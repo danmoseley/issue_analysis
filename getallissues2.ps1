@@ -214,7 +214,7 @@ foreach ($labelName in $areaLabels) {
     }
 
     if ($null -eq $resp.data) {
-      $resp | ConvertTo-Json -Depth 10 | Out-File -FilePath ".\graphql-debug-{0}.json" -f $safeName -Encoding UTF8
+      $resp | ConvertTo-Json -Depth 10 | Out-File -FilePath (".\graphql-debug-{0}.json" -f $safeName) -Encoding UTF8
       Write-Log ("GraphQL returned no data; saved ./graphql-debug-{0}.json; aborting label." -f $safeName)
       $failed = $true
       break
@@ -286,7 +286,7 @@ foreach ($labelName in $areaLabels) {
           $v = @{ owner=$Owner; name=$Repo; number=[int]$iss.number; pageSize=$CommentPageSize; cursor=$cAfter; reactionPageSize=$ReactionPageSize }
           $cResp = Invoke-Gql -query $commentsPageQuery -variables $v
           if ($null -eq $cResp) { Start-Sleep -Seconds 2; continue }
-          if ($cResp.errors) { $cResp | ConvertTo-Json -Depth 8 | Out-File -FilePath ".\graphql-debug-comments-{0}.json" -f $safeName -Encoding UTF8; Write-Log "Comments paging error; skipping label"; $failed = $true; break }
+          if ($cResp.errors) { $cResp | ConvertTo-Json -Depth 8 | Out-File -FilePath (".\graphql-debug-comments-{0}.json" -f $safeName) -Encoding UTF8; Write-Log "Comments paging error; skipping label"; $failed = $true; break }
           Ensure-RateLimit $cResp.data.rateLimit
           $pageInfo = $cResp.data.repository.issue.comments.pageInfo
           $cNodes = $cResp.data.repository.issue.comments.nodes
@@ -313,7 +313,7 @@ foreach ($labelName in $areaLabels) {
           $v = @{ owner=$Owner; name=$Repo; number=[int]$iss.number; pageSize=$ReactionPageSize; cursor=$rAfter }
           $rResp = Invoke-Gql -query $reactionsPageQuery -variables $v
           if ($null -eq $rResp) { Start-Sleep -Seconds 2; continue }
-          if ($rResp.errors) { $rResp | ConvertTo-Json -Depth 8 | Out-File -FilePath ".\graphql-debug-reactions-{0}.json" -f $safeName -Encoding UTF8; Write-Log "Reactions paging error; skipping label"; $failed = $true; break }
+          if ($rResp.errors) { $rResp | ConvertTo-Json -Depth 8 | Out-File -FilePath (".\graphql-debug-reactions-{0}.json" -f $safeName) -Encoding UTF8; Write-Log "Reactions paging error; skipping label"; $failed = $true; break }
           Ensure-RateLimit $rResp.data.rateLimit
           $rNodes = $rResp.data.repository.issue.reactions.nodes
           foreach ($rn in $rNodes) { $iss.reactions.nodes += @{ content = $rn.content; user = if ($rn.user) { $rn.user.login } else { $null }; createdAt = $rn.createdAt } }
@@ -332,7 +332,7 @@ foreach ($labelName in $areaLabels) {
           $v = @{ commentId = $c.id; pageSize = $ReactionPageSize; cursor = $crAfter }
           $crResp = Invoke-Gql -query $commentReactionsByIdQuery -variables $v
           if ($null -eq $crResp) { Start-Sleep -Seconds 2; continue }
-          if ($crResp.errors) { $crResp | ConvertTo-Json -Depth 8 | Out-File -FilePath ".\graphql-debug-comment-reactions-{0}.json" -f $safeName -Encoding UTF8; Write-Log "Comment reactions paging error; skipping label"; $failed = $true; break }
+          if ($crResp.errors) { $crResp | ConvertTo-Json -Depth 8 | Out-File -FilePath (".\graphql-debug-comment-reactions-{0}.json" -f $safeName) -Encoding UTF8; Write-Log "Comment reactions paging error; skipping label"; $failed = $true; break }
           Ensure-RateLimit $crResp.data.rateLimit
           $rNodes = $crResp.data.node.reactions.nodes
           foreach ($rn in $rNodes) { $c.reactions.nodes += @{ content = $rn.content; user = if ($rn.user) { $rn.user.login } else { $null }; createdAt = $rn.createdAt } }
