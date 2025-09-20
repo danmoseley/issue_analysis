@@ -1,0 +1,1300 @@
+﻿[
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/2954",
+        "createdAt":  "2017-11-06T20:26:16Z",
+        "number":  2954,
+        "author":  "MichaelSimons",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2023-09-21T22:32:45Z",
+        "body":  "## Steps to reproduce\r\nWrite logic to download an Alpine artifact with checksum verification.  The checksum in this example was retrieved from https://dotnetclichecksums.blob.core.windows.net/dotnet/Runtime/2.1.0-preview1-25901-02/dotnet-runtime-2.1.0-preview1-25901-02-alpine.3.6-x64.tar.gz.sha512\r\n\r\n```\r\nwget -O dotnet.tar.gz https://dotnetcli.blob.core.windows.net/dotnet/Runtime/2.1.0-preview1-25901-02/dotnet-runtime-2.1.0-preview1-25901-02-alpine.3.6-x64.tar.gz \\\r\n    \u0026\u0026 echo \"2C7FF8A63C03354B6C3F563F662E8820108BE7995B2D72DB7D5446AD579977A37DB46BAE7C5DE918B4423A1C37BCFD505DF514248F253BE1ED2D9A84A982AA98  dotnet.tar.gz\" | sha512sum -c -\r\n```\r\n\r\n## Expected  behavior\r\nChecksum verification should pass.\r\n\r\n\r\n## Actual behavior\r\n`sha512sum: WARNING: 1 of 1 computed checksums did NOT match`\r\n\r\nThe reason for the failure is that the checksum copied from https://dotnetclichecksums.blob.core.windows.net/dotnet/Runtime/2.1.0-preview1-25901-02/dotnet-runtime-2.1.0-preview1-25901-02-alpine.3.6-x64.tar.gz.sha512 is upper cased.  The Alpine sha512sum implementation expects the checksum to be lower cased `2c7ff8a63c03354b6c3f563f662e8820108be7995b2d72db7d5446ad579977a37db46bae7c5de918b4423a1c37bcfd505df514248f253be1ed2d9a84a982aa98`.\r\n\r\n## Environment data\r\nRunning on alpine 3.6\r\n\r\ncc @janvorli \r\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOLDu4IQ==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDM5ODQxNzUyOQ==",
+                                           "createdAt":  "2018-06-19T14:24:05Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "mohanlalrb",
+                                           "body":  "I am facing the same issue, but couldn\u0027t figure out a solution out of this conversation. Am I missing something here?",
+                                           "updatedAt":  "2018-06-19T14:24:05Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDM5ODQzNDE1NA==",
+                                           "createdAt":  "2018-06-19T15:08:39Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "MichaelSimons",
+                                           "body":  "@mohanlalrb - did you try running the provided checksum through a ToLower conversion?",
+                                           "updatedAt":  "2018-06-19T15:08:39Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDM5ODY5OTY1Ng==",
+                                           "createdAt":  "2018-06-20T10:17:43Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "mohanlalrb",
+                                           "body":  "I upgraded to alpine image 3.7 and the error went away. Will give \"ToLower\" a try with alpine 3.4 for which I was trying before. Also, I found a msdn link : \"https://blogs.msdn.microsoft.com/dotnet/2018/05/30/announcing-net-core-2-1/\" which says .NET Core 2.1 is supported from alpine 3.7+. Please correct me if I have mistaken something. \r\nThanks.",
+                                           "updatedAt":  "2018-06-20T10:17:43Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDU3NDg2ODgxMQ==",
+                                           "createdAt":  "2020-01-15T21:40:20Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dagood",
+                                           "body":  "(Triage) Note from @MichaelSimons: the checksums blob storage is still uppercase everywhere (based on spot check) and releases.json is lowercase.\r\n\r\nThis is still valid to fix: it makes sense to have the checksum match the platform\u0027s expectations.",
+                                           "updatedAt":  "2020-01-15T21:40:20Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDc0MjExMTI2NQ==",
+                                           "createdAt":  "2020-12-09T22:46:24Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "MichaelSimons",
+                                           "body":  "I verified this is still an issue for 6.0.  e.g - https://dotnetclichecksums.blob.core.windows.net:443/dotnet/Sdk/6.0.100-alpha.1.20609.2/dotnet-sdk-6.0.100-alpha.1.20609.2-linux-musl-x64.tar.gz.sha",
+                                           "updatedAt":  "2020-12-09T22:46:24Z"
+                                       }
+                                   ],
+                         "totalCount":  5
+                     },
+        "title":  "Checksums for Alpine related artifacts are not readily consumable.",
+        "labels":  [
+                       "area-Infrastructure-installer"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/749",
+        "createdAt":  "2019-12-10T23:40:50Z",
+        "number":  749,
+        "author":  "dagood",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2023-09-21T22:00:42Z",
+        "body":  "Followup on https://github.com/dotnet/runtime/pull/705, based on PR comments:\r\n\r\n* [ ] Figure out Windows way to implement `setScriptToEchoAndFailOnNonZero` (and/or make more obvious why it\u0027s not implemented?) https://github.com/dotnet/runtime/pull/705#discussion_r356199549\r\n* [x] Use more conditions rather than top-down assignment when assigning `skipTests`, `publicRidAgnosticPackages`, etc. https://github.com/dotnet/runtime/pull/705#discussion_r356200912\r\n  * Resolved in https://github.com/dotnet/runtime/pull/1623\r\n* [ ] Make yml arrangements follow some convention between the subsets. (Not related to installer in particular.) https://github.com/dotnet/runtime/pull/705#discussion_r356202949\r\n* [ ] Move dependency download and variable assignment to xplat-setup. https://github.com/dotnet/runtime/pull/705#discussion_r356205944\r\n* [x] Make the installer matrix accept a set of platforms rather than a set of skips. Maybe merge into platform-matrix? https://github.com/dotnet/runtime/pull/705#discussion_r356326693\r\n  * Resolved in https://github.com/dotnet/runtime/pull/1623\r\n* [ ] Propagate changes back to sharedfx tools if necessary. (May be subsumed by effort to propagate local live-live changes back.) https://github.com/dotnet/runtime/pull/705#discussion_r356327200 https://github.com/dotnet/runtime/pull/705#discussion_r356328108\r\n  * In the meantime, make any patches more readable: https://github.com/dotnet/runtime/pull/705#discussion_r356328108\r\n\r\nFollowup on official build pipeline PR https://github.com/dotnet/runtime/pull/1016:\r\n\r\n* [ ] Combine `runtime-official.yml` into `runtime.yml`. https://github.com/dotnet/runtime/pull/1016#discussion_r359528670\r\n* [ ] Put libraries-AllConfigurations and libraries-{platform} artifacts in the same directory instead of isolating AllConfigurations artifacts. More details, necessary steps, reasoning at https://github.com/dotnet/runtime/pull/1016#discussion_r359534429\r\n  * Lets us remove this artifact publish step because the packages will flow the same way RID-specific packages flow:\r\n    https://github.com/dotnet/runtime/blob/c5fbd3dfde0cd0d48d871a1572443029f16bdd9c/eng/pipelines/libraries/build-job.yml#L171-L177\r\n  * Also do this: \"Would you mind conditioning all the copy steps above and the upload of those artifacts with a compile time condition expanding the current one to check for runTests eq false and framework ne allConfigurations?\"\r\n\r\nNot everything here\u0027s about Installer specifically, but items can be broken out and changed as needed.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOR-74gw==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDc0NDY2NjA1Ng==",
+                                           "createdAt":  "2020-12-14T19:41:02Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "NikolaMilosavljevic",
+                                           "body":  "[Triage] We should break this into separate issues.",
+                                           "updatedAt":  "2020-12-14T19:41:02Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5H7jjL",
+                                           "createdAt":  "2022-08-05T19:34:15Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "NikolaMilosavljevic",
+                                           "body":  "[Triage] @ViktorHofer is this still needed?",
+                                           "updatedAt":  "2022-08-05T19:34:15Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5H7viD",
+                                           "createdAt":  "2022-08-05T20:34:05Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ViktorHofer",
+                                           "body":  "Yes, the installer ymls are still different than the rest. ",
+                                           "updatedAt":  "2022-08-05T20:34:12Z"
+                                       }
+                                   ],
+                         "totalCount":  3
+                     },
+        "title":  "Clean up Installer build yaml after incorporation into runtime.yml",
+        "labels":  [
+                       "area-Infrastructure-installer"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/35607",
+        "createdAt":  "2020-04-29T15:11:49Z",
+        "number":  35607,
+        "author":  "eerhardt",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHOBCoH3w==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "dagood",
+                                            "createdAt":  "2020-04-29T15:31:57Z"
+                                        }
+                                    ],
+                          "totalCount":  1
+                      },
+        "updatedAt":  "2023-09-21T21:47:33Z",
+        "body":  "Instead of hard-coding a couple RIDs to see if the host machine is \"debian based\":\r\n\r\nhttps://github.com/dotnet/runtime/blob/5f09f33bc547e7c6733ab89e05baf9e860079bba/src/installer/Directory.Build.props#L304-L309\r\n\r\nWe should instead use a more proper way of checking for Debian systems.\r\n\r\nOne example would be to check for the existence of `/etc/debian_version`. See https://github.com/dotnet/runtime/pull/35538#discussion_r416794104.\r\n\r\nfyi - @jkotas @ViktorHofer ",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOZyL3-g==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDYyMTI3NTY0MQ==",
+                                           "createdAt":  "2020-04-29T15:11:53Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @safern, @viktorhofer\nNotify danmosemsft if you want to be subscribed.",
+                                           "updatedAt":  "2020-04-29T15:11:53Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5nIvf6",
+                                           "createdAt":  "2023-09-21T21:47:32Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "NikolaMilosavljevic",
+                                           "body":  "[Triage] This would affect source-building .NET in Debian family of distros.",
+                                           "updatedAt":  "2023-09-21T21:47:32Z"
+                                       }
+                                   ],
+                         "totalCount":  2
+                     },
+        "title":  "installer\u0027s HostMachineRidTargetsDebianPackages should check for Debian in a better way",
+        "labels":  [
+                       "area-Infrastructure-installer"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/36537",
+        "createdAt":  "2020-05-15T15:12:22Z",
+        "number":  36537,
+        "author":  "ViktorHofer",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHOBEYeVQ==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "jkotas",
+                                            "createdAt":  "2020-05-15T15:19:06Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "eerhardt",
+                                            "createdAt":  "2020-05-15T16:29:38Z"
+                                        }
+                                    ],
+                          "totalCount":  2
+                      },
+        "updatedAt":  "2022-08-03T16:55:22Z",
+        "body":  "Source: https://github.com/dotnet/runtime/tree/master/tools-local/dotnet-deb-tool\r\n\r\nThis tool currently lives in dotnet/runtime even though it\u0027s used in at least dotnet/installer as well: https://github.com/dotnet/installer/blob/7684bd57bf7ed43737d2a388b2aa7270d92b97fd/src/redist/targets/GenerateDebs.targets#L4-L7. Looks like package was manually pushed to the \"dotnet-core\" feed (cc @mmitche?) and blocks removing that feed in favor of the AzDO feeds (ie dotnet5, dotnet-eng, dotnet-tools).\r\n\r\nI\u0027m wondering if we should move the tools as-is to Arcade (and potentially convert it to a global tool) or replace it by something newer?\r\n\r\ncc @dleeapho @NikolaMilosavljevic @dagood @eerhardt",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOLTwTTg==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDYyOTI5Mzc0OA==",
+                                           "createdAt":  "2020-05-15T15:12:55Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ViktorHofer",
+                                           "body":  "cc @dsplaisted for dotnet/installer\u0027s usage.",
+                                           "updatedAt":  "2020-05-15T15:13:02Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDYyOTM2NTEyNw==",
+                                           "createdAt":  "2020-05-15T16:48:08Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dagood",
+                                           "body":  "We already use the cross-distro `fpm` tool to build RPM packages--I think we should use it for Debian packages too, and delete dotnet-deb-tool. This removes the arbitrary limitation to have to build Deb/RPM packages on a matching build image, so the dev experience and official build can be significantly improved.\r\n\r\nWe have an old issue tracking moving dotnet-deb-tool to Arcade, though: https://github.com/dotnet/runtime/issues/3047.\r\n\r\nA background note: since Arcade onboarding (dotnet/core-setup 3.1), dotnet-deb-tool isn\u0027t actually consumed as a package by dotnet/core-setup or dotnet/runtime. https://github.com/dotnet/core-setup/commit/58efb317558e34b805ec8e8650a3b3dcede21fcd. (Yes, that puts the dotnet/installer usage in a weird place if we ever needed to service.)",
+                                           "updatedAt":  "2020-05-15T16:48:08Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDYyOTM2NjU0Ng==",
+                                           "createdAt":  "2020-05-15T16:50:47Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dagood",
+                                           "body":  "\u003e Looks like package was manually pushed to the \"dotnet-core\" feed (cc @mmitche?) and blocks removing that feed [from dotnet/installer(?)] in favor of the AzDO feeds (ie dotnet5, dotnet-eng, dotnet-tools).\r\n\r\nThe conclusion I get from this is that dotnet-eng or dotnet-tools is missing the package, not that something\u0027s blocked.",
+                                           "updatedAt":  "2020-05-15T16:50:47Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDYyOTM4ODk4NQ==",
+                                           "createdAt":  "2020-05-15T17:37:09Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dsplaisted",
+                                           "body":  "FYI @wli3 ",
+                                           "updatedAt":  "2020-05-15T17:37:09Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDYyOTcyNDc1Mw==",
+                                           "createdAt":  "2020-05-17T00:33:17Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "wli3",
+                                           "body":  "If we decide to remove \"dotnet-deb-tool\". I hope someone from central engineering team can contribute the conversion from \"dotnet-deb-tool\" to \"fpm\" in dotnet/installer. Or it should be maintained until we have bandwidth to work on this conversion - at least post November",
+                                           "updatedAt":  "2020-05-17T00:34:35Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY0NTYyMTc5Ng==",
+                                           "createdAt":  "2020-06-17T20:59:59Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "NikolaMilosavljevic",
+                                           "body":  "This is a good feature - we should use fpm to build deb packages.",
+                                           "updatedAt":  "2020-06-17T20:59:59Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY0NjMzNjQ1Nw==",
+                                           "createdAt":  "2020-06-18T22:27:18Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jkoritzinsky",
+                                           "body":  "For the initial version, the new shared framework SDK will directly use the `package_tool` script that `dotnet-deb-tool` launches. For future versions, we should be able to move to `fpm`.",
+                                           "updatedAt":  "2020-06-18T22:27:18Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDc0MDIyMDY5OQ==",
+                                           "createdAt":  "2020-12-07T22:31:50Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOBZLUjA==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "jkoritzinsky",
+                                                                               "createdAt":  "2020-12-07T22:33:20Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "ViktorHofer",
+                                           "body":  "Now that the Shared Framework SDK got merged into master and proven to be successful, should we continue the discussion to move to `fpm` and away from `dotnet-deb-tool`? Who would be driving that effort? cc @NikolaMilosavljevic ",
+                                           "updatedAt":  "2020-12-07T22:31:50Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDc0NTUyNzMwNg==",
+                                           "createdAt":  "2020-12-15T19:51:40Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOBaEsyw==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "jkoritzinsky",
+                                                                               "createdAt":  "2020-12-15T20:05:43Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "NikolaMilosavljevic",
+                                           "body":  "[Triage] Both runtime and installer should use the new shared tooling.",
+                                           "updatedAt":  "2020-12-15T19:51:40Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDc0Nzc4NTY5OA==",
+                                           "createdAt":  "2020-12-18T00:13:50Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "safern",
+                                           "body":  "@NikolaMilosavljevic this would unblock: https://github.com/dotnet/runtime/issues/45396 -- do you have an ETA on when this will be ready? ",
+                                           "updatedAt":  "2020-12-18T00:13:50Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDc1ODkxMTgyMg==",
+                                           "createdAt":  "2021-01-12T20:13:17Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ViktorHofer",
+                                           "body":  "ping @NikolaMilosavljevic @dleeapho ",
+                                           "updatedAt":  "2021-01-12T20:13:17Z"
+                                       }
+                                   ],
+                         "totalCount":  11
+                     },
+        "title":  "Remove \"Debian Package Tool\" in favor of fpm",
+        "labels":  [
+                       "area-Infrastructure-installer"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/44842",
+        "createdAt":  "2020-11-17T23:55:13Z",
+        "number":  44842,
+        "author":  "ViktorHofer",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHOBXIVpA==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "safern",
+                                            "createdAt":  "2020-11-18T01:31:29Z"
+                                        }
+                                    ],
+                          "totalCount":  1
+                      },
+        "updatedAt":  "2023-10-06T14:14:13Z",
+        "body":  "We could save 7-10 minutes in our build by uploading build assets and generating a partial build manifest directly in the installer legs instead of in the \"Prepare Signed Artifacts\" leg which only runs after the whole build stage is done. By doing that we could shrink the \"Prepare Signed Artifacts\" leg down to only merge the partial build manifests and push the BuildId to BAR.\r\n\r\n@jkoritzinsky is looking into if we need tooling support for this.\r\n\r\ncc @mmitche @NikolaMilosavljevic @safern",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOZySZ_Q==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDcyOTMxNTUwMQ==",
+                                           "createdAt":  "2020-11-18T01:24:12Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "hoyosjs",
+                                           "body":  "Is the time saving from this mostly download + upload time for the artifacts?",
+                                           "updatedAt":  "2020-11-18T01:24:12Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDcyOTMxNTcwOA==",
+                                           "createdAt":  "2020-11-18T01:24:49Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jkoritzinsky",
+                                           "body":  "Yes. And if we can remove the job, it would save us time cloning the repo as well.",
+                                           "updatedAt":  "2020-11-18T01:24:49Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDcyOTMxNjQ5Mw==",
+                                           "createdAt":  "2020-11-18T01:27:15Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOBXLcUg==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "safern",
+                                                                               "createdAt":  "2020-11-18T01:31:45Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "ViktorHofer",
+                                                                               "createdAt":  "2020-11-18T10:57:03Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  2
+                                                         },
+                                           "author":  "hoyosjs",
+                                           "body":  "@jkoritzinsky uploading to the bar already merges the manifests into one. So maybe this could even work transparently. The only thing to verify is PB and in-build signing work/end up in the manifest.",
+                                           "updatedAt":  "2020-11-18T02:18:28Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDcyOTMxNzg1OQ==",
+                                           "createdAt":  "2020-11-18T01:31:23Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jkoritzinsky",
+                                           "body":  "I was looking through the aspnetcore build and noticed that. That should make this much easier. I\u0027m just trying to figure out how their repo does it since they explicitly exclude generating binlogs in the official build.",
+                                           "updatedAt":  "2020-11-18T01:31:23Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDcyOTMxOTEwNw==",
+                                           "createdAt":  "2020-11-18T01:35:16Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jkoritzinsky",
+                                           "body":  "I think just passing the `-publish` flag will work, but I need to figure out how to ensure that all of the uploaded manifests have unique names.",
+                                           "updatedAt":  "2020-11-18T01:35:16Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDcyOTMxOTY4Mg==",
+                                           "createdAt":  "2020-11-18T01:37:02Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jkoritzinsky",
+                                           "body":  "They just explicitly pass the `AssetManifestFileName` property with a preset name. We should be able to do the same thing with our jobs.",
+                                           "updatedAt":  "2020-11-18T01:37:02Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDcyOTMxOTgzOA==",
+                                           "createdAt":  "2020-11-18T01:37:33Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOBXIZcQ==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "safern",
+                                                                               "createdAt":  "2020-11-18T01:38:46Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "jkoritzinsky",
+                                                                               "createdAt":  "2020-11-18T01:44:42Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  2
+                                                         },
+                                           "author":  "hoyosjs",
+                                           "body":  "\u003e I was looking through the aspnetcore build and noticed that. That should make this much easier. I\u0027m just trying to figure out how their repo does it since they explicitly exclude generating binlogs in the official build.\r\n\r\nYeah, that always makes their\u0027s more... fun...\r\n\r\n\r\n\u003e I think just passing the `-publish` flag will work, but I need to figure out how to ensure that all of the uploaded manifests have unique names.\r\n\r\nWe can use the job name as the manifest name. It\u0027s guaranteed to be unique.",
+                                           "updatedAt":  "2020-11-18T01:37:33Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDcyOTYwMjgxNQ==",
+                                           "createdAt":  "2020-11-18T10:58:28Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ViktorHofer",
+                                           "body":  "Sounds like we could get rid of the \"Prepare Signed Artifacts\" leg entirely. That would be fantastic.",
+                                           "updatedAt":  "2020-11-18T10:58:28Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDcyOTg5MDY3OQ==",
+                                           "createdAt":  "2020-11-18T19:04:25Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "safern",
+                                           "body":  "As a note... we could also save some time if Installer didn\u0027t depend on All Configurations leg, and in the All Configurations leg we could produce the manifest for libraries OOB packages. ",
+                                           "updatedAt":  "2020-11-18T19:04:25Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDcyOTg5MTY5Ng==",
+                                           "createdAt":  "2020-11-18T19:06:20Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jkoritzinsky",
+                                           "body":  "Installer doesn\u0027t depend on AllConfigurations any more. I agree with Santi that we should have AllConfigurations produce the manifest for the libraries OOB packages.",
+                                           "updatedAt":  "2020-11-18T19:06:20Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDcyOTg5MjAwMg==",
+                                           "createdAt":  "2020-11-18T19:06:58Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "safern",
+                                           "body":  "\u003e Installer doesn\u0027t depend on AllConfigurations any more.\r\n\r\nThat\u0027s great to know! That means we could prototype a collapsed official build that might be faster and more reliable 😄 ",
+                                           "updatedAt":  "2020-11-18T19:07:32Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDc3OTg5Mzg3NA==",
+                                           "createdAt":  "2021-02-16T15:01:31Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ViktorHofer",
+                                           "body":  "@tkapin @lukas-lansky @riarenas as briefly mentioned in the last \"Harmonize Arcade and Runtime\" meeting, we currently have [custom publishing logic](https://github.com/dotnet/runtime/tree/1d9e50cb4735df46d3de0cee5791e97295eaf588/src/installer/publish) in place which we would like to get rid of, which should save 5-15 minutes in our official builds.\r\nI hope we can prioritize this task as its cost shouldn\u0027t be too high but its positive impact definitely is.",
+                                           "updatedAt":  "2021-02-16T15:01:31Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDgzMjg0NTQ3Nw==",
+                                           "createdAt":  "2021-05-05T16:44:17Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ViktorHofer",
+                                           "body":  "@riarenas have you had time to look into this further part of the \"Runtime \u003c-\u003e Arcade harmonization\" effort?",
+                                           "updatedAt":  "2021-05-05T16:44:17Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDgzMjg4NjYwMw==",
+                                           "createdAt":  "2021-05-05T17:48:01Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "riarenas",
+                                           "body":  "@ViktorHofer Yep, this is definitely still top of mind for me, I\u0027m currently in our FR rotation until 5/14, and I will go back to it once I\u0027m back to working on the harmonization effort. ",
+                                           "updatedAt":  "2021-05-05T17:48:01Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDgzMjg4NzIzNQ==",
+                                           "createdAt":  "2021-05-05T17:49:00Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ViktorHofer",
+                                           "body":  "Awesome, thanks for the update Ricardo.",
+                                           "updatedAt":  "2021-05-05T17:49:00Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc41T-0r",
+                                           "createdAt":  "2021-08-06T18:08:54Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ViktorHofer",
+                                           "body":  "Keeping this in 6.0 as @riarenas is currently working on it.",
+                                           "updatedAt":  "2021-08-06T18:08:54Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5H7iif",
+                                           "createdAt":  "2022-08-05T19:28:16Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "NikolaMilosavljevic",
+                                           "body":  "[Triage] @ViktorHofer is this still an issue?",
+                                           "updatedAt":  "2022-08-05T19:28:16Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5H7myv",
+                                           "createdAt":  "2022-08-05T19:55:08Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "hoyosjs",
+                                           "body":  "In-build signing and other legs with complex behavior (crossdac) took a dependency on this. It\u0027s not blocking for 7 - it would save us time but all legs would need to adjust appropriately. ",
+                                           "updatedAt":  "2022-08-05T19:55:08Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5H7oa-",
+                                           "createdAt":  "2022-08-05T20:05:27Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "NikolaMilosavljevic",
+                                           "body":  "\u003e In-build signing and other legs with complex behavior (crossdac) took a dependency on this. It\u0027s not blocking for 7 - it would save us time but all legs would need to adjust appropriately.\r\n\r\nThanks @hoyosjs - moving to 8.0.0 milestone.",
+                                           "updatedAt":  "2022-08-05T20:05:27Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5nItc1",
+                                           "createdAt":  "2023-09-21T21:38:11Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "NikolaMilosavljevic",
+                                           "body":  "[Triage] @ViktorHofer is this still relevant? Should this be moved to a different repo, like arcade services?",
+                                           "updatedAt":  "2023-09-21T21:38:11Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5nJJn9",
+                                           "createdAt":  "2023-09-21T22:52:38Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODHviYQ==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "NikolaMilosavljevic",
+                                                                               "createdAt":  "2023-09-22T16:35:15Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "ViktorHofer",
+                                                                               "createdAt":  "2023-09-24T12:36:33Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "hoyosjs",
+                                                                               "createdAt":  "2023-09-25T18:04:21Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  3
+                                                         },
+                                           "author":  "jkoritzinsky",
+                                           "body":  "I think this is something we\u0027d still like to investigate and this is right repo for it.",
+                                           "updatedAt":  "2023-09-21T22:52:38Z"
+                                       }
+                                   ],
+                         "totalCount":  21
+                     },
+        "title":  "Remove Prepare Signed Artifacts leg by uploading build assets and generate partial build manifests in the installer leg",
+        "labels":  [
+                       "area-Infrastructure-installer"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/45972",
+        "createdAt":  "2020-12-11T20:00:36Z",
+        "number":  45972,
+        "author":  "jkoritzinsky",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2023-09-21T21:26:30Z",
+        "body":  "We discovered in #45781 that the installer test assets build against a pre-built ref pack.\r\n\r\nSince they build at the end of the build and we want to build them as though they were built against the released product, we should change their build to build against the live ref pack. This way we\u0027ll ensure that each test is testing what it should without including any extra roll-forward behaviors that we may accidentally start depending on.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOT53vUQ==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc41UIu7",
+                                           "createdAt":  "2021-08-06T19:23:22Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "NikolaMilosavljevic",
+                                           "body":  "[Triage] This should only consume live ref-packs for new release and not in servicing, as those are not reshipped.",
+                                           "updatedAt":  "2021-08-06T19:23:22Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5H7iBW",
+                                           "createdAt":  "2022-08-05T19:25:07Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "NikolaMilosavljevic",
+                                           "body":  "[Triage] @ViktorHofer is this still needed?",
+                                           "updatedAt":  "2022-08-05T19:25:07Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5H7vPP",
+                                           "createdAt":  "2022-08-05T20:32:21Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ViktorHofer",
+                                           "body":  "Yes, afaik they still don\u0027t compile against the live targeting pack. ",
+                                           "updatedAt":  "2022-08-05T20:32:33Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5Pne9R",
+                                           "createdAt":  "2022-12-02T19:47:25Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ViktorHofer",
+                                           "body":  "This is again causing issues when upgrading the TFM (from net7.0 to net8.0): https://github.com/dotnet/runtime/pull/78354/. Will again work-around it for now but we should really fix this.",
+                                           "updatedAt":  "2022-12-02T19:47:25Z"
+                                       }
+                                   ],
+                         "totalCount":  4
+                     },
+        "title":  "Build installer tests against the live ref pack",
+        "labels":  [
+                       "area-Infrastructure-installer"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/48341",
+        "createdAt":  "2021-02-16T15:51:41Z",
+        "number":  48341,
+        "author":  "ViktorHofer",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2023-09-21T21:09:27Z",
+        "body":  "`\u003cProductVersion /\u003e` is defined centrally in the Versions.props file and is currently set to `6.0.0`: https://github.com/dotnet/runtime/blob/54f6250216a8f73025ccd3340560f26455b3ec18/eng/Versions.props#L3-L4\r\n\r\nIn addition to that, installer defines the `\u003cProductVersion /\u003e` property as well which means the central one is overwritten: https://github.com/dotnet/runtime/blob/54f6250216a8f73025ccd3340560f26455b3ec18/src/installer/Directory.Build.targets#L42\r\n\r\nThe Arcade SDK itself doesn\u0027t know anything about `\u003cProductVersion /\u003e` but the Installers package in Arcade does, i.e.: https://github.com/dotnet/arcade/blob/55c2f07346757ddc6f1fa569b2de6506b3fdea2a/src/Microsoft.DotNet.Build.Tasks.Installers/build/bundle.targets#L151\r\n\r\nWe should clarify which of the the property values the Installers package in Arcade expects (my guess is the one provided by the installer subset) and possibly depend on a different on a different property in that package. In addition to that my assumption is that more of the properties next to `\u003cProductVersion /\u003e` in the installers subset can be cleaned-up and consolidated with the rest of the repo and don\u0027t need to reside inside a target anymore.\r\n\r\nRelated: https://github.com/dotnet/runtime/issues/48229\r\n\r\ncc @dotnet/runtime-infrastructure ",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOLrULCQ==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDc4MDA3MTQ4NA==",
+                                           "createdAt":  "2021-02-16T19:38:56Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "safern",
+                                           "body":  "IIRC `ProductVersion` under installer is what drives the produced package versions, we should update that to use the same mechanism as we use for other packages which is based of arcade properties. ",
+                                           "updatedAt":  "2021-02-16T19:39:23Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDc4MDEyMDY2OQ==",
+                                           "createdAt":  "2021-02-16T21:11:56Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOBgyj8g==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "EYES",
+                                                                               "user":  "safern",
+                                                                               "createdAt":  "2021-02-16T21:13:18Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "safern",
+                                                                               "createdAt":  "2021-02-16T21:13:21Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "am11",
+                                                                               "createdAt":  "2021-02-21T10:42:34Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  3
+                                                         },
+                                           "author":  "jkoritzinsky",
+                                           "body":  "`ProductVersion` in installer is driven by the Arcade properties, but it has to add additional information to get the installer versions to match what they\u0027re supposed to for the given platform installer (like using a `~` instead of a `-` in deb package versions).",
+                                           "updatedAt":  "2021-02-16T21:11:56Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDc4Mjg0MTcwNA==",
+                                           "createdAt":  "2021-02-21T11:25:56Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "am11",
+                                           "body":  "The customization around `AppHostVersion`, `HostPolicyVersion` and friends having different values during a single build seems to be unused/untested in practice (at least going by the public-facing CI scripts). If that also holds true for official builds and source-build scenarios, then we could define just one derived property (e.g. `DotnetProductVersion`) in `eng/Versions.props` and delete `GetProductVersions` target. That will allow us to also cleanup a handful of other stuff (msbuild, cmake and shell scripts, pipeline yaml files) around these customizations.",
+                                           "updatedAt":  "2021-02-21T11:25:56Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDc4MjkyNjc2OQ==",
+                                           "createdAt":  "2021-02-21T21:07:38Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jkoritzinsky",
+                                           "body":  "For those properties, I think @dagood and @vitek-karas are the most likely to know their intended usage. Their regular usage predates me.",
+                                           "updatedAt":  "2021-02-21T21:07:38Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDc4MzA4NTY2NQ==",
+                                           "createdAt":  "2021-02-22T05:10:29Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dagood",
+                                           "body":  "They predate me, too. I think the comment explains it well:\r\n\r\nhttps://github.com/dotnet/runtime/blob/54f6250216a8f73025ccd3340560f26455b3ec18/src/installer/Directory.Build.targets#L51-L64\r\n\r\nAFAIK we never used this feature--rebuilding the host-related packages every servicing release never ended up being considered worth preventing, I suppose.\r\n\r\n@NikolaMilosavljevic may be able to dig in more.",
+                                           "updatedAt":  "2021-02-22T05:10:29Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDc4MzMxNTM3NA==",
+                                           "createdAt":  "2021-02-22T11:42:56Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ViktorHofer",
+                                           "body":  "Thanks Davis. I don\u0027t think there is any harm in keeping this incremental servicing infrastructure as long we can derive the properties from something that is available at evaluation time outside of a target and based on Arcade\u0027s version properties.",
+                                           "updatedAt":  "2021-02-22T11:42:56Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDc4MzYxNTE4MQ==",
+                                           "createdAt":  "2021-02-22T19:26:25Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "am11",
+                                           "body":  "\u003e at evaluation time outside of a target\r\n\r\nI was experimenting a bit and it seems like it would require us to move `VersionSuffix` calculation out of https://github.com/dotnet/arcade/blob/ca7fab569267ed3bc73360882d652d119aae5653/src/Microsoft.DotNet.Arcade.Sdk/tools/Version.BeforeCommonTargets.targets\r\n\r\nThe rest of the *Version calculations can be done statically in runtime/Directory.Build.props, after importing the Arcade SDK\u0027s props.",
+                                           "updatedAt":  "2021-02-22T19:26:25Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDc4MzYxNjc3Nw==",
+                                           "createdAt":  "2021-02-22T19:29:12Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOBg7xyQ==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "am11",
+                                                                               "createdAt":  "2021-02-22T19:30:19Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "ViktorHofer",
+                                           "body":  "I\u0027m currently also experimenting on it locally and am in a pretty good state. Based on the `Version` in most cases only be read in target files or from within targets or in ItemGroups, moving out `VersionSuffix` shouldn\u0027t be necessary. I\u0027ll probably create a draft PR this week with my progress.",
+                                           "updatedAt":  "2021-02-22T19:29:12Z"
+                                       }
+                                   ],
+                         "totalCount":  8
+                     },
+        "title":  "ProductVersion property\u0027s meaning is ambiguous ",
+        "labels":  [
+                       "help wanted",
+                       "area-Infrastructure-installer"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/54068",
+        "createdAt":  "2021-06-11T16:32:33Z",
+        "number":  54068,
+        "author":  "NikolaMilosavljevic",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2023-09-19T21:56:10Z",
+        "body":  "# Situation\r\n\r\nWe produce many installer artifacts, including Windows MSIs and Linux RPM/DEB packages. We also produce or eventually would produce various other artifacts (json, xml) that drive publishing, signing and other stages of the build.\r\n\r\nWe do not run any tests of these artifacts during build. This has caused some issues and regressions, i.e. https://github.com/dotnet/runtime/issues/53543\r\n\r\n# Objective\r\n\r\nValidate installer artifacts during build. There are many levels of validation that can be done, from static analysis all the way to installation validation.\r\n\r\n# Execution\r\n\r\nIdentify opportunities for validations for each type of artifacts. Prioritize and schedule. Implement tests and/or add build steps when needed.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  null,
+                         "nodes":  [
+
+                                   ],
+                         "totalCount":  0
+                     },
+        "title":  "Validation of installer artifacts",
+        "labels":  [
+                       "Epic",
+                       "area-Infrastructure-installer",
+                       "Bottom Up Work"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/54513",
+        "createdAt":  "2021-06-21T19:33:34Z",
+        "number":  54513,
+        "author":  "MichaelSimons",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHOBvkMTw==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "ViktorHofer",
+                                            "createdAt":  "2021-06-21T21:02:57Z"
+                                        }
+                                    ],
+                          "totalCount":  1
+                      },
+        "updatedAt":  "2021-06-21T21:03:49Z",
+        "body":  "This issue stems from [review feedback from this PR](https://github.com/dotnet/runtime/pull/54223#issuecomment-863785611).  \r\n\r\nThe general issue is that the CrossGen project has a hard coded RID list it supports.  This hard coded list doesn\u0027t work for source-build, which needs to build arbitrary non-portable RIDs like `centos.8-x64` and [`banana.42-x64`](https://github.com/dotnet/source-build/issues/297) with no unexpected feature gaps vs. portable RIDs.  Currently, source-build conditionally disables the hard coded RID list but this could be improved.  It could have a list of \"good\" portable RIDs, and check if the current RID is a descendant of any of the \"good\" RIDs in the RID graph. Then, there would be no need for source-build-specific behavior, because `banana.42-x64` derives from `linux-x64`.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOM5QSWQ==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDg2NTM0MjA0MQ==",
+                                           "createdAt":  "2021-06-21T21:03:34Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ViktorHofer",
+                                           "body":  "cc @trylek @ericstj @dagood @jkoritzinsky ",
+                                           "updatedAt":  "2021-06-21T21:03:34Z"
+                                       }
+                                   ],
+                         "totalCount":  1
+                     },
+        "title":  "Refactor CrossGen build to better support arbitrary RIDs",
+        "labels":  [
+                       "area-Infrastructure-installer"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/74766",
+        "createdAt":  "2022-08-29T17:04:57Z",
+        "number":  74766,
+        "author":  "NikolaMilosavljevic",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-06-05T15:28:43Z",
+        "body":  "Currently we have a list of repos that contribute TPNs and a commented out list of those that do not. These lists can change and the repo can onboard its own TPN file. Every such change would require modification of the tool, to uncomment the repo-specific entry.\r\n\r\nhttps://github.com/dotnet/runtime/blob/d9cfbb4d5e2e861a36a974ca36b62a2f98a611ca/eng/regenerate-third-party-notices.proj#L15-L33\r\n\r\nInstead of requiring manual tool changes, which can easily be overlooked, make a change to the tool to check all known repos and skip those that do not have TPNs onboarded.\r\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOgCvajw==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5m6MEJ",
+                                           "createdAt":  "2023-09-19T21:30:59Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "NikolaMilosavljevic",
+                                           "body":  "[Triage] We could use Darc dependencies, starting with `installer`, to discover all product repos.",
+                                           "updatedAt":  "2023-09-19T21:30:59Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6AK9qP",
+                                           "createdAt":  "2024-06-05T15:27:55Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "akoeplinger",
+                                           "body":  "We also need to remove the dotnet/installer repo from this list now that it was merged into the sdk repo.\r\nI tried adding the sdk repo instead but then the target complains because the TPN file in the sdk repo doesn\u0027t have any entries (which sounds like another issue?)",
+                                           "updatedAt":  "2024-06-05T15:28:43Z"
+                                       }
+                                   ],
+                         "totalCount":  2
+                     },
+        "title":  "Tool for updating 3rd-party notices should be more resilient to changes in dependencies",
+        "labels":  [
+                       "area-Infrastructure-installer"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/115407",
+        "createdAt":  "2025-05-08T18:08:51Z",
+        "number":  115407,
+        "author":  "NikolaMilosavljevic",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHODDQj0A==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "LeszekKalibrate",
+                                            "createdAt":  "2025-06-04T10:59:12Z"
+                                        }
+                                    ],
+                          "totalCount":  1
+                      },
+        "updatedAt":  "2025-08-26T21:16:37Z",
+        "body":  "We\u0027ve had to update the list of supported `libicu` versions several times in the past. Latest one: https://github.com/dotnet/runtime/pull/115374\n\nIt would be best if we don\u0027t need to touch this file manually and have a way to automatically add latest and some future versions.\n\nOne suggested solution: https://github.com/dotnet/runtime/pull/115378#issuecomment-2860038569",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOwEU0Cg==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc7ARTQK",
+                                           "createdAt":  "2025-08-26T21:16:35Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "NikolaMilosavljevic",
+                                           "body":  "[Triage] @NikolaMilosavljevic please investigate this and come up with a solution. Per @MichaelSimons we could at least have a unit-test to discover latest `libicu` version in distro\u0027s latest docker images (not .NET modified ones) and compare with some property in our infra.",
+                                           "updatedAt":  "2025-08-26T21:16:35Z"
+                                       }
+                                   ],
+                         "totalCount":  1
+                     },
+        "title":  "List of `libicu` versions in Debian DEPS file needs occasional updates",
+        "labels":  [
+                       "area-Infrastructure-installer",
+                       "untriaged"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/115522",
+        "createdAt":  "2025-05-13T17:06:55Z",
+        "number":  115522,
+        "author":  "elinor-fung",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-08-26T21:20:44Z",
+        "body":  "\u003e The packaging tests should really live in Arcade as part of testing the SharedFramework SDK.\n\n_Originally posted by @jkoritzinsky in https://github.com/dotnet/runtime/issues/114187#issuecomment-2874037469_\n            \nWith #114187, the [`Microsoft.DotNet.CoreSetup.Packaging.Tests`](https://github.com/dotnet/runtime/tree/main/src/installer/tests/Microsoft.DotNet.CoreSetup.Packaging.Tests) are no longer part of runtime PR/CI.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOwEVkkA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc7ARWSQ",
+                                           "createdAt":  "2025-08-26T21:20:37Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "NikolaMilosavljevic",
+                                           "body":  "[Triage] @NikolaMilosavljevic can you investigate if this is for testing the infra or packages?",
+                                           "updatedAt":  "2025-08-26T21:20:37Z"
+                                       }
+                                   ],
+                         "totalCount":  1
+                     },
+        "title":  "Move packaging tests to Arcade for testing the SharedFramework SDK",
+        "labels":  [
+                       "area-Infrastructure-installer",
+                       "untriaged"
+                   ]
+    }
+]

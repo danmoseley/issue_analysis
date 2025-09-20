@@ -1,0 +1,117 @@
+﻿{
+    "url":  "https://github.com/dotnet/aspire/issues/11071",
+    "createdAt":  "2024-01-18T13:28:39Z",
+    "number":  11071,
+    "author":  "martincostello",
+    "reactions":  {
+                      "hasNextPage":  false,
+                      "endCursor":  null,
+                      "nodes":  [
+
+                                ],
+                      "totalCount":  0
+                  },
+    "updatedAt":  "2025-09-09T22:48:28Z",
+    "body":  "Each panel in the [Grafana dashboards](https://github.com/dotnet/aspire/tree/main/src/Grafana) are tied directly to a specific datasource ID _at the point it is imported_, rather than being a variable in of itself.\r\n\r\nhttps://github.com/dotnet/aspire/blob/fc0d681c0921984da03e61dcbf69ce5528a658d3/src/Grafana/dashboards/aspnetcore.json#L77-L80\r\n\r\nIn the case that a Grafana instance has multiple data sources, this makes it difficult to switch between different deployments of an application in the same dashboard.\r\n\r\nIt would be useful if the dashboards instead defined a Data Source variable and referenced that instead for easy switching.\r\n\r\nFor example:\r\n\r\n```jsonc\r\n{\r\n  \"panels\": [\r\n    {\r\n      \"datasource\": {\r\n        \"type\": \"prometheus\",\r\n        \"uid\": \"${prometheus}\"\r\n      }\r\n      // The actual panel...\r\n    }\r\n  ],\r\n  \"templating\": {\r\n    \"list\": [\r\n      {\r\n        \"current\": {\r\n          \"selected\": true,\r\n          \"text\": \"Prometheus Production-EU-WEST-1\",\r\n          \"value\": \"Prometheus Production-EU-WEST-1\"\r\n        },\r\n        \"hide\": 0,\r\n        \"includeAll\": false,\r\n        \"multi\": false,\r\n        \"name\": \"prometheus\",\r\n        \"options\": [],\r\n        \"query\": \"prometheus\",\r\n        \"queryValue\": \"\",\r\n        \"refresh\": 1,\r\n        \"regex\": \"\",\r\n        \"skipUrlSync\": false,\r\n        \"type\": \"datasource\"\r\n      }\r\n    ]\r\n  }\r\n}\r\n```\r\n",
+    "comments":  {
+                     "hasNextPage":  false,
+                     "endCursor":  "Y3Vyc29yOnYyOpHOv6Hhow==",
+                     "nodes":  [
+                                   {
+                                       "id":  "IC_kwDOKYQzfc6_oeFw",
+                                       "createdAt":  "2024-01-18T18:28:12Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  "josephaw1022",
+                                       "body":  "\r\nTies in directly to dotnet/aspire#1037 and discussions in the pr for the issue https://github.com/dotnet/aspire/pull/1173#issue-2021860731\r\n\r\nAnd more specifically \r\nhttps://github.com/dotnet/aspire/pull/1173#issuecomment-1884513463\r\n\r\nProbably going to have a solution for this problem this week",
+                                       "updatedAt":  "2024-01-18T18:28:12Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDOKYQzfc6_oeF2",
+                                       "createdAt":  "2024-01-18T19:23:23Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  "martincostello",
+                                       "body":  "Just to be clear, I\u0027m not referring to usage of Aspire itself and it producing any dashboards. I took the dashboards from [here](https://grafana.com/orgs/dotnetteam) and then imported them into our instance of Grafana directly.",
+                                       "updatedAt":  "2024-01-18T19:23:23Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDOKYQzfc6_oeGE",
+                                       "createdAt":  "2024-01-19T15:02:44Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  "josephaw1022",
+                                       "body":  "@martincostello  Sorry, I was skimming through this during my lunch yesterday and just went through this too quickly. But I read this again yesterday and again today and I think I know what you\u0027re getting at now. \r\n\r\nSo, currently the Prometheus data source in the json file [here](https://github.com/dotnet/aspire-samples/blob/ef6868b0999c6eea3d42a10f2b20433c5ea93720/samples/Metrics/grafana/dashboards/aspnetcore.json#L32) seems to be only configured to point to what is supposed to be an \"aspire orchestrated\" prometheus instance. \r\n\r\n### For clarification\r\n\r\n**So the current functionality seems to be** \r\n\r\n```mermaid\r\ngraph TD\r\n    subgraph prod [\"Production Environment\"]\r\n        grafanaProd[(prod Grafana)] --\u003e prometheusProd[(prod Prometheus)]\r\n        prometheusProd --\u003e dataSourceProd[(prod scrape targets)]\r\n    end\r\n    subgraph dev [\"Development Environment\"]\r\n        grafanaDev[(dev Grafana)] --\u003e prometheusDev[(dev Prometheus)]\r\n        prometheusDev --\u003e dataSourceDev[(dev scrape targets)]\r\n    end\r\n    subgraph qa [\"QA Environment\"]\r\n        grafanaQA[(qa Grafana)] --\u003e prometheusQA[(qa Prometheus)]\r\n        prometheusQA --\u003e dataSourceQA[(qa scrape targets)]\r\n    end\r\n\r\n```\r\n\r\n\r\n**And what I think you are suggesting is configuring it to point to potentially 1-many datasources** (that you can toggle between in the ui)\r\n\r\n```mermaid\r\ngraph TD\r\n    grafana[(Grafana)]\r\n    grafana --\u003e prometheusDev[(dev Prometheus)]\r\n    grafana --\u003e prometheusProd[(prod Prometheus)]\r\n    grafana --\u003e prometheusQA[(qa Prometheus)]\r\n\r\n```\r\n\r\n**NOTE 🚧**\r\nI use Prometheus (as the DataSource) in these mermaid charts, but it can be whatever datasource you have in mind. And I just used dev, prod, and qa as a way to get the point across, it can be whatever you want it to be. \r\n\r\n\r\nBut from the wording of this, it also seems like you want the the list of data sources to initially include what is currently the \"singular DataSource\" that\u0027s in the json. keeping it simple initially but also \"appendable\" for easy toggling\r\n\r\n\r\n**Is this what you have in mind?** \r\n",
+                                       "updatedAt":  "2024-01-19T15:16:55Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDOKYQzfc6_oeGQ",
+                                       "createdAt":  "2024-01-19T15:17:06Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  "martincostello",
+                                       "body":  "\u003e Is this what you have in mind?\r\n\r\nYep, that\u0027s it exactly. I\u0027d like to be able to use a single dashboard to pivot between environments/deployments from a single dashboard.\r\n\r\nFor context, we have two instances of Grafana: one for non-production and one for production. All non-production environments use one, and all production environments use the other.\r\n\r\nWe have _many_ environments of each type, but the preference would be to import a dashboard once for each Grafana instance, and then easily pivot between an environment to see the health of an application in two different AWS accounts (which are broadly equivalent to an \"environment\") in the same dashboard without changing the URL/losing context/etc.\r\n",
+                                       "updatedAt":  "2024-01-19T15:17:06Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDOKYQzfc6_oeGX",
+                                       "createdAt":  "2025-08-19T00:02:33Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  "danmoseley",
+                                       "body":  "we don\u0027t really have an area label for this. @JamesNK where should issue for grafana dashbaord go?",
+                                       "updatedAt":  "2025-08-19T00:02:33Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDOKYQzfc6_oeGj",
+                                       "createdAt":  "2025-08-19T01:43:20Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  "JamesNK",
+                                       "body":  "Typically they\u0027ve gone in the aspire repo because that\u0027s where the code is.",
+                                       "updatedAt":  "2025-08-19T01:43:20Z"
+                                   }
+                               ],
+                     "totalCount":  6
+                 },
+    "title":  "Parameterise the Prometheus Data Source in Grafana Dashboards",
+    "labels":  [
+                   "area-grafana"
+               ]
+}

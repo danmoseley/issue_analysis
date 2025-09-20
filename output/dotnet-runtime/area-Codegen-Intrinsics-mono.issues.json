@@ -1,0 +1,826 @@
+﻿[
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/43051",
+        "createdAt":  "2020-10-05T18:21:32Z",
+        "number":  43051,
+        "author":  "imhameed",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-08-11T14:58:21Z",
+        "body":  "## .NET 6\r\n\r\nGeneral implementation:\r\n- [x] [System.Runtime.Intrinsics.Vector{128,64}](https://github.com/dotnet/runtime/issues/42350)  Assigned to imhameed\r\n- [x] [System.Runtime.Intrinsics.Arm.Sha256](https://github.com/dotnet/runtime/issues/42325)  Assigned to fanyang-mono\r\n- [x] [System.Runtime.Intrinsics.Arm.Sha1](https://github.com/dotnet/runtime/issues/42323)  Assigned to fanyang-mono\r\n- [x] [System.Runtime.Intrinsics.Arm.Rdm](https://github.com/dotnet/runtime/issues/42322) Assigned to imhameed\r\n- [x] [System.Runtime.Intrinsics.Arm.Dp](https://github.com/dotnet/runtime/issues/42280)  Assigned to imhameed\r\n- [x] [System.Runtime.Intrinsics.Arm.Aes](https://github.com/dotnet/runtime/issues/42273) Assigned to fanyang-mono\r\n- [x] [System.Runtime.Intrinsics.Arm.AdvSimd](https://github.com/dotnet/runtime/issues/42266)  Assigned to naricc/imhameed\r\n- [x] [MultiplyHigh](https://github.com/dotnet/runtime/issues/43106)\r\n- [x] [4-arg ops](https://github.com/dotnet/runtime/issues/48475)\r\n- [x] [Tablegen automation](https://github.com/dotnet/runtime/issues/48499)\r\n\r\nBugs:\r\n- [x] https://github.com/dotnet/runtime/issues/43676\r\n- [x] https://github.com/dotnet/runtime/issues/53078\r\n\r\n## .NET 7\r\n\r\nGeneral implementation:\r\n- [x] #64072 \r\n- [x] #69186\r\n- [x] [Addressed input arguments with LLVM enabled] #60068\r\n- [x] [LoadPairVector](https://github.com/dotnet/runtime/issues/39243)\r\n    - See https://github.com/dotnet/runtime/pull/52424#issuecomment-876635972\r\n    - An implementation is available at https://github.com/dotnet/runtime/pull/52424/commits/82bb175ceb2195d22453f348a0e6cd7b2e84096b\r\n\r\nRuntime test coverage:\r\n- [x] #43842\r\n\r\nCleanup and refactoring:\r\n- [x] #65318 \r\n- [x] #66525\r\n\r\n## .NET 8\r\n- [x] #80788\r\n- [x] #80566\r\n- [x] #74583\r\n- [x] #80762\r\n- [x] #76025 - Will focus on Arm64 first. May not be able to get to the Amd64 one in .NET8\r\n- [x] #81483\r\n- [x] #81482\r\n- [x] #86272\r\n- [x] https://github.com/dotnet/runtime/issues/86957\r\n- [x] https://github.com/dotnet/runtime/pull/85458\r\n- [x] #73454\r\n- [x] #83891\r\n\r\n## .NET 9\r\n- [x] #73462\r\n- [x] #91394\r\n- [x] #93081\r\n- [x] #97815\r\n- [x] #99161\r\n- [x] #101495\r\n\r\n## .NET10\r\n- [ ] #73261 - focus on Vector128 only.\r\n\r\n## Future:\r\n- [ ] #66392\r\n- [ ] [Handle output argument with LLVM enabled and more] #60068\r\n- [ ] [System.Runtime.Intrinsics.Vector256](https://github.com/dotnet/runtime/issues/42350)\r\n- [ ] 512-bit vector support\r\n- [x] #60483\r\n- [x] #60484\r\n- [x] #60485\r\n- [ ] #68916\r\n- [ ] #81501\r\n- [ ] #88207\r\n- [ ] #87576\r\n- [ ] #81420\r\n- [ ] #90402\r\n- [ ] #91392\r\n- [x] #93488\r\n- [ ] #97988\r\n- [ ] #82408\r\n\r\nSize optimization:\r\n- [ ] #43050\r\n\r\nCleanup and refactoring:\r\n- [ ] #53032\r\n- [ ] #75144\r\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOYVIEwA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDcwMzgwNTMzOA==",
+                                           "createdAt":  "2020-10-05T18:21:35Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Dotnet-GitSync-Bot",
+                                           "body":  "I couldn\u0027t figure out the best area label to add to this issue. If you have write-permissions please help me learn by adding exactly one [area label](https://github.com/dotnet/runtime/blob/master/docs/area-owners.md).",
+                                           "updatedAt":  "2020-10-05T18:21:35Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDcwMzgwNTQyNA==",
+                                           "createdAt":  "2020-10-05T18:21:43Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: \nSee info in area-owners.md if you want to be subscribed.",
+                                           "updatedAt":  "2020-10-05T18:21:43Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc43ztF0",
+                                           "createdAt":  "2021-10-06T14:06:05Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "lambdageek",
+                                           "body":  "@imhameed @fanyang-mono  I can\u0027t tell from the summary, does this also include marshalling support for `Vector128\u003cT\u003e`/`Vector256\u003cT\u003e` (ie so that pinvokes on x86-64 use the xmm registers, and on arm64 use the NEON registers for argument passing to native code).  Would allow us to run these tests https://github.com/dotnet/runtime/tree/main/src/tests/Interop/PInvoke/Generics and implement https://github.com/mono/mono/issues/17868\r\n\r\nA related issue https://github.com/dotnet/runtime/issues/9578 is tracking the CoreCLR work to unblock passing `Vector128\u003cT\u003e`/`Vector256\u003cT\u003e` by value to P/Invokes.  It\u0027s currently blocked (with a bad error message about the types not being blittable) due to CoreCLR incorrectly marshalling vector return values on Windows x64.\r\n\r\n",
+                                           "updatedAt":  "2021-10-06T14:36:18Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc430HwL",
+                                           "createdAt":  "2021-10-06T14:46:56Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "imhameed",
+                                           "body":  "That work hasn\u0027t happened yet. It\u0027s come up a few times in PR comments but I previously had only been tracking this in my head. I just created an issue for this: https://github.com/dotnet/runtime/issues/60068",
+                                           "updatedAt":  "2021-10-06T14:46:56Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5IFvTC",
+                                           "createdAt":  "2022-08-09T14:34:49Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "SamMonoRT",
+                                           "body":  "moving tracking issue to 8.0.0",
+                                           "updatedAt":  "2022-08-09T14:34:49Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5hUgTA",
+                                           "createdAt":  "2023-07-12T15:34:32Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "fanyang-mono",
+                                           "body":  "Moving tracking issue to 9.0.0",
+                                           "updatedAt":  "2023-07-12T15:34:32Z"
+                                       }
+                                   ],
+                         "totalCount":  6
+                     },
+        "title":  "[mono] Tracking: Intrinsics implementation",
+        "labels":  [
+                       "runtime-mono",
+                       "tracking",
+                       "area-Codegen-Intrinsics-mono"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/68916",
+        "createdAt":  "2022-05-05T16:54:32Z",
+        "number":  68916,
+        "author":  "anthonycanino",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-07-26T16:16:11Z",
+        "body":  "The `X86Serialize` API was proposed and accepted at https://github.com/dotnet/runtime/issues/66467. The PR https://github.com/dotnet/runtime/pull/68677 for this implements `X86Serialize` API and intrinsic for RyuJIT, but the `mono` JIT and runtime also need an implementation.\r\n\r\nCreating this issue as a work item to add the API/intrinsic for mono.\r\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOQq_6GA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5Cr_oY",
+                                           "createdAt":  "2022-05-05T16:54:36Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "I couldn\u0027t figure out the best area label to add to this issue. If you have write-permissions please help me learn by adding exactly one [area label](https://github.com/dotnet/runtime/blob/master/docs/area-owners.md).",
+                                           "updatedAt":  "2022-05-05T16:54:36Z"
+                                       }
+                                   ],
+                         "totalCount":  1
+                     },
+        "title":  "Add `X86Serialize` API and intrinsic for mono.",
+        "labels":  [
+                       "area-Codegen-Intrinsics-mono"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/81501",
+        "createdAt":  "2023-02-01T20:07:35Z",
+        "number":  81501,
+        "author":  "fanyang-mono",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHOCuRkAA==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "srxqds",
+                                            "createdAt":  "2023-02-02T05:23:50Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "jandupej",
+                                            "createdAt":  "2023-02-07T13:49:08Z"
+                                        }
+                                    ],
+                          "totalCount":  2
+                      },
+        "updatedAt":  "2024-02-12T20:03:46Z",
+        "body":  "Vector2/3 needs to be intrinsified on all mono supported platforms.\r\n\r\n- [x] Vector2 with LLVM on arm64 (#73462)\r\n- [x] Vector2 with mini JIT on arm64 (#73462)\r\n- [ ] Vector2 with mini JIT on amd64\r\n- [ ] Vector2 with LLVM on amd64\r\n- [ ] Vector2 with interpreter\r\n- [x] Vector3 with LLVM on arm64(https://github.com/dotnet/runtime/issues/91456)\r\n- [x] Vector3 with mini JIT on arm64 (https://github.com/dotnet/runtime/issues/91456)\r\n- [ ] Vector3 with mini JIT on amd64\r\n- [ ] Vector3 with LLVM on amd64\r\n- [ ] Vector3 with interpreter",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOYC4nRA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5gLidE",
+                                           "createdAt":  "2023-06-29T18:54:03Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "fanyang-mono",
+                                           "body":  "Intrinsifying Vector2 should help improve the performance of Vector2 and Matrix3x2 microbenchmarks.",
+                                           "updatedAt":  "2023-06-29T18:54:03Z"
+                                       }
+                                   ],
+                         "totalCount":  1
+                     },
+        "title":  "[Mono] Intrinsify Vector2/3",
+        "labels":  [
+                       "area-Codegen-Intrinsics-mono"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/82408",
+        "createdAt":  "2023-02-20T19:59:28Z",
+        "number":  82408,
+        "author":  "radekdoulik",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-08-05T15:28:44Z",
+        "body":  "Currently we don\u0027t have correct intrinsics for these operators for Quaternions in mono",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOhGM3fQ==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5i3I1e",
+                                           "createdAt":  "2023-07-31T15:39:21Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "SamMonoRT",
+                                           "body":  "@radekdoulik - Not sure how much more work is remaining here, moving to 9.0.0",
+                                           "updatedAt":  "2023-07-31T15:39:21Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6EYzd9",
+                                           "createdAt":  "2024-07-10T17:38:44Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "steveisok",
+                                           "body":  "@radekdoulik is this still relevant? Do you plan on getting this in in the 9.0 timeframe?",
+                                           "updatedAt":  "2024-07-10T17:38:44Z"
+                                       }
+                                   ],
+                         "totalCount":  2
+                     },
+        "title":  "[mono] Implement * and / quaternion intrinsics",
+        "labels":  [
+                       "area-Codegen-Intrinsics-mono"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/87576",
+        "createdAt":  "2023-06-14T20:34:29Z",
+        "number":  87576,
+        "author":  "fanyang-mono",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-07-26T16:12:54Z",
+        "body":  "According to #87540\r\n\r\nThe following problems need to be fixed to enable SIMD registers across all Mono codegen engines on Arm64\r\n\r\n- [ ] the gshared versions of SIMD types like Vector\u003cT_INT\u003e are not marked as SIMD, so there is a calling convention mismatch if the callee is generic shared.\r\n- [ ] the gsharedvt code doesn\u0027t support it, i.e. it asserts in get_arg_slots ().\r\n- [ ] the dyncall code might not support it either.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  null,
+                         "nodes":  [
+
+                                   ],
+                         "totalCount":  0
+                     },
+        "title":  "[Mono] Issues to prevent SIMD registers from being enabled on Arm64",
+        "labels":  [
+                       "area-Codegen-Intrinsics-mono"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/90402",
+        "createdAt":  "2023-08-11T15:30:04Z",
+        "number":  90402,
+        "author":  "matouskozak",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2023-08-15T14:22:52Z",
+        "body":  "Add support for emitting intrinsics for `Vector64.ExtractMostSignificantBits` on ARM64 platform. https://github.com/dotnet/runtime/blob/376e2353e4a06bd79639cad4ea83fd9001e62883/src/mono/mono/mini/simd-intrinsics.c#L1828-L1831",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  null,
+                         "nodes":  [
+
+                                   ],
+                         "totalCount":  0
+                     },
+        "title":  "[Mono] Intrinsify Vector64.ExtractMostSignificantBits on ARM64",
+        "labels":  [
+                       "area-Codegen-Intrinsics-mono"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/90600",
+        "createdAt":  "2023-08-15T14:21:20Z",
+        "number":  90600,
+        "author":  "matouskozak",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHOC0bpoQ==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "lewing",
+                                            "createdAt":  "2023-08-15T20:11:26Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "MadProbe",
+                                            "createdAt":  "2023-12-05T11:38:25Z"
+                                        }
+                                    ],
+                          "totalCount":  2
+                      },
+        "updatedAt":  "2024-12-12T17:13:59Z",
+        "body":  "Add support for emitting intrinsics for `Vector128.ExtractMostSignificantBits` when element type is `float`, `double` on WASM.\r\n\r\nhttps://github.com/dotnet/runtime/blob/1eb702ce1efe3581488a37704cee47603a291069/src/mono/mono/mini/simd-intrinsics.c#L1807-L1809",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOZBPCzA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5kE8LM",
+                                           "createdAt":  "2023-08-15T14:21:27Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to \u0027arch-wasm\u0027: @lewing\nSee info in area-owners.md if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\nAdd support for emitting intrinsics for `Vector128.ExtractMostSignificantBits` when element type is `float`, `double` on WASM.\r\n\r\nhttps://github.com/dotnet/runtime/blob/1eb702ce1efe3581488a37704cee47603a291069/src/mono/mono/mini/simd-intrinsics.c#L1807-L1809\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003ematouskozak\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003eradekdoulik\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`arch-wasm`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e9.0.0\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2023-08-15T14:21:27Z"
+                                       }
+                                   ],
+                         "totalCount":  1
+                     },
+        "title":  "[wasm] Intrinsify Vector128.ExtractMostSignificantBits for floating element types",
+        "labels":  [
+                       "arch-wasm",
+                       "area-Codegen-Intrinsics-mono"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/91278",
+        "createdAt":  "2023-08-29T16:23:44Z",
+        "number":  91278,
+        "author":  "matouskozak",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-03-29T05:25:21Z",
+        "body":  "Mono is missing intrinsics support for some Vector4 scenarios. \r\n\r\n- [ ] Vector4 with miniJIT on amd64\r\n- [x] Vector4 with interpreter (https://github.com/dotnet/runtime/pull/87822)",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOZTIYhg==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5lMhiG",
+                                           "createdAt":  "2023-08-29T16:28:57Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @SamMonoRT, @fanyang-mono\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\nMono is missing intrinsics support for some Vector4 scenarios. \r\n\r\n- [ ] Vector4 with miniJIT on amd64\r\n- [ ] Vector4 with interpreter\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003ematouskozak\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003efanyang-mono\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-Codegen-Intrinsics-mono`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e9.0.0\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2023-08-29T16:28:57Z"
+                                       }
+                                   ],
+                         "totalCount":  1
+                     },
+        "title":  "[mono] Intrinsify Vector4",
+        "labels":  [
+                       "area-Codegen-Intrinsics-mono"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/97988",
+        "createdAt":  "2024-02-05T16:53:27Z",
+        "number":  97988,
+        "author":  "jkurdek",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-08-22T16:15:00Z",
+        "body":  "Add SIMD support for methods from `System.Numerics.Vector` on x64. Will fix https://github.com/dotnet/perf-autofiling-issues/issues/25809. Currently blocked by lack of AVX support.\r\n\r\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOcuLNRw==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5y4s1H",
+                                           "createdAt":  "2024-02-05T16:53:32Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @SamMonoRT, @fanyang-mono\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\nAdd SIMD support for methods from `System.Numerics.Vector` on x64. Will fix https://github.com/dotnet/perf-autofiling-issues/issues/25809. Currently blocked by lack of AVX support.\r\n\r\n\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003ejkurdek\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`arch-x64`, `area-Codegen-Intrinsics-mono`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2024-02-05T16:53:32Z"
+                                       }
+                                   ],
+                         "totalCount":  1
+                     },
+        "title":  "[Mono] [x64] Add SIMD support for System.Numerics.Vector",
+        "labels":  [
+                       "arch-x64",
+                       "area-Codegen-Intrinsics-mono"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/99749",
+        "createdAt":  "2024-03-14T08:15:44Z",
+        "number":  99749,
+        "author":  "jkurdek",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-06-21T15:19:03Z",
+        "body":  "Intensified dot product calculation utilises `FADDV`. It has been observed that on some hardware it is faster to use `FADDP` multiple times instead. We should investigate making the transition to `FADDP`\r\n\r\nhttps://github.com/dotnet/runtime/pull/98761#discussion_r1500858340",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOdwTgUQ==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc53BOBR",
+                                           "createdAt":  "2024-03-14T08:16:08Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @SamMonoRT, @fanyang-mono\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2024-03-14T08:16:08Z"
+                                       }
+                                   ],
+                         "totalCount":  1
+                     },
+        "title":  "[Mono] Investigate using FADDP instead of FADDV in sum vector intrinsics",
+        "labels":  [
+                       "area-Codegen-Intrinsics-mono"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/102557",
+        "createdAt":  "2024-05-21T08:42:30Z",
+        "number":  102557,
+        "author":  "performanceautofiler",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-08-15T13:45:13Z",
+        "body":  "\u003c!-- DATA: {\"RunType\":{\"Repo\":\"dotnetruntime\",\"Branch\":\"refs/heads/main\",\"Arch\":\"x64\",\"Os\":\"Ubuntu2204\",\"Queue\":\"TigerUbuntu\",\"Frequency\":\"Weekly\",\"CoreClr\":false,\"Mono\":true,\"Wasm\":false,\"Maui\":false,\"Configs\":[\"CompilationMode:tiered\",\"LLVM:true\",\"MonoAOT:true\",\"MonoInterpreter:false\",\"RunKind:micro_mono\"]},\"RegressionDate\":\"2024-05-13T21:18:56\",\"IsRegression\":true} --\u003e\r\n\n### Run Information\n\nName | Value\n-- | --\nArchitecture | x64\nOS | ubuntu 22.04\nQueue | TigerUbuntu\nBaseline | [42c2362ca7d6030a4f665bb309fe49ce6552502b](https://github.com/dotnet/runtime/commit/42c2362ca7d6030a4f665bb309fe49ce6552502b)\nCompare | [778cc8436260736c1ca5393abb27414ea42ad8a7](https://github.com/dotnet/runtime/commit/778cc8436260736c1ca5393abb27414ea42ad8a7)\nDiff | [Diff](https://github.com/dotnet/runtime/compare/42c2362ca7d6030a4f665bb309fe49ce6552502b...778cc8436260736c1ca5393abb27414ea42ad8a7)\nConfigs | CompilationMode:tiered, LLVM:true, MonoAOT:true, MonoInterpreter:false, RunKind:micro_mono\n\n\n### Regressions in System.Numerics.Tests.Perf_VectorConvert\n\nBenchmark | Baseline | Test | Test/Base | Test Quality | Edge Detector | Baseline IR | Compare IR | IR Ratio\n-- | -- | -- | -- | -- | -- | -- | -- | --\n|\u003cul\u003e\u003cli\u003e[Convert_float_uint - Duration of single invocation](\u003chttps://pvscmdupload.z22.web.core.windows.net/reports/allTestHistory/refs/heads/main_x64_ubuntu 22.04_LLVM=true_MonoAOT=true_MonoInterpreter=false_RunKind=micro_mono/System.Numerics.Tests.Perf_VectorConvert.Convert_float_uint.html\u003e)\u003c/li\u003e\u003cli\u003e📝 - [Benchmark Source](\u003chttps://github.com/dotnet/performance/blob/main/src/benchmarks/micro/libraries/System.Numerics.Vectors/Perf_VectorConvert.cs#L35-#L37\u003e)\u003c/li\u003e\u003cli\u003e[ADX - Test Multi Config Graph](\u003chttps://dataexplorer.azure.com/clusters/dotnetperf.westus/databases/PerformanceData?query=H4sIAAAAAAAACpVUXW/TMBR9R+I/+C0JZG2WFTQqBdGVMQbtKF21F4QqN7ltjPwRXdtbMyF+O3ZaytpJI7wkvtfnnHvt3JMxUG0RBEijn/0kdyUgkDPLeDGFSpEsI0GhjATTRSsNExDso86QyrxscAhL3S2BFrorKJMHwAHmJTOQG1eNMEnCYP26F8QkoCjcItqhZ6DNFRXgNd8F17U2IDpXVgCyXHf8ru5MAJfzGyemcKjkLaDpbN/zJVfUzC2T5m8DUyvd9pKtLFLDlNTfgqESFeNNNFYFBN9J9osEhjl4ETx/ijka3Yz/wNHC0+CxkmrwZfZf+EtpACsE99zylpTrfxBd6jOTxZYgWI5qLpzYAxbTICpTh4/YA2WiFrBLpUf8VjRfsw3+kz6XKyahDXayUrO6agcta81yyieohPKZtsSP9QJZccHVgnJ23+Ta0KbptG2F83XlptR7yQ/w/kgPlfMP4ExV29W+PWaOdm2oqMhbUlAD3mphmqS9o+TkKD2eJaf9Xto/TjpvXiXpadp7mST9JPEltBWCIrsHQnE1F3QdNoK+g5i8iMiiPqgQ7ywW+0n6asGC06lQ/XCOegSegrbcZOi6LsIHJ9nkB850dOWUTqKYNFJeOPuADGTB613GX1YT+JbR7QESf8a8pGjIHTMlCbW7PNDZjhOTda64FTI77Kne5HW2acIBDTMcsuC9uzr3U6m3oaeQUOrI53TFmcnoGnT0G6oYA5n2BAAA\u003e)\u003c/li\u003e\u003c/ul\u003e | 36.94 μs | 52.70 μs | 1.43 | 0.06 | True | | |\r\n|\u003cul\u003e\u003cli\u003e[Convert_double_ulong - Duration of single invocation](\u003chttps://pvscmdupload.z22.web.core.windows.net/reports/allTestHistory/refs/heads/main_x64_ubuntu 22.04_LLVM=true_MonoAOT=true_MonoInterpreter=false_RunKind=micro_mono/System.Numerics.Tests.Perf_VectorConvert.Convert_double_ulong.html\u003e)\u003c/li\u003e\u003cli\u003e📝 - [Benchmark Source](\u003chttps://github.com/dotnet/performance/blob/main/src/benchmarks/micro/libraries/System.Numerics.Vectors/Perf_VectorConvert.cs#L43-#L44\u003e)\u003c/li\u003e\u003cli\u003e[ADX - Test Multi Config Graph](\u003chttps://dataexplorer.azure.com/clusters/dotnetperf.westus/databases/PerformanceData?query=H4sIAAAAAAAACpWUXW/TMBSG75H4D75LAlmbdhUalYLoyoBBO0oX7Qahyk1OGyN/RMf21kyI346dlrJ20gg3iX38vO85dnwyBaotggBp9LOf5K4EBHJuGS/mUCmSpiQolJFgumilYQKCQ+ocqczLhkNY6W4JtNBdQZk8AkeYl8xAblw2wiQJg82rQRCTgKJwg2hPZ6DNFRXgPd8G17U2IDpXVgCyXHf8qu7MAFeLG2emcKzkLaDp7N6LQtklh4XlSq7/ljC30gErtrZIDVNSfwvGSlSMN7OpKiD4TtJfJDDM4UXw/CnlZHIz/YOjhafhqZJq9CX7L/5SGsAKwT13uhXl+h9CF/rMZLETCJajWghn9kDFNIjK1OEj9UiZqAV2qfSE34rme7bhP+kLuWYS2rCztcrqqh1a1prllM9QCeUjbYUf6yWy4gNXS8rZfRNrI5v3520zXGwqd099N/krfHipx8p1EGCmqt3osEEyJ7s2VFTkDSmoAd9sYT/pD06S05N+L0vOhoP+sNfrJGfJ617Se5kkwyTxKbQVgiK7B0JxvRB0EzaGvoKYvIjIsj7KEO+bLPY36asFC86nQvXD9dQjeA7acpOiq7oIH+xkGx+5tqNr53QaxaSx8sbpe2QgC17vI/6wmokvGd0aIPF7zEuKhtwxU5JQu8MDne41Mdnkilsh0+Oa6m1cp9siHGiY4ZAG79zRud9KvZt6CQmljnxMV5yZlG5AR78BINx8R/gEAAA=\u003e)\u003c/li\u003e\u003c/ul\u003e | 12.88 μs | 23.93 μs | 1.86 | 0.06 | True | | |\r\n|\u003cul\u003e\u003cli\u003e[Convert_double_long - Duration of single invocation](\u003chttps://pvscmdupload.z22.web.core.windows.net/reports/allTestHistory/refs/heads/main_x64_ubuntu 22.04_LLVM=true_MonoAOT=true_MonoInterpreter=false_RunKind=micro_mono/System.Numerics.Tests.Perf_VectorConvert.Convert_double_long.html\u003e)\u003c/li\u003e\u003cli\u003e📝 - [Benchmark Source](\u003chttps://github.com/dotnet/performance/blob/main/src/benchmarks/micro/libraries/System.Numerics.Vectors/Perf_VectorConvert.cs#L39-#L41\u003e)\u003c/li\u003e\u003cli\u003e[ADX - Test Multi Config Graph](\u003chttps://dataexplorer.azure.com/clusters/dotnetperf.westus/databases/PerformanceData?query=H4sIAAAAAAAACpVUXW/TMBR9R+I/+C0pdG2Wlg9VCqIrAwbtKF20F4QqN7lNjPwRXdtbMyF+O3ZaytpJI7wkvtfnnHvt3JMZUG0RBEijn/wktyUgkDPLeL6ASpEkIUGujATTRysNExAcos6QyqxscAhr3S+B5rovKJNHwDFmJTOQGVeNMEnCYPNyGHRJQFG4RWePTkGbSyrAa74NrmptQPQurQBkme75Xd2bA66X105M4UTJG0DT272XubIrDkuuZPG3g4WVbn/NCovUMCX1t2CiRMV4E81UDsF3kvwigWEOngdPH2NOp9ezP3C08Dh4pqQaf0n/C38hDWCF4J473ppy/Q+iS31mMt8RBMtQLYUTu8diGkRl6vABe6xMpwXsQukpvxHN52yD/6TPZcEktMHOC5XWVTtoWWuWUT5HJZTPtCV+rFfI8g9crShnd02uDW0RL9pWON9Ubky9mfwEH870RDkDAaaq2q0O/ZE62pWhoiJvSE4NeK+FcRQPT6LBSXyaRq9Hw3h0etqLBy+Grwbx8ygaRZEvoa0QFNkdEIrFUtBN2Aj6DrrkWYes6qMK3b3Hun6Svlqw4HQqVD+cpR6AF6AtNwm6rvPw3km2+bFzHS2c0qDTJY2UF07eIwOZ83qf8ZfVBL5ldHuAxJ8xKykacstMSULtLg90sud0ySZT3AqZHPdUb/M62TbhgIYZDknwzl2d+6vUu9BTSCh1x+d0xZlJ6AZ05zcGUoRg9wQAAA==\u003e)\u003c/li\u003e\u003c/ul\u003e | 2.49 μs | 9.07 μs | 3.64 | 0.08 | True | | |\r\n\n![graph](\u003chttps://pvscmdupload.z22.web.core.windows.net/autofilereport/autofilereports/05_21_2024/refs/heads/main_x64_ubuntu%2022.04_LLVM%3Dtrue_MonoAOT%3Dtrue_MonoInterpreter%3Dfalse_RunKind%3Dmicro_mono_Regression/System.Numerics.Tests.Perf_VectorConvert_1.png\u003e)\n![graph](\u003chttps://pvscmdupload.z22.web.core.windows.net/autofilereport/autofilereports/05_21_2024/refs/heads/main_x64_ubuntu%2022.04_LLVM%3Dtrue_MonoAOT%3Dtrue_MonoInterpreter%3Dfalse_RunKind%3Dmicro_mono_Regression/System.Numerics.Tests.Perf_VectorConvert_2.png\u003e)\n![graph](\u003chttps://pvscmdupload.z22.web.core.windows.net/autofilereport/autofilereports/05_21_2024/refs/heads/main_x64_ubuntu%2022.04_LLVM%3Dtrue_MonoAOT%3Dtrue_MonoInterpreter%3Dfalse_RunKind%3Dmicro_mono_Regression/System.Numerics.Tests.Perf_VectorConvert_3.png\u003e)\n[Test Report](\u003chttps://pvscmdupload.z22.web.core.windows.net/autofilereport/autofilereports/05_21_2024/refs/heads/main_x64_ubuntu%2022.04_LLVM%3Dtrue_MonoAOT%3Dtrue_MonoInterpreter%3Dfalse_RunKind%3Dmicro_mono_Regression/System.Numerics.Tests.Perf_VectorConvert.html\u003e)\n\n### Repro\nGeneral Docs link: https://github.com/dotnet/performance/blob/main/docs/benchmarking-workflow-dotnet-runtime.md\n\n\u003cdetails\u003e\n   \u003csummary\u003eRepro Steps\u003c/summary\u003e\n\n\n#### Prerequisites (Files either built locally (with build.(sh/cmd) or downloaded from payload above (if same system setup) (in this order))\n- Libraries build extracted to `runtime/artifacts` or build instructions: [Libraries README](https://github.com/dotnet/runtime/blob/main/docs/workflow/building/libraries/README.md) args: `-subset libs+libs.tests -rc release -configuration Release -arch $RunArch -framework net8.0`\n- CoreCLR product build extracted to `runtime/artifacts/bin/coreclr/$RunOS.$RunArch.Release`, build instructions: [CoreCLR README](https://github.com/dotnet/runtime/blob/main/docs/workflow/building/coreclr/README.md) args: `-subset clr+libs -rc release -configuration Release -arch $RunArch -framework net8.0`\n- AOT MONO build extracted to `runtime/artifacts/bin/mono/$RunOS.$RunArch.Release`, build instructions: [MONO README](https://github.com/dotnet/runtime/blob/main/docs/workflow/building/mono/README.md) args: `-arch $RunArch -os $RunOS -s mono+libs+host+packs -c Release /p:CrossBuild=false /p:MonoLLVMUseCxx11Abi=false`\n- Dotnet SDK installed for dotnet commands\n- Running commands from the runtime folder\n\nLinux\n```cmd\n# Set $RunDir to the runtime directory\nRunDir=`pwd`\n\n# Set the OS, arch, and OSId\nRunOS=\u0027linux\u0027\nRunOSId=\u0027linux\u0027\nRunArch=\u0027x64\u0027\n\n# Create aot directory \nmkdir -p $RunDir/artifacts/bin/aot/sgen\nmkdir -p $RunDir/artifacts/bin/aot/pack\ncp -r $RunDir/artifacts/obj/mono/$RunOS.$RunArch.Release/mono/* $RunDir/artifacts/bin/aot/sgen\ncp -r $RunDir/artifacts/bin/microsoft.netcore.app.runtime.$RunOS-$RunArch/Release/* $RunDir/artifacts/bin/aot/pack\n\n# Create Core Root\n$RunDir/src/tests/build.sh release $RunArch generatelayoutonly /p:LibrariesConfiguration=Release\n\n# Clone performance \ngit clone --branch main --depth 1 --quiet https://github.com/dotnet/performance.git $RunDir/performance\n\n# One line run:\npython3 $RunDir/performance/scripts/benchmarks_ci.py --csproj $RunDir/performance/src/benchmarks/micro/MicroBenchmarks.csproj --incremental no --architecture $RunArch -f net8.0 --filter \u0027System.Numerics.Tests.Perf_VectorConvert*\u0027 --bdn-artifacts $RunDir/artifacts/BenchmarkDotNet.Artifacts --bdn-arguments=\"--anyCategories Libraries Runtime  --category-exclusion-filter NoAOT NoWASM --runtimes monoaotllvm --aotcompilerpath $RunDir/artifacts/bin/aot/sgen/mini/mono-sgen --customruntimepack $RunDir/artifacts/bin/aot/pack --aotcompilermode llvm --logBuildOutput --generateBinLog\"\n\n# Individual Commands:\n# Restore \ndotnet restore $RunDir/performance/src/benchmarks/micro/MicroBenchmarks.csproj --packages $RunDir/performance/artifacts/packages /p:UseSharedCompilation=false /p:BuildInParallel=false /m:1\n\n# Build\ndotnet build $RunDir/performance/src/benchmarks/micro/MicroBenchmarks.csproj --configuration Release --framework net8.0 --no-restore /p:NuGetPackageRoot=$RunDir/performance/artifacts/packages /p:UseSharedCompilation=false /p:BuildInParallel=false /m:1\n\n# Run\ndotnet run --project $RunDir/performance/src/benchmarks/micro/MicroBenchmarks.csproj --configuration Release --framework net8.0 --no-restore --no-build -- --filter System.Numerics.Tests.Perf_VectorConvert* --anyCategories Libraries Runtime \" --category-exclusion-filter NoAOT NoWASM --runtimes monoaotllvm --aotcompilerpath $RunDir/artifacts/bin/aot/sgen/mini/mono-sgen --customruntimepack $RunDir/artifacts/bin/aot/pack --aotcompilermode llvm --logBuildOutput --generateBinLog \" --artifacts $RunDir/artifacts/BenchmarkDotNet.Artifacts --packages $RunDir/performance/artifacts/packages --buildTimeout 1200\n```\n\nWindows\n```cmd\n# Set $RunDir to the runtime directory\n$RunDir=\"FullPathHere\"\n\n# Set the OS, arch, and OSId\nRunOS=\u0027windows\u0027\nRunOSId=\u0027win\u0027\nRunArch=\u0027x64\u0027\n\n# Create aot directory\nmkdir $RunDir\\artifacts\\bin\\aot\\sgen\nmkdir $RunDir\\artifacts\\bin\\aot\\pack\nxcopy $RunDir\\artifacts\\obj\\mono\\$RunOS.$RunArch.Release\\mono $RunDir\\artifacts\\bin\\aot\\sgen\\ /e /y\nxcopy $RunDir\\artifacts\\bin\\microsoft.netcore.app.runtime.$RunOSId-$RunArch\\Release $RunDir\\artifacts\\bin\\aot\\pack\\ /e /y\n\n# Create Core Root\n$RunDir\\src\\tests\\build.cmd release $RunArch generatelayoutonly /p:LibrariesConfiguration=Release\n\n# Clone performance \ngit clone --branch main --depth 1 --quiet https://github.com/dotnet/performance.git $RunDir\\performance\n\n# One line run:\npython3 $RunDir\\performance\\scripts\\benchmarks_ci.py --csproj $RunDir\\performance\\src\\benchmarks\\micro\\MicroBenchmarks.csproj --incremental no --architecture $RunArch -f net8.0 --filter \u0027System.Numerics.Tests.Perf_VectorConvert*\u0027 --bdn-artifacts $RunDir\\artifacts\\BenchmarkDotNet.Artifacts --bdn-arguments=\"--anyCategories Libraries Runtime  --category-exclusion-filter NoAOT NoWASM --runtimes monoaotllvm --aotcompilerpath $RunDir\\artifacts\\bin\\aot\\sgen\\mini\\mono-sgen.exe --customruntimepack $RunDir\\artifacts\\bin\\aot\\pack --aotcompilermode llvm --logBuildOutput --generateBinLog\"\n\n# Individual Commands:\n# Restore \ndotnet restore $RunDir\\performance\\src\\benchmarks\\micro\\MicroBenchmarks.csproj --packages $RunDir\\performance\\artifacts\\packages /p:UseSharedCompilation=false /p:BuildInParallel=false /m:1\n\n# Build\ndotnet build $RunDir\\performance\\src\\benchmarks\\micro\\MicroBenchmarks.csproj --configuration Release --framework net8.0 --no-restore /p:NuGetPackageRoot=$RunDir\\performance\\artifacts\\packages /p:UseSharedCompilation=false /p:BuildInParallel=false /m:1\n\n# Run\ndotnet run --project $RunDir\\performance\\src\\benchmarks\\micro\\MicroBenchmarks.csproj --configuration Release --framework net8.0 --no-restore --no-build -- --filter System.Numerics.Tests.Perf_VectorConvert* --anyCategories Libraries Runtime \" --category-exclusion-filter NoAOT NoWASM --runtimes monoaotllvm --aotcompilerpath $RunDir\\artifacts\\bin\\aot\\sgen\\mini\\mono-sgen.exe --customruntimepack $RunDir\\artifacts\\bin\\aot\\pack -aotcompilermode llvm --logBuildOutput --generateBinLog \" --artifacts $RunDir\\artifacts\\BenchmarkDotNet.Artifacts --packages $RunDir\\performance\\artifacts\\packages --buildTimeout 1200\n```\n\n\u003c/details\u003e\n\n\u003cdetails\u003e\n\n### System.Numerics.Tests.Perf_VectorConvert.Convert_float_uint\r\n\r\n#### ETL Files\r\n\r\n#### Histogram\r\n\r\n#### JIT Disasms\r\n\r\n### System.Numerics.Tests.Perf_VectorConvert.Convert_double_ulong\r\n\r\n#### ETL Files\r\n\r\n#### Histogram\r\n\r\n#### JIT Disasms\r\n\r\n### System.Numerics.Tests.Perf_VectorConvert.Convert_double_long\r\n\r\n#### ETL Files\r\n\r\n#### Histogram\r\n\r\n#### JIT Disasms\r\n\r\n\n\n### Docs\n\n[Profiling workflow for dotnet/runtime repository](https://github.com/dotnet/performance/blob/master/docs/profiling-workflow-dotnet-runtime.md)\n[Benchmarking workflow for dotnet/runtime repository](https://github.com/dotnet/performance/blob/master/docs/benchmarking-workflow-dotnet-runtime.md)\n\n\u003c/details\u003e\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOgh0I4g==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5-o6XB",
+                                           "createdAt":  "2024-05-22T12:18:55Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @directhex\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2024-05-22T12:18:55Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5-o6xH",
+                                           "createdAt":  "2024-05-22T12:19:47Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @fanyang-mono, @steveisok\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2024-05-22T12:19:47Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5-o64A",
+                                           "createdAt":  "2024-05-22T12:20:02Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "matouskozak",
+                                           "body":  "Could it be related to https://github.com/dotnet/runtime/pull/102098 @tannergooding ?",
+                                           "updatedAt":  "2024-05-22T12:20:02Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5_SfVP",
+                                           "createdAt":  "2024-05-28T15:36:06Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "fanyang-mono",
+                                           "body":  "For AOT, this regression was introduced because of lacking intrinsics for `Vector.ConvertToUInt32` and `Vector.ConvertToUInt64` on AMD64 when LLVM is not available. This is a low priority scenario.\r\n\r\nThere is no regression on ARM64.\r\n\r\n",
+                                           "updatedAt":  "2024-05-28T15:37:02Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5_aIEU",
+                                           "createdAt":  "2024-05-29T14:27:30Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "fanyang-mono",
+                                           "body":  "For interpreter, `Vector.ConvertToUInt32` and `Vector.ConvertToUInt64` is not on the list for being intrinsified. (https://github.com/dotnet/runtime/blob/main/src/mono/mono/mini/interp/transform-simd.c#L57) Once they are intrinsifed, this regression should go away for interpreter. @BrzVlad ",
+                                           "updatedAt":  "2024-05-29T14:28:09Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6CHQji",
+                                           "createdAt":  "2024-06-21T15:12:29Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "steveisok",
+                                           "body":  "@BrzVlad is this something that can be addressed in .net 9?",
+                                           "updatedAt":  "2024-06-21T15:12:29Z"
+                                       }
+                                   ],
+                         "totalCount":  6
+                     },
+        "title":  "[mono][Perf][x64] System.Numerics.Tests.Perf_VectorConvert regressions on 5/13/2024 9:18:56 PM",
+        "labels":  [
+                       "os-linux",
+                       "tenet-performance",
+                       "tenet-performance-benchmarks",
+                       "arch-x64",
+                       "runtime-mono",
+                       "area-Codegen-Intrinsics-mono"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/114250",
+        "createdAt":  "2025-04-04T01:32:46Z",
+        "number":  114250,
+        "author":  "lewing",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-07-14T18:11:58Z",
+        "body":  "## Build Information\nBuild: https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_build/results?buildId=1004750\nBuild error leg or test failing: _HwiSideEffects::HwiSideEffects.TestProblemWithThrowingLoads()\nPull request: https://github.com/dotnet/runtime/pull/114243\n\u003c!-- Error message template  --\u003e\n## Error Message\n\nFill the error message using [step by step known issues guidance](https://github.com/dotnet/arcade/blob/main/Documentation/Projects/Build%20Analysis/KnownIssueJsonStepByStep.md).\n\n\u003c!-- Use ErrorMessage for String.Contains matches. Use ErrorPattern for regex matches (single line/no backtracking). Set BuildRetry to `true` to retry builds with this error. Set ExcludeConsoleLog to `true` to skip helix logs analysis. --\u003e\n\n```json\n{\n  \"ErrorMessage\": \"Failed test: _HwiSideEffects::HwiSideEffects.TestProblemWithThrowingLoads\",\n  \"ErrorPattern\": \"\",\n  \"BuildRetry\": false,\n  \"ExcludeConsoleLog\": false\n}\n```\n\n\r\n\u003c!-- Known issue validation start --\u003e\r\n ### Known issue validation\r\n**Build: :mag_right:** https://dev.azure.com/dnceng-public/public/_build/results?buildId=1004750\r\n**Error message validated:** `[Failed test: _HwiSideEffects::HwiSideEffects.TestProblemWithThrowingLoads`]\r\n**Result validation:** :white_check_mark: Known issue matched with the provided build.\r\n**Validation performed at:** 4/4/2025 1:33:08 AM UTC\r\n\u003c!-- Known issue validation end --\u003e\r\n\u003c!--Known issue error report start --\u003e\r\n\r\n### Report\r\n\r\n|Build|Definition|Test|Pull Request|\r\n|---|---|---|---|\r\n|[1004750](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1004750)|dotnet/runtime|[_HwiSideEffects::HwiSideEffects.TestProblemWithThrowingLoads()](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1004750\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=26816918\u0026resultId=105536)|dotnet/runtime#114243|\r\n#### Summary\r\n|24-Hour Hit Count|7-Day Hit Count|1-Month Count|\r\n|---|---|---|\r\n|1|1|1|\r\n\u003c!--Known issue error report end --\u003e",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOpYzSYQ==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc6ljFS1",
+                                           "createdAt":  "2025-04-04T02:52:48Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to \u0027arch-wasm\u0027: @lewing\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2025-04-04T02:52:48Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6ljFww",
+                                           "createdAt":  "2025-04-04T02:54:52Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOEM3S4A==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "lewing",
+                                                                               "createdAt":  "2025-04-04T03:09:09Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "jkotas",
+                                           "body":  "@lewing This failure looks new in https://github.com/dotnet/runtime/pull/114243 . \n\nThe test is testing Vector128:\n\nhttps://github.com/dotnet/runtime/blob/bf7d30b9ecfbb502f055fef74190754e85ff7bda/src/tests/JIT/HardwareIntrinsics/General/HwiOp/HwiSideEffects.cs#L49\n\nand the PR is Vector128 related change...\n\nCould you please fix the bug or disable the test for mono wasm?",
+                                           "updatedAt":  "2025-04-04T02:54:52Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6ljJXb",
+                                           "createdAt":  "2025-04-04T03:10:08Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "lewing",
+                                           "body":  "Sorry, I misread the error and thought it was on a different platform.  Will resolve it.",
+                                           "updatedAt":  "2025-04-04T03:10:08Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6ljNJh",
+                                           "createdAt":  "2025-04-04T03:24:08Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @steveisok, @vitek-karas\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2025-04-04T03:24:08Z"
+                                       }
+                                   ],
+                         "totalCount":  4
+                     },
+        "title":  "[wasm]regression in _HwiSideEffects::HwiSideEffects.TestProblemWithThrowingLoads",
+        "labels":  [
+                       "arch-wasm",
+                       "regression-from-last-release",
+                       "area-Codegen-Intrinsics-mono"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/114295",
+        "createdAt":  "2025-04-05T02:16:56Z",
+        "number":  114295,
+        "author":  "lewing",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-09-09T23:28:21Z",
+        "body":  "Evidence suggests that there is value in filling some more of the Vector and Unsafe intrinsics\n\n- [ ] Add intrinsics for 128 bit vector types\n    - [x] Use PackedSimd methods where they correspond directly to 128 bit Vector methods\n    - [x] Use PackedSimd methods for Vector(128)? operators for direct matches\n    - [ ] add implementations of .NET missing intrinsics using Wasm intrinsics directly\n- [ ] Implement managed PackedSimd implementations of the Vector128 methods that have managed sse implementations\n- [ ] recognize VectorMath hot paths\n- [ ] implement missing instance intrinsic methods\n- [ ] implement missing Unsafe intrinsics\n    - [x] Bitcast\n      - [x] AOT https://github.com/dotnet/runtime/pull/115130\n      - [x] Interpreter https://github.com/dotnet/runtime/pull/115443\n    - [ ] ReadUnaligned, WriteUnaligned\n\n\nPRs\n\n\n- https://github.com/dotnet/runtime/pull/115151\n- https://github.com/dotnet/runtime/pull/115130\n- https://github.com/dotnet/runtime/pull/115062\n- https://github.com/dotnet/runtime/pull/114811\n- https://github.com/dotnet/runtime/pull/114711\n- https://github.com/dotnet/runtime/pull/114669\n- https://github.com/dotnet/runtime/pull/114659\n- https://github.com/dotnet/runtime/pull/114517\n- https://github.com/dotnet/runtime/pull/114501\n- https://github.com/dotnet/runtime/pull/114493\n- https://github.com/dotnet/runtime/pull/114492\n- https://github.com/dotnet/runtime/pull/114413\n- https://github.com/dotnet/runtime/pull/114293\n- https://github.com/dotnet/runtime/pull/114270\n- https://github.com/dotnet/runtime/pull/114243\n- https://github.com/dotnet/runtime/pull/114087\n- https://github.com/dotnet/runtime/pull/114070\n- https://github.com/dotnet/runtime/pull/114399\n- https://github.com/dotnet/runtime/pull/114395\n- https://github.com/dotnet/runtime/pull/113743\n- https://github.com/dotnet/runtime/pull/113739\n- https://github.com/dotnet/runtime/pull/113456\n- https://github.com/dotnet/runtime/pull/115351\n- https://github.com/dotnet/runtime/pull/115344\n\n9.0\n- https://github.com/dotnet/runtime/pull/114218",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOpbYF2w==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc6ltZ7t",
+                                           "createdAt":  "2025-04-05T02:17:28Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @brzvlad, @kotlarmilos\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2025-04-05T02:17:28Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6ltaku",
+                                           "createdAt":  "2025-04-05T02:23:17Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to \u0027arch-wasm\u0027: @lewing\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2025-04-05T02:23:17Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6ltalZ",
+                                           "createdAt":  "2025-04-05T02:23:22Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @brzvlad, @kotlarmilos\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2025-04-05T02:23:22Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6ltalc",
+                                           "createdAt":  "2025-04-05T02:23:23Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @steveisok, @vitek-karas\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2025-04-05T02:23:23Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6ltgXb",
+                                           "createdAt":  "2025-04-05T03:19:55Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "lewing",
+                                           "body":  "cc @kg ",
+                                           "updatedAt":  "2025-04-05T03:19:55Z"
+                                       }
+                                   ],
+                         "totalCount":  5
+                     },
+        "title":  "[mono][wasm] intrinsics improvements",
+        "labels":  [
+                       "arch-wasm",
+                       "area-Codegen-Interpreter-mono",
+                       "area-Codegen-Intrinsics-mono",
+                       "os-browser"
+                   ]
+    }
+]

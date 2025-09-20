@@ -1,0 +1,292 @@
+﻿[
+    {
+        "url":  "https://github.com/dotnet/aspire/issues/1536",
+        "createdAt":  "2024-01-03T16:54:42Z",
+        "number":  1536,
+        "author":  "paule96",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHODGO32g==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "IvanFeric",
+                                            "createdAt":  "2024-05-27T10:56:34Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "jimitndiaye",
+                                            "createdAt":  "2024-06-03T21:08:05Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "BenjaminCharlton",
+                                            "createdAt":  "2024-12-19T12:50:33Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "RobertWeaver",
+                                            "createdAt":  "2025-03-30T08:44:30Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "ryanspain",
+                                            "createdAt":  "2025-07-08T17:30:04Z"
+                                        }
+                                    ],
+                          "totalCount":  5
+                      },
+        "updatedAt":  "2025-06-04T18:49:03Z",
+        "body":  "Hi aspire team,\r\n\r\nin my last try to use aspire I tried to add a blazor webassembly app to my project. \r\n\r\nWhat I did so far is the following:\r\n\r\nAdd the blazor project to the aspire host with a reference to the backend:\r\n\r\n```csharp\r\nusing Aspire.Hosting;\r\nvar builder = DistributedApplication.CreateBuilder(args);\r\n\r\nvar server = builder.AddProject\u003cProjects.ElsaServer\u003e(\"elsaServer\");\r\nvar webApp = builder.AddProject\u003cProjects.ElsaStudio\u003e(\"elsaStudio\")\r\n    .WithReference(server);\r\n\r\nvar app = builder.Build();\r\nawait app.RunAsync();\r\n```\r\n\r\nNow I added the required packages to get service discovery to my blazor project\r\n\r\n```xml\r\n    \u003cPackageReference Include=\"Microsoft.Extensions.Http.Resilience\" Version=\"8.0.0\" /\u003e\r\n    \u003cPackageReference Include=\"Microsoft.Extensions.ServiceDiscovery\" Version=\"8.0.0-preview.3.24052.7\" /\u003e\r\n```\r\n\r\nThen I added in my `Program.cs` of my blazor project the following lines:\r\n\r\n```csharp\r\nbuilder.Services.AddServiceDiscovery();\r\nbuilder.Services.ConfigureHttpClientDefaults(http =\u003e\r\n{\r\n    // Turn on resilience by default\r\n    http.AddStandardResilienceHandler();\r\n\r\n    // Turn on service discovery by default\r\n    http.UseServiceDiscovery();\r\n});\r\n```\r\n\r\nThen I use as `BaseAddress` for my `httpClient` `http://elsaServer/elsa/api`\r\n\r\nBut when I run my blazor application I always get a HTTP Request from the browser on `http://elsaServer/elsa/api` and not on `http://localhost:43432/elsa/api`.\r\n\r\nSomething seems to not work here. And I don\u0027t know how to fix it. \r\n\r\nSo what I would wish to do is something like:\r\n\r\n```csharp\r\nbuilder.Services.AddServiceDiscovery(\"http://aspireHost/serviceDiscovery\");\r\n```\r\n\r\nSo you can specify in you client apps where aspire lives and provide an API that the clients can use to discover the services",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOmzGXOw==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDOKYQzfc5wp_C5",
+                                           "createdAt":  "2024-01-12T22:16:43Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOEZzwdw==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "ReubenBond",
+                                                                               "createdAt":  "2024-01-19T00:08:50Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "RobertWeaver",
+                                                                               "createdAt":  "2024-02-23T08:29:23Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "fdugdale112",
+                                                                               "createdAt":  "2024-05-18T13:52:12Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "HEART",
+                                                                               "user":  "BenjaminCharlton",
+                                                                               "createdAt":  "2024-09-15T19:19:03Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "Allann",
+                                                                               "createdAt":  "2025-02-09T22:53:33Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "ryanspain",
+                                                                               "createdAt":  "2025-07-08T17:29:56Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  6
+                                                         },
+                                           "author":  "DamianEdwards",
+                                           "body":  "The service discovery system requires configuration to have the service name mapped to the actual underlying endpoint address. For server apps composed into the Aspire AppHost project, this happens automatically by injecting environment variables into the processes when they start, that have names that follow the service discovery system\u0027s configuration-based provider (and because ASP.NET Core configuration defaults to reading from environment variables, it works).\r\n\r\nFor browser apps, there\u0027s no such automatic flowing of configuration for service discovery. You\u0027ll need to somehow flow the configuration details to the browser. If the HTML is initially server-rendered, you could emit the details there into the page in some format, e.g. `data-` attributes on the `\u003cbody\u003e` tag, etc., and then author a custom implementation of `IServiceDiscoveryEndPointResolver` in your Blazor client app that reads from wherever you injected the data to. You could instead host an endpoint yourself that the implementation calls to from the browser to resolve addresses.\r\n\r\nI might have a go at putting together a sample as this question has come up a few times and it would be good to have something to point at.",
+                                           "updatedAt":  "2024-01-12T22:16:43Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc5wz2kM",
+                                           "createdAt":  "2024-01-15T18:47:34Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "paule96",
+                                           "body":  "@DamianEdwards maybe it would be nice to have a example how to host static content in aspire. Or what is the best way. I mean you can always deploy some kind of static website server but there are so many options out there that it could be a bit overwhelming to choose and also to build a good integration for it to aspire.\n",
+                                           "updatedAt":  "2024-01-15T18:47:34Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc5xNtzd",
+                                           "createdAt":  "2024-01-19T00:12:58Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODzQnjw==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "paule96",
+                                                                               "createdAt":  "2024-01-20T12:25:36Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "vicperdana",
+                                                                               "createdAt":  "2024-04-23T11:11:08Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "JakobFerdinand",
+                                                                               "createdAt":  "2024-09-23T17:46:46Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  3
+                                                         },
+                                           "author":  "ReubenBond",
+                                           "body":  "Service Discovery does not support client-side apps today since, as @DamianEdwards said, there is no automatic flowing of configuration from the host to the client application. In the eShop sample, we use YARP to act as a proxy when the client needs to contact another service. In particular, loading images from the catalog: https://github.com/dotnet/eShop/blob/3b49f61a888656b038b5f044b0d4c5096fc9f073/src/WebApp/Program.cs#L29\r\n\r\nFor the MAUI frontend, we map each API which is needed by the app using a similar strategy here: https://github.com/dotnet/eShop/blob/3b49f61a888656b038b5f044b0d4c5096fc9f073/src/Mobile.Bff.Shopping/Program.cs#L12-L36\r\n\r\nEDIT to clarify: in the eShop sample, instead of the clients communicating directly with backend API services, they only communicate directly with the service which the app is hosted on. That service proxies communication to the correct backend, using service discovery.",
+                                           "updatedAt":  "2024-01-19T00:27:21Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc5xaJbw",
+                                           "createdAt":  "2024-01-21T16:01:50Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "yarseyah",
+                                           "body":  "Is anything special needed to be done for the forwarder to make it work with Aspire\u0027s service discovery, e.g. I have added the following forwarder to Wasm Server:\r\n\r\n`app.MapForwarder(\"/api/weatherforecast\", \"http://apiservice\", \"/weatherforecast\");`\r\n\r\nbut I get the following error:\r\n\r\n`System.Net.Http.HttpRequestException: nodename nor servname provided, or not known (apiservice:80)`\r\n\r\nIf I implement a new API in the server, and use `HttpClient` to manually make a call to the microservice, using the same `http://apiservice` it correctly communicates, so the service resolution works in the server, but not as part of the Yarp `MapForwarder`.",
+                                           "updatedAt":  "2024-01-21T16:01:50Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc5xaKMB",
+                                           "createdAt":  "2024-01-21T16:12:51Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODme-sw==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "yarseyah",
+                                                                               "createdAt":  "2024-01-21T16:20:45Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "geloidA",
+                                                                               "createdAt":  "2024-06-21T04:41:39Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  2
+                                                         },
+                                           "author":  "davidfowl",
+                                           "body":  "@yarseyah yes, add a reference to [Microsoft.Extensions.ServiceDiscovery.Yarp](https://www.nuget.org/packages/Microsoft.Extensions.ServiceDiscovery.Yarp/), and call `AddHttpForwarderWithServiceDiscovery`.",
+                                           "updatedAt":  "2024-01-21T16:12:51Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6Fq_BM",
+                                           "createdAt":  "2024-07-22T10:35:47Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "1iveowl",
+                                           "body":  "\u003e @yarseyah yes, add a reference to [Microsoft.Extensions.ServiceDiscovery.Yarp](https://www.nuget.org/packages/Microsoft.Extensions.ServiceDiscovery.Yarp/), and call `AddHttpForwarderWithServiceDiscovery`.\r\n\r\n@davidfowl, as far as I can tell, adding a reference to `Microsoft.Extensions.ServiceDiscovery.Yarp` will not work for blazor webassembly clients, because `Microsoft.Extensions.ServiceDiscovery.Yarp` has a dependency to `Microsoft.AspNetCore.App`. \r\n\r\nTrying to add `Microsoft.Extensions.ServiceDiscovery.Yarp` results in:\r\n\r\n`Severity | Code | Description | Project | File | Line | Suppression State\r\n-- | -- | -- | -- | -- | -- | --\r\nError (active) | NETSDK1082 | There was no runtime pack for Microsoft.AspNetCore.App available for the specified RuntimeIdentifier \u0027browser-wasm\u0027. | MyBlazor.Client | C:\\Program Files\\dotnet\\sdk\\8.0.303\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.Sdk.FrameworkReferenceResolution.targets | 491 |  \r\n`",
+                                           "updatedAt":  "2024-07-22T10:36:11Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6K5dYB",
+                                           "createdAt":  "2024-09-04T23:28:16Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "DamianEdwards",
+                                           "body":  "@1iveowl that package would be added to the server project in the case of an ASP.NET Core hosted Blazor WASM project, if using YARP to forward requests from the Blazor WASM app to another backend service.",
+                                           "updatedAt":  "2024-09-04T23:28:16Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6bMZc7",
+                                           "createdAt":  "2025-01-21T05:52:57Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOEZzxiQ==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "paule96",
+                                                                               "createdAt":  "2025-01-21T06:02:32Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "ryanspain",
+                                                                               "createdAt":  "2025-07-08T17:32:08Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  2
+                                                         },
+                                           "author":  "BenjaminCharlton",
+                                           "body":  "I believe [this pull request](https://github.com/dotnet/aspire/pull/7162) (if it gets accepted) will do what you need with service discovery, @paule96.\n\nIn the meantime, [this Nuget package](https://www.nuget.org/packages/Aspire4Wasm/) does exactly the same thing for you. It doesn\u0027t make the Aspire developer experience with Blazor totally seamless, but it does overcome your particular problem. I\u0027d be glad of feedback [on the repo](https://github.com/BenjaminCharlton/Aspire4Wasm) if you decide to try it.",
+                                           "updatedAt":  "2025-01-21T05:52:57Z"
+                                       }
+                                   ],
+                         "totalCount":  8
+                     },
+        "title":  "Is there any way to use ServiceDiscovery for client (aka browser) apps?",
+        "labels":  [
+                       "area-samples",
+                       "area-service-discovery",
+                       "blazor-wasm"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspire/issues/8884",
+        "createdAt":  "2025-04-19T07:51:49Z",
+        "number":  8884,
+        "author":  "unmade-spangle",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-04-21T22:43:52Z",
+        "body":  "### Is there an existing issue for this?\n\n- [x] I have searched the existing issues\n\n### Describe the bug\n\nCould we get a working sample? the javascript examples don\u0027t export any logs, metric or traces. only the console shows entries for the javascript apps. \n\n### Expected Behavior\n\n_No response_\n\n### Steps To Reproduce\n\n_No response_\n\n### Exceptions (if any)\n\n_No response_\n\n### .NET Version info\n\n_No response_\n\n### Anything else?\n\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  null,
+                         "nodes":  [
+
+                                   ],
+                         "totalCount":  0
+                     },
+        "title":  "aspire samples: javascript",
+        "labels":  [
+                       "area-samples"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspire/issues/11378",
+        "createdAt":  "2025-09-13T04:52:04Z",
+        "number":  11378,
+        "author":  "adamint",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-09-13T04:52:39Z",
+        "body":  "@adamint  we should delete this restore npm thin and use the community toolkit instead\r\n\r\n_Originally posted by @davidfowl in https://github.com/dotnet/aspire/issues/11372#issuecomment-3286941975_\r\n            ",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  null,
+                         "nodes":  [
+
+                                   ],
+                         "totalCount":  0
+                     },
+        "title":  "Use community toolkit instead of npm restore task",
+        "labels":  [
+                       "area-samples"
+                   ]
+    }
+]

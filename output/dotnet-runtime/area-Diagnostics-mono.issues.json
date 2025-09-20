@@ -1,0 +1,1790 @@
+﻿[
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/82492",
+        "createdAt":  "2023-02-22T16:49:16Z",
+        "number":  82492,
+        "author":  "uweigand",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-04-09T20:43:37Z",
+        "body":  "As discussed in https://github.com/dotnet/runtime/issues/82428, avoid using the `select` routine in the Mono profiler to handle file descriptors larger than `FD_SETSIZE`.\r\n\r\n`select` is currently used in `src/mono/mono/profiler/log.c` and `src/mono/mono/profiler/aot.c`.\r\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOVdtExg==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5V20TG",
+                                           "createdAt":  "2023-02-22T17:03:26Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "lambdageek",
+                                           "body":  "/cc @steveisok ",
+                                           "updatedAt":  "2023-02-22T17:03:26Z"
+                                       }
+                                   ],
+                         "totalCount":  1
+                     },
+        "title":  "Stop using select in the Mono profiler",
+        "labels":  [
+                       "area-Diagnostics-mono"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/83390",
+        "createdAt":  "2023-03-14T13:38:47Z",
+        "number":  83390,
+        "author":  "tmds",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2023-08-28T17:34:32Z",
+        "body":  "I\u0027m familiar with the tooling for coreclr, but I have no idea how this works for .NET 6+ built with mono runtime.\r\n\r\nIs it possible to do SOS-like things with the core dump using gdb/lldb?\r\n\r\nIs this documentation applicable: https://www.mono-project.com/docs/debug+profile/debug/\r\n\r\ncc @akoeplinger ",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOZRggaA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5XgcSb",
+                                           "createdAt":  "2023-03-14T13:38:54Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @tommcdon\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\nI\u0027m familiar with the tooling for coreclr, but I have no idea how this works for .NET 6+ built with mono runtime.\r\n\r\nIs it possible to do SOS-like things with the core dump using gdb/lldb?\r\n\r\nIs this documentation applicable: https://www.mono-project.com/docs/debug+profile/debug/\r\n\r\ncc @akoeplinger \n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003etmds\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-Diagnostics-coreclr`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2023-03-14T13:38:54Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5XhBhJ",
+                                           "createdAt":  "2023-03-14T15:03:19Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jkotas",
+                                           "body":  "cc @uweigand ",
+                                           "updatedAt":  "2023-03-14T15:03:19Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5XhMv_",
+                                           "createdAt":  "2023-03-14T15:29:01Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "akoeplinger",
+                                           "body":  "/cc @lateralusX ",
+                                           "updatedAt":  "2023-03-14T15:29:01Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5YNZzJ",
+                                           "createdAt":  "2023-03-22T16:39:59Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOC4V_dQ==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "ashnaga",
+                                                                               "createdAt":  "2023-03-22T16:52:36Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "omajid",
+                                           "body":  "cc @ashnaga \r\n\r\nAshita, I think this is a relevant issue for our discussion a few minutes ago.\r\n\r\n.NET on ppc64le and s390x uses Mono (not CoreCLR) as a the VM. When there are bugs in mono, we (devs working on maintaining/building .NET itself) don\u0027t have a great way to easily figure out what\u0027s going on and how to fix it. Most of the tooling around .NET is focused on CoreCLR and doesn\u0027t work on Mono.\r\n\r\nThis has an impact on end-users running .NET: when end-users writing .NET applications run into and report issues, it becomes harder for devs who maintain .NET itself to diagnose/isolate/reproduce/fix the issue\r\n\r\nThis has an impact on Red Hat (and other vendors, as well as any community distribution building ppc64le/s390x, such as Alpine and Fedora): when our builds crash or hangs, it takes us longer to root-cause and fix things too. ",
+                                           "updatedAt":  "2023-03-22T16:39:59Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5lGCBo",
+                                           "createdAt":  "2023-08-28T17:34:13Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "lambdageek",
+                                           "body":  "\r\n\u003e Is this documentation applicable: https://www.mono-project.com/docs/debug+profile/debug/\r\n\r\nThis documentation is generally applicable - in general this is how we investigate issues in the .NET version of Mono when there\u0027s a live process.\r\n\r\n\u003e I\u0027m familiar with the tooling for coreclr, but I have no idea how this works for .NET 6+ built with mono runtime.\r\n\u003e \r\n\u003e Is it possible to do SOS-like things with the core dump using gdb/lldb?\r\n\r\nIn general debugging core dumps is possible but much more limited with Mono.  The way SOS works is by basically hosting a copy of all the data structures that CoreCLR implements and running code in the debugger process to poke at memory regions and pull out the relevant info.  This is the \"DAC\" - it is actually just a build of the normal coreclr VM but with all memory accesses proxied.  This allows SOS to be agnostic about how CoreCLR lays out memory and just say \"walk the stack\" and the .NET unwinder and JIT will do the actual work (but in the debugger not the debuggee).   \r\n\r\nWith mono we don\u0027t have a DAC.  The instructions on that mono-project.com page generally ask you to do things like `p mono_pmip(0xdeadbeef)` to get the name of the managed method that is at some address on teh stack, for example.  It\u0027s\r\ncode running in the debuggee. So if we\u0027re in a core dump, we\u0027re much much more limited - we can\u0027t run any code and we generally don\u0027t know what\u0027s in memory.\r\n\r\nThis causes other problems - for example we don\u0027t have a great way to look in a `GHashTable` so all sorts of caches are opaque if all we have is a coredump.\r\n\r\nTL;DR - there is not a whole lot we can do with a coredump with mono.  Live process debugging is what we typically rely on.\r\n",
+                                           "updatedAt":  "2023-08-28T17:34:13Z"
+                                       }
+                                   ],
+                         "totalCount":  5
+                     },
+        "title":  "Q: debugging mono core dumps",
+        "labels":  [
+                       "question",
+                       "area-Diagnostics-mono"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/91049",
+        "createdAt":  "2023-08-23T18:51:23Z",
+        "number":  91049,
+        "author":  "bruno-garcia",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-08-05T22:07:53Z",
+        "body":  "### Is there an existing issue for this?\r\n\r\n- [X] I have searched the existing issues\r\n\r\n### Is your feature request related to a problem? Please describe the problem.\r\n\r\nProduction stack traces are hard to debug:\r\n\r\n```\r\n    at _mono_wasm_invoke_js_blazor (https://localhost:5001/_framework/dotnet.7.0.10.hef7nl7p9e.js:14:103886)\r\n    at wasm://wasm/009931b2:wasm-function[313]:0x1d6b6\r\n    at wasm://wasm/009931b2:wasm-function[283]:0x1cae4\r\n    at wasm://wasm/009931b2:wasm-function[221]:0xe1d4\r\n    at wasm://wasm/009931b2:wasm-function[220]:0xd044\r\n    at wasm://wasm/009931b2:wasm-function[8115]:0x1a2377\r\n    at wasm://wasm/009931b2:wasm-function[2040]:0x85b46\r\n    at wasm://wasm/009931b2:wasm-function[2038]:0x85abc\r\n    at wasm://wasm/009931b2:wasm-function[1395]:0x6889a\r\n    at wasm://wasm/009931b2:wasm-function[313]:0x1d66f\r\n    at wasm://wasm/009931b2:wasm-function[283]:0x1cae4\r\n    at wasm://wasm/009931b2:wasm-function[221]:0xe1d4\r\n    at wasm://wasm/009931b2:wasm-function[220]:0xd044\r\n    at wasm://wasm/009931b2:wasm-function[8115]:0x1a2377\r\n    at wasm://wasm/009931b2:wasm-function[2040]:0x85b46\r\n    at wasm://wasm/009931b2:wasm-function[2045]:0x861ae\r\n    at wasm://wasm/009931b2:wasm-function[2072]:0x8826d\r\n    at wasm://wasm/009931b2:wasm-function[114]:0x9d80\r\n```\r\n\r\nTools like [Sentry](https://sentry.io/) support several debug file format. Including DWARF, PDB, Portable PDBs, etc.\r\nIt also supports Wasm DWARF but it requires a way to identify the wasm modules at runtime. It has a [JavaScript integration](https://docs.sentry.io/platforms/javascript/guides/wasm/) that patches things at [runtime in order to collect the loaded modules](https://github.com/getsentry/sentry-javascript/blob/2d80b4b2cfabb69f0cfd4a96ea637a8cabbd37cb/packages/wasm/src/patchWebAssembly.ts#L6C17-L38). And with that it can load debug files when events come into the service.\r\n\r\nPatching the `wasm` with a debug id after the fact breaks ASP.NET\u0027s ability to check for integrity, forcing the user to abandon it through `BlazorCacheBootResources` set to `false`.\r\n\r\n### Describe the solution you\u0027d like\r\n\r\nAttach a section called `debug_id` in the .NET wasm module :\r\n\r\nhttps://docs.sentry.io/platforms/native/guides/wasm/data-management/debug-files/identifiers/#wasm-build-ids\r\n\r\nThis way crash reporting tools can build integrations for Blazor to have better debuggability for production builds.\r\n\r\nhttps://github.com/WebAssembly/tool-conventions/pull/183/files\r\n\r\n### Additional context\r\n\r\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOjuokAg==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5k0Dga",
+                                           "createdAt":  "2023-08-24T01:06:22Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "bruno-garcia",
+                                           "body":  "Just realized perhaps this belongs in `dotnet/runtime`?",
+                                           "updatedAt":  "2023-08-24T01:06:22Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5k1FuZ",
+                                           "createdAt":  "2023-08-24T13:05:09Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to \u0027arch-wasm\u0027: @lewing\nSee info in area-owners.md if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Is there an existing issue for this?\r\n\r\n- [X] I have searched the existing issues\r\n\r\n### Is your feature request related to a problem? Please describe the problem.\r\n\r\nProduction stack traces are hard to debug:\r\n\r\n```\r\n    at _mono_wasm_invoke_js_blazor (https://localhost:5001/_framework/dotnet.7.0.10.hef7nl7p9e.js:14:103886)\r\n    at wasm://wasm/009931b2:wasm-function[313]:0x1d6b6\r\n    at wasm://wasm/009931b2:wasm-function[283]:0x1cae4\r\n    at wasm://wasm/009931b2:wasm-function[221]:0xe1d4\r\n    at wasm://wasm/009931b2:wasm-function[220]:0xd044\r\n    at wasm://wasm/009931b2:wasm-function[8115]:0x1a2377\r\n    at wasm://wasm/009931b2:wasm-function[2040]:0x85b46\r\n    at wasm://wasm/009931b2:wasm-function[2038]:0x85abc\r\n    at wasm://wasm/009931b2:wasm-function[1395]:0x6889a\r\n    at wasm://wasm/009931b2:wasm-function[313]:0x1d66f\r\n    at wasm://wasm/009931b2:wasm-function[283]:0x1cae4\r\n    at wasm://wasm/009931b2:wasm-function[221]:0xe1d4\r\n    at wasm://wasm/009931b2:wasm-function[220]:0xd044\r\n    at wasm://wasm/009931b2:wasm-function[8115]:0x1a2377\r\n    at wasm://wasm/009931b2:wasm-function[2040]:0x85b46\r\n    at wasm://wasm/009931b2:wasm-function[2045]:0x861ae\r\n    at wasm://wasm/009931b2:wasm-function[2072]:0x8826d\r\n    at wasm://wasm/009931b2:wasm-function[114]:0x9d80\r\n```\r\n\r\nTools like [Sentry](https://sentry.io/) support several debug file format. Including DWARF, PDB, Portable PDBs, etc.\r\nIt also supports Wasm DWARF but it requires a way to identify the wasm modules at runtime. It has a [JavaScript integration](https://docs.sentry.io/platforms/javascript/guides/wasm/) that patches things at [runtime in order to collect the loaded modules](https://github.com/getsentry/sentry-javascript/blob/2d80b4b2cfabb69f0cfd4a96ea637a8cabbd37cb/packages/wasm/src/patchWebAssembly.ts#L6C17-L38). And with that it can load debug files when events come into the service.\r\n\r\nPatching the `wasm` with a debug id after the fact breaks ASP.NET\u0027s ability to check for integrity, forcing the user to abandon it through `BlazorCacheBootResources` set to `false`.\r\n\r\n### Describe the solution you\u0027d like\r\n\r\nAttach a section called `debug_id` in the .NET wasm module :\r\n\r\nhttps://docs.sentry.io/platforms/native/guides/wasm/data-management/debug-files/identifiers/#wasm-build-ids\r\n\r\nThis way crash reporting tools can build integrations for Blazor to have better debuggability for production builds.\r\n\r\nhttps://github.com/WebAssembly/tool-conventions/pull/183/files\r\n\r\n### Additional context\r\n\r\n_No response_\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003ebruno-garcia\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`arch-wasm`, `untriaged`, `area-VM-meta-mono`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2023-08-24T13:05:09Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5k1F_H",
+                                           "createdAt":  "2023-08-24T13:05:49Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "SamMonoRT",
+                                           "body":  "/cc @maraf @pavelsavara - please triage this issue, and set milestone accordingly.",
+                                           "updatedAt":  "2023-08-24T13:05:49Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5k1Pse",
+                                           "createdAt":  "2023-08-24T13:29:21Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "pavelsavara",
+                                           "body":  "Related https://github.com/WebAssembly/tool-conventions/issues/133",
+                                           "updatedAt":  "2023-08-24T13:29:21Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5k1Q61",
+                                           "createdAt":  "2023-08-24T13:32:02Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODE1QAQ==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "bruno-garcia",
+                                                                               "createdAt":  "2023-08-25T21:44:00Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "pavelsavara",
+                                           "body":  "Note that the stack above is most likely C code of the MonoVM and it\u0027s interpreter. \r\nLooking at it\u0027s DWARF would not help you understanding the managed stack trace.",
+                                           "updatedAt":  "2023-08-24T13:32:02Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5k9-ju",
+                                           "createdAt":  "2023-08-25T21:46:11Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "bruno-garcia",
+                                           "body":  "That\u0027s fair. I truncated off the C# code from the stack trace in this example. And it\u0027s true this was running in the interpreter. And I\u0027m more interested in production environments so not really the interpreter. What I\u0027m after is being able to map every frame back to something in its original form. App and \"System\" frames that is. I understand that might require going through DWARF for some native frames, and perhaps Portable PDB for some managed frames (at least to get line numbers in release builds, which we do already for normal .NET JIT workloads when users upload PDBs).",
+                                           "updatedAt":  "2023-08-25T21:46:54Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5lCniA",
+                                           "createdAt":  "2023-08-28T07:35:38Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "pavelsavara",
+                                           "body":  "Is there LLVM/emcc support for the `build_id` section already ?",
+                                           "updatedAt":  "2023-08-28T07:35:38Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5lOydQ",
+                                           "createdAt":  "2023-08-30T01:53:45Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "bruno-garcia",
+                                           "body":  "\u003e Is there LLVM/emcc support for the `build_id` section already ?\r\n\r\nI believe so: https://reviews.llvm.org/D107662 ",
+                                           "updatedAt":  "2023-08-30T01:53:45Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc59puVw",
+                                           "createdAt":  "2024-05-13T15:56:22Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODjZogw==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "HEART",
+                                                                               "user":  "bruno-garcia",
+                                                                               "createdAt":  "2024-05-27T15:35:56Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "bitsandfoxes",
+                                           "body":  "Hey, we\u0027re looking into improving the Blazor debugability. Is there any update on this?",
+                                           "updatedAt":  "2024-05-13T15:56:22Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6Dqvj9",
+                                           "createdAt":  "2024-07-04T13:37:50Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODo0jTA==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "HOORAY",
+                                                                               "user":  "bruno-garcia",
+                                                                               "createdAt":  "2024-07-05T14:31:24Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "HOORAY",
+                                                                               "user":  "bitsandfoxes",
+                                                                               "createdAt":  "2024-07-08T15:18:14Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  2
+                                                         },
+                                           "author":  "pavelsavara",
+                                           "body":  "It seems [LLVM now has](https://github.com/llvm/llvm-project/commit/c7af9ae577bb04c5fe120fc07844a500818c8f47) `--build-id` flag. ",
+                                           "updatedAt":  "2024-07-04T13:37:50Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6GpG0x",
+                                           "createdAt":  "2024-07-30T18:08:58Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODsK-XA==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "thaystg",
+                                                                               "createdAt":  "2024-07-30T20:55:45Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "lewing",
+                                           "body":  "@thaystg we should discuss what we can do",
+                                           "updatedAt":  "2024-07-30T18:08:58Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6Gpv3y",
+                                           "createdAt":  "2024-07-30T19:47:42Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "pavelsavara",
+                                           "body":  "- any native build (with workload) can do it\r\n     - it needs to be native build on customer machine, otherwise all users will have same `dotnet.wasm` binary with same id that we calculated during runtime build\r\n     - the default value could be new GUID\r\n- we could add optional MSbuild property, for user to override the value\r\n    - it would trigger native build if passed\r\n\r\nmaybe `WasmNativeBuildId`",
+                                           "updatedAt":  "2024-07-30T19:47:42Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6Gpwsq",
+                                           "createdAt":  "2024-07-30T19:50:06Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "pavelsavara",
+                                           "body":  "and we could also expose that ID on JavaScript `runtimeBuildInfo` API",
+                                           "updatedAt":  "2024-07-30T19:50:06Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6Ox-kf",
+                                           "createdAt":  "2024-10-06T14:45:44Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "bruno-garcia",
+                                           "body":  "Any updates on this one? I imagine for .NET 9 it\u0027s too late, but perhaps we get this going for .NET 10?\r\n\r\n* Here\u0027s now tool-conventions documented it: https://github.com/WebAssembly/tool-conventions/blob/f44d6c526a06a19eec59003a924e475f57f5a6a1/BuildId.md?plain=1#L23-L35\r\n* LLVM implementation: https://reviews.llvm.org/D107662\r\n\r\nWould be great to have full/proper stack trace for production exception with server side symbolication so app deployments can be small/optimized and developers can have good debugging tools in production",
+                                           "updatedAt":  "2024-10-06T14:45:44Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6O6iQC",
+                                           "createdAt":  "2024-10-07T19:23:27Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "pavelsavara",
+                                           "body":  "https://github.com/WebAssembly/tool-conventions/blob/main/ProducersSection.md",
+                                           "updatedAt":  "2024-10-07T19:23:27Z"
+                                       }
+                                   ],
+                         "totalCount":  15
+                     },
+        "title":  "Blazor - WebAssembly `build_id` section",
+        "labels":  [
+                       "enhancement",
+                       "arch-wasm",
+                       "area-VM-meta-mono",
+                       "Priority:3",
+                       "area-Diagnostics-mono",
+                       "os-browser"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/93551",
+        "createdAt":  "2023-10-16T13:46:45Z",
+        "number":  93551,
+        "author":  "radekdoulik",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHOCzcaOw==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "pavelsavara",
+                                            "createdAt":  "2023-10-16T13:47:58Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "maraf",
+                                            "createdAt":  "2023-10-20T09:39:59Z"
+                                        }
+                                    ],
+                          "totalCount":  2
+                      },
+        "updatedAt":  "2024-12-12T16:42:40Z",
+        "body":  "Currently we use plain http connection to our HttpServer sample app, when running `browser-bench`. Let use secure connection instead. It is how the majority of apps will run.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOaijpUw==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5pNQC1",
+                                           "createdAt":  "2023-10-16T18:44:42Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to \u0027arch-wasm\u0027: @lewing\nSee info in area-owners.md if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\nCurrently we use plain http connection to our HttpServer sample app, when running `browser-bench`. Let use secure connection instead. It is how the majority of apps will run.\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003eradekdoulik\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003eradekdoulik\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`arch-wasm`, `area-Diagnostics-mono`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e9.0.0\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2023-10-16T18:44:42Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5qKOlT",
+                                           "createdAt":  "2023-10-26T12:54:11Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "radekdoulik",
+                                           "body":  "HttpListener doesn\u0027t support https connections on the platforms we use. https://github.com/dotnet/runtime/issues/19752 \r\n\r\nSo we will need to switch to something else, [Kestrel server](https://github.com/dotnet/aspnetcore/tree/main/src/Servers/Kestrel) is one option.",
+                                           "updatedAt":  "2023-10-26T12:54:11Z"
+                                       }
+                                   ],
+                         "totalCount":  2
+                     },
+        "title":  "[wasm] run browser-bench sample with https connection",
+        "labels":  [
+                       "arch-wasm",
+                       "area-Diagnostics-mono"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/94114",
+        "createdAt":  "2023-10-27T20:33:12Z",
+        "number":  94114,
+        "author":  "brianrob",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-07-30T14:47:21Z",
+        "body":  "### Description\n\nConstruction of the IPC channel fails for applications on OSX that run inside of the sandbox.  This results in failures when using any IPC channel-based diagnostic commands (e.g. dotnet-trace).\n\n### Reproduction Steps\n\n1. Build a MAUI application targeting OSX.\r\n2. Enable execution in the sandbox.\r\n3. Build and sign the package.\r\n4. Start the application.\r\n5. Run `dotnet-trace collect -p \u003cpid\u003e`\n\n### Expected behavior\n\n`dotnet-trace` is able to attach to the application and capture a trace.\n\n### Actual behavior\n\n`dotnet-trace` isn\u0027t able to connect to the application because the diagnostic IPC channel doesn\u0027t exist.\n\n### Regression?\n\n_No response_\n\n### Known Workarounds\n\nDisable the sandbox by re-compiling the application.\n\n### Configuration\n\n_No response_\n\n### Other information\n\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOhQbWyQ==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5qTcPs",
+                                           "createdAt":  "2023-10-27T20:33:26Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "brianrob",
+                                           "body":  "@lateralusX ",
+                                           "updatedAt":  "2023-10-27T20:33:26Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5qVJuC",
+                                           "createdAt":  "2023-10-28T22:02:39Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to \u0027os-maccatalyst\u0027: @steveisok, @akoeplinger\nSee info in area-owners.md if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Description\n\nConstruction of the IPC channel fails for applications on OSX that run inside of the sandbox.  This results in failures when using any IPC channel-based diagnostic commands (e.g. dotnet-trace).\n\n### Reproduction Steps\n\n1. Build a MAUI application targeting OSX.\r\n2. Enable execution in the sandbox.\r\n3. Build and sign the package.\r\n4. Start the application.\r\n5. Run `dotnet-trace collect -p \u003cpid\u003e`\n\n### Expected behavior\n\n`dotnet-trace` is able to attach to the application and capture a trace.\n\n### Actual behavior\n\n`dotnet-trace` isn\u0027t able to connect to the application because the diagnostic IPC channel doesn\u0027t exist.\n\n### Regression?\n\n_No response_\n\n### Known Workarounds\n\nDisable the sandbox by re-compiling the application.\n\n### Configuration\n\n_No response_\n\n### Other information\n\n_No response_\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003ebrianrob\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`EventPipe`, `untriaged`, `os-maccatalyst`, `area-Diagnostics-mono`, `needs-area-label`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2023-10-28T22:02:39Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5qYU3V",
+                                           "createdAt":  "2023-10-30T09:06:03Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODOQWCw==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "tommcdon",
+                                                                               "createdAt":  "2023-10-30T13:12:17Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "tipa",
+                                                                               "createdAt":  "2023-12-02T08:30:15Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  2
+                                                         },
+                                           "author":  "lateralusX",
+                                           "body":  "Running an application inside the sandbox on `macOS` either as an `OSX` or `MacCatalyst` app gets their file system rooted to `~/Libraries/Containers/\u003capps bundle id\u003e/Data`, and can not create any files outside that folder. `CoreCLR OSX` apps and `Mono MacCatalyst` apps uses `EventPipe` IPC channels for its diagnostic server implementation, and since Unix Domain Sockets (UDS) uses  file system, it will fail to create the UDS if it uses a path outside the sandboxed file system.\r\n\r\nDiagnostic tools as` dotnet-trace` gets installed as a global tool and runs as a regular `OSX` app meaning it won\u0027t be part of the apps sandbox and will get a different default tmp directory setup compared to the sandboxed app. This means that the default UDS won\u0027t be visible to the diagnostic tools if they don\u0027t follow a specific naming pattern based out of the default tmp directory. Since sandboxed apps won\u0027t have its default tmp dir setup as other apps, the default UDS created by sandboxed apps won\u0027t be visible to diagnostic tools like `dotnet-trace`.\r\n\r\nOne solution could be to use the reverse connect model for diagnostic tooling, in that case the sandboxed app could connect to a UDS created by for example `dotnet-trace` inside the sandboxed apps file system setup the app using `DOTNET_DiagnosticPorts` and let it connect to the UDS, that should work but comes with a hard limitation. On` macOS` the max length of an UDS path is set by the OS and can only be up to 104 characters long. Since the path needs to be inside the apps sandboxed file system that includes the apps bundle id, it will break as soon as the apps bundle id is long enough, but as long as the full UDS path used in the reverse connect model is shorter than 104 characters this could be used as a workaround, `/Users/xxx/Library/Containers/\u003capp bundle id\u003e/Data`, that gives us ~70 characters for user `\u003cuid\u003e + \u003capp bundle id\u003e + \u003cname of UDS file\u003e`. If that exceeds ~70 characters then apps will fail to create the UDS.\r\n\r\nFor the default UDS listener things are a little more complicated, first, it uses a unique naming schema based out of default tmp path, meaning that default UDS listeners created by sandboxed apps won\u0027t be visible to diagnostic tooling. Second, the default naming schema of default UDS listeners adds a number of characters to the total path length, by default the default diagnostic server UDS listener has the following format, `dotnet-diagnostic-\u003cpid\u003e-\u003ckey\u003e-socket`, 26 characters + `\u003cpid\u003e` + `\u003ckey\u003e` that will be reduced from the 70 characters that is available for `\u003cuid\u003e` + `\u003capp bundle id\u003e` + `\u003cname\u003e` of UDS. Here is an example of the default HelloWorld samples UDS path:\r\n\r\n`/Users/\u003cuid\u003e/Library/Containers/net.dot-HelloiOS/Data/tmp/dotnet-diagnostic-2460-1698654835-socket`\r\n\r\nso 93 characters + `\u003cuid\u003e` is getting very close to the 104 character limit.\r\n\r\nIf however the default UDS path is short enough and created inside the apps sandboxed file system it should be possible to manually connect diagnostic tooling using the `--diagnostic-port \u003cuds path\u003e,connect` argument.\r\n\r\nThere are a couple of workarounds to overcome this issue:\r\n\r\n* Turn off apps sandbox, after that is done, all should work as is.\r\n* If its not possible to turn off apps sandbox, make sure default UDS path falls within 104 characters path length limit, currently there is only two things in control of the app developer the `\u003cuid\u003e` running the app + the length of the `\u003capp bundle id\u003e`, if full UDS path falls within 104 characters, then run diagnostic tools like `dotnet-trace` using `--diagnostic-port \u003cuds path\u003e,connect` to connect to the default UDS listener.\r\n* Use diagnostic server reverse connect configuration. Make sure to create the UDS socket from `dotnet-trace` within apps sandboxed file system and that it gets a full path below 104 characters. Start up app with the `DOTNET_DiagnosticPorts` environment variable set to `\u003cuds path\u003e`, see https://learn.microsoft.com/en-us/dotnet/core/diagnostics/dotnet-trace#use-diagnostic-port-to-collect-a-trace-from-app-startup\r\n\r\nNOTE that all of above must fit into full UDS path not exceeding the maximum of 104 characters path.\r\n\r\nPossible long term solutions:\r\n\r\n* Switch to TCP/IP as transport for IPC channels when building a sandboxed app, affects both `OSX (CoreCLR)` and `MacCatalyst (Mono)`. This is how other sandboxed apps runs today, for example` iOS/tvOS/Android` and will resolve all issues around OS UDS path length limitations. Will require `dotnet-dsrouter` to run in order for tools like `dotnet-trace` to connect to the sandboxed app + setting env variables in launched app.\r\n\r\n* Have default UDS path to be shorter if running inside the sandbox, this would open up for longer `\u003cuid\u003e` + `\u003capp bundle id\u003e`. Won\u0027t solve diagnostic tools not being able to discover the default UDS listener, but increase the chances that full UDS path falls into max path length limits and open up for the possible to use `--diagnostic-port \u003cdefault uds listener path\u003e,connect` in the sandboxed app use case.\r\n\r\nLooks like another issue is hitting similar issue but in that case causing issue with CoreCLR managed debugging on sandboxed OSX apps, https://github.com/dotnet/runtime/issues/79852. Managed debugging is using a different set of default UDS listeners, but most likely running into by same underlying issue when trying to debug a sandboxed app.\r\n\r\n/cc @tommcdon",
+                                           "updatedAt":  "2023-10-30T09:19:13Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6FBtbJ",
+                                           "createdAt":  "2024-07-16T20:59:06Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @tommcdon\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2024-07-16T20:59:06Z"
+                                       }
+                                   ],
+                         "totalCount":  4
+                     },
+        "title":  "CoreCLR Debugging and CoreCLR/Mono EventPipe Doesn\u0027t Work On OSX With Sandbox Enabled",
+        "labels":  [
+                       "enhancement",
+                       "EventPipe",
+                       "area-Diagnostics-coreclr",
+                       "os-maccatalyst",
+                       "area-Diagnostics-mono"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/97097",
+        "createdAt":  "2024-01-17T13:26:03Z",
+        "number":  97097,
+        "author":  "javiercn",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-04-01T15:57:40Z",
+        "body":  "### Discussed in https://github.com/dotnet/aspnetcore/discussions/52289\r\n\r\n\u003cdiv type=\u0027discussions-op-text\u0027\u003e\r\n\r\n\u003csup\u003eOriginally posted by **DierkDroth** November 22, 2023\u003c/sup\u003e\r\nSince the first days of .NET + WebAssembly many years back I\u0027m looking forward to finally get a debugging experience which would make it possible to do \u0027native\u0027 development in .NET and WebAssembly.\r\n\r\nUnfortunately the debugging experience even got worse with .NET 8 - as just experienced (again):\r\n- starting the debugging sessions takes \u003e 5 times longer than starting the WASM app from VisualStudio without debugging\r\n- as a breakpoint it hit it takes ~30 seconds until VisualStudio finally broke\r\n- removing a breakpoint while debugging just is not effective: although VS no longer would show the breakpoint, it\u0027s still triggered\r\n- terminating the debugging sesison could freeze VisualStudio for several minutes until it finally becomes responsive again\r\n- and so on and so on...\r\n\r\nDo we \u0027have to live\u0027 with that bad debugging experience going forward - implying in my case that I keep doing the actual development work in WindowsAppSDK - or is there any significant improvement in sight?\r\n\r\nMy setup: latest VisualStudio, latest Windows 11, latest .NET 8. latest Chrome, state-of-the-art development machine. I\u0027m working on a Platform UNO project.\r\nI activate debugging by enabling this line in my launchSettings.json:\r\n` \"inspectUri\": \"{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}\"`\r\n\u003c/div\u003e",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOcP_KHQ==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5w_8Vl",
+                                           "createdAt":  "2024-01-17T13:26:28Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @tommcdon\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Discussed in https://github.com/dotnet/aspnetcore/discussions/52289\r\n\r\n\u003cdiv type=\u0027discussions-op-text\u0027\u003e\r\n\r\n\u003csup\u003eOriginally posted by **DierkDroth** November 22, 2023\u003c/sup\u003e\r\nSince the first days of .NET + WebAssembly many years back I\u0027m looking forward to finally get a debugging experience which would make it possible to do \u0027native\u0027 development in .NET and WebAssembly.\r\n\r\nUnfortunately the debugging experience even got worse with .NET 8 - as just experienced (again):\r\n- starting the debugging sessions takes \u003e 5 times longer than starting the WASM app from VisualStudio without debugging\r\n- as a breakpoint it hit it takes ~30 seconds until VisualStudio finally broke\r\n- removing a breakpoint while debugging just is not effective: although VS no longer would show the breakpoint, it\u0027s still triggered\r\n- terminating the debugging sesison could freeze VisualStudio for several minutes until it finally becomes responsive again\r\n- and so on and so on...\r\n\r\nDo we \u0027have to live\u0027 with that bad debugging experience going forward - implying in my case that I keep doing the actual development work in WindowsAppSDK - or is there any significant improvement in sight?\r\n\r\nMy setup: latest VisualStudio, latest Windows 11, latest .NET 8. latest Chrome, state-of-the-art development machine. I\u0027m working on a Platform UNO project.\r\nI activate debugging by enabling this line in my launchSettings.json:\r\n` \"inspectUri\": \"{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}\"`\r\n\u003c/div\u003e\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003ejaviercn\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-Diagnostics-coreclr`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2024-01-17T13:26:28Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5w_8mU",
+                                           "createdAt":  "2024-01-17T13:27:04Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to \u0027arch-wasm\u0027: @lewing\nSee info in area-owners.md if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Discussed in https://github.com/dotnet/aspnetcore/discussions/52289\r\n\r\n\u003cdiv type=\u0027discussions-op-text\u0027\u003e\r\n\r\n\u003csup\u003eOriginally posted by **DierkDroth** November 22, 2023\u003c/sup\u003e\r\nSince the first days of .NET + WebAssembly many years back I\u0027m looking forward to finally get a debugging experience which would make it possible to do \u0027native\u0027 development in .NET and WebAssembly.\r\n\r\nUnfortunately the debugging experience even got worse with .NET 8 - as just experienced (again):\r\n- starting the debugging sessions takes \u003e 5 times longer than starting the WASM app from VisualStudio without debugging\r\n- as a breakpoint it hit it takes ~30 seconds until VisualStudio finally broke\r\n- removing a breakpoint while debugging just is not effective: although VS no longer would show the breakpoint, it\u0027s still triggered\r\n- terminating the debugging sesison could freeze VisualStudio for several minutes until it finally becomes responsive again\r\n- and so on and so on...\r\n\r\nDo we \u0027have to live\u0027 with that bad debugging experience going forward - implying in my case that I keep doing the actual development work in WindowsAppSDK - or is there any significant improvement in sight?\r\n\r\nMy setup: latest VisualStudio, latest Windows 11, latest .NET 8. latest Chrome, state-of-the-art development machine. I\u0027m working on a Platform UNO project.\r\nI activate debugging by enabling this line in my launchSettings.json:\r\n` \"inspectUri\": \"{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}\"`\r\n\u003c/div\u003e\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003ejaviercn\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`arch-wasm`, `untriaged`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2024-01-17T13:27:04Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5w_8od",
+                                           "createdAt":  "2024-01-17T13:27:09Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "javiercn",
+                                           "body":  "/cc @thaystg ",
+                                           "updatedAt":  "2024-01-17T13:27:09Z"
+                                       }
+                                   ],
+                         "totalCount":  3
+                     },
+        "title":  "[.NET8 + WebAssembly] Debugging experience still is far from being \u0027OK\u0027",
+        "labels":  [
+                       "enhancement",
+                       "arch-wasm",
+                       "area-Diagnostics-mono"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/103132",
+        "createdAt":  "2024-06-06T16:25:04Z",
+        "number":  103132,
+        "author":  "lambdageek",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHOC4dCrw==",
+                          "nodes":  [
+                                        {
+                                            "content":  "EYES",
+                                            "user":  "ivanpovazan",
+                                            "createdAt":  "2024-06-07T06:44:31Z"
+                                        }
+                                    ],
+                          "totalCount":  1
+                      },
+        "updatedAt":  "2024-06-11T17:34:39Z",
+        "body":  "Use case:\r\n\r\nI\u0027m a C# android developer.  I am capable of reproducing a native crash in my app and I can run `adb log`.  In addition to the standard android crash dump summary, I would like the .NET runtime to print out its own view of a native backtrace using `llvm-symbolizer` markup so that I can use that output together with `dotnet-symbol` to view native stack traces that include line number information.\r\n\r\n\r\nThere\u0027s three tasks here:\r\n\r\n1.  Modify `dump_native_stacktrace` to use `{{bt:...}}` markup to print stack frame addresses.\r\n2. Emit `{{module:}}` and `{{mmap:...:load:...}}` markup to print out the ELF BuildId of each module and the memory map info for each loaded that appears in the stack traces (probably `dladdr` and some kind of `dlinfo` will get this data)\r\n3. Modify `dump_native_stacktrace` to use `\"unwind.h\"` and [_Unwind_backtrace](https://refspecs.linuxfoundation.org/LSB_5.0.0/LSB-Core-generic/LSB-Core-generic/baselib--unwind-backtrace.html) on Android to iterate over stack frames. (Android doesn\u0027t have `backtrace` that we use on other platforms)",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOgNKX_w==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc6AUzBw",
+                                           "createdAt":  "2024-06-06T16:25:30Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @tommcdon\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2024-06-06T16:25:30Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6AUzDR",
+                                           "createdAt":  "2024-06-06T16:25:34Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODk0TOg==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "mdh1418",
+                                                                               "createdAt":  "2024-06-06T16:26:42Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "lambdageek",
+                                           "body":  "/cc @mdh1418 ",
+                                           "updatedAt":  "2024-06-06T16:25:34Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6AVmSB",
+                                           "createdAt":  "2024-06-06T18:27:23Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "lambdageek",
+                                           "body":  "To get the build ids, I guess you need to do a [`dl_iterate_phdr`](https://man7.org/linux/man-pages/man3/dl_iterate_phdr.3.html) and look through each `dl_phdr_info`\u0027s `dl_phdr` with `p_type == PT_NOTE` and then for BuildID note.  there is some useful example at https://github.com/mattst88/build-id",
+                                           "updatedAt":  "2024-06-06T18:27:23Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6Az7H_",
+                                           "createdAt":  "2024-06-11T15:49:12Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "tommcdon",
+                                           "body":  "Potential duplicate issues:\r\n* https://github.com/dotnet/runtime/issues/35852\r\n* https://github.com/dotnet/runtime/issues/46552",
+                                           "updatedAt":  "2024-06-11T15:49:12Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6Az8Hv",
+                                           "createdAt":  "2024-06-11T15:51:10Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "tommcdon",
+                                           "body":  "Possible workaround - https://github.com/xamarin/xamarin-android/issues/8832#issuecomment-2133462990",
+                                           "updatedAt":  "2024-06-11T15:51:10Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6A0pf_",
+                                           "createdAt":  "2024-06-11T17:34:37Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "lambdageek",
+                                           "body":  "\u003e Potential duplicate issues:\r\n\u003e \r\n\u003e * [Packaging \u0026 redistribution of mdoc.exe \u0026 mono-symbolicate in a .NET 6 world? #35852](https://github.com/dotnet/runtime/issues/35852)\r\n\u003e * [Support for stack trace source location reconstruction #46552](https://github.com/dotnet/runtime/issues/46552)\r\n\r\nThese issues are about managed stack traces and adding line number info to android logs based on MVID of the managed stack frames.  The current issue is about unmanaged stack traces.\r\n\r\n\u003e Possible workaround - https://github.com/xamarin/xamarin-android/issues/8832#issuecomment-2133462990\r\n\r\nThat workaround is just about _displaying_ the unmanaged stack traces (likely with missing symbol names) - currently the runtime just swallows its own attempts at printing those.   After the workaround there is still the question of how to ensure that it\u0027s possible to get the symbol names for the native addresses that appear in the log.  (ie: the current issue is about enhancing the workaround)\r\n",
+                                           "updatedAt":  "2024-06-11T17:34:37Z"
+                                       }
+                                   ],
+                         "totalCount":  6
+                     },
+        "title":  "[mobile][diagnostics] Format native crash output using llvm-symbolizer markup",
+        "labels":  [
+                       "enhancement",
+                       "os-android",
+                       "area-Diagnostics-mono"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/105664",
+        "createdAt":  "2024-07-29T23:48:44Z",
+        "number":  105664,
+        "author":  "ghosttie",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-02-26T02:01:57Z",
+        "body":  "### Description\r\n\r\nI am writing an application based on the \"WebAssembly Browser App\" template (not Blazor).  The [documentation](https://github.com/dotnet/runtime/blob/main/src/mono/wasm/features.md#eh---exception-handling) says that exceptions should be caught natively, but when my code throws an exception I get a stack trace like this\r\n```\r\nUncaught ManagedError Error: Nullable object must have a value.\r\n    at Jn (c:\\Dropbox (Personal)\\personal\\projects\\C#\\Tactics\\Tactics\\wwwroot\\_framework\\https:\\raw.githubusercontent.com\\dotnet\\runtime\\2aade6beb02ea367fd97c4070a4198802fe61c03\\src\\mono\\wasm\\runtime\\marshal-to-js.ts:349:18)\r\n    at kr (c:\\Dropbox (Personal)\\personal\\projects\\C#\\Tactics\\Tactics\\wwwroot\\_framework\\https:\\raw.githubusercontent.com\\dotnet\\runtime\\2aade6beb02ea367fd97c4070a4198802fe61c03\\src\\mono\\wasm\\runtime\\invoke-cs.ts:277:19)\r\n    at \u003canonymous\u003e (c:\\Dropbox (Personal)\\personal\\projects\\C#\\Tactics\\Tactics\\wwwroot\\_framework\\https:\\raw.githubusercontent.com\\dotnet\\runtime\\2aade6beb02ea367fd97c4070a4198802fe61c03\\src\\mono\\wasm\\runtime\\invoke-cs.ts:247:13)\r\n    at paint (C:\\Dropbox (Personal)\\personal\\projects\\C#\\Tactics\\Tactics\\wwwroot\\main.js:102:26)\r\n```\r\nwhere it only tells me where it was in the JS WASM runtime, not in the .NET code, which makes exceptions very hard to debug.\r\n\r\n### Reproduction Steps\r\n\r\nMy code does a `window.requestAnimationFrame` in JS which sends an interop to the .NET code which throws an exception.  I don\u0027t know if the requestAnimationFrame part is relevant.\r\n\r\n### Expected behavior\r\n\r\nIdeally the exception breaks in Visual Studio, but even just showing the .NET stack track would be helpful.\r\n\r\n### Actual behavior\r\n\r\nIt shows the stack trace in the JS WASM runtime code.\r\n\r\n### Regression?\r\n\r\n_No response_\r\n\r\n### Known Workarounds\r\n\r\n_No response_\r\n\r\n### Configuration\r\n\r\n.NET 8.0.7\r\nWindows 10 v10.0.19045\r\nx64\r\nChrome v127\r\n\r\n### Other information\r\n\r\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOiDsA-A==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc6GrTrd",
+                                           "createdAt":  "2024-07-31T02:04:01Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "tommcdon",
+                                           "body":  "@thaystg ",
+                                           "updatedAt":  "2024-07-31T02:04:01Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6GrUN0",
+                                           "createdAt":  "2024-07-31T02:06:28Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "thaystg",
+                                           "body":  "Can you please provide a sample app to reproduce the problem?",
+                                           "updatedAt":  "2024-07-31T02:06:28Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6GuST3",
+                                           "createdAt":  "2024-07-31T11:17:30Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODsRLAA==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "thaystg",
+                                                                               "createdAt":  "2024-07-31T14:16:26Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "ghosttie",
+                                           "body":  "It was easier to reproduce than I thought it was going to be\r\n[repro.zip](https://github.com/user-attachments/files/16440443/repro.zip)\r\n",
+                                           "updatedAt":  "2024-07-31T11:31:34Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6G416a",
+                                           "createdAt":  "2024-08-01T13:28:44Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "maraf",
+                                           "body":  "cc @pavelsavara ",
+                                           "updatedAt":  "2024-08-01T13:28:44Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6G5D6j",
+                                           "createdAt":  "2024-08-01T13:47:07Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODsca2g==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "tommcdon",
+                                                                               "createdAt":  "2024-08-01T13:54:17Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "pavelsavara",
+                                           "body":  "I think this is possibly because the runtime already exited, before trying to format the stack trace.\r\n\r\nhttps://github.com/dotnet/runtime/blob/2aade6beb02ea367fd97c4070a4198802fe61c03/src/mono/wasm/runtime/marshal.ts#L346\r\n\r\nIn the latest version of the code we are more explicit about that\r\nhttps://github.com/dotnet/runtime/blob/74c608d67d64675ff840c5888368669777c8aa2c/src/mono/browser/runtime/marshal.ts#L418-L420\r\n\r\nsomehow you still use the old template with \r\n`await dotnet.run();`\r\n\r\nwe now have better template with `runMain` which will kee the runtime running\r\nhttps://github.com/dotnet/runtime/blob/74c608d67d64675ff840c5888368669777c8aa2c/src/mono/wasm/templates/templates/browser/wwwroot/main.js#L31-L32",
+                                           "updatedAt":  "2024-08-01T13:47:07Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6G5fI9",
+                                           "createdAt":  "2024-08-01T14:26:39Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ghosttie",
+                                           "body":  "I set it up with\r\n```\r\ndotnet workload install wasm-tools\r\ndotnet workload install wasm-experimental\r\ndotnet new wasmbrowser\r\n```\r\n\r\nfollowing the instructions from [here](https://devblogs.microsoft.com/dotnet/use-net-7-from-any-javascript-app-in-net-7/) - I couldn\u0027t find newer instructions, are there any?",
+                                           "updatedAt":  "2024-08-01T14:26:39Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6G7QpD",
+                                           "createdAt":  "2024-08-01T18:17:23Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "maraf",
+                                           "body":  "No, .NET 8 template contains `dotnet.run()` that exits the runtime after finished. You can replace it with `runMain()` that won\u0027t exit the runtime (which is used in the .NET 9 template by defualt)",
+                                           "updatedAt":  "2024-08-01T19:16:33Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6G9OhR",
+                                           "createdAt":  "2024-08-01T23:25:31Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ghosttie",
+                                           "body":  "I changed\r\n```js\r\nawait dotnet.run();\r\n```\r\nto\r\n```js\r\nawait dotnet.runMain();\r\n```\r\nin `main.js` but it doesn\u0027t seem to have made any difference\r\n\r\nI also tried just\r\n```js\r\nawait runMain();\r\n```\r\nand it\u0027s the same",
+                                           "updatedAt":  "2024-08-02T00:00:31Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6G_ej_",
+                                           "createdAt":  "2024-08-02T07:51:19Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ilonatommy",
+                                           "body":  "Testing the repro app in net9, I am getting a nice stack (no edition to `runMain() / dotnet.run()`, @maraf):\r\n```\r\nmarshal-to-js.ts:349 Uncaught    at MyClass.Greeting() in C:\\Users\\user\\Downloads\\repro\\Program.cs:line 9\r\n   at MyClass.__Wrapper_Greeting_1428811289(JSMarshalerArgument* __arguments_buffer) in C:\\Users\\user\\Downloads\\repro\\obj\\Debug\\net8.0\\Microsoft.Interop.JavaScript.JSImportGenerator\\Microsoft.Interop.JavaScript.JSExportGenerator\\JSExports.g.cs:line 38\r\nError: Error in the application.\r\n    at Jn (http://localhost:5250/_framework/dotnet.runtime.8.0.7.pga4svny9i.js:3:31614)\r\n    at kr (http://localhost:5250/_framework/dotnet.runtime.8.0.7.pga4svny9i.js:3:35529)\r\n    at Object.\u003canonymous\u003e (http://localhost:5250/_framework/dotnet.runtime.8.0.7.pga4svny9i.js:3:180960)\r\n    at http://localhost:5250/main.js:21:30\r\n```",
+                                           "updatedAt":  "2024-08-02T07:52:27Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6HAnhv",
+                                           "createdAt":  "2024-08-02T10:39:00Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "maraf",
+                                           "body":  "@ghosttie I can\u0027t repro the issue as you see it. Running the repro app that you produces this on my machine.\r\n```\r\nUncaught    at MyClass.Greeting() in /Users/marekfisera/Development/samples/Browser8JSExportCallstack/repro/Program.cs:line 9\r\n   at MyClass.__Wrapper_Greeting_1196689670(JSMarshalerArgument* __arguments_buffer) in /Users/marekfisera/Development/samples/Browser8JSExportCallstack/repro/Microsoft.Interop.JavaScript.JSImportGenerator/Microsoft.Interop.JavaScript.JSExportGenerator/JSExports.g.cs:line 38\r\nError: Error in the application.\r\n```\r\n\r\nIs the managed stack trace missing even for the repro on your machine? \r\n\r\nAbout the replace of `dotnet.run` with `runMain`, you can see it here (in the .NET 9 version of the template) https://github.com/dotnet/runtime/blob/main/src/mono/wasm/templates/templates/browser/wwwroot/main.js#L32. It\u0027s just `runMain()`, not `dotnet.runMain`, and you get function on line 6. Does this change help on your app?",
+                                           "updatedAt":  "2024-08-02T10:39:00Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6HA-3A",
+                                           "createdAt":  "2024-08-02T11:44:10Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ghosttie",
+                                           "body":  "I was able to get the repro to work by getting the `runMain` function from line 6 of the .NET 9 version of the template, thanks.\r\n\r\nIt only shows the managed stack trace in the browser console, not in Visual Studio, is that how it\u0027s supposed to work?\r\n\r\nI also haven\u0027 been able to get it to work in my actual application - I made the same `runMain` changes but I\u0027m getting\r\n```\r\nTypeError: Cannot read properties of undefined (reading \u0027length\u0027)\r\n    at startup.ts:632:43\r\n    at Object.Oc [as runMain] (run.ts:38:5)\r\n    at main.js:54:12\r\n```",
+                                           "updatedAt":  "2024-08-02T11:44:10Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6HDpsz",
+                                           "createdAt":  "2024-08-02T17:56:51Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "maraf",
+                                           "body":  "\u003e I also haven\u0027 been able to get it to work in my actual application - I made the same runMain changes but I\u0027m gettin\n\nIn .NET 8 it expects an array with ARGS, so `runMain([])` should work\n\n\u003e It only shows the managed stack trace in the browser console, not in Visual Studio, is that how it\u0027s supposed to work?\n\nI\u0027ll check that..",
+                                           "updatedAt":  "2024-08-02T18:00:35Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6HDsBf",
+                                           "createdAt":  "2024-08-02T18:03:35Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODsn_Fg==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "maraf",
+                                                                               "createdAt":  "2024-08-02T19:40:13Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "ghosttie",
+                                           "body":  "I got it working with\r\n```js\r\nrunMain(mainAssemblyName, [])\r\n```",
+                                           "updatedAt":  "2024-08-02T18:03:35Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6HOP8H",
+                                           "createdAt":  "2024-08-05T09:50:31Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "pavelsavara",
+                                           "body":  "Please re-open if necessary.",
+                                           "updatedAt":  "2024-08-05T09:50:31Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6HZmfa",
+                                           "createdAt":  "2024-08-06T16:00:47Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "maraf",
+                                           "body":  "Validated that VS omits details from the from `ManagedError`\r\n\r\n![image](https://github.com/user-attachments/assets/62b4f7a4-9de2-4128-acd3-e6403b1d36c4)\r\n\r\nIt doesn\u0027t event print message from `ManagedError` \r\n\r\nEDIT: If I try-catch the error and log it is displayed correctly\r\n```\r\ntry {\r\n    exports.JSInterop.Greet();\r\n} catch (e) {\r\n    console.log(e);\r\n}\r\n```\r\n=\u003e\r\n![image](https://github.com/user-attachments/assets/91d89e31-a784-42c1-8d94-112d8a873854)\r\n\r\nIt looks like VS doesn\u0027t process the `ManagedError` wrapper",
+                                           "updatedAt":  "2024-08-06T16:08:05Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6HZnlo",
+                                           "createdAt":  "2024-08-06T16:03:08Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODs_3mQ==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "maraf",
+                                                                               "createdAt":  "2024-08-06T16:03:32Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "ghosttie",
+                                           "body":  "So should the issue be reopened?",
+                                           "updatedAt":  "2024-08-06T16:03:08Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6IOwD4",
+                                           "createdAt":  "2024-08-13T07:41:36Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "maraf",
+                                           "body":  "After brief investigation it seems it will need a change on the VS/debugger side. Moving to Future as there won\u0027t be needed a change in the runtime. I\u0027ll futher investigate what needs to be changed.\r\n\r\nThe repo responsible for object transformation is https://github.com/microsoft/vscode-js-debug/",
+                                           "updatedAt":  "2024-08-16T10:06:24Z"
+                                       }
+                                   ],
+                         "totalCount":  17
+                     },
+        "title":  ".NET exception call stack not present when running as WASM",
+        "labels":  [
+                       "arch-wasm",
+                       "needs-further-triage",
+                       "area-Diagnostics-mono",
+                       "os-browser"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/106395",
+        "createdAt":  "2024-08-14T13:53:05Z",
+        "number":  106395,
+        "author":  "thaystg",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHOC884pA==",
+                          "nodes":  [
+                                        {
+                                            "content":  "EYES",
+                                            "user":  "brunck",
+                                            "createdAt":  "2024-11-25T20:22:42Z"
+                                        }
+                                    ],
+                          "totalCount":  1
+                      },
+        "updatedAt":  "2025-07-22T17:57:44Z",
+        "body":  "We don\u0027t have a good solution for line numbers in stack traces in .NET 6+ for release apps.\r\n\r\n\r\nhttps://devdiv.visualstudio.com/DevDiv/_workitems/edit/1809586/",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOiGyrvA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc6IbKu8",
+                                           "createdAt":  "2024-08-14T13:53:26Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @tommcdon\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2024-08-14T13:53:26Z"
+                                       }
+                                   ],
+                         "totalCount":  1
+                     },
+        "title":  "Replacement for mono-symbolicate",
+        "labels":  [
+                       "enhancement",
+                       "area-Diagnostics-mono"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/108211",
+        "createdAt":  "2024-09-24T18:20:33Z",
+        "number":  108211,
+        "author":  "jonpryor",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHOC7Sz_w==",
+                          "nodes":  [
+                                        {
+                                            "content":  "EYES",
+                                            "user":  "filipnavara",
+                                            "createdAt":  "2024-09-24T18:33:09Z"
+                                        },
+                                        {
+                                            "content":  "EYES",
+                                            "user":  "AmrAlSayed0",
+                                            "createdAt":  "2024-09-25T06:48:10Z"
+                                        }
+                                    ],
+                          "totalCount":  2
+                      },
+        "updatedAt":  "2025-07-30T16:17:01Z",
+        "body":  "## Background\r\n\r\n[Java.Interop](/dotnet/java-interop) is used to allow in-process interactions with a Java Virtual Machine (JVM).  [.NET for Android](/dotnet/android) builds atop Java.Interop for integration with Android, using MonoVM as the JIT.  (Neither CoreCLR nor NativeAot are supported by .NET for Android at this time.)\r\n\r\nSee also:\r\n\r\n  * https://github.com/dotnet/android/pull/4927#issuecomment-1273940849\r\n  * https://github.com/dotnet/android/pull/4927#discussion_r490457925\r\n  * https://github.com/dotnet/android/issues/8608\r\n  * https://github.com/dotnet/android/pull/4877\r\n  * https://github.com/dotnet/android/issues/4548#issuecomment-614376712\r\n  * https://github.com/dotnet/android/blob/49fdc42b2137ce7ce7cbb301ebf2e7c4de2576ae/Documentation/project-docs/exception-handling.md\r\n\r\n## Setup\r\n\r\nAssume we have a call stack wherein [Managed code calls into Java code which calls back into Managed code](https://github.com/xamarin/java.interop/blob/998f0b6bc152be5302690728c66f699e6fd583a9/tests/Java.Base-Tests/Java.Base/JavaToManagedTests.cs#L25-L28):\r\n\r\n```csharp\r\n// C#\r\nvoid ManagedJavaManaged()\r\n{\r\n\tint value   = 0;\r\n\tusing var c = new MyIntConsumer(v =\u003e value = v);\r\n\tusing var r = JavaInvoker.CreateRunnable(c);\r\n\tr.Run ();\r\n}\r\n\r\npartial class MyIntConsumer : Java.Lang.Object, Java.Util.Function.IIntConsumer {\r\n\tAction\u003cint\u003e action;\r\n\r\n\tpublic MyIntConsumer (Action\u003cint\u003e action)\r\n\t{\r\n\t\tthis.action = action;\r\n\t}\r\n\r\n\tpublic void Accept (int value)\r\n\t{\r\n\t\taction (value);\r\n\t}\r\n}\r\n```\r\n\r\n[Java side of `JavaInvoker`](https://github.com/xamarin/java.interop/blob/998f0b6bc152be5302690728c66f699e6fd583a9/tests/Java.Base-Tests/java/com/microsoft/java_base_tests/Invoker.java):\r\n\r\n```java\r\n// Java\r\npublic final class Invoker {\r\n\tpublic static Runnable createRunnable(final IntConsumer consumer) {\r\n\t\treturn new Runnable() {\r\n\t\t\tint value;\r\n\t\t\tpublic void run() {\r\n\t\t\t\tconsumer.accept(value++);\r\n\t\t\t}\r\n\t\t};\r\n\t}\r\n}\r\n```\r\n\r\nThe above demonstrates a Managed \u003e Java \u003e Managed transition:\r\n\r\n 1. the originating Managed method is `ManagedJavaManaged()`, which invokes\r\n 2. `JavaInvoker.CreateRunnable()`, which eventually calls the Java method `Invoker.createRunnable()`, which in turn calls `consumer.accept()`, transitioning back into\r\n 3.  Managed code in `MyIntConsumer.Accept()`.\r\n\r\nWhen no exceptions are involved, everything is fine!\r\n\r\nBut what if an exception *is* thrown?  What if `MyIntConsumer.Accept(int)` throws an exception?\r\n\r\n## Exception Handling\r\n\r\nJava code cannot directly invoke managed code.  Instead, Java code invokes [special native methods](https://docs.oracle.com/javase/8/docs/technotes/guides/jni/spec/design.html#compiling_loading_and_linking_native_methods).  We call these \"marshal methods\", which are responsible for marshaling parameters, return values, and (ideally) exceptions. \r\n\r\n### Exception Handling without a Debugger\r\n\r\nWhen no Debugger is present, the marshal methods catch and marshal all exceptions:\r\n\r\n```csharp\r\npartial class IIntConsumerInvoker : global::Java.Lang.Object, IIntConsumer {\r\n\tstatic void n_Accept_I (IntPtr jnienv, IntPtr native__this, int value)\r\n\t{\r\n\t\tvar envp = new JniTransition(jnienv);\r\n\t\ttry {\r\n\t\t\tvar __this = global::Java.Lang.Object.GetObject\u003cJava.Util.Functions.IIntConsumer\u003e(jnienv, native__this, JniHandleOwnership.DoNotTransfer)!;\r\n\t\t\t__this.Accept(value);\r\n\t\t} catch (Exception e) {\r\n\t\t\tenvp.SetPendingException(e);\r\n\t\t} finally {\r\n\t\t\tenvp.Dispose();\r\n\t\t}\r\n\t}\r\n}\r\n```\r\n\r\nThis way, if `MyIntConsumer.Accept()` throws an exception, it will be caught within `IIntConsumerInvoker.n_Accept_I()`, marshaled to Java, and then the method will return.  Execution is assumed to return to Java, Java will see the pending exception, raise it, and Java code will be able to participate in exception handling.\r\n\r\n## Exception Handling with a Debugger: catch everything\r\n\r\nThings get \"more interesting\" when a debugger is attached, as we want our developer customers to see a \"first chance exception\" which points to the correct location.\r\n\r\nIf we run the following with a debugger attached:\r\n\r\n```\r\n/* 1 */ using var c = new MyIntConsumer(v =\u003e throw new InvalidOperationException());\r\n/* 2 */ using var r = JavaInvoker.CreateRunnable(c);\r\n/* 3 */ r.Run ();\r\n```\r\n\r\nthen when line 3 is executed, we *want* the debugger to \"break\" on line 1, with a callstack that shows (more or less):\r\n\r\n  * `\u003c\u003ecompiler-generated-method` for `throw new InvalidOperationException()`\r\n  * `MyIntConsumer.Accept(int)`\r\n  * `IIntConsumerInvoker.n_Accept_I(IntPtr, IntPtr, int)`\r\n  * *non-managed Java code*\r\n  * `JniEnvironment.InstanceMethods.CallVoidMethod(…)`\r\n  * …\r\n  * `IRunnableInvoker.Run()`\r\n  * *calling method*\r\n\r\nThe problem is that if we use the `IIntConsumerInvoker.n_Accept_I()` marshal method described above, in which all exceptions are caught, then instead the debugger will \"break\" at `JniEnvironment.InstanceMethods.CallVoidMethod(…)`, if anywhere at all, completely skipping the original `throw` site and it\u0027s Java callers.\r\n\r\nThis was not considered to be an acceptable developer experience.\r\n\r\n### Exception Handling with a Debugger: catch only when a debugger is attached\r\n\r\nIf we instead have a marshal method where the `catch` block uses a `when` clause:\r\n\r\n```csharp\r\npartial class IIntConsumerInvoker : global::Java.Lang.Object, IIntConsumer {\r\n\tstatic void n_Accept_I (IntPtr jnienv, IntPtr native__this, int value)\r\n\t{\r\n\t\tvar envp = new JniTransition(jnienv);\r\n\t\ttry {\r\n\t\t\tvar __this = global::Java.Lang.Object.GetObject\u003cJava.Util.Functions.IIntConsumer\u003e(jnienv, native__this, JniHandleOwnership.DoNotTransfer)!;\r\n\t\t\t__this.Accept(value);\r\n\t\t} catch (Exception e) when (!Debugger.IsAttached) {\r\n\t\t\tenvp.SetPendingException(e);\r\n\t\t} finally {\r\n\t\t\tenvp.Dispose();\r\n\t\t}\r\n\t}\r\n}\r\n```\r\n\r\nthen we have a better \"unhandled exception\" experience: the debugger breaks on the original `throw` site.\r\n\r\nYay!\r\n\r\nThe problem is that if the developer then continues execution (F5), then *the process state may be **corrupted***.  This is because with the `catch (Exception e) when (!Debugger.IsAttached)` construct, the catch block becomes \"invisible\".  This means that the exception is never caught, there is never an opportunity to return to Java code, and MonoVM will unwind *all* the call stacks, the Java call stacks included.  This can result in the JVM aborting the process.\r\n\r\nOops.\r\n\r\n### Exception Handling Performance\r\n\r\nThere is an added complication: the use of `JniTransition` laid out above is a lie.  What *actually* happens is that the marshal methods contain *no* exception handling, *and* the marshal method usage is \"wrapped\" around [`JNINativeWrapper.CreateDelegate()`](https://github.com/dotnet/android/blob/8bb3c8ec0ae832e0dbe5dbc0bb5d357916ba8de5/src/Mono.Android/Android.Runtime/JNINativeWrapper.cs#L29-L105):\r\n\r\n```csharp\r\n// From src/Mono.Android/obj/Debug/net9.0/android-35/mcw/Java.Util.Functions.IIntConsumer.cs\r\ninternal partial class IIntConsumerInvoker : global::Java.Lang.Object, IIntConsumer {\r\n\tstatic void n_Accept_I (IntPtr jnienv, IntPtr native__this, int value)\r\n\t{\r\n\t\tvar __this = global::Java.Lang.Object.GetObject\u003cJava.Util.Functions.IIntConsumer\u003e (jnienv, native__this, JniHandleOwnership.DoNotTransfer)!;\r\n\t\t__this.Accept (value);\r\n\t}\r\n\r\n\tstatic Delegate? cb_accept_Accept_I_V;\r\n\tstatic Delegate GetAccept_IHandler ()\r\n\t{\r\n\t\tif (cb_accept_Accept_I_V == null)\r\n\t\t\tcb_accept_Accept_I_V = JNINativeWrapper.CreateDelegate (new _JniMarshal_PPI_V (n_Accept_I));\r\n\t\treturn cb_accept_Accept_I_V;\r\n\t}\r\n}\r\n```\r\n\r\n`JNINativeWrapper.CreateDelegate()` in turn uses *System.Reflection.Emit* to do a variant on the \"`catch (Exception) when (!Debugger.IsAttached)`\" approach.  This in turn means that System.Reflection.Emit is required, and can impact app startup times by pulling in System.Reflection.Emit initialization and usage into app startup.\r\n\r\n## Request\r\n\r\nWhat we would like is a construct to say \"ignore this `catch` block when dealing with first chance exceptions, while executing this `catch` block when actually unwinding the stack.\"\r\n\r\nAn idea [sketched out here](https://github.com/dotnet/android/pull/4927#issuecomment-1273940849) is to add a `StackUnwinding` type:\r\n\r\n```csharp\r\nnamespace System.Runtime.ExceptionServices {\r\n    public partial class StackUnwinding : Exception\r\n    {\r\n        public StackUnwinding(Exception innerException);\r\n    }\r\n}\r\n```\r\n\r\n`catch(StackUnwinding)` blocks would be \"invisible\" to first chance exception reporting.\r\n\r\nThis would allow our marshal methods to use it:\r\n\r\n```csharp\r\nvoid JniBoundary(IntPtr jnienv, IntPtr self)\r\n{\r\n    var t = new JniTransition(jnienv);\r\n    try {\r\n        // code which may throw an exception\r\n    }\r\n    catch (StackUnwinding e) {\r\n        t.SetPendingException(e.InnerException);\r\n    }\r\n    finally {\r\n        t.Dispose();\r\n    }\r\n}\r\n```\r\n\r\nWe could then update our `generator` to make use of the new type, which would also allow us to *stop* using `JNINativeWrapper.CreateDelegate()` entirely.  This would allow for faster app startup (no System.Reflection.Emit usage) without permitting Cross-VM corruption issues.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOjdhZGg==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc6NYeN2",
+                                           "createdAt":  "2024-09-24T18:24:29Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "steveisok",
+                                           "body":  "/cc @janvorli @vitek-karas ",
+                                           "updatedAt":  "2024-09-24T18:24:29Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6NYvtK",
+                                           "createdAt":  "2024-09-24T18:58:34Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jkotas",
+                                           "body":  "This problem looks very similar to the problem addressed by https://github.com/dotnet/runtime/issues/103105. Can #103105 be used to solve your debugger experience problem as well?",
+                                           "updatedAt":  "2024-09-24T18:58:34Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6NY9cR",
+                                           "createdAt":  "2024-09-24T19:14:47Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODzb49w==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "jkotas",
+                                                                               "createdAt":  "2024-09-24T20:07:22Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "steveisok",
+                                                                               "createdAt":  "2024-09-24T20:09:04Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  2
+                                                         },
+                                           "author":  "jonpryor",
+                                           "body":  "@jkotas: I think that would!  I was not aware of that new attribute.  We\u0027ll need to prototype it and see if it behaves as desired.\r\n\r\nThanks!",
+                                           "updatedAt":  "2024-09-24T19:14:54Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6NiYly",
+                                           "createdAt":  "2024-09-25T16:41:52Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jonpryor",
+                                           "body":  "@jkotas, @steveisok: I think `[DebuggerDisableUserUnhandledExceptionsAttribute]` + `Debugger.BreakForUserUnhandledException()` in #103105 will work, in that the following .NET 9 Console app behaves as I want: the debugger \"breaks\" within `B()` at the `throw new InvalidOperationException()` line, even though the exception is handled:\r\n\r\n```csharp\r\nusing System.Diagnostics;\r\n\r\nConsole.WriteLine(\"Hello, World!\");\r\nA();\r\n\r\n[DebuggerDisableUserUnhandledExceptions]\r\nvoid A()\r\n{\r\n    try\r\n    {\r\n        B();\r\n    }\r\n    catch (Exception e)\r\n    {\r\n        Debugger.BreakForUserUnhandledException(e);\r\n        Console.WriteLine(e.ToString());\r\n    }\r\n}\r\n\r\nvoid B()\r\n{\r\n    throw new InvalidOperationException();\r\n}\r\n```\r\n\r\n@steveisok, @thaystg: the problem is that `[DebuggerDisableUserUnhandledExceptionsAttribute]` + `Debugger.BreakForUserUnhandledException()` do *not* work with MonoVM in a .NET for Android 9 project.  If I debug the following .NET for Android app:\r\n\r\n```csharp\r\nnamespace Scratch.AndroidApp_DisableUserUnhandledException\r\n{\r\n    [Activity(Label = \"@string/app_name\", MainLauncher = true)]\r\n    public class MainActivity : Activity\r\n    {\r\n        protected override void OnCreate(Bundle? savedInstanceState)\r\n        {\r\n            base.OnCreate(savedInstanceState);\r\n\r\n            // Set our view from the \"main\" layout resource\r\n            SetContentView(Resource.Layout.activity_main);\r\n\r\n            A(); \r\n        }\r\n\r\n        [System.Diagnostics.DebuggerDisableUserUnhandledExceptions]\r\n        static void A()\r\n        {\r\n            try\r\n            {\r\n                B();\r\n            }\r\n            catch (Exception e)\r\n            {\r\n                System.Diagnostics.Debugger.BreakForUserUnhandledException(e);\r\n                Console.WriteLine(e.ToString());\r\n            }\r\n        }\r\n\r\n        static void B()\r\n        {\r\n            throw new InvalidOperationException();\r\n        }\r\n    }\r\n}\r\n```\r\n\r\nthe debugger does *not* break within `B()`.\r\n\r\nWhat would be involved in making `Debugger.BreakForUserUnhandledException()` and related work on MonoVM?  Could this be done for .NET 10?",
+                                           "updatedAt":  "2024-09-25T16:41:52Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6Nighz",
+                                           "createdAt":  "2024-09-25T16:55:55Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "lambdageek",
+                                           "body":  "/cc @tommcdon ",
+                                           "updatedAt":  "2024-09-25T16:55:55Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6NkDV6",
+                                           "createdAt":  "2024-09-25T19:21:29Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jkotas",
+                                           "body":  "\u003e What would be involved in making Debugger.BreakForUserUnhandledException()\r\n\r\n`Debugger.BreakForUserUnhandledException` is an empty method for a debugger to set a breakpoint at (check the implementation in https://github.com/dotnet/runtime/pull/104813/). There is no runtime specific support to make this work.\r\n\r\nWhat is the debugger engine used to debug Mono on Android? It needs to be fixed there.",
+                                           "updatedAt":  "2024-09-25T19:21:29Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6NreU2",
+                                           "createdAt":  "2024-09-26T13:29:59Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "thaystg",
+                                           "body":  "@jonpryor Did you test it using VS or VSCode? Can you please test it in VSCode with the new debugger engine enabled? Because it uses the same debugger engine used to debug a coreclr app, so it may probably work?",
+                                           "updatedAt":  "2024-09-26T13:30:17Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6NsnDM",
+                                           "createdAt":  "2024-09-26T15:23:35Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jonpryor",
+                                           "body":  "@thaystg: I was testing using \"Visual Studio 17.12 P3\" on devbox, using whatever was current for \"main\" circa yesterday morning.\r\n\r\nIs Visual Studio not using the correct debugger engine?",
+                                           "updatedAt":  "2024-09-26T15:23:35Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6Nsqaw",
+                                           "createdAt":  "2024-09-26T15:29:10Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "thaystg",
+                                           "body":  "@jonpryor  Yes, this is correct, VSCode uses the same debugger engine used by coreclr debug, and VS uses the older one (debugger-libs), it will be replaced soon.",
+                                           "updatedAt":  "2024-09-26T15:29:21Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6N1_I8",
+                                           "createdAt":  "2024-09-27T17:21:59Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jonpryor",
+                                           "body":  "@thaystg [requested](https://github.com/dotnet/runtime/issues/108211#issuecomment-2376983862):\r\n\r\n\u003e Can you please test it in VSCode with the new debugger engine enabled?\r\n\r\nIt does *not* work as desired:\r\n\u003cimg width=\"1622\" alt=\"image\" src=\"https://github.com/user-attachments/assets/7cc5e1e5-7c3c-47ae-8c1d-ee2cac3bd77c\"\u003e\r\n\r\nNote that the debugger \"breaks\" at the `Debugger.BreakForUserUnhandledException()` location within `A()`, *not* the `throw new InvalidOperationException()` location within `B()`.\r\n\r\nCompare with Visual Studio + .NET 9 + console app, which \"breaks\" at the original `throw new InvalidOperationException()` site within `B()`:\r\n\r\n\u003cimg width=\"957\" alt=\"image\" src=\"https://github.com/user-attachments/assets/533e9e16-fc4a-4ed8-9885-c563d612d1a5\"\u003e\r\n\r\nOf equal importance is the exception callstack: VS + net9 + Console app shows the *original* callstack:\r\n\r\n\u003cimg width=\"660\" alt=\"image\" src=\"https://github.com/user-attachments/assets/08c5eac4-e14b-4769-9d81-243cc991b979\"\u003e\r\n\r\n\r\nCompare to `\u003cCannot evaluate the exception stack trace\u003e` within the VSCode screenshot.  Additionally, if I hover my mouse over the topmost `Scratch.AndroidApp-DisableUser…` frame within **CALL STACK** (lower-right corner of VScode screenshot), it shows `A()`, ***not*** `B()`.",
+                                           "updatedAt":  "2024-09-27T17:25:13Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6N2Fka",
+                                           "createdAt":  "2024-09-27T17:40:18Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "thaystg",
+                                           "body":  "Thanks a lot, I was also able to reproduce it in a console app running on mono runtime using the new debugger engine.\r\nFor sure we can fix it or .net 10.",
+                                           "updatedAt":  "2024-09-27T17:40:18Z"
+                                       }
+                                   ],
+                         "totalCount":  11
+                     },
+        "title":  "Cross-VM Exception Unwinding",
+        "labels":  [
+                       "area-Diagnostics-mono"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/111150",
+        "createdAt":  "2025-01-07T11:51:53Z",
+        "number":  111150,
+        "author":  "ivanpovazan",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-07-23T10:39:24Z",
+        "body":  "## Description\n\nWe should add a functional test which would verify that the `SIGSEGV` signal chaining to default handler works correctly on iOS platforms and that a crash report is properly generated when such signal is raised from native code.\n\nThe behavior got fixed in: https://github.com/dotnet/runtime/pull/110741 and only manually verified with .NET MAUI iOS/MacCatalyst application.\nHowever, we should improve our test coverage and catch any potential future regression early on.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOmXzXXw==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc6ZfNdf",
+                                           "createdAt":  "2025-01-07T11:52:02Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to \u0027os-ios\u0027: @vitek-karas, @kotlarmilos, @ivanpovazan, @steveisok, @akoeplinger\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2025-01-07T11:52:02Z"
+                                       }
+                                   ],
+                         "totalCount":  1
+                     },
+        "title":  "[mono][ios] Add a functional test for testing `SIGSEGV` signal chaining to default handler on iOS platforms",
+        "labels":  [
+                       "os-ios",
+                       "area-Diagnostics-mono"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/113514",
+        "createdAt":  "2025-03-14T04:30:24Z",
+        "number":  113514,
+        "author":  "Liangjia0411",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-03-18T20:17:00Z",
+        "body":  "## Environment Information\n- .NET Version: 9.0.1\n- Mono runtime\n\n## Issue Description\n\nAn interference issue has been identified when using the `mono_profiler_get_call_instrumentation_flags` function with multiple MonoProfilers running simultaneously.\n\n```c\nMonoProfilerCallInstrumentationFlags\nmono_profiler_get_call_instrumentation_flags (MonoMethod *method)\n{\n    MonoProfilerCallInstrumentationFlags flags = MONO_PROFILER_CALL_INSTRUMENTATION_NONE;\n\n    for (MonoProfilerHandle handle = mono_profiler_state.profilers; handle; handle = handle-\u003enext) {\n        MonoProfilerCallInstrumentationFilterCallback cb = (MonoProfilerCallInstrumentationFilterCallback)handle-\u003ecall_instrumentation_filter;\n\n        if (cb)\n            flags |= cb (handle-\u003eprof, method);\n    }\n\n    return flags;\n}\n```\n\n## Specific Problems\n\n1. When using this method to filter out methods that don\u0027t need profiling, the OR operation used to merge flags causes interference between multiple profilers\n2. If profiler A wants to filter out method X (returns NONE), but profiler B wants to profile method X (returns non-NONE), the end result will be that method X is profiled\n3. This mechanism makes it impossible to implement the requirement that \"certain methods are excluded by specific profilers\"\n\n## Impact\n\nWhen multiple profilers are running simultaneously, it\u0027s not possible to effectively control each profiler\u0027s filtering rules. This causes some methods that should be filtered to still be profiled, potentially resulting in unnecessary performance overhead or interfering with analysis results.\n\n## Suggested Solutions\n\nConsider the following potential improvements:\n1. Provide independent method filtering mechanisms for each profiler\n2. Introduce a priority system allowing higher priority profilers to override decisions of lower priority ones\n3. Add an explicit API for method exclusion that can coexist with the current inclusion mechanism",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOov7atg==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc6iVGM6",
+                                           "createdAt":  "2025-03-14T04:30:54Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @tommcdon\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2025-03-14T04:30:54Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6i_tq2",
+                                           "createdAt":  "2025-03-18T20:17:00Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOELHXOw==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "Liangjia0411",
+                                                                               "createdAt":  "2025-03-24T02:06:05Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "tommcdon",
+                                           "body":  "Thanks for reporting this issue @Liangjia0411!  This looks like a feature request for the mono profiler to support low-overhead filtering.  Currently we do not intend to work on this issue in this release, so we are placing it into the Future milestone.  ",
+                                           "updatedAt":  "2025-03-18T20:17:00Z"
+                                       }
+                                   ],
+                         "totalCount":  2
+                     },
+        "title":  "Mono: Call Instrumentation Flags Conflict Between Multiple Mono Profilers",
+        "labels":  [
+                       "enhancement",
+                       "area-Diagnostics-mono"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/117165",
+        "createdAt":  "2025-06-30T17:47:17Z",
+        "number":  117165,
+        "author":  "jozkee",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-08-14T17:29:28Z",
+        "body":  "## Build Information\nBuild: https://dev.azure.com/dnceng-public/public/_build/results?buildId=1073221\nBuild error leg or test failing: \n\u003c!-- Error message template  --\u003e\n## Error Message\n\nFill the error message using [step by step known issues guidance](https://github.com/dotnet/arcade/blob/main/Documentation/Projects/Build%20Analysis/KnownIssueJsonStepByStep.md).\n\n\u003c!-- Use ErrorMessage for String.Contains matches. Use ErrorPattern for regex matches (single line/no backtracking). Set BuildRetry to `true` to retry builds with this error. Set ExcludeConsoleLog to `true` to skip helix logs analysis. --\u003e\n\n```json\n{\n  \"ErrorMessage\": \"[FAIL] System.Diagnostics.Tests.DiagnosticMethodInfoTests.Create_StackFrame\",\n  \"BuildRetry\": false,\n  \"ExcludeConsoleLog\": false\n}\n```\n\nConsole log: https://helixr1107v0xd1eu3ibi6ka.blob.core.windows.net/dotnet-runtime-refs-heads-release-100-preview6504d1246db64978ad/WasmTestOnChrome-ST-System.Diagnostics.StackTrace.Tests/1/console.e41b9fda.log?helixlogtype=result\n```\n[00:33:54] info: [FAIL] System.Diagnostics.Tests.DiagnosticMethodInfoTests.Create_StackFrame\n[00:33:54] info: System.ArgumentNullException : Value cannot be null. (Parameter \u0027frame\u0027)\n[00:33:54] info:    at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)\n[00:33:54] info: Finished:    System.Diagnostics.StackTrace.Tests.dll\n[00:33:55] info: Stored /root/helix/work/workitem/uploads/xharness-output/testResults.xml results 28607 bytes\n[00:33:55] info: Finished uploading 28607 bytes of RESULTXML\n[00:33:55] info: Xml file was written to the provided writer.\n[00:33:55] info: \n[00:33:55] info: === TEST EXECUTION SUMMARY ===\n[00:33:55] info: Tests run: 86 Passed: 81 Inconclusive: 0 Failed: 1 Ignored: 0 Skipped: 4\n```\r\n\u003c!-- Known issue validation start --\u003e\r\n ### Known issue validation\r\n**Build: :mag_right:** https://dev.azure.com/dnceng-public/public/_build/results?buildId=1073221\r\n**Error message validated:** `[[FAIL] System.Diagnostics.Tests.DiagnosticMethodInfoTests.Create_StackFrame`]\r\n**Result validation:** :white_check_mark: Known issue matched with the provided build.\r\n**Validation performed at:** 6/30/2025 5:47:47 PM UTC\r\n\u003c!-- Known issue validation end --\u003e\r\n\u003c!--Known issue error report start --\u003e\r\n\r\n### Report\r\n\r\n|Build|Definition|Test|Pull Request|\r\n|---|---|---|---|\r\n|[1111945](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1111945)|dotnet/runtime|[WasmTestOnChrome-ST-System.Diagnostics.StackTrace.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1111945\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=30523108\u0026resultId=174968)||\r\n|[1111636](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1111636)|dotnet/runtime|[WasmTestOnChrome-ST-System.Diagnostics.StackTrace.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1111636\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=30514486\u0026resultId=174968)||\r\n|[1111091](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1111091)|dotnet/runtime|[WasmTestOnChrome-ST-System.Diagnostics.StackTrace.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1111091\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=30495610\u0026resultId=174394)||\r\n|[1110710](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1110710)|dotnet/runtime|[WasmTestOnChrome-ST-System.Diagnostics.StackTrace.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1110710\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=30482982\u0026resultId=174968)||\r\n|[1110214](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1110214)|dotnet/runtime|[WasmTestOnChrome-ST-System.Diagnostics.StackTrace.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1110214\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=30468394\u0026resultId=174968)||\r\n|[1110201](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1110201)|dotnet/runtime|[WasmTestOnChrome-ST-System.Diagnostics.StackTrace.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1110201\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=30467978\u0026resultId=174968)||\r\n|[1109817](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1109817)|dotnet/runtime|[WasmTestOnChrome-ST-System.Diagnostics.StackTrace.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1109817\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=30453718\u0026resultId=174968)||\r\n|[1109292](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1109292)|dotnet/runtime|[WasmTestOnChrome-ST-System.Diagnostics.StackTrace.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1109292\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=30435746\u0026resultId=174927)||\r\n|[1108891](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1108891)|dotnet/runtime|[WasmTestOnChrome-ST-System.Diagnostics.StackTrace.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1108891\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=30417554\u0026resultId=174927)||\r\n|[1108673](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1108673)|dotnet/runtime|[WasmTestOnChrome-ST-System.Diagnostics.StackTrace.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1108673\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=30409980\u0026resultId=174944)||\r\n|[1108337](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1108337)|dotnet/runtime|[WasmTestOnChrome-ST-System.Diagnostics.StackTrace.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1108337\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=30396964\u0026resultId=174927)||\r\n|[1107905](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1107905)|dotnet/runtime|[WasmTestOnChrome-ST-System.Diagnostics.StackTrace.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1107905\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=30378168\u0026resultId=174926)||\r\n|[1107614](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1107614)|dotnet/runtime|[WasmTestOnChrome-ST-System.Diagnostics.StackTrace.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1107614\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=30367664\u0026resultId=174928)|dotnet/runtime#118048|\r\n|[1107524](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1107524)|dotnet/runtime|[WasmTestOnChrome-ST-System.Diagnostics.StackTrace.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1107524\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=30364434\u0026resultId=114750)|dotnet/runtime#117585|\r\n|[1107280](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1107280)|dotnet/runtime|[WasmTestOnChrome-ST-System.Diagnostics.StackTrace.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1107280\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=30354850\u0026resultId=175179)||\r\n|[1106917](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1106917)|dotnet/runtime|[WasmTestOnChrome-ST-System.Diagnostics.StackTrace.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1106917\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=30341398\u0026resultId=174926)||\r\n|[1106817](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1106817)|dotnet/runtime|[WasmTestOnChrome-ST-System.Diagnostics.StackTrace.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1106817\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=30336060\u0026resultId=174926)||\r\n|[1106690](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1106690)|dotnet/runtime|[WasmTestOnChrome-ST-System.Diagnostics.StackTrace.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1106690\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=30331448\u0026resultId=173865)||\r\n|[1106578](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1106578)|dotnet/runtime|[WasmTestOnChrome-ST-System.Diagnostics.StackTrace.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1106578\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=30327638\u0026resultId=174924)||\r\n|[1106297](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1106297)|dotnet/runtime|[WasmTestOnChrome-ST-System.Diagnostics.StackTrace.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1106297\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=30319894\u0026resultId=174944)||\r\n|[1106291](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1106291)|dotnet/runtime|[WasmTestOnChrome-ST-System.Diagnostics.StackTrace.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1106291\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=30319868\u0026resultId=174924)||\r\n|[1106003](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1106003)|dotnet/runtime|[WasmTestOnChrome-ST-System.Diagnostics.StackTrace.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1106003\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=30309386\u0026resultId=114750)|dotnet/runtime#117585|\r\n|[1105654](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1105654)|dotnet/runtime|[WasmTestOnChrome-ST-System.Diagnostics.StackTrace.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1105654\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=30300376\u0026resultId=174917)||\r\n|[1105624](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1105624)|dotnet/runtime|[WasmTestOnChrome-ST-System.Diagnostics.StackTrace.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1105624\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=30298816\u0026resultId=174917)||\r\n|[1105148](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1105148)|dotnet/runtime|[WasmTestOnChrome-ST-System.Diagnostics.StackTrace.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1105148\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=30284174\u0026resultId=174917)||\r\n|[1103994](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1103994)|dotnet/runtime|[WasmTestOnChrome-ST-System.Diagnostics.StackTrace.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1103994\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=30239658\u0026resultId=174944)||\r\n|[1103918](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1103918)|dotnet/runtime|[WasmTestOnChrome-ST-System.Diagnostics.StackTrace.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1103918\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=30237614\u0026resultId=174916)||\r\n|[1103901](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1103901)|dotnet/runtime|[WasmTestOnChrome-ST-System.Diagnostics.StackTrace.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1103901\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=30237426\u0026resultId=174916)||\r\n|[1103711](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1103711)|dotnet/runtime|[WasmTestOnChrome-ST-System.Diagnostics.StackTrace.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1103711\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=30230632\u0026resultId=174944)||\r\n|[1103105](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1103105)|dotnet/runtime|[WasmTestOnChrome-ST-System.Diagnostics.StackTrace.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1103105\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=30212330\u0026resultId=174914)||\r\n|[1102557](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1102557)|dotnet/runtime|[WasmTestOnChrome-ST-System.Diagnostics.StackTrace.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1102557\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=30193748\u0026resultId=174947)||\r\n|[1102475](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1102475)|dotnet/runtime|[WasmTestOnChrome-ST-System.Diagnostics.StackTrace.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1102475\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=30191574\u0026resultId=174944)||\r\n|[1102190](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1102190)|dotnet/runtime|[WasmTestOnChrome-ST-System.Diagnostics.StackTrace.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1102190\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=30183218\u0026resultId=174944)||\r\n|[1101878](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1101878)|dotnet/runtime|[WasmTestOnChrome-ST-System.Diagnostics.StackTrace.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1101878\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=30168658\u0026resultId=174944)||\r\n|[1101389](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1101389)|dotnet/runtime|[WasmTestOnChrome-ST-System.Diagnostics.StackTrace.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1101389\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=30149432\u0026resultId=174944)||\r\n|[1100700](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1100700)|dotnet/runtime|[WasmTestOnChrome-ST-System.Diagnostics.StackTrace.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1100700\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=30121718\u0026resultId=174944)||\r\n|[1100359](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1100359)|dotnet/runtime|[WasmTestOnChrome-ST-System.Diagnostics.StackTrace.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1100359\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=30104514\u0026resultId=174944)||\r\n|[1100209](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1100209)|dotnet/runtime|[WasmTestOnChrome-ST-System.Diagnostics.StackTrace.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1100209\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=30099346\u0026resultId=174944)||\r\n|[1099934](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1099934)|dotnet/runtime|[WasmTestOnChrome-ST-System.Diagnostics.StackTrace.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1099934\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=30084428\u0026resultId=174944)||\r\n|[1099458](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1099458)|dotnet/runtime|[WasmTestOnChrome-ST-System.Diagnostics.StackTrace.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1099458\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=30070088\u0026resultId=174944)||\r\n|[1098828](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1098828)|dotnet/runtime|[WasmTestOnChrome-ST-System.Diagnostics.StackTrace.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1098828\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=30053124\u0026resultId=174860)||\r\n|[1098261](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1098261)|dotnet/runtime|[WasmTestOnChrome-ST-System.Diagnostics.StackTrace.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1098261\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=30032368\u0026resultId=174854)||\r\n|[1097633](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1097633)|dotnet/runtime|[WasmTestOnChrome-ST-System.Diagnostics.StackTrace.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1097633\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=30013258\u0026resultId=174854)||\r\n|[1096980](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1096980)|dotnet/runtime|[System.Diagnostics.Tests.DiagnosticMethodInfoTests.Create_StackFrame](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1096980\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=29987788\u0026resultId=113309)||\r\n|[1096215](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1096215)|dotnet/runtime|[WasmTestOnChrome-ST-System.Diagnostics.StackTrace.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1096215\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=29955614\u0026resultId=174094)||\r\n|[1095577](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1095577)|dotnet/runtime|[WasmTestOnChrome-ST-System.Diagnostics.StackTrace.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1095577\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=29923566\u0026resultId=174854)||\r\n#### Summary\r\n|24-Hour Hit Count|7-Day Hit Count|1-Month Count|\r\n|---|---|---|\r\n|0|0|46|\r\n\u003c!--Known issue error report end --\u003e",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOvhjVRA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc60BBVr",
+                                           "createdAt":  "2025-06-30T17:47:49Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to \u0027arch-wasm\u0027: @lewing\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2025-06-30T17:47:49Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc60Cp_W",
+                                           "createdAt":  "2025-06-30T20:31:11Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jozkee",
+                                           "body":  "This is from a preview6 run from Jun 20th, it might\u0027ve been fixed in main already.",
+                                           "updatedAt":  "2025-06-30T20:31:11Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc67dmu-",
+                                           "createdAt":  "2025-08-01T16:17:22Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "pavelsavara",
+                                           "body":  "\u003cimg width=\"1142\" height=\"516\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/5639a8fe-a12c-45c9-a172-3a555815f810\" /\u003e",
+                                           "updatedAt":  "2025-08-01T16:17:22Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc67eDUK",
+                                           "createdAt":  "2025-08-01T17:05:58Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "pavelsavara",
+                                           "body":  "In `mono_get_frame_info` the value of `mono_llvm_only` is true for AOT run. \n`get_unwind_backtrace()` is not implemented and always returns `NULL`. \nThat\u0027s why `mono_get_frame_info` always returns false.\n\nhttps://github.com/dotnet/runtime/blob/e11a3d4c0604a2bd1f5b2aee27a32d4a0cbcbac8/src/mono/mono/mini/mini-exceptions.c#L1482C9-L1497",
+                                           "updatedAt":  "2025-08-01T17:05:58Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6-GNVE",
+                                           "createdAt":  "2025-08-14T17:29:28Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "lewing",
+                                           "body":  "It looks like this used to pass, do we know why it started failing?",
+                                           "updatedAt":  "2025-08-14T17:29:28Z"
+                                       }
+                                   ],
+                         "totalCount":  5
+                     },
+        "title":  "[browser][AOT] System.Diagnostics.Tests.DiagnosticMethodInfoTests.Create_StackFrame: ArgumentNullException : Value cannot be null. (Parameter \u0027frame\u0027)",
+        "labels":  [
+                       "arch-wasm",
+                       "disabled-test",
+                       "wasm-aot-test",
+                       "area-Diagnostics-mono"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/117352",
+        "createdAt":  "2025-07-06T23:25:07Z",
+        "number":  117352,
+        "author":  "jeremy-visionaid",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-07-31T01:11:04Z",
+        "body":  "### Description\n\nIf a breakpoint is triggered, callbacks for audio/video appear to be queued up leading to the exhaustion of system memory and eventually a reboot due to a watchdog timeout.\n\n### Reproduction Steps\n\nRun the following with a webcam attached on MacCatalyst:\nhttps://github.com/jeremy-visionaid/MauiTestApp/tree/breakpoint-triggers-watchdog\n\n### Expected behavior\n\nBreakpoint triggers and app execution is paused with no growth in memory usage.\n\n### Actual behavior\n\nApplication memory usage grows rapidly until the system become unresponsive and reboots from a watchdog timeout.\n\n### Regression?\n\n_No response_\n\n### Known Workarounds\n\nPerform the debugging inspections really quickly!\n\n### Configuration\n\ndotnet sdk 9.0.301\nmacOS 15.5\nARM64\n\n### Other information\n\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOuw4ggQ==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc63X5I_",
+                                           "createdAt":  "2025-07-16T02:17:32Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "steveisok",
+                                           "body":  "/cc @thaystg @lateralusX ",
+                                           "updatedAt":  "2025-07-16T02:17:32Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc63czv6",
+                                           "createdAt":  "2025-07-16T09:41:28Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "lateralusX",
+                                           "body":  "I guess this becomes problematic if native thread fills up buffers that will be consumed by managed threads (threads attached to runtime). When stopping in managed debugger, we suspend the runtime, suspending all managed threads (threads attached to runtime), but native threads, not attached to runtime, will continue to execute. So, if there are native threads capturing the frames and putting them into a buffer polled by managed threads, then you will get side effects like this under managed debugger.",
+                                           "updatedAt":  "2025-07-16T09:41:28Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc63hHaE",
+                                           "createdAt":  "2025-07-16T14:40:10Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOEck5Ag==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "jeremy-visionaid",
+                                                                               "createdAt":  "2025-07-31T01:07:41Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "steveisok",
+                                           "body":  "@jeremy-visionaid I think your best recourse now is log debugging for this kind of scenario. If we ever ship mixed-mode debugging support for non-windows platforms, I bet your experience would improve. At least being able to hit a breakpoint without total chaos.\n\nI\u0027m going to move this issue to future for now.",
+                                           "updatedAt":  "2025-07-16T14:40:10Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc63sxsP",
+                                           "createdAt":  "2025-07-17T00:41:08Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jeremy-visionaid",
+                                           "body":  "@steveisok Sadly relying on logging alone probably isn\u0027t going to cut it since it\u0027s a pretty big/complex app. It\u0027s not so terrible if I use a low resolution and/or framerate. I can get in and out of the debugger quickly before the system reboots, so I\u0027ll just have to manage by being quick, or yanking the camera 😆 \n\nMixed-mode debugging would be absolutely awesome. Would #34964 be the right ticket to track for that?\n\nThe other thing to note here is that [alwaysDiscardsLateVideoFrames](https://developer.apple.com/documentation/avfoundation/avcapturevideodataoutput/alwaysdiscardslatevideoframes) is enabled (which is also the default). So, even with the native threads still running, I was expecting that the memory usage would be OK. I know that\u0027s separate to this issue, but I don\u0027t know if that\u0027s the runtime, the macios bindings or perhaps an AVFoundation bug (or perhaps my expectations are at fault). I wonder if you have any thoughts if there\u0027s a gotcha with the runtime and/or bindings? If I change the `Break` to a `while (true);` then the memory increases similarly. I can at least write a test app in Swift to check the behavior there and/or fiddle with the dispatch queue, see if I can come up with a workaround.",
+                                           "updatedAt":  "2025-07-17T00:41:08Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc63trOc",
+                                           "createdAt":  "2025-07-17T02:15:50Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jeremy-visionaid",
+                                           "body":  "Just verified that blocking in the sample buffer delegate with a dispatch queue configured per Apple samples does not result in memory usage increasing in a Swift app, but the equivalent does in a dotnet app. So, seems like there\u0027s a secondary issue that `alwaysDiscardsLateVideoFrames` doesn\u0027t appear to be having the intended effect there. I\u0027ll open a bug in macios and link it to this one.",
+                                           "updatedAt":  "2025-07-17T02:15:50Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc67DiCB",
+                                           "createdAt":  "2025-07-31T01:11:04Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jeremy-visionaid",
+                                           "body":  "I should note my corrected findings here too - the problem with `alwaysDiscardsLateVideoFrames` is an upstream bug in AVFoundation affecting particular configurations of the capture session:\nhttps://feedbackassistant.apple.com/feedback/19035046\n\n@steveisok Should we perhaps just close this one as being covered by #34964 already?",
+                                           "updatedAt":  "2025-07-31T01:11:04Z"
+                                       }
+                                   ],
+                         "totalCount":  6
+                     },
+        "title":  "Breakpoint triggers watchdog timeout on MacCatalyst/iOS",
+        "labels":  [
+                       "enhancement",
+                       "area-Diagnostics-mono"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/119553",
+        "createdAt":  "2025-09-10T20:52:59Z",
+        "number":  119553,
+        "author":  "pcullen1",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-09-11T12:08:25Z",
+        "body":  "### Description\n\nOriginally filed here: https://github.com/microsoft/vscode/issues/263832 but advised to file against the dotnet runtime.\nAs mentioned:\n\n\"I have a .NET Maui app that interops to native MacCatalyst code that works without issue if I run the code in debug mode but without stopping at the line where I make the native call. I\u0027m using the new NLI (Native Library Interop) technique that was recently published: https://learn.microsoft.com/en-us/dotnet/communitytoolkit/maui/native-library-interop/ If I put a breakpoint at the line where I execute the native call and step over, the debugger exits. VSCode will put up a warning toast message that says \"Failed to Step\". Sometimes a crash report is recorded in the debugger agent. I have this call wrapped by an awaited Task.Run. More often than not, if I remove the await wrapper, the debugger does not exit or crash. Sometimes it still crashes, leading me to think the async wrapper is not part of the root cause. I\u0027m using Visual Studio Code v 1.103 on an M1 Macbook Air, running macOS Sequioa 15.5\"Project structure:\n- .NET Maui App targeting MacCatalyst\n-  Exported Swift function defined in a binding project in \"ApiDefinition.cs\"\n-   Swift code that calls C++ to execute code in a native library. I followed the \"ForestBuilder\" example used in this demo: https://developer.apple.com/videos/play/wwdc2023/101\n\n\n### Reproduction Steps\n\nI tried the newBinding.sln NLI sample that my code is based on but I could not reproduce it: https://github.com/CommunityToolkit/Maui.NativeLibraryInterop \n\n### Expected behavior\n\nTo be able to set a breakpoint in c# code at a line where an exported function is called and step over it without having the debugger exit and the app crash.\n\n### Actual behavior\n\nVS debugger exits and the debugged app usually crashes with the indicated report.\n\n### Regression?\n\n_No response_\n\n### Known Workarounds\n\nSimply run the app in either debug with no breakpoint at the native layer boundary, or run a release mode. \n\n### Configuration\n\n_No response_\n\n### Other information\n\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOw4UBkw==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc7DhDjc",
+                                           "createdAt":  "2025-09-11T11:58:10Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @steveisok, @dotnet/dotnet-diag\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2025-09-11T11:58:10Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc7DhP2_",
+                                           "createdAt":  "2025-09-11T12:08:15Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to \u0027os-maccatalyst\u0027: @vitek-karas, @kotlarmilos, @steveisok, @akoeplinger\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2025-09-11T12:08:15Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc7DhQGT",
+                                           "createdAt":  "2025-09-11T12:08:25Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to \u0027os-ios\u0027: @vitek-karas, @kotlarmilos, @steveisok, @akoeplinger\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2025-09-11T12:08:25Z"
+                                       }
+                                   ],
+                         "totalCount":  3
+                     },
+        "title":  "Native Library Interop from C# to Native MacCatalyst causes VSCode debugger to exit and app to crash when stepping over a breakpoint",
+        "labels":  [
+                       "os-ios",
+                       "os-maccatalyst",
+                       "area-Diagnostics-mono"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/119811",
+        "createdAt":  "2025-09-17T15:10:47Z",
+        "number":  119811,
+        "author":  "lateralusX",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-09-17T15:13:17Z",
+        "body":  "Mono issues both a hot and a cold EventPipe method load event for AOT methods. Back in .net5/.net6 this sequence was emitted by CoreCLR as well, but since then the cold sections event has been dropped since it\u0027s not in use in CoreCLR and Mono have never supported it. We should drop emitting the cold section method load event for Mono AOT methods in EventPipe\n\nSee https://github.com/dotnet/runtime/blob/4999995b87603d106c161094e1632cb5ff07cd4f/src/mono/mono/eventpipe/ep-rt-mono-runtime-provider.c#L536 and https://github.com/dotnet/runtime/blob/4999995b87603d106c161094e1632cb5ff07cd4f/src/mono/mono/eventpipe/ep-rt-mono-runtime-provider.c#L562",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  null,
+                         "nodes":  [
+
+                                   ],
+                         "totalCount":  0
+                     },
+        "title":  "[Mono]: Stop emitting cold section method load EventPipe events for AOT methods.",
+        "labels":  [
+                       "EventPipe",
+                       "area-Diagnostics-mono"
+                   ]
+    }
+]

@@ -1,0 +1,1086 @@
+﻿[
+    {
+        "url":  "https://github.com/dotnet/aspire/issues/4854",
+        "createdAt":  "2024-07-11T09:29:00Z",
+        "number":  4854,
+        "author":  "v-sherryfan",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-06-09T10:07:08Z",
+        "body":  "**INSTALL STEPS**\r\n\r\n1. Clean machine: MacOS M1 (Sonoma 14.5)\r\n2. Install latest released SDK 8.0.303\r\n3. Install latest released Aspire 8.0.2\r\n4. Install latest released azd 1.9.5\r\n\r\n**REPRO STEPS**\r\n\r\n1. Open Terminal, run following command to create an Aspire Starter App project and deploy it \r\n```\r\ndotnet new aspire-starter -o aspire1\r\ncd aspire1/aspire1.AppHost\r\nazd init\r\nazd up\r\n```\r\n2. After successful deployment, open the deployed \"Aspire Dashboard\" URL\r\n\r\n**NOTE:**\r\n\r\n- This issue does not repro on Edge browser, only on Safari.\r\n- This issue also reproduce on Aspire 8.1.\r\n-  When clicking on the webfrontend link on the deployed dashboard, you will also see the \"Misdirected Request\" error\r\n\r\n**ACTUAL**\r\nOpening the deployed \u0027Aspire Dashboard\u0027 URL displays a \"Misdirected Request\" error. However, sometimes after waiting for a while and manually refreshing the page, it can be displayed normally.\r\n![image](https://github.com/dotnet/aspire/assets/71361488/e2e6dc9d-99d1-4d1d-871d-f448696896f1)\r\n\r\n**EXPECTED**\r\n![image](https://github.com/dotnet/aspire/assets/71361488/4b43aac3-bbb3-43c2-b711-7ab73af64512)\r\n\r\n\r\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOsCacMg==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6FCAJ-",
+                                           "createdAt":  "2024-07-16T21:59:57Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "leslierichardson95",
+                                           "body":  "@snehapar9 Is this potentially an ACA issue?",
+                                           "updatedAt":  "2024-07-16T21:59:57Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6F7XQB",
+                                           "createdAt":  "2024-07-24T05:27:56Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "snehapar9",
+                                           "body":  "Thanks for opening this issue @v-sherryfan! Does this consistently repro on Safari? I was able to successfully access the Aspire dashboard on Safari. This may be a transient issue.",
+                                           "updatedAt":  "2024-07-24T05:27:56Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6GEUu9",
+                                           "createdAt":  "2024-07-25T03:16:09Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "v-sherryfan",
+                                           "body":  "@snehapar9 Verified the issue using aspire 8.1.1 on Safari, now the issue does not reproduce when clicking on deployed aspire dashboard links, but does consistently reproduce on deployed webfrontend links.\r\n![image](https://github.com/user-attachments/assets/bf5bf520-0780-472e-9d95-612b811c20bb)\r\n![image](https://github.com/user-attachments/assets/7c88ebad-f377-4544-b92e-e34c47dfb43f)\r\n",
+                                           "updatedAt":  "2024-07-25T03:16:09Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6GpZ8Y",
+                                           "createdAt":  "2024-07-30T18:53:18Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "adamint",
+                                           "body":  "@snehapar9 ",
+                                           "updatedAt":  "2024-07-30T18:53:18Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6afa1E",
+                                           "createdAt":  "2025-01-15T08:29:37Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "davidfowl",
+                                           "body":  "@v-sherryfan can you still reproduce this?",
+                                           "updatedAt":  "2025-01-15T08:29:37Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6aq3jV",
+                                           "createdAt":  "2025-01-16T08:57:15Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "v-sherryfan",
+                                           "body":  "@davidfowl Yes, it still reproduced using SDK 9.0.102 + Aspire 9.1.0-preview.1.25065.6 on MacOS arm64.",
+                                           "updatedAt":  "2025-01-16T08:58:14Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6wDiM4",
+                                           "createdAt":  "2025-06-08T08:07:47Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "davidfowl",
+                                           "body":  "Do you still see this?",
+                                           "updatedAt":  "2025-06-08T08:07:47Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6wJpwy",
+                                           "createdAt":  "2025-06-09T10:07:08Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "v-reinawang",
+                                           "body":  "Not repro using SDK 9.0.301 + Aspire 9.3.1 on MacOS arm64.",
+                                           "updatedAt":  "2025-06-09T10:07:08Z"
+                                       }
+                                   ],
+                         "totalCount":  8
+                     },
+        "title":  "[WebToolsE2E][Aspire][Safari] Opening the \"Aspire Dashboard\" URL of a deployed Aspire project fails with error \"Misdirected Request\" on Mac.",
+        "labels":  [
+                       "azure",
+                       "area-azure-aca",
+                       "azure-container-apps"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspire/issues/5308",
+        "createdAt":  "2024-08-15T08:42:55Z",
+        "number":  5308,
+        "author":  "Rita003",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-06-03T08:53:34Z",
+        "body":  "**INSTALL STEPS**\r\n1. Clean machine: Win11 x64 23h2 ENU\r\n2. Install SDK 8.0.400\r\n3. Install Aspire 8.1.0\r\n4. Install latest released azd v1.9.6\r\n5. Install git v2.46.0\r\n\r\n**REPRO STEPS**\r\n1. Open CMD, run following command to create an Aspire Starter App project and deploy it\r\n```\r\ndotnet new aspire-starter -o AspireStarterApp\r\ncd AspireStarterApp/AspireStarterApp.AppHost\r\nazd init\r\nazd up\r\n```\r\n2. After successful deployment, open the deployed \"Aspire Dashboard\" URL\r\n![Screenshot 2024-08-15 153624](https://github.com/user-attachments/assets/48e7858e-71ec-40fb-b5a4-8c6a7c7e6a01)\r\n3. In the Aspire dashboard resources, remember the Container app Start time, then Restart \u0027apiservice\u0027 under Commands\r\n\r\n**Note:**\r\n1. After refreshing the page, the Container app Start time matches the current time\r\n\r\n**ACTUAL**\r\nDuring the restart process, the Start time matches the current time. After the restart is complete, the Container app Start time doesn\u0027t match the current time\r\n![Time](https://github.com/user-attachments/assets/88f01685-3ef0-4313-981c-baa174e0d0cd)\r\n\r\n**EXPECTED**\r\nThe Container app Start time matches the current time after the project restart is complete",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOn5lZTA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6MLLqg",
+                                           "createdAt":  "2024-09-15T18:43:53Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOED715A==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "snehapar9",
+                                                                               "createdAt":  "2025-01-24T18:15:23Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "davidfowl",
+                                           "body":  "@snehapar9 Can you take a look?",
+                                           "updatedAt":  "2024-09-15T18:43:53Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6bwb3a",
+                                           "createdAt":  "2025-01-24T18:41:53Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "snehapar9",
+                                           "body":  "@Rita003 the 9.0 version should only display the container app start time and will not change during re-starts. Can you validate in any of these regions - australiaeast, germanywestcentral, italynorth and switzerlandnorth",
+                                           "updatedAt":  "2025-01-24T18:41:53Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6dIQwp",
+                                           "createdAt":  "2025-02-05T09:27:56Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Rita003",
+                                           "body":  "@snehapar9 When I run the Aspire starter project and click the Restart button in the dashboard, the project start time matches current time. But after publishing the Aspire starter project, the Container app Start time doesn\u0027t match the current time after restarting the project in the \u0027Aspire Dashboard\u0027",
+                                           "updatedAt":  "2025-02-05T09:27:56Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6fmVlM",
+                                           "createdAt":  "2025-02-24T07:35:17Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Rita003",
+                                           "body":  "@snehapar9 I verified in these regions - australiaeast, germanywestcentral, italynorth and switzerlandnorth.  After publishing the Aspire starter project,  the container app start time will not change after re-starts.",
+                                           "updatedAt":  "2025-02-24T07:35:17Z"
+                                       }
+                                   ],
+                         "totalCount":  4
+                     },
+        "title":  "[WebToolsE2E][Aspire] After successfully publishing an Aspire project, the Container app Start time doesn\u0027t match the current time after restarting the project in the \u0027Aspire Dashboard\u0027",
+        "labels":  [
+                       "area-azure-aca",
+                       "azure-container-apps"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspire/issues/5949",
+        "createdAt":  "2024-09-26T07:53:56Z",
+        "number":  5949,
+        "author":  "Rita003",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-06-03T08:53:34Z",
+        "body":  "**INSTALL STEPS**\r\n1. Clean machine: Windows/Mac\r\n2. Install SDK 8.0.402\r\n3. Install Aspire 8.2.0\r\n4. Install latest released azd v1.10.1\r\n5. Install git v2.46.2.windows.1\r\n\r\n**REPRO STEPS**\r\n1. Open CMD, run following command to create an Aspire Starter App project and deploy it\r\n```\r\ndotnet new aspire-starter -o AspireStarterApp\r\ncd AspireStarterApp/AspireStarterApp.AppHost\r\nazd init\r\nazd up\r\n```\r\n2. After successful deployment, open the deployed \"Aspire Dashboard\" URL in physical machine\r\n\r\n![Screenshot 2024-09-26 153313](https://github.com/user-attachments/assets/63813cb0-3c9c-4d83-9160-0dd474be007e)\r\n\r\n3. Click the \"Metrics\" option on the Aspire dashboard left, select a resource and double click on any instrument group\r\n\r\nNote:\r\n1. This issue only reproduce when open the deployed \"Aspire Dashboard\" URL on physical machine, it doesn\u0027t repro on the virtual machine\r\n2. This issue also repro on Aspire 8.2.1, and it also repro on the latest Aspire 9.0.0-preview.4.24475.9\r\n\r\n\r\n**ACTUAL**\r\nThe page keeps flashing\r\n![Metrics](https://github.com/user-attachments/assets/8f8fd4b3-1afc-44cd-8574-ad642a72f854)\r\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOjcODQA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6Nw4NA",
+                                           "createdAt":  "2024-09-27T04:57:40Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "davidfowl",
+                                           "body":  "cc @snehapar9 @drewnoakes ",
+                                           "updatedAt":  "2024-09-27T04:57:40Z"
+                                       }
+                                   ],
+                         "totalCount":  1
+                     },
+        "title":  "[WebToolsE2E][Aspire] After successfully publishing an Aspire project, the page keeps flashing when double clicking any instrument group in the \"Aspire Dashboard\" Metrics on the physical machine.",
+        "labels":  [
+                       "dashboard-metrics",
+                       "area-azure-aca",
+                       "azure-container-apps"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspire/issues/7213",
+        "createdAt":  "2025-01-23T06:02:28Z",
+        "number":  7213,
+        "author":  "faisalriazz",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-06-14T06:03:54Z",
+        "body":  "### Is there an existing issue for this?\n\n- [x] I have searched the existing issues\n\n### Describe the bug\n\nI am following multiple issues related to Aspire Dashboard.\n- Start Time of the multiple apps is not updated on new deployment. Showing the initial time when container app was created.\n- Stop/Start container does not update the Start Time as well. \n\n![Image](https://github.com/user-attachments/assets/a9f0d372-7790-49b0-b841-9ff7f04f12d5)\n\n- Aspire Dashboard  `Version: 9.0.1-dev`\n- Stop/Start Conatiner only working from Aspire Dashboard, Start/stop from Azure portal does not update the status of the container.\n- No error is reported upon starting/stopping containers from portal but status is not updated on Dashboard.\n- No error is reported upong starting/stopping containers using logic apps but status is not updated on Dashboard.\n\n![Image](https://github.com/user-attachments/assets/dd57da96-53f9-4fe9-b19c-4c8b76cef83e)\n- I have another container app environment where Aspire Dashboard  `Version: 8.0.2` the above mentioned issue is not appearing.\n**Additionally commands related to PS for container apps does not work either using PS or Azure devops pipeline. `Start-AzContainerApp -Name \u003cString\u003e -ResourceGroupName \u003cString\u003e [-SubscriptionId \u003cString\u003e]`. No error is generated upon issuing this command but the status of the container does not change for both verions i mentioned above.**\n\n### Expected Behavior\n\n_No response_\n\n### Steps To Reproduce\n\n_No response_\n\n### Exceptions (if any)\n\n_No response_\n\n### .NET Version info\n\n_No response_\n\n### Anything else?\n\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOpFAnxg==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6by0pb",
+                                           "createdAt":  "2025-01-25T05:30:23Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOEENRUA==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "snehapar9",
+                                                                               "createdAt":  "2025-01-27T22:09:32Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "davidfowl",
+                                           "body":  "This is something that we\u0027re still working on. The views have evolved a bit since the first version. One ACA the dashboard is now showing the container app creation time instead of the runtime of the replicas. We intend to show both but that will be in an update.",
+                                           "updatedAt":  "2025-01-25T05:30:23Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6by7pt",
+                                           "createdAt":  "2025-01-25T07:10:28Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "faisalriazz",
+                                           "body":  "Thanks for the update. What about starting /stopping container app only works from dashboard neither from azure Portal nor from ps or API call using azure logic apps.\nSpecifically for version 9.0.\n",
+                                           "updatedAt":  "2025-01-25T07:10:28Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6b_EZQ",
+                                           "createdAt":  "2025-01-27T22:09:14Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "snehapar9",
+                                           "body":  "@faisalriazz Starting and stopping should work from both the portal and the Aspire dashboard. However, the status may not update dynamically. If you start or stop the container app from the portal, refresh the Aspire dashboard to see the updated running or stopped status.",
+                                           "updatedAt":  "2025-01-27T22:09:14Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6cC8En",
+                                           "createdAt":  "2025-01-28T06:23:16Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "faisalriazz",
+                                           "body":  "@snehapar9 , You are right, ideally it should but its not. Please read the issue again.",
+                                           "updatedAt":  "2025-01-28T06:23:16Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6kUCfG",
+                                           "createdAt":  "2025-03-27T05:13:58Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "faisalriazz",
+                                           "body":  "@joperezr @davidfowl guys is there any update in near future",
+                                           "updatedAt":  "2025-03-27T05:13:58Z"
+                                       }
+                                   ],
+                         "totalCount":  5
+                     },
+        "title":  "Aspire Dashboard is not showing the updated start time and Actions (Stop/Start) only working from Dashboard. (Multiple Bugs)",
+        "labels":  [
+                       "area-azure-aca",
+                       "azure-container-apps"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspire/issues/7644",
+        "createdAt":  "2025-02-17T10:15:44Z",
+        "number":  7644,
+        "author":  "vmykagapuz",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-08-21T05:20:32Z",
+        "body":  "**REGRESSION INFO**\n1. Also reproduces in aspire 9.0.0\n\n**NOTES**\n1. This issue did not occur in the previous ACA dashboard, so we want to confirm if this is an expected change\n\n**REPRO STEPS**\n1. Clean machine: Win11 x64 23h2 ENU\n2. Install SDK 9.0.200\n3. Install Aspire 9.1.0\n-Apply Feed\n4. Install latest released azd\n\n**REPRO STEPS**\n1. Open CMD and create Aspire Starter App\n`dotnet new aspire-starter -o Aspire1`\n2. Publish the project\n```\nazd init\nazd up\n```\n3. Open the url link and navigate to Aspire Dashboard \u003e Console logs \u003e Select Apiservice/Webfrontend\n\n**ACTUAL**\nThere is an additional \u0027stdout F\u0027 string in the log information of the Resources in the Console logs.\n![Image](https://github.com/user-attachments/assets/fa576bc3-535e-4fc2-b5ef-c0972a5f0b34)\n\n**EXPECTED**\n1. There should be no \"stdout F\" string in the log information.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOv0YHpA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6_Rgek",
+                                           "createdAt":  "2025-08-21T05:20:32Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "davidfowl",
+                                           "body":  "@snehapar9 can we fix this in the resource server in aca?",
+                                           "updatedAt":  "2025-08-21T05:20:32Z"
+                                       }
+                                   ],
+                         "totalCount":  1
+                     },
+        "title":  "[WebToolsE2E][Aspire] When publishing the Aspire project in ACA, there is a \u0027stdout F\u0027 in the Resources section of the Console logs.",
+        "labels":  [
+                       "area-azure-aca",
+                       "azure-container-apps"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspire/issues/7859",
+        "createdAt":  "2025-03-03T08:54:03Z",
+        "number":  7859,
+        "author":  "Rita003",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-08-07T19:57:54Z",
+        "body":  "**INSTALL STEPS**\n1. Clean machine: Win11 x64 ENU\n2. Install SDK 9.0.200\n3. Install Aspire 9.1.0\n4. Install AZD version 1.12.0\n5. Install git version 2.48.1.windows.1\n\n**REPRO STEPS**\n1. Open CMD, run following command to create an Aspire Starter App project and deploy it\n```\ndotnet new aspire-starter -o AspireStarterApp\ncd AspireStarterApp/AspireStarterApp.AppHost\nazd init\nazd up\n```\n2. After successful deployment, open the deployed \"Aspire Dashboard\" URL in the browser.\n![Image](https://github.com/user-attachments/assets/7bd839e4-d86d-4736-8cec-572faf0b8e44)\n3. Click the \u0027Restart\u0027 button for apiservice/webfrontend project Aspire dashboard\n4. Click the \"Console\" option on the Aspire dashboard left, and select the apiservice/webfrontend resource.\n\n**Note:**\n1. This issue also repro after installing Aspire 9.2.0-preview.1.25152.3\n2. The ACA Dashboard version is 9.0.1-dev\n\n**ACTUAL**\nConsole log does not have any log information\n![Image](https://github.com/user-attachments/assets/c5196409-3fe8-4784-9a64-8a9a31101287)\n![Image](https://github.com/user-attachments/assets/b8e6ca6a-cb47-492e-8531-9949b35900b2)\n\nEXPECTED\nConsole log has some log information\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOvK5SrA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6ixgOP",
+                                           "createdAt":  "2025-03-17T20:48:33Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "adamint",
+                                           "body":  "@captainsafia is this more your area..?",
+                                           "updatedAt":  "2025-03-17T20:48:43Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6iyGCR",
+                                           "createdAt":  "2025-03-17T22:06:15Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "captainsafia",
+                                           "body":  "@adamint Not entirely. I suspect that because this is happening in the ACA environment there is probably an issue with the output redirection that happens there?",
+                                           "updatedAt":  "2025-03-17T22:06:15Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6jLuGg",
+                                           "createdAt":  "2025-03-19T19:14:36Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "adamint",
+                                           "body":  "Do you know who would know more? cc @JamesNK ",
+                                           "updatedAt":  "2025-03-19T19:20:15Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6jPHQK",
+                                           "createdAt":  "2025-03-20T00:31:03Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "JamesNK",
+                                           "body":  "Logs in ACA come from their own implementaiton. This bug should be investigated by them.",
+                                           "updatedAt":  "2025-03-20T00:31:03Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6nUcSd",
+                                           "createdAt":  "2025-04-15T18:45:05Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "danmoseley",
+                                           "body":  "@snehapar9 this looks like you?",
+                                           "updatedAt":  "2025-04-15T18:45:05Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6p_xEX",
+                                           "createdAt":  "2025-05-05T19:08:08Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "danmoseley",
+                                           "body":  "@snehapar9 ?",
+                                           "updatedAt":  "2025-05-05T19:08:08Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc63JvN4",
+                                           "createdAt":  "2025-07-15T08:59:38Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "vmykagapuz",
+                                           "body":  "With the latest ACA dashboard version 9.3.1, restarting the resource in Console will not display a message indicating that the project has been restarted.\n\n\u003cimg width=\"1811\" height=\"467\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/5ee7bb0b-8d63-41d8-9bf0-33e0a04b7051\" /\u003e\n\n**EXPECTED**\nThere should have been a message displayed saying, \u0027Successfully executed command \u0027resource-start\u0027.\u0027\n\u003cimg width=\"1812\" height=\"585\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/641378e2-1065-42ab-bd9b-06435ab23614\" /\u003e",
+                                           "updatedAt":  "2025-07-15T08:59:38Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc68rlKs",
+                                           "createdAt":  "2025-08-07T19:57:53Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "snehapar9",
+                                           "body":  "@danmoseley Apologies for the delayed response. Is this issue still ongoing? If so, could you please share the name of your environment?\n",
+                                           "updatedAt":  "2025-08-07T19:57:53Z"
+                                       }
+                                   ],
+                         "totalCount":  8
+                     },
+        "title":  "[WebToolsE2E][Aspire] After successfully publishing an Aspire project, the Console log does not have any logs after restarting the project in the \u0027Aspire Dashboard\u0027.",
+        "labels":  [
+                       "external",
+                       "area-azure-aca",
+                       "azure-container-apps"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspire/issues/9519",
+        "createdAt":  "2025-05-27T06:24:36Z",
+        "number":  9519,
+        "author":  "vmykagapuz",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-08-08T05:42:36Z",
+        "body":  "**INSTALL STEPS**\n1. Clean machine: Win11 x64 24h2 ENU\n2. Install SDK 9.0.300\n3. Add dotnet9 feed for 9.4.0\n4. Install the latest Aspire 9.4.0\n`- dotnet new install Aspire.ProjectTemplates::9.4.0-preview.1.25276.3 --force`\n5. Install git and azd\n\n**NOTES**\n1. The ACA dashboard is version 9.2.1, but checking this issue with the Aspire 9.2.1 dashboard does not reproduce the issue.\n2. This issue does not occur when restarting the project.\n\n**REPRO STEPS**\n1. Open CMD \u003e Create aspire-starter app:\n`dotnet new aspire-starter -o aspire1`\n2. Publish the project\n`cd aspire1/aspire.1apphost`\n`azd init`\n`azd up`\n3. Click the link displayed in CMD to open the ACA dashboard.\n4. Stop and start the project, then check the start time.\n\n**ACTUAL**\nThe displayed start time does not refresh or update correctly.\n\nhttps://github.com/user-attachments/assets/0b520647-b727-41b0-b7cd-66c63fae46c4\n\n**EXPECTED**\nAfter starting a previously stopped project using the Start button in the ACA dashboard, the start time should update to accurately reflect the new start time.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOvL8m3w==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6thsPM",
+                                           "createdAt":  "2025-05-27T06:38:43Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "davidfowl",
+                                           "body":  "@snehapar9 this is the same issue we spoke about.",
+                                           "updatedAt":  "2025-05-27T06:38:43Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc68rmF-",
+                                           "createdAt":  "2025-08-07T19:59:36Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "snehapar9",
+                                           "body":  "@vmykagapuz this should be fixed in 9.3.1. Please let me know if you\u0027re still encountering this. Thanks",
+                                           "updatedAt":  "2025-08-07T19:59:36Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc68vybf",
+                                           "createdAt":  "2025-08-08T05:42:36Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "vmykagapuz",
+                                           "body":  "This issue still reproduce when deployed aspire 9.5.0-preview.1.25407.3 which has ACA dashboard version 9.3.1 ",
+                                           "updatedAt":  "2025-08-08T05:42:36Z"
+                                       }
+                                   ],
+                         "totalCount":  3
+                     },
+        "title":  "[AspireE2E] The start time displayed in the ACA dashboard does not refresh or update correctly when using the Start button to restart a stopped project.",
+        "labels":  [
+                       "area-azure-aca",
+                       "azure-container-apps"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspire/issues/9575",
+        "createdAt":  "2025-05-29T20:43:57Z",
+        "number":  9575,
+        "author":  "dimenus",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-06-04T13:20:49Z",
+        "body":  "### Is there an existing issue for this?\n\n- [x] I have searched the existing issues\n\n### Describe the bug\n\nHello,\n\nI have a one-shot / run-to-completion Project in my AppHost that works perfectly locally. The dashboard reports that it is in the Finished state when running locally.\n\nHowever, when deploying my resource into ACA via the manifest publisher (azd), this resource gets stuck in Activation / ActivationFailed state even though it still runs to completion.\n\n\nACA:\n![Image](https://github.com/user-attachments/assets/b2037c19-7652-40d7-9abf-cdbd3e3c93a4)\n\nLocal:\n\n\u003cimg width=\"722\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/33965bcd-a11e-4d6b-b5a0-ccb41da9f145\" /\u003e\n\nAppHost:\n\n```\nvar builder = DistributedApplication.CreateBuilder(new DistributedApplicationOptions {\n    Args = args\n});\n\nvar db_admin_user = builder.AddParameter(\"DbSchemaManagerUser\", \"ca_admin\");\nvar db_admin_password = builder.AddParameter(\"DbSchemaManagerPassword\", true);\nvar db_api_user = builder.AddParameter(\"DbApiUsername\", \"ca_api\");\nvar db_api_password = builder.AddParameter(\"DbApiUserPassword\", true);\nvar az_cogservices_endpoint =\n    builder.AddParameterFromConfiguration(\"AzureCognitiveServices-Endpoint\", \"AzureCognitiveServices:Endpoint\");\nvar az_cogservices_apikey =\n    builder.AddParameterFromConfiguration(\"AzureCognitiveServices-ApiKey\", \"AzureCognitiveServices:ApiKey\",\n        true);\nvar oidc_metadata_address = builder.AddParameterFromConfiguration(\"OidcMetadataAddress\", \"OidcMetadataAddress\");\nvar oidc_audience = builder.AddParameterFromConfiguration(\"OidcAudience\", \"OidcAudience\");\n\nvar storage_account = builder.AddAzureStorage(\"storage\");\nvar blob_storage = storage_account.AddBlobs(\"ContentAnalyzerStorage\");\n\nvar db = builder.AddPostgres(\"db\", db_admin_user, db_admin_password)\n    .AddDatabase(\"ContentAnalyzerDb\", \"content_analyzer\");\n\nvar db_manager = builder.AddProject\u003cEspiContentAnalyzer_DbManager\u003e(\"db-schema-manager\")\n    .WithEnvironment(\"ApiDbUserConfig__Username\", db_api_user)\n    .WithEnvironment(\"ApiDbUserConfig__Password\", db_api_password)\n    .WithReference(db)\n    .WaitFor(db);\n\nvar core_api = builder.AddProject\u003cEspiContentAnalyzer_API\u003e(\"coreapi\")\n    .WithEnvironment(\"AzureCognitiveServices__Endpoint\", az_cogservices_endpoint)\n    .WithEnvironment(\"AzureCognitiveServices__ApiKey\", az_cogservices_apikey)\n    .WithEnvironment(\"ApiDbUserConfig__Username\", db_api_user)\n    .WithEnvironment(\"ApiDbUserConfig__Password\", db_api_password)\n    .WithEnvironment(\"Authentication__Schemes__Bearer__ValidAudience\", oidc_audience)\n    .WithEnvironment(\"ASPNETCORE_ENVIRONMENT\", builder.Environment.EnvironmentName)\n    .WithReference(db)\n    .WithReference(blob_storage)\n    .WaitFor(storage_account)\n    .WaitForCompletion(db_manager)\n    .WithHttpHealthCheck(\"/health\", 200)\n    .WithExternalHttpEndpoints();\n\nif (builder.ExecutionContext.IsPublishMode) {\n    core_api.WithEnvironment(\"Authentication__Schemes__Bearer__MetadataAddress\", oidc_metadata_address);\n}\n\nbuilder.Build().Run();\n```\n\n### Expected Behavior\n\nI expect the db-schema-manager resource to reach Finished state\n\n### Steps To Reproduce\n\nN/A\n\n### Exceptions (if any)\n\nN/A\n\n### .NET Version info\n\n9.0.4\n\n### Anything else?",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOrz0pww==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6uFDXv",
+                                           "createdAt":  "2025-05-29T20:53:24Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "snehapar9",
+                                           "body":  "Thanks for reaching out @dimenus! Can you please provide your environment\u0027s name?",
+                                           "updatedAt":  "2025-05-29T20:53:24Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6uGoPI",
+                                           "createdAt":  "2025-05-30T01:26:33Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dimenus",
+                                           "body":  "Hi @snehapar9 \n\nThe container app environment?\n\ncae-lbhhnidrcp7j6",
+                                           "updatedAt":  "2025-05-30T01:26:33Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6uw8XI",
+                                           "createdAt":  "2025-06-02T18:59:39Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOEVTiKQ==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "dimenus",
+                                                                               "createdAt":  "2025-06-04T13:10:39Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "snehapar9",
+                                           "body":  "Thanks for the additional information @dimenus!\n\nWhen you deploy a “one‐shot” executable as a regular Container App, ACA will wait for that container to pass its startup/readiness probe (or expose an HTTP endpoint) before marking it as “Activated.” In practice, your process exits immediately—so ACA never sees a healthy endpoint—and the Container App stays in Activation/ActivationFailed even though the binary did run to completion.\n\nA standard Container App is designed to host a long‑running service.\nBy default, ACA injects a “health check” that tries to ping the port exposed before declaring Running.\nIf your process immediately exits (because it was just a “run \u0026 exit” job), that probe never succeeds. ACA thinks the app failed to start.\n\nLocally, you see “Finished” because you ran the container manually (e.g. docker run … \u0026\u0026 exit). No  probe blocks you.\n\nThe recommended solution is to convert to a `ContainerApp Job` \nSince your DB‐schema‐manager is truly “run‑to‑completion,” the easiest path is to re‐deploy it as a Job instead of a long‑running App. Jobs in ACA spin up pods, let them finish, and then mark themselves “Succeeded” (no probe blocking).\n\nI’d like to note that the Aspire dashboard currently only shows Container Apps; adding support for Container App Jobs is on our backlog.",
+                                           "updatedAt":  "2025-06-02T18:59:39Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6vPJ8A",
+                                           "createdAt":  "2025-06-04T13:10:36Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dimenus",
+                                           "body":  "That makes logical sense to me. It would also be nice to express certain projects as Jobs within the AppHost (unless I just missed it?)",
+                                           "updatedAt":  "2025-06-04T13:10:36Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6vPSnD",
+                                           "createdAt":  "2025-06-04T13:20:48Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "davidfowl",
+                                           "body":  "Not supported yet https://github.com/dotnet/aspire/issues/4366",
+                                           "updatedAt":  "2025-06-04T13:20:48Z"
+                                       }
+                                   ],
+                         "totalCount":  5
+                     },
+        "title":  "Dashboard reports ActivationFailed in ACA for ProjectResource that ran to completion",
+        "labels":  [
+                       "area-azure-aca",
+                       "azure-container-apps"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspire/issues/11214",
+        "createdAt":  "2025-09-02T13:15:51Z",
+        "number":  11214,
+        "author":  "mizrael",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-09-17T06:48:20Z",
+        "body":  "as per title, I just deployed an app on Azure. There are 3 app services and 1 function app, all working perfectly fine. The Aspire dashboard instead is not loading, it just shows a \"Internal server error.\"\n\nIs there any place I can check for logs?",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOxMm17g==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDOKYQzfc7BhIZt",
+                                           "createdAt":  "2025-09-02T20:26:19Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "adamint",
+                                           "body":  "@mizrael could you check the browser console for any exception details?",
+                                           "updatedAt":  "2025-09-02T20:26:19Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc7BhLfm",
+                                           "createdAt":  "2025-09-02T20:30:59Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "mizrael",
+                                           "body":  "hi @adamint , I see two requests with a 403 status. Just FYI, my account has both Contributor and Owner on the Container Environment",
+                                           "updatedAt":  "2025-09-02T20:30:59Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc7Bhya0",
+                                           "createdAt":  "2025-09-02T21:31:15Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "adamint",
+                                           "body":  "@mizrael but there are no errors you can see in the browser console?\n\n@snehapar9 if so.",
+                                           "updatedAt":  "2025-09-02T21:31:15Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc7Bh0Iu",
+                                           "createdAt":  "2025-09-02T21:32:34Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "mizrael",
+                                           "body":  "No errors on the browser console",
+                                           "updatedAt":  "2025-09-02T21:32:34Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc7DPaUQ",
+                                           "createdAt":  "2025-09-10T16:03:52Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "MdeBruin93",
+                                           "body":  "Same issue here:\n\u003cimg width=\"1407\" height=\"1182\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/4bf4b50e-eaf5-477a-a243-56461512fc59\" /\u003e\n\nI\u0027m using Aspire 9.4.2 dashboard. Weirdest thing is that it does work when deployed on a different account. I\u0027m owning both of them.\nThe only difference I can tell is that the dashboard that doesn\u0027t work also uses other Azure components (like SignalR and Azure SQL).",
+                                           "updatedAt":  "2025-09-10T16:03:52Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc7DPeSW",
+                                           "createdAt":  "2025-09-10T16:09:04Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jsedlak",
+                                           "body":  "Same issue here. Running on 9.4.0.\n\nNotably, after adding ACA support to the AppHost, the dashboard now works, but the containers do not build\n\n```csharp\n// Add the Azure Container Apps environment\nbuilder.AddAzureContainerAppEnvironment(\"environmentName\")\n       .WithAzdResourceNaming();\n```\n\nI get an error that points to a non-existent file (`main.bicepparam`).\n\n\u003e Error BCP133: The unicode escape sequence is not valid. Valid unicode escape sequences range from \\u{0} to \\u{10FFFF}",
+                                           "updatedAt":  "2025-09-10T16:09:04Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc7DPgH8",
+                                           "createdAt":  "2025-09-10T16:11:07Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "snehapar9",
+                                           "body":  "@mizrael Can you please share your container app environment name and subscription?",
+                                           "updatedAt":  "2025-09-10T16:11:07Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc7DTbxE",
+                                           "createdAt":  "2025-09-10T21:46:36Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "snehapar9",
+                                           "body":  "@MdeBruin93 Is this issue still persistent? Looks like your environment is scheduled for deletion.",
+                                           "updatedAt":  "2025-09-10T21:46:36Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc7DTcoI",
+                                           "createdAt":  "2025-09-10T21:48:35Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "MdeBruin93",
+                                           "body":  "@snehapar9 Yes the issue still applies. Just deleted the environment to save me some costs. If I deploy the dashboard again the issue is still there.",
+                                           "updatedAt":  "2025-09-10T21:48:35Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc7DVBbW",
+                                           "createdAt":  "2025-09-11T01:36:52Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "mizrael",
+                                           "body":  "\u003e [@mizrael](https://github.com/mizrael) Can you please share your container app environment name and subscription?\n\nsubscription id: c2e01faf-34ee-4fcc-8e89-925f1e1f471f\ncontainer app env: cae-4r3sqj76fi5ti\n\nthanks @snehapar9 !\n\n\nEDIT: I just tried logging in incognito and the dashboard was working fine this time \n\n",
+                                           "updatedAt":  "2025-09-11T01:38:27Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc7DiQAP",
+                                           "createdAt":  "2025-09-11T13:00:29Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jsedlak",
+                                           "body":  "Incognito mode does not work for me. After deploying, all resources appear to be working properly, but the Aspire Dashboard does not come up. I am using Privileged Access (as Owner on the Subscription) to manage these resources.\n\nSubscription ID: `27051c4a-0e92-4f4e-9c47-af7dad4b866e`\nContainer App Env: `cae-zcxiw6e7ga6zm`",
+                                           "updatedAt":  "2025-09-11T13:00:29Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc7Dqj4Q",
+                                           "createdAt":  "2025-09-11T21:35:11Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "snehapar9",
+                                           "body":  "@jsedlak do you have Owner/Contributor permissions on the environment? \n\nhttps://learn.microsoft.com/en-us/azure/container-apps/aspire-dashboard?pivots=azd#troubleshooting",
+                                           "updatedAt":  "2025-09-11T21:35:32Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc7DqtWf",
+                                           "createdAt":  "2025-09-11T21:54:31Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "MdeBruin93",
+                                           "body":  "@snehapar9 I\u0027ve just deployed a different Aspire application. Same account, different subscription. Works like a charm.\nthe not working one is sub: 77291260-7e45-4ddf-a5d8-6606e20801a9\nthe working one is sub: ae6e1dbf-d6aa-4fa2-85a8-f3273d4b75b0\n\nWhat\u0027s the difference between them?",
+                                           "updatedAt":  "2025-09-11T21:54:31Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc7D0fwi",
+                                           "createdAt":  "2025-09-12T13:31:44Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jsedlak",
+                                           "body":  "\u003e [@jsedlak](https://github.com/jsedlak) do you have Owner/Contributor permissions on the environment?\n\u003e \n\u003e https://learn.microsoft.com/en-us/azure/container-apps/aspire-dashboard?pivots=azd#troubleshooting\n\nYes, I am an owner on the subscription via Privileged Access and have granted myself explicit Owner role for the Container App",
+                                           "updatedAt":  "2025-09-12T13:31:44Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc7ETqft",
+                                           "createdAt":  "2025-09-15T18:50:02Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "snehapar9",
+                                           "body":  "@MdeBruin93 @jsedlak Thank you for sharing your environment details. I’m still investigating the issue and will update you as soon as I have more findings",
+                                           "updatedAt":  "2025-09-15T18:50:02Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc7EUUbY",
+                                           "createdAt":  "2025-09-15T19:38:33Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "MdeBruin93",
+                                           "body":  "@snehapar9 Now I\u0027m sure there is some bug in the deletion of the environment itself. The environment was called padel-app. I\u0027ve deleted it several times and re-created it a few times (mostly for the sake of costs) and eventually it didn\u0027twork anymore. I\u0027ve just created a completly new environment (padel-app-v2, because why not) and it works like a charm. I think you should look for some components or whatever that should be deleted but actually aren\u0027t. Quite possibly corrupted data.",
+                                           "updatedAt":  "2025-09-15T19:45:27Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc7EUrq3",
+                                           "createdAt":  "2025-09-15T20:13:42Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "snehapar9",
+                                           "body":  "@MdeBruin93 Thanks for the additional information. Just to clarify—are you seeing the ‘internal server error’ when accessing the environment after it has been deleted and then re-created?",
+                                           "updatedAt":  "2025-09-15T20:13:42Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc7EUwn8",
+                                           "createdAt":  "2025-09-15T20:18:00Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOEiWAdQ==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "snehapar9",
+                                                                               "createdAt":  "2025-09-15T20:21:14Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "MdeBruin93",
+                                           "body":  "@snehapar9 yes I saw the error message ‘internal server error’ after the environment and the dashboard was deployed again. Once the dashboard was having the ‘internal server error’-issue it was the reason for me to delete the entire resource group. So at that point I was deleting both the resource group created by the deployment as well as the deployments in my subscription (the ones `azd` uses to check whether or not it needs to create/update components.\n\nRight now it\u0027s working again.",
+                                           "updatedAt":  "2025-09-15T20:18:00Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc7EybXu",
+                                           "createdAt":  "2025-09-17T06:48:20Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOEipPEQ==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "jsedlak",
+                                                                               "createdAt":  "2025-09-17T12:55:48Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "snehapar9",
+                                           "body":  "Thanks for sharing the detailed repro steps and environment information.\n\nI was able to investigate further and found that the “internal server error” occurs specifically when an environment is deleted and then re-created with the same name. In this case, the re-creation provisions a new cluster, while the old AKS cluster associated with the original environment has already been deleted.\n\nWhen the Aspire dashboard URL is accessed during this window, it attempts to authenticate against the old cluster. Since that cluster no longer exists, the authentication fails, resulting in the “internal server error”.\n\nThis is effectively a race condition during environment deletion and re-creation. I’ll go ahead and flag this as a bug, since the expected behavior should not result in failed authentication when re-using environment names.\n\nTemporary workaround: Until a fix is in place, we recommend creating environments with a new unique name instead of re-using the name of a recently deleted environment. This avoids the race condition and ensures the Aspire dashboard works as expected.",
+                                           "updatedAt":  "2025-09-17T06:48:20Z"
+                                       }
+                                   ],
+                         "totalCount":  19
+                     },
+        "title":  "Dashboard not loading \"Internal server error.\"",
+        "labels":  [
+                       "area-azure-aca"
+                   ]
+    }
+]

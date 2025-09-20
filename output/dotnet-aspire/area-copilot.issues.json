@@ -1,0 +1,118 @@
+﻿[
+    {
+        "url":  "https://github.com/dotnet/aspire/issues/10163",
+        "createdAt":  "2025-07-01T11:10:03Z",
+        "number":  10163,
+        "author":  "AnKushSingh05",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-07-28T19:48:05Z",
+        "body":  "### GitHubTags\n#A11ySev2; #A11yTCS;#DesktopWeb; #Win32;#.NET Project system for CSharp and VB;#BM_AspireDashboard_Web_June25;#Win32;#WCAG4.1.2:#Name Role Value;#A11yMAS;\n\n### Environment Details:\nApplication Name: Aspire Dashboard\nEdition Windows 11 Enterprise\nVersion 24H2\nOS build 26100.4351\n\n### Repro Steps\n\n1. Open Visual studio.\n2. Open a aspire project and run it.\n3. A new window will open in the chromium edge,\n4. TAB to \"Github copilot chat\" tab item and hit ENTER key.\n5. Verify that Incorrect name property is provided for \"Model Selector\" button as Claude sonnet 4.\n\n### Actual Result:\nIncorrect name property is provided for \"Model Selector\" button as Claude sonnet 4\n\n### Expected Result:\nCorrect name property as Model Selector should be provided.\n\n### User Impact:\nScreen reader users will get confused if correct name property is not provided and they will not know the purpose of the control.\n\n### Attachment:\n\n![Image](https://github.com/user-attachments/assets/a02dccc5-f070-41a0-a2f7-36de61d4085d)",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  null,
+                         "nodes":  [
+
+                                   ],
+                         "totalCount":  0
+                     },
+        "title":  "Incorrect name property is provided for \"Model Selector\" button as Claude sonnet 4: A11y_Aspire Dashboard_Metrics_Name.",
+        "labels":  [
+                       "area-dashboard",
+                       "area-copilot"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspire/issues/10297",
+        "createdAt":  "2025-07-09T10:41:50Z",
+        "number":  10297,
+        "author":  "AnKushSingh05",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-09-11T17:23:57Z",
+        "body":  "### GitHubTags\n#A11ySev1; #A11yTCS;#DesktopWeb; #Win32;#.NET Project system for CSharp and VB;#BM_AspireDashboard_Web_June25;#Win32;#WCAG2.1.1;#Keyboard;#A11yMAS;\n\n### Environment Details:\nApplication Name: Aspire Dashboard\nEdition Windows 11 Enterprise\nVersion 24H2\nOS build 26100.4351\nMicrosoft Visual Studio Enterprise 18 (64-bit) - Int Preview\nVersion 18.0.0 Preview 1.0 [10807.200.main]\n\n### Repro Steps:\n\n1. Open Visual studio.\n2. Open a aspire project and run it.\n3. A new window will open in the chromium edge, TAB to \"Copilot\" tab item and hit ENTER key.\n4. Verify that Model selector options are not accessible using the keyboard.\n\n### Actual Result:\nModel selector options are not accessible using the keyboard.\n\n### Expected Result:\nModel selector options should be accessible using the keyboard keys and user can select them.\n\n### User Impact:\nModel selector options are not accessible using the keyboard, making it difficult for keyboard and screen reader users to select the different options available.\n\n### Attachment:\n\nhttps://github.com/user-attachments/assets/80fcfd25-90dd-415f-acd6-7fbadbc7827b",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOw58brA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDOKYQzfc7A2iso",
+                                           "createdAt":  "2025-08-29T02:37:28Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "adamint",
+                                           "body":  "This will likely have to slip to the next version, as multiple changes are required across fluentui-blazor and here.\n\n1. I filed https://github.com/microsoft/fluentui-blazor/pull/4093, which allows us to replace our `AspireMenuButton` components with a more accessible `FluentMenuButton` one. We cannot currently do this because of the inflexibility in button content. So we will need to consume a new fluentui-blazor version.\n2. We have to replace AspireMenuButton in this repo.",
+                                           "updatedAt":  "2025-08-29T02:37:28Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc7Dnxus",
+                                           "createdAt":  "2025-09-11T17:23:56Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "adamint",
+                                           "body":  "Moving to backlog, as we will not consume a new fluentui release before 9.5 dev ends. We need to make sure to include this in planning for next sprint\n\ncc @maddymontaquila ",
+                                           "updatedAt":  "2025-09-11T17:23:56Z"
+                                       }
+                                   ],
+                         "totalCount":  2
+                     },
+        "title":  "Model selector options are not accessible using the keyboard: A11y_Aspire Dashboard_Copilot_Keyboard",
+        "labels":  [
+                       "area-dashboard",
+                       "area-copilot"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspire/issues/10298",
+        "createdAt":  "2025-07-09T10:54:35Z",
+        "number":  10298,
+        "author":  "AnKushSingh05",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-07-31T20:49:15Z",
+        "body":  "### GitHubTags\n#A11yTCS;#DesktopWeb; #Win32;#Win32;;#Functionality;#A11yFunctional;#Aspire;\n\n### Environment Details:\nApplication Name: Aspire Dashboard\nEdition Windows 11 Enterprise\nVersion 24H2\nOS build 26100.4351\nMicrosoft Visual Studio Enterprise 18 (64-bit) - Int Preview\nVersion 18.0.0 Preview 1.0 [10807.200.main]\n\n### Repro Steps:\n\n1. Open Visual studio.\n2. Open a aspire project and run it.\n3. A new window will open in the chromium edge, TAB to \"Copilot\" tab item and hit ENTER key.\n4. Verify that Clicking the \u0027Unhelpful\u0027 button auto-selects the \u0027helpful\u0027 button.\n\n### Actual Result:\nClicking the \u0027Unhelpful\u0027 button auto-selects the \u0027helpful\u0027 button\n\n### Expected Result:\nWhen a user clicks on \"unhelpful\" button, No other reaction (including \"helpful\") should be automatically selected.\n\n### User Impact:\nThis may lead to confusion or frustration for users, particularly during feedback or review workflows.\n\n### Attachment:\n\nhttps://github.com/user-attachments/assets/f96c9d28-8ec8-48ce-8dcb-bf172c663322",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  null,
+                         "nodes":  [
+
+                                   ],
+                         "totalCount":  0
+                     },
+        "title":  "Clicking the \u0027Unhelpful\u0027 button auto-selects the \u0027helpful\u0027 button: A11y_Aspire Dashboard_Copilot_Functionality",
+        "labels":  [
+                       "area-dashboard",
+                       "area-copilot"
+                   ]
+    }
+]

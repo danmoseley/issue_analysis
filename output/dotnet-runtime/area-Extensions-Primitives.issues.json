@@ -1,0 +1,1553 @@
+﻿[
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/36045",
+        "createdAt":  "2020-02-27T14:59:12Z",
+        "number":  36045,
+        "author":  "dazinator",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHOCll4fw==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "cocowalla",
+                                            "createdAt":  "2020-02-27T15:02:08Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "rcollina",
+                                            "createdAt":  "2020-02-27T20:45:57Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "czd890",
+                                            "createdAt":  "2020-09-16T09:32:02Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "Swimburger",
+                                            "createdAt":  "2020-09-16T15:42:18Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "KorsG",
+                                            "createdAt":  "2021-01-14T15:40:03Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "Bludator",
+                                            "createdAt":  "2021-10-02T12:22:39Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "lonix1",
+                                            "createdAt":  "2022-07-07T12:26:26Z"
+                                        }
+                                    ],
+                          "totalCount":  7
+                      },
+        "updatedAt":  "2025-04-02T02:40:15Z",
+        "body":  "I\u0027m opening this issue again, as per guidance from @guardrex \r\n\r\n- [Please see here](https://github.com/dotnet/AspNetCore.Docs/issues/9785)\r\n- [and here](https://github.com/dotnet/aspnetcore/issues/2542)\r\n- [and this gist](https://gist.github.com/cocowalla/5d181b82b9a986c6761585000901d1b8)\r\n\r\nThe reasons for me opening this again, are that the issues linked above to track the problem have been closed by engineering, however:\r\n- The problem has been acknowledged, but still exists unresolved - i.e no framework provided solution or workarounds. This also mean no adequately tested / officially approved workarounds.\r\n- Developers won\u0027t expect an API named `OnChange` to fire twice in rapid succession when there is a single change to a file. So I think this is still very likely to cause developers issues when using this API.\r\n- Without any official debouncing methods that are readily adoptable to developers who encounter this, they will have to spend time rolling (and testing) their own solutions. This is a time sink that would be much more efficiently fixed at the source by the framework providing a couple of approved and tested methods for this. The documented workaround provided by @guardrex may help developers to a limited degree, but it is limited because it has no real tests so could exhibit bugs, and sha1 checking may cause other problems later when the application is scaled out or large files are introduced - so could actually lead them down a bad path without these considerations being pointed out. Also the documented sample code is not in a form that is readily adoptable and maintainable in a central location - if for example bugs are discovered, then each developer will most likely have their own copied and pasted version to maintain.\r\n\r\n- The approach in the gist with the configurable delay is probably much more robust than the documented sha1 checking approach, as long as you configure a sensible delay.\r\n\r\n- I don\u0027t believe it would take that much effort on the part of engineering to provide some framework approved debouncing implementations to resolve this issue, either including them as optional API\u0027s in the same package as `ChangeToken` itself or an optional support package, and then update the docs to document each of those. The gist I feel is probably the most broadly applicable\u0027/ widely useful solution to this - with barely any dependencies at all, and could probably more easily be included out of the box than something like the sha1 check though imho.\r\n\r\nI appreciate you want to get on and deliver other features. Users of the framework are like-minded in that regard.\r\n\r\n### Describe the bug\r\nThe bug is already well described in the issues linked above.\r\n\r\n### To Reproduce\r\nSee linked issues.\r\n\r\n### Further technical details\r\nSee linked issues.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOKdBBqA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDU5MjA3OTk1Mg==",
+                                           "createdAt":  "2020-02-27T17:27:13Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOBDvGjg==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "dazinator",
+                                                                               "createdAt":  "2020-05-10T22:16:48Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "guardrex",
+                                           "body":  "Thanks @dazinator and @cocowalla. At the very least, I\u0027ll improve the doc coverage:\r\n\r\n* Improve the coverage of this scenario.\r\n* Mention that the approaches shown ...  file hashes (duplicate handling) and an exponential back-off (delay handling) ... won\u0027t address every scenario.\r\n* Mention (possibly cross-link) community approaches and/or engineering issues.\r\n\r\nI\u0027ll open an issue and react when this is resolved here. :ear:",
+                                           "updatedAt":  "2020-02-27T17:27:13Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDU5MjEwOTcyOQ==",
+                                           "createdAt":  "2020-02-27T18:32:14Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Pilchie",
+                                           "body":  "Just a note that I transferred this to the `extensions` repo",
+                                           "updatedAt":  "2020-02-27T18:32:14Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDYyNTUyODE5NQ==",
+                                           "createdAt":  "2020-05-07T22:26:37Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Dotnet-GitSync-Bot",
+                                           "body":  "I couldn\u0027t figure out the best area label to add to this issue. Please help me learn by adding exactly one [area label](https://github.com/dotnet/runtime/blob/master/docs/area-owners.md).",
+                                           "updatedAt":  "2020-05-07T22:26:37Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDcwMTQ5NDA2Ng==",
+                                           "createdAt":  "2020-09-30T16:15:51Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "maryamariyan",
+                                           "body":  "@guardrex I was wondering if there is a PR on dotnet-api-docs that is linked to this issue?",
+                                           "updatedAt":  "2020-09-30T16:15:51Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDcwMTUxNDE1Mg==",
+                                           "createdAt":  "2020-09-30T16:52:27Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "guardrex",
+                                           "body":  "Not that I\u0027m aware of. There\u0027s only the original docs (ASP.NET Core) issue at ...\r\n\r\nhttps://github.com/dotnet/AspNetCore.Docs/issues/9785\r\n\r\n... before it was closed there and opened for engineering (then transferred here).",
+                                           "updatedAt":  "2020-09-30T16:52:27Z"
+                                       }
+                                   ],
+                         "totalCount":  5
+                     },
+        "title":  "Change Tokens and Duplicate OnChange firing in rapid succession",
+        "labels":  [
+                       "documentation",
+                       "help wanted",
+                       "area-Extensions-Primitives"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/40677",
+        "createdAt":  "2020-08-11T19:03:38Z",
+        "number":  40677,
+        "author":  "KalleOlaviNiemitalo",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHOCWHzYw==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "dazinator",
+                                            "createdAt":  "2022-04-04T18:22:28Z"
+                                        }
+                                    ],
+                          "totalCount":  1
+                      },
+        "updatedAt":  "2021-07-19T20:20:03Z",
+        "body":  "\u003c!--This is just a template - feel free to delete any and all of it and replace as appropriate.--\u003e\r\n\r\n### Description\r\n\r\nCompositeChangeToken.ActiveChangeCallbacks returns true if **at least one** of the inner change tokens has active callbacks. It seems to me that it should return true only if **all** inner change tokens have active callbacks.\r\n\r\n### Rationale\r\n\r\n[IChangeToken.ActiveChangeCallbacks](https://docs.microsoft.com/dotnet/api/microsoft.extensions.primitives.ichangetoken.activechangecallbacks?view=dotnet-plat-ext-5.0) indicates whether the consumer can rely on its callback being invoked, or must instead poll the IChangeToken.HasChanged property.\r\n\r\n* If some of the inner change tokens of CompositeChangeToken have active callbacks but others don\u0027t, then the current implementation of CompositeChangeToken.ActiveChangeCallbacks returns true, and the consumer may rely on the callback. However, it would be safer to poll in this situation, as some of the inner change tokens may detect a change but not invoke the callback. That is, CompositeChangeToken.ActiveChangeCallbacks should return false.\r\n* If there are no inner change tokens, then CompositeChangeToken.ActiveChangeCallbacks returns false, directing the consumer to poll the IChangeToken.HasChanged property. However, HasChanged will constantly return false because no change can ever be detected. It might be more efficient not to poll in this situation. That is, CompositeChangeToken.ActiveChangeCallbacks should perhaps return true. I have not benchmarked this.\r\n\r\n### Configuration\r\n\r\nMicrosoft.Extensions.Primitives 2.1.6, but 5.0.0-preview.7.20364.11 behaves the same:\r\n\r\n\u003chttps://github.com/dotnet/runtime/blob/53976d38b1bd6917b8fa4d1dd4f009728ece3adb/src/libraries/Microsoft.Extensions.Primitives/src/CompositeChangeToken.cs#L30-L37\u003e\r\n\r\n### Regression?\r\n\r\nNo, it has always been like this.\r\n\r\n### Other information\r\n\r\n* \u003chttps://github.com/aspnet/FileSystem/commit/15c9f1d229b000d9b2472b1fcfd22120a116669e#diff-c4244fff2896e0080f8eeaa5c8c7c2bcR51-R54\u003e added CompositeFileChangeToken and it already worked like this.\r\n* \u003chttps://github.com/dotnet/extensions/pull/175\u003e added CompositeChangeToken.\r\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOKKl9Rg==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY3MjIwMDgzNA==",
+                                           "createdAt":  "2020-08-11T19:03:41Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Dotnet-GitSync-Bot",
+                                           "body":  "I couldn\u0027t figure out the best area label to add to this issue. If you have write-permissions please help me learn by adding exactly one [area label](https://github.com/dotnet/runtime/blob/master/docs/area-owners.md).",
+                                           "updatedAt":  "2020-08-11T19:03:41Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY3MjIwMTQ1Mw==",
+                                           "createdAt":  "2020-08-11T19:04:50Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "KalleOlaviNiemitalo",
+                                           "body":  "Please add **area-Extensions-Primitives**.",
+                                           "updatedAt":  "2020-08-11T19:04:50Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY4MjE5NjI5NA==",
+                                           "createdAt":  "2020-08-27T21:18:33Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @eerhardt, @maryamariyan\nSee info in area-owners.md if you want to be subscribed.",
+                                           "updatedAt":  "2020-08-27T21:18:33Z"
+                                       }
+                                   ],
+                         "totalCount":  3
+                     },
+        "title":  "CompositeChangeToken.ActiveChangeCallbacks returns true when not all inner change tokens do so",
+        "labels":  [
+                       "area-Extensions-Primitives"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/52507",
+        "createdAt":  "2021-05-08T19:19:57Z",
+        "number":  52507,
+        "author":  "benaadams",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2023-05-01T04:02:28Z",
+        "body":  "## Background and Motivation\r\n\r\nCurrently if appending a value to a `StringValues` you need to use the static `Concat` method:\r\n```csharp\r\nheaders.ContentLanguage = StringValues.Concat(headers.ContentLanguage, requestCulture.UICulture.Name);\r\n```\r\nOverloading `operator+` would allow it to be much cleaner\r\n```csharp\r\nheaders.ContentLanguage += requestCulture.UICulture.Name;\r\n```\r\n\r\n## Proposed API\r\n\r\nPlease provide the specific public API signature diff that you are proposing. For example:\r\n```csharp\r\nnamespace Microsoft.Extensions.Primitives\r\n{\r\n    public readonly partial struct StringValues\r\n    {\r\n        public static StringValues operator +(StringValues left, StringValues right);\r\n        public static StringValues operator +(string left, StringValues right);\r\n        public static StringValues operator +(StringValues left, string right);\r\n        public static StringValues operator +(string[] left, StringValues right);\r\n        public static StringValues operator +(StringValues left, string[] right);\r\n    }\r\n}\r\n```\r\n\r\n## Risks\r\n\r\nCurrently\r\n```csharp\r\nheaders.ContentLanguage += requestCulture.UICulture.Name;\r\n```\r\nWill compile; however it will implicitly convert the `StringValues` to a `string` add the two `string`s and then implictly convert back to a single value `StringValue`.\r\n\r\nHowever; hopefully no-one is doing that as it will append the add in an incorrect way.\r\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOWyd3nA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDgzNTQ4MDE1OA==",
+                                           "createdAt":  "2021-05-08T19:20:04Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @eerhardt, @maryamariyan\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n## Background and Motivation\r\n\r\nCurrently if appending a value to a `StringValues` you need to use the static `Concat` method:\r\n```csharp\r\nheaders.ContentLanguage = StringValues.Concat(headers.ContentLanguage, requestCulture.UICulture.Name);\r\n```\r\nOverloading `operator+` would allow it to be much cleaner\r\n```csharp\r\nheaders.ContentLanguage += requestCulture.UICulture.Name;\r\n```\r\n\r\n## Proposed API\r\n\r\nPlease provide the specific public API signature diff that you are proposing. For example:\r\n```csharp\r\nnamespace Microsoft.Extensions.Primitives\r\n{\r\n    public readonly partial struct StringValues\r\n    {\r\n        public static StringValues operator +(StringValues left, StringValues right);\r\n        public static StringValues operator +(string left, StringValues right);\r\n        public static StringValues operator +(StringValues left, string right);\r\n        public static StringValues operator +(string[] left, StringValues right);\r\n        public static StringValues operator +(StringValues left, string[] right);\r\n    }\r\n}\r\n```\r\n\r\n## Risks\r\n\r\nCurrently\r\n```csharp\r\nheaders.ContentLanguage += requestCulture.UICulture.Name;\r\n```\r\nWill compile; however it will implicitly convert the `StringValues` to a `string` add the two `string`s and then implictly convert back to a single value `StringValue`.\r\n\r\nHowever; hopeful no-one is doing that as it will append the add in an incorrect way.\r\n\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003ebenaadams\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`api-suggestion`, `area-Extensions-Primitives`, `untriaged`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2021-05-08T19:20:04Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDgzNjc4OTkxMA==",
+                                           "createdAt":  "2021-05-10T14:46:19Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "eerhardt",
+                                           "body":  "Do we have a precedent for using the `+` operator to add a value to a collection? I don\u0027t think I\u0027ve seen that in the BCL before.",
+                                           "updatedAt":  "2021-05-10T14:46:19Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDgzNjgwNzYxMg==",
+                                           "createdAt":  "2021-05-10T15:01:13Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOC63kUA==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "rameel",
+                                                                               "createdAt":  "2021-05-10T15:36:33Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "FilipToth",
+                                                                               "createdAt":  "2021-05-11T08:57:46Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "aradalvand",
+                                                                               "createdAt":  "2023-05-01T03:42:01Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  3
+                                                         },
+                                           "author":  "benaadams",
+                                           "body":  "So the following\r\n```csharp\r\nusing System;\r\nusing Microsoft.Extensions.Primitives;\r\n\r\nStringValues values = \"hello\";\r\n\r\nvalues = StringValues.Concat(values, \"world\");\r\n\r\nConsole.WriteLine(values);\r\n\r\nvalues += \"how\";\r\n\r\nConsole.WriteLine(values);\r\n```\r\nComplies and outputs\r\n```\r\nhello,world\r\nhello,worldhow\r\n```\r\nWhich is no use to anyone, whereas it would be better if it output\r\n```\r\nhello,world\r\nhello,world,how\r\n```",
+                                           "updatedAt":  "2021-05-10T15:01:13Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDgzNjgzMDE3Ng==",
+                                           "createdAt":  "2021-05-10T15:20:02Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "eerhardt",
+                                           "body":  "IMO, that\u0027s the issue with having implicit operators. They do unexpected things. I\u0027m not sure if doing more unorthodox things is the right fix.",
+                                           "updatedAt":  "2021-05-10T15:20:02Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5bJ3ec",
+                                           "createdAt":  "2023-05-01T03:45:05Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "aradalvand",
+                                           "body":  "Currently, it\u0027s not at all clear exactly _how_ a new value should be added to a `StringValues` instance. There are `Append` and `Add` methods that appear as suggestions in the editor, neither of which do what you would expect them to.\r\n\r\n[`Add` throws a `NotSupportedException`](https://github.com/dotnet/runtime/blob/2b530d4abdab90801b9c3434d62e511d9f72e3e7/src/libraries/Microsoft.Extensions.Primitives/src/StringValues.cs#L386), and `Append` is a LINQ method that is similar to `StringValues.Concat` and returns a new instance. It\u0027s very easy to fall into the trap of thinking the following line of code is actually doing something — when in reality it isn\u0027t:\r\n```csharp\r\nResponse.Headers.Vary.Append(HeaderNames.Referer);\r\n```\r\n\r\nThe API in this regard is in dire need of some refinement. There are even [comments in the ASP.NET Core codebase itself](https://github.com/dotnet/aspnetcore/blob/e313fbec2f1156e0e9db64e098474590b64ce269/src/Middleware/ResponseCompression/src/ResponseCompressionBody.cs#L222-L224) pointing out these very same unexpected quirks when it comes to adding things to `StringValues`, which goes to show how non-obvious its API really is.",
+                                           "updatedAt":  "2023-05-01T04:02:28Z"
+                                       }
+                                   ],
+                         "totalCount":  5
+                     },
+        "title":  "Add `StringValues operator+`",
+        "labels":  [
+                       "api-suggestion",
+                       "area-Extensions-Primitives"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/57596",
+        "createdAt":  "2021-08-17T18:39:29Z",
+        "number":  57596,
+        "author":  "terrajobst",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2022-12-08T04:46:29Z",
+        "body":  "### Background and motivation\r\n\r\nWe keep getting asked to add functionality to features in `Microsoft.Extensions`, such as:\r\n\r\n* https://github.com/dotnet/runtime/issues/45593\r\n* https://github.com/dotnet/runtime/issues/45592\r\n\r\nWe can\u0027t add methods to interfaces, so we\u0027re adding more and more APIs to the classes only. We should make a decision on what to do with the interfaces. My proposal is hide and obsolete.\r\n\r\n### API Proposal\r\n\r\nTBD\r\n\r\n### API Usage\r\n\r\nTBD\r\n\r\n### Risks\r\n\r\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOT_2N_A==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc41rSlC",
+                                           "createdAt":  "2021-08-17T18:39:33Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "I couldn\u0027t figure out the best area label to add to this issue. If you have write-permissions please help me learn by adding exactly one [area label](https://github.com/dotnet/runtime/blob/master/docs/area-owners.md).",
+                                           "updatedAt":  "2021-08-17T18:39:33Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc41rUnj",
+                                           "createdAt":  "2021-08-17T18:52:03Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @eerhardt, @maryamariyan\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Background and motivation\r\n\r\nWe keep getting asked to add functionality to features in `Microsoft.Extensions`, such as:\r\n\r\n* https://github.com/dotnet/runtime/issues/45593\r\n* https://github.com/dotnet/runtime/issues/45592\r\n\r\nWe can\u0027t add methods to interfaces, so we\u0027re adding more and more APIs to the classes only. We should make a decision on what to do with the interfaces. My proposal is hide and obsolete.\r\n\r\n### API Proposal\r\n\r\nTBD\r\n\r\n### API Usage\r\n\r\nTBD\r\n\r\n### Risks\r\n\r\n_No response_\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003eterrajobst\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`api-suggestion`, `area-Extensions-Primitives`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e7.0.0\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2021-08-17T18:52:03Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc41rXB6",
+                                           "createdAt":  "2021-08-17T19:06:47Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "eerhardt",
+                                           "body":  "cc @davidfowl @Tratcher ",
+                                           "updatedAt":  "2021-08-17T19:06:47Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc41rYxS",
+                                           "createdAt":  "2021-08-17T19:18:23Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Tratcher",
+                                           "body":  "IMemoryCache is used in many public TagHelper APIs like:\r\nhttps://github.com/dotnet/aspnetcore/blob/8b30d862de6c9146f466061d51aa3f1414ee2337/src/Mvc/Mvc.TagHelpers/src/DistributedCacheTagHelper.cs#L44-L46\r\n\r\nMost other ASP.NET uses seem to be internal.",
+                                           "updatedAt":  "2021-08-17T19:18:23Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc46EsXn",
+                                           "createdAt":  "2021-11-19T18:30:24Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOCHkhwA==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "maryamariyan",
+                                                                               "createdAt":  "2021-12-22T06:45:06Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "eerhardt",
+                                           "body":  "\u003e My proposal is hide and obsolete.\r\n\r\nI can see 2 high-level approaches to fixing this.\r\n\r\n### 1. Embrace the interfaces and use DIMs\r\n\r\nTaking #45593 as a case study, it would mean this change:\r\n\r\n```diff\r\nnamespace Microsoft.Extensions.Caching.Memory\r\n{\r\n    public interface IMemoryCache\r\n    {\r\n+#if NET6_OR_GREATER\r\n+        void Clear() { throw new NotImplementedException(); }\r\n+#endif\r\n    }\r\n\r\n    public class MemoryCache : IMemoryCache\r\n    {\r\n+        public void Clear();\r\n    }\r\n}\r\n```\r\n\r\nThe advantages:\r\n\r\n* Consumers don\u0027t need to rewrite their code away from the interfaces.\r\n* We would be dogfooding the DIM feature, which was implemented exactly for this scenario\r\n\r\nDisadvantages:\r\n\r\n* People consuming the abstraction (`IMemoryCache`) on older TFMs (i.e. netstandard2.0) wouldn\u0027t be able to use the new members\r\n* Risk that we hit issues with DIMs, as we don\u0027t have much experience since we haven\u0027t used them\r\n\r\n### 2. Deprecate the interfaces and replace with base classes\r\n\r\nAgain, using #45593 as a case study:\r\n\r\n```diff\r\nnamespace Microsoft.Extensions.Caching.Memory\r\n{\r\n+   [Obsolete(\"Use MemoryCacheBase instead\")]\r\n    public interface IMemoryCache\r\n    {\r\n...\r\n    }\r\n\r\n+    public abstract class MemoryCacheBase\r\n+    {\r\n+        public virtual void Clear() { throw new NotImplementedException(); }\r\n+    }\r\n\r\n-   public class MemoryCache : IMemoryCache\r\n+   public class MemoryCache : MemoryCacheBase, IMemoryCache\r\n    {\r\n    }\r\n```\r\n\r\n(Note: we wouldn\u0027t strictly need to obsolete the interfaces. So we have options 2.a - obsolete interfaces and 2.b - don\u0027t obsolete the interfaces.)\r\n\r\nThe advantages/disadvantages are basically flipped from Option 1 above.\r\n\r\n### Thoughts\r\n\r\nFollowing Option 2 is what we would traditionally do. It is the \"safer\" and more traveled road. Do we think Option 1 has enough advantages to try to blaze a new trail here?\r\n\r\ncc @davidfowl @Tratcher @halter73 ",
+                                           "updatedAt":  "2021-11-19T18:30:24Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc46E8TM",
+                                           "createdAt":  "2021-11-19T19:48:24Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Tratcher",
+                                           "body":  "Option 2 would cause significant public API breaks up stack and is not DI friendly. Option 1 is much less invasive if you can make it work. If you find Option 1 to be insufficient or problematic after one or more releases, you can still fall back to Option 2.",
+                                           "updatedAt":  "2021-11-19T19:52:25Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc46FIrJ",
+                                           "createdAt":  "2021-11-19T20:27:26Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "eerhardt",
+                                           "body":  "\u003e and is not DI friendly.\r\n\r\nCan you elaborate? Why is an abstract base class \"not DI friendly\" vs. an interface?",
+                                           "updatedAt":  "2021-11-19T20:27:26Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc46KpDK",
+                                           "createdAt":  "2021-11-22T19:55:46Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOCDoVFQ==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "HEART",
+                                                                               "user":  "davidfowl",
+                                                                               "createdAt":  "2021-11-22T23:41:23Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "Tratcher",
+                                           "body":  "\u003e \u003e and is not DI friendly.\r\n\u003e \r\n\u003e Can you elaborate? Why is an abstract base class \"not DI friendly\" vs. an interface?\r\n\r\nI\u0027d overlooked MemoryCacheBase, yes that would work for DI. \r\n\r\nI still think DIMs are better for being less disruptive to the ecosystem. We\u0027ve used them successfully in aspnetcore, though we didn\u0027t have the netstandard limitation.",
+                                           "updatedAt":  "2021-11-22T19:55:46Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5P_Y38",
+                                           "createdAt":  "2022-12-08T04:46:29Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "fowl2",
+                                           "body":  "There\u0027s also the possibility of:\r\n\r\n ```diff\r\n namespace Microsoft.Extensions.Caching.Memory;\r\n \r\n+  public interface IMemoryCache2 : IMemoryCache\r\n+  {\r\n+      void Clear();\r\n+  }\r\n \r\n-  public class MemoryCache : IMemoryCache\r\n+  public class MemoryCache : IMemoryCache, IMemoryCache2\r\n ```\r\n\r\nWith the option to obsolete `IMemoryCache`. A little inelegant - having to register multiple interfaces in DI, but backwards compatible. ",
+                                           "updatedAt":  "2022-12-08T04:46:29Z"
+                                       }
+                                   ],
+                         "totalCount":  9
+                     },
+        "title":  "[API Proposal]: Reconciling base classes and interfaces in Microsoft.Extensions",
+        "labels":  [
+                       "api-suggestion",
+                       "area-Extensions-Primitives"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/60183",
+        "createdAt":  "2021-10-08T15:41:59Z",
+        "number":  60183,
+        "author":  "IEvangelist",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2022-01-11T23:27:49Z",
+        "body":  "### Description\n\nThe static `ChangeToken.OnChange` method throws a `StackOverflowException` when its producer factory returns the same change token instance.\n\n### Reproduction Steps\n\nYou will need a project with the `Microsoft.Extensions.Primitives` NuGet package installed. The following C# code demonstrates the bug:\r\n\r\n```csharp\r\nusing System;\r\nusing System.Threading;\r\nusing Microsoft.Extensions.Primitives;\r\n\r\nCancellationTokenSource cancellationTokenSource = new();\r\nCancellationChangeToken cancellationChangeToken = new(cancellationTokenSource.Token);\r\n\r\nConsole.WriteLine($\"Initial state of HasChanged: {cancellationChangeToken.HasChanged}\");\r\n\r\nFunc\u003cIChangeToken\u003e producer = () =\u003e\r\n{\r\n    return cancellationChangeToken;\r\n};\r\n\r\nAction consumer = () =\u003e Console.WriteLine(\"The callback was invoked.\");\r\n\r\nusing (ChangeToken.OnChange(producer, consumer))\r\n{\r\n    cancellationTokenSource.Cancel();\r\n}\r\n```\n\n### Expected behavior\n\nI would expect that this method would not throw a `StackOverflowException`.\n\n### Actual behavior\n\nA `StackOverflowException` is thrown. The `ChangeToken.OnChange` function registers the `producer` and corresponding `consumer`. When the producer triggers a change, i.e.; the `cancellationTokenSource.Cancel` is called, the `consumer` callback is executed and then the `producer` is called again to get a new change token. However, the same change token is returned. And since it has already fired, it immediately causes the re-registration to invoke the callback inline. This creates an infinite loop, where the symptom is the SOE.\n\n### Regression?\n\nIt is my understanding that this has always been an issue, it\u0027s just never been raised before. This [`ChangeToken` is applicable](https://docs.microsoft.com/dotnet/api/microsoft.extensions.primitives.changetoken?view=dotnet-plat-ext-5.0#applies-to) to the following .NET builds:\r\n.NET Platform Extensions | 1.0, 1.1, 2.0, 2.1, 2.2, 3.0, 3.1, 5.0, 6.0 RC 1\r\n-- | --\r\n\n\n### Known Workarounds\n\nThe known workaround is to ensure that the `producer` either returns a new change token, or at least evaluates the previous state and resets itself (if possible).\r\n\r\n```csharp\r\nusing System;\r\nusing System.Threading;\r\nusing Microsoft.Extensions.Primitives;\r\n\r\nCancellationTokenSource cancellationTokenSource = new();\r\nCancellationChangeToken cancellationChangeToken = new(cancellationTokenSource.Token);\r\n\r\nConsole.WriteLine($\"Initial state of HasChanged: {cancellationChangeToken.HasChanged}\");\r\n\r\nFunc\u003cIChangeToken\u003e producer = () =\u003e\r\n{\r\n    // The producer factory should always return a new change token.\r\n    // If the token\u0027s already fired, get a new token.\r\n    if (cancellationTokenSource.IsCancellationRequested)\r\n    {\r\n        cancellationTokenSource = new();\r\n        cancellationChangeToken = new(cancellationTokenSource.Token);\r\n    }\r\n\r\n    return cancellationChangeToken;\r\n};\r\n\r\nAction consumer = () =\u003e Console.WriteLine(\"The callback was invoked.\");\r\n\r\nusing (ChangeToken.OnChange(producer, consumer))\r\n{\r\n    cancellationTokenSource.Cancel();\r\n}\r\n```\n\n### Configuration\n\n_No response_\n\n### Other information\n\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  null,
+                         "nodes":  [
+
+                                   ],
+                         "totalCount":  0
+                     },
+        "title":  "The static `ChangeToken.OnChange` method throws a `StackOverflowException` when its producer factory returns the same change token instance",
+        "labels":  [
+                       "area-Extensions-Primitives"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/67487",
+        "createdAt":  "2022-04-02T17:05:15Z",
+        "number":  67487,
+        "author":  "AraHaan",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2023-04-19T14:58:33Z",
+        "body":  "For starters, the Microsoft.Extensions.* packages that are from this repository are great, well known, and also well used (with a majority used by tons of packages that result in a huge dependency chain of just those packages alone if you count the transitive dependencies).\r\n\r\nBecause of this I would like to suggest making them into an framework named ``Microsoft.NETCore.Extensions.App`` framework that can be used for all types of apps, This framework would replace the nuget package versions and support .NET 6 at minimum (or rather the TFM that the packages all commonly support at minimum), also make them into an workload that can be installed into the .NET 7 SDK (not the .NET 6 one).\r\n\r\nOther changes that would need to be made:\r\n- Migrate the usage of them in dotnet/aspnetcore (and possibly other repos) to the workload version (An Sdk change would need to be made to make it know about the new workload before then).\r\n- A nuget.org change would need to be made to make it possible to obsolete the Microsoft.Extensions nuget package for that workload so they get warned to \"install the workload instead\".\r\n\r\nPros of the change:\r\n- the libraries could benefit from crossgen2 for startup performance and various other things that might make them able to be optimized more than what the package version can offer.\r\n- more easier to use and less chance of a dependency version conflict (the updates would flow in when you update the workload and would update for all projects) (less chance of dll hell at runtime too).\r\n- overall the workload experience would be better than the package approach here for these well known packages that can become their own framework (because there are a lot of them that it would be more logical to make it a framework).\r\n- easier to contribute to projects depending on the workload as then it can be listed as an hard requirement to have the workload installed when you open their Visual Studio solution file.\r\n\r\nCons of the change:\r\n- Might not support as many TFMs as the package version (unless there is a way to preserve that one too).\r\n- Would require some help to configure the workload installer generation for this in this repository, however the workload would probably need it\u0027s own SDK to insert itself into ``KnownFrameworkReference`` and define a property responsible for enabling the insertion and framework reference.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOWkqlow==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5AxWhP",
+                                           "createdAt":  "2022-04-02T17:05:18Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "I couldn\u0027t figure out the best area label to add to this issue. If you have write-permissions please help me learn by adding exactly one [area label](https://github.com/dotnet/runtime/blob/master/docs/area-owners.md).",
+                                           "updatedAt":  "2022-04-02T17:05:18Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5AxXmR",
+                                           "createdAt":  "2022-04-02T17:23:58Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "teo-tsirpanis",
+                                           "body":  "The packages in the `Microsoft.Extensions` family are plain-old general-purpose libraries. They need no special SDK support to warrant their own workload. And they also have to support .NET Framework through .NET Standard 2.0, so obsoleting the NuGet cannot happen.",
+                                           "updatedAt":  "2022-04-02T17:23:58Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5AxXv6",
+                                           "createdAt":  "2022-04-02T17:26:32Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "AraHaan",
+                                           "body":  "~~Hmm I guess the framework option could work for .NET Standard based frameworks (like .NET Framework for example) right?~~\r\n\r\n~~Or is ``FrameworkReference`` not possible for sdk style .NET Framework projects?~~\r\n~~Although the users might not be using sdk style though 🤔.~~\r\n\r\nI guess the deprecation message could be added to the .NET SDK when it sees them referencing the packages in .NET 6+ to use the workload instead.",
+                                           "updatedAt":  "2022-04-02T17:43:45Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5AxY8J",
+                                           "createdAt":  "2022-04-02T17:48:27Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "teo-tsirpanis",
+                                           "body":  "I still don\u0027t understand why to make them on their own shared framework. Extensions is a library, not an app model like ASP.NET Core, Windows Desktop or MAUI. Imagine needing a shared framework for Newtonsoft.Json.",
+                                           "updatedAt":  "2022-04-02T17:48:27Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5AxZmX",
+                                           "createdAt":  "2022-04-02T18:00:15Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "AraHaan",
+                                           "body":  "Newtonsoft is a single package, Extensions is not (and is often considered by many it\u0027s own framework because of that).",
+                                           "updatedAt":  "2022-04-02T18:01:08Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5AxaEW",
+                                           "createdAt":  "2022-04-02T18:08:50Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "teo-tsirpanis",
+                                           "body":  "That is a miconception. Extensions is like the Windows Community Toolkit. A set of _libraries_ that could have well resided in the BCL or in a third-party library. There\u0027s absolutely nothing special about them.",
+                                           "updatedAt":  "2022-04-02T18:08:50Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5AxbHB",
+                                           "createdAt":  "2022-04-02T18:33:06Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "AraHaan",
+                                           "body":  "While that may be the case, take a look at the ASP.NET Core framework reference, almost (if not all of them) are included in it, however they could have been instead moved to their own framework that one would have to opt-into using (with asp.net core projects opting into it by default). Because of that many people thought it was a great idea to try to manually reference the ASP.NET Core framework when using:\r\n- WindowsDesktop\r\n- MAUI\r\n\r\nHowever it would then result in failure to run the program due to that (because they want the extensions to be used from a framework and not from a package because their application is FDD and not self-contained) with it thinking that the relevant runtime is not installed (WindowsDesktop/MAUI).\r\n\r\nThat was one of the main reasons for filing the issue, along with the reasons I listed above like enabling crossgen2 on all the Microsoft.Extensions assemblies that are inside the reference to boost statup performance (which can also indirectly improve asp.net core / efcore as well).\r\n\r\nAnd yes my argument is, if asp.net core apps can use them in FDD without needing the packages, so should any other type of project if they opt-in to not using the packages but still be able to use them the same way asp.net core apps can (also doing such could bring down the size of the asp.net core framework itself by at least 3~5 MB or so by having the source code to that framework also opt-in to it, it\u0027s planned to be a workload anyway so why cant workloads depend on other workloads?).\r\n\r\nAlso I forgot 1 other reason as well:\r\n- Imagine a security issue existed in an Microsoft.Extensions.* library, with the package being referenced. A typical developer might not be aware of said issue and might skip the update thinking that it might not affect their project, likewise if the project was already compiled with the package they will not get the patch to automatically be applied when they run the application.\r\n  - This would not be an issue if the workload existed as it would be easy to let the developer know \"hey update this workload to this security patch.\" and then when they run the FDD application it will use that patch (without being forced to update the package themselves, recompile, and pray the updated dll was copied).",
+                                           "updatedAt":  "2022-04-02T18:49:12Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5AxbNr",
+                                           "createdAt":  "2022-04-02T18:35:40Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-meta\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\nFor starters, the Microsoft.Extensions.* packages that are from this repository are great, well known, and also well used (with a majority used by tons of packages that result in a huge dependency chain of just those packages alone if you count the transitive dependencies).\r\n\r\nBecause of this I would like to suggest making them into an framework named ``Microsoft.NETCore.Extensions.App`` framework that can be used for all types of apps, This framework would replace the nuget package versions and support .NET 6 at minimum (or rather the TFM that the packages all commonly support at minimum), also make them into an workload that can be installed into the .NET 7 SDK (not the .NET 6 one).\r\n\r\nOther changes that would need to be made:\r\n- Migrate the usage of them in dotnet/aspnetcore (and possibly other repos) to the workload version (An Sdk change would need to be made to make it know about the new workload before then).\r\n- A nuget.org change would need to be made to make it possible to obsolete the Microsoft.Extensions nuget package for that workload so they get warned to \"install the workload instead\".\r\n\r\nPros of the change:\r\n- the libraries could benefit from crossgen2 for startup performance and various other things that might make them able to be optimized more than what the package version can offer.\r\n- more easier to use and less chance of a dependency version conflict (the updates would flow in when you update the workload and would update for all projects) (less chance of dll hell at runtime too).\r\n- overall the workload experience would be better than the package approach here for these well known packages that can become their own framework (because there are a lot of them that it would be more logical to make it a framework).\r\n- easier to contribute to projects depending on the workload as then it can be listed as an hard requirement to have the workload installed when you open their Visual Studio solution file.\r\n\r\nCons of the change:\r\n- Might not support as many TFMs as the package version (unless there is a way to preserve that one too).\r\n- Would require some help to configure the workload installer generation for this in this repository, however the workload would probably need it\u0027s own SDK to insert itself into ``KnownFrameworkReference`` and define a property responsible for enabling the insertion and framework reference.\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003eAraHaan\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-Meta`, `packaging`, `untriaged`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2022-04-02T18:35:40Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5BjHuo",
+                                           "createdAt":  "2022-04-14T23:52:21Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-extensions-primitives\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\nFor starters, the Microsoft.Extensions.* packages that are from this repository are great, well known, and also well used (with a majority used by tons of packages that result in a huge dependency chain of just those packages alone if you count the transitive dependencies).\r\n\r\nBecause of this I would like to suggest making them into an framework named ``Microsoft.NETCore.Extensions.App`` framework that can be used for all types of apps, This framework would replace the nuget package versions and support .NET 6 at minimum (or rather the TFM that the packages all commonly support at minimum), also make them into an workload that can be installed into the .NET 7 SDK (not the .NET 6 one).\r\n\r\nOther changes that would need to be made:\r\n- Migrate the usage of them in dotnet/aspnetcore (and possibly other repos) to the workload version (An Sdk change would need to be made to make it know about the new workload before then).\r\n- A nuget.org change would need to be made to make it possible to obsolete the Microsoft.Extensions nuget package for that workload so they get warned to \"install the workload instead\".\r\n\r\nPros of the change:\r\n- the libraries could benefit from crossgen2 for startup performance and various other things that might make them able to be optimized more than what the package version can offer.\r\n- more easier to use and less chance of a dependency version conflict (the updates would flow in when you update the workload and would update for all projects) (less chance of dll hell at runtime too).\r\n- overall the workload experience would be better than the package approach here for these well known packages that can become their own framework (because there are a lot of them that it would be more logical to make it a framework).\r\n- easier to contribute to projects depending on the workload as then it can be listed as an hard requirement to have the workload installed when you open their Visual Studio solution file.\r\n\r\nCons of the change:\r\n- Might not support as many TFMs as the package version (unless there is a way to preserve that one too).\r\n- Would require some help to configure the workload installer generation for this in this repository, however the workload would probably need it\u0027s own SDK to insert itself into ``KnownFrameworkReference`` and define a property responsible for enabling the insertion and framework reference.\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003eAraHaan\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`untriaged`, `area-Extensions-Primitives`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2022-04-14T23:52:21Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5BjIIx",
+                                           "createdAt":  "2022-04-14T23:57:21Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ericstj",
+                                           "body":  "@eerhardt @davidfowl @maryamariyan -- thoughts on this?  One thing we could consider is adding more extensions packages to the base shared framework rather than ASP.NETCore shared framework and keep the package/framework duality.",
+                                           "updatedAt":  "2022-04-14T23:57:21Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5BlAT-",
+                                           "createdAt":  "2022-04-15T16:42:34Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "eerhardt",
+                                           "body":  "I don\u0027t think we will get rid of the NuGet packages. We would need some pretty strong reasoning to justify removing the NuGet packages.\r\n\r\nI agree with @ericstj above that if we think this justifies its own \"shared framework\", we should just move them into the Microsoft.NETCore.App shared framework. These libraries already exist in dotnet/runtime. There would be no real benefit to splitting them into their own shared framework.\r\n\r\nBut I don\u0027t think the above is strong enough justification for doing this work. If you use these libraries outside of ASP.NET, and you need fast startup, you can publish your app with `PublishReadyToRun=true`, and these assemblies will be pre-compiled. If you need to share them across multiple apps in order to save size, we should enable that scenario generically for any NuGet packages before solving it specially for Microsoft.Extensions. For example, the [`dotnet store`](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-store) command was built to do something like this. If reusing libraries in a common location is necessary, something like that will solve it for everybody - not just Microsoft.Extensions.",
+                                           "updatedAt":  "2022-04-15T16:42:34Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5BlI5q",
+                                           "createdAt":  "2022-04-15T17:39:50Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "AraHaan",
+                                           "body":  "What I wanted was to have them in something like a framework where they would get serviced for all of my code at once so the serviced code gets run on all of them whenever the .NET SDK updates, a lot of people could agree with me on this one.\r\n\r\nPlacing it in the base shared framework would be a good option too. While the packages might be great (they get copied to the output directory which is not always the best option for everyone). After all not everyone keeps track of package updates and that can result in security problems in their app where placing them in a shared framework would eliminate that issue as then updating the shared framework when a servicing release is issued would be a far more better (and safer) option. This is why I am reluctant to use the packages as a lot of people do not wildcard them with ``*-*`` because sometimes if they do a prerelease build might be breaking for them.\r\n\r\nBesides they get versioned with the rest of the projects in this repo so I think having both the package option and having them in the base shared framework would be the best option (which also exists for System.Text.Json and other libraries in the base shared framework).\r\n\r\nWhile dotnet-store is an option, it would not be the best option for end users who might want to use the app (as some programs that might do this might be closed source so they would not have the source code to run the command). Besides End users really just want to install the runtime \u0026 try to run the app (however it would be nice if one can tell the apphost to instead link to the sdk instead of the runtime).",
+                                           "updatedAt":  "2022-04-15T17:43:59Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5BlKRe",
+                                           "createdAt":  "2022-04-15T17:50:34Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "eerhardt",
+                                           "body":  "We can leave this issue open for a while to get feedback from others in the community if they see high value in doing this work. But without overwhelming feedback that putting the Microsoft.Extensions assemblies into the shared framework would benefit a lot of users, I don\u0027t think it is likely to get implemented.\r\n\r\n\u003e After all not everyone keeps track of package updates and that can result in security problems in their app where placing them in a shared framework would eliminate that issue as then updating the shared framework when a servicing release is issued would be a far more better (and safer) option.\r\n\r\nAgain, the Microsoft.Extensions libraries are not special in this regard. A security issue could be found in any library. There are other mechanisms for finding security vulnerabilities in your dependencies. Here\u0027s one example: https://devblogs.microsoft.com/nuget/how-to-scan-nuget-packages-for-security-vulnerabilities/.",
+                                           "updatedAt":  "2022-04-15T17:51:01Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5BmKWt",
+                                           "createdAt":  "2022-04-16T03:22:45Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "davidfowl",
+                                           "body":  "I\u0027m open to that discussion 😃 ",
+                                           "updatedAt":  "2022-04-16T03:22:45Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5BogMa",
+                                           "createdAt":  "2022-04-18T06:23:06Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "AraHaan",
+                                           "body":  "Another option could be to do something similar to how the ``WindowsDesktop`` shared framework has profiles and do an ``Extensions`` profile on the base shared framework that does not get used by default and for those who use that profile to gather the telemetry on (unless they opted out by environment variable). And then when more usage data is in merge the 2 profiles (when it is determined to be well used and not just on the aspnetcore repo and projects using ASP.NET Core).",
+                                           "updatedAt":  "2022-04-18T06:27:49Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5BvUzq",
+                                           "createdAt":  "2022-04-19T17:49:33Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ericstj",
+                                           "body":  "\u003e Another option could be to do something similar to how the WindowsDesktop shared framework has profiles and do an Extensions profile\r\n\r\nI\u0027m not sure that really solves any problem, just another implementation option.  The reason this was done in `WindowsDesktop` was to [hide API](https://github.com/dotnet/sdk/issues/10029) and build tooling.  I don\u0027t think we really care about hiding API here -- it\u0027s already segmented well by namespace.\r\n\r\nIMO to justify work we don\u0027t need \"options\" here.  We need a clear set of pros/cons that makes it a winning value proposition.  Ideally that could be backed with data.",
+                                           "updatedAt":  "2022-04-19T17:49:33Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5BwRZH",
+                                           "createdAt":  "2022-04-19T21:04:39Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "This issue has been marked `needs-author-action` since it may be missing important information. Please refer to our [contribution guidelines](https://github.com/dotnet/runtime/blob/main/CONTRIBUTING.md#writing-a-good-bug-report) for tips on how to report issues effectively.",
+                                           "updatedAt":  "2022-04-19T21:04:39Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5BwrX4",
+                                           "createdAt":  "2022-04-20T00:08:25Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "AraHaan",
+                                           "body":  "What I can think of so far:\r\n\r\nPros:\r\n- Projects can use the types and members from the Extensions assemblies without needing the packages.\r\n- Projects can get less files copied to their outputs when FDD.\r\n- Projects that normally do not maintain nuget dependencies would get free servicing updates when either Visual Studio or Windows Update patches their runtime major version (security and bug fixes that they would otherwise miss out on).\r\n- Less disc space wasted downloading the packages as they would be part of the base shared framework instead.\r\n- Less network usage (and faster restore) as the packages would become optional (unless they want to either roll back a breaking change or opt into the daily package builds that are not part of any daily sdk / runtime installer builds or not part of what the install scripts would install as it is too new)\r\n- Could simplify the Dependencies in the aspnetcore repository (and others) that use the package versions (they could use the ones in the base shared framework in .NET 7+). The change would mean that the ASP.NET Core framework assemblies list would get smaller, which means in turn that it\u0027s own runtime would also be smaller (because they would be moved to the base shared framework for the ones that exist in that framework reference that are package references to the ones in this repository)  which in turn allows them to be used for any projects due to the fact they are generic enough where they can be used for any project.\r\n- Could resolve problems that the package version might have (example could be that an extensions package might have not been patched to remove the S.R.CS.U dependency and nobody noticed it until they installed the package because the S.R.CS.U dependency no longer gets updated packages released). AKA the framework reference might catch this and will immediately get patched to then not include the S.R.CS.U dependency at all.\r\n\r\nCons:\r\n- Would not handle fresh builds in the nuget feed which are not yet part of the daily feed builds that the install script/installers would install (forcing package to be used until then for some).\r\n- The Extensions packages that exist in the aspnetcore repository would not be possible to be included in the base shared framework (due to the fact it was made specifically for ASP.NET Core)",
+                                           "updatedAt":  "2022-04-20T00:08:25Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5Bwxox",
+                                           "createdAt":  "2022-04-20T00:41:29Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jkotas",
+                                           "body":  "\u003e Less disc space wasted downloading the packages as they would be part of the base shared framework instead.\r\n\r\nIt is not true if your project depends on netcoreapp shared framework only and does not use any of these packages. We do publish packages with netcoreapp shared framework only (https://dotnet.microsoft.com/en-us/download/dotnet/6.0).",
+                                           "updatedAt":  "2022-04-20T00:41:29Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5aPDH5",
+                                           "createdAt":  "2023-04-18T23:07:17Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "wtgodbe",
+                                           "body":  "If we do wind up moving these into Microsoft.Netcore.App it will require a reaction in aspnetcore, please keep me in the loop if we wind up taking that path.",
+                                           "updatedAt":  "2023-04-18T23:07:17Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5aPEvr",
+                                           "createdAt":  "2023-04-18T23:16:29Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "trylek",
+                                           "body":  "We just hit this in our efforts on publishing Linux Docker containers using the combined ASP.NET + runtime Crossgen2 composite build, please see here:\r\n\r\n* https://github.com/dotnet/aspnetcore/pull/47747\r\n* https://github.com/dotnet/runtime/issues/84860\r\n\r\nIn particular, we\u0027re hitting problems with the \u003ccode\u003eMicrosoft.Extensions.Logging.Abstractions\u003c/code\u003e assembly because both aspnetcore and SDK reference it and they may end up picking up different versions of the assembly due to various latencies in the build.",
+                                           "updatedAt":  "2023-04-18T23:16:29Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5aSqWj",
+                                           "createdAt":  "2023-04-19T14:29:24Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "AraHaan",
+                                           "body":  "Yep, that was another reason why I opened this issue as well, to discuss a way to and permanently resolve the problem via roll forward logic that already exists in the way the runtime works which I think could solve the aspnetcore and the SDK issue with it loading up wrong versions at the same time during build.",
+                                           "updatedAt":  "2023-04-19T14:58:33Z"
+                                       }
+                                   ],
+                         "totalCount":  22
+                     },
+        "title":  "Migrate Microsoft.Extensions packages into their own Framework (and workload)",
+        "labels":  [
+                       "area-Extensions-Primitives"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/69099",
+        "createdAt":  "2022-05-10T03:44:38Z",
+        "number":  69099,
+        "author":  "davidfowl",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHODLHukA==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "lonix1",
+                                            "createdAt":  "2022-07-07T13:15:06Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "cocowalla",
+                                            "createdAt":  "2022-07-07T14:45:52Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "divinebovine",
+                                            "createdAt":  "2022-07-15T21:18:41Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "cdalmasso",
+                                            "createdAt":  "2022-11-08T14:41:47Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "dazinator",
+                                            "createdAt":  "2022-11-09T16:03:45Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "Turnerj",
+                                            "createdAt":  "2022-11-10T00:41:14Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "kakone",
+                                            "createdAt":  "2022-12-23T18:31:37Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "Tornhoof",
+                                            "createdAt":  "2023-02-16T10:12:24Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "oising",
+                                            "createdAt":  "2023-05-18T17:09:40Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "masterged",
+                                            "createdAt":  "2023-05-29T18:15:24Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "justmine66",
+                                            "createdAt":  "2023-06-08T03:11:33Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "OronDF343",
+                                            "createdAt":  "2023-11-08T14:24:49Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "georg-jung",
+                                            "createdAt":  "2023-11-09T15:48:30Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "pacoteinnov",
+                                            "createdAt":  "2024-02-21T15:35:38Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "dgoldm",
+                                            "createdAt":  "2024-08-18T05:09:11Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "julealgon",
+                                            "createdAt":  "2024-11-15T20:53:53Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "hlovdal",
+                                            "createdAt":  "2024-12-11T11:08:07Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "yncardoso",
+                                            "createdAt":  "2025-01-27T19:18:07Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "SplitThePotCyrus",
+                                            "createdAt":  "2025-03-10T12:25:03Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "scabana",
+                                            "createdAt":  "2025-05-12T18:34:06Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "Was85",
+                                            "createdAt":  "2025-05-14T19:05:34Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "cyungmann",
+                                            "createdAt":  "2025-07-11T17:14:34Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "andrewyakonyuk",
+                                            "createdAt":  "2025-07-28T09:45:52Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "kronic",
+                                            "createdAt":  "2025-08-13T21:19:35Z"
+                                        }
+                                    ],
+                          "totalCount":  24
+                      },
+        "updatedAt":  "2024-11-19T13:26:31Z",
+        "body":  "### Background and motivation\n\nToday it\u0027s not possible to use `ChangeToken.OnChange` to execute asynchronous logic before re-subscribing for new updates. The current API has a `Action\u003cT\u003e` based callback only (https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.primitives.changetoken.onchange?view=dotnet-plat-ext-6.0). We need an async overload to run async logic so people don\u0027t end up using async void or blocking when using this helper.\n\n### API Proposal\n\n```csharp\r\nnamespace Microsoft.Extensions.Primitives;\r\n\r\npublic static class ChangeToken\r\n{\r\n    public IDisposable OnChange(Func\u003cIChangeToken\u003e changeTokenProducer, Func\u003cTask\u003e changeTokenConsumer);\r\n    public IDisposable OnChange\u003cTState\u003e(Func\u003cIChangeToken\u003e changeTokenProducer, Func\u003cTState, Task\u003e changeTokenConsumer, TState state);\r\n}\r\n```\r\n\n\n### API Usage\n\n```csharp\r\nusing Microsoft.Extensions.Primitives;\r\n\r\nvar config = new ConfigurationBuilder().AddJsonFile(\"config.json\", optional: false, reloadOnChange: true)\r\n            .Build();\r\n\r\n_ = ChangeToken.OnChange(config.GetReloadToken, async () =\u003e\r\n{\r\n    await Task.Delay(1000);\r\n    Console.WriteLine(\"Change happened\");\r\n});\r\n```\r\n\n\n### Alternative Designs\n\n_No response_\n\n### Risks\n\nNone",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOlCjzmQ==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5C3iDq",
+                                           "createdAt":  "2022-05-10T03:44:44Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @mangod9\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Background and motivation\n\nToday it\u0027s not possible to use `ChangeToken.OnChange` to execute asynchronous logic before re-subscribing for new updates. The current API has a `Action\u003cT\u003e` based callback only (https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.primitives.changetoken.onchange?view=dotnet-plat-ext-6.0). We need an async overload to run async logic so people don\u0027t end up using async void or blocking when using this helper.\n\n### API Proposal\n\n```csharp\r\nnamespace Microsoft.Extensions.Primitives;\r\n\r\npublic static class ChangeToken\r\n{\r\n    public IDisposable OnChange(Func\u003cIChangeToken\u003e changeTokenProducer, Func\u003cTask\u003e changeTokenConsumer);\r\n    public IDisposable OnChange\u003cTState\u003e(Func\u003cIChangeToken\u003e changeTokenProducer, Func\u003cTState, Task\u003e changeTokenConsumer, TState state);\r\n}\r\n```\r\n\n\n### API Usage\n\n```csharp\r\nusing Microsoft.Extensions.Primitives;\r\n\r\nvar config = new ConfigurationBuilder().AddJsonFile(\"config.json\", optional: false, reloadOnChange: true)\r\n            .Build();\r\n\r\n_ = ChangeToken.OnChange(config.GetReloadToken, async () =\u003e\r\n{\r\n    await Task.Delay(1000);\r\n    Console.WriteLine(\"Change happened\");\r\n});\r\n```\r\n\n\n### Alternative Designs\n\n_No response_\n\n### Risks\n\nNone\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003edavidfowl\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`api-suggestion`, `area-System.Threading`, `untriaged`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2022-05-10T03:44:44Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5C5jCs",
+                                           "createdAt":  "2022-05-10T13:19:02Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-extensions-primitives\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Background and motivation\n\nToday it\u0027s not possible to use `ChangeToken.OnChange` to execute asynchronous logic before re-subscribing for new updates. The current API has a `Action\u003cT\u003e` based callback only (https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.primitives.changetoken.onchange?view=dotnet-plat-ext-6.0). We need an async overload to run async logic so people don\u0027t end up using async void or blocking when using this helper.\n\n### API Proposal\n\n```csharp\r\nnamespace Microsoft.Extensions.Primitives;\r\n\r\npublic static class ChangeToken\r\n{\r\n    public IDisposable OnChange(Func\u003cIChangeToken\u003e changeTokenProducer, Func\u003cTask\u003e changeTokenConsumer);\r\n    public IDisposable OnChange\u003cTState\u003e(Func\u003cIChangeToken\u003e changeTokenProducer, Func\u003cTState, Task\u003e changeTokenConsumer, TState state);\r\n}\r\n```\r\n\n\n### API Usage\n\n```csharp\r\nusing Microsoft.Extensions.Primitives;\r\n\r\nvar config = new ConfigurationBuilder().AddJsonFile(\"config.json\", optional: false, reloadOnChange: true)\r\n            .Build();\r\n\r\n_ = ChangeToken.OnChange(config.GetReloadToken, async () =\u003e\r\n{\r\n    await Task.Delay(1000);\r\n    Console.WriteLine(\"Change happened\");\r\n});\r\n```\r\n\n\n### Alternative Designs\n\n_No response_\n\n### Risks\n\nNone\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003edavidfowl\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`api-suggestion`, `untriaged`, `area-Extensions-Primitives`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2022-05-10T13:19:02Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5C7Xr7",
+                                           "createdAt":  "2022-05-10T21:06:21Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "maryamariyan",
+                                           "body":  "Marked for future. @davidfowl is this a critical feature for 7.0?",
+                                           "updatedAt":  "2022-05-10T21:06:21Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5C82_1",
+                                           "createdAt":  "2022-05-11T06:48:48Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOESI-yA==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "HEART",
+                                                                               "user":  "divinebovine",
+                                                                               "createdAt":  "2022-07-15T21:19:09Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "HEART",
+                                                                               "user":  "causer",
+                                                                               "createdAt":  "2022-12-08T23:28:01Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "HEART",
+                                                                               "user":  "TWhidden",
+                                                                               "createdAt":  "2023-01-12T20:13:21Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "HEART",
+                                                                               "user":  "m17kea",
+                                                                               "createdAt":  "2024-03-05T21:57:51Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "HEART",
+                                                                               "user":  "Was85",
+                                                                               "createdAt":  "2025-05-14T19:05:57Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  5
+                                                         },
+                                           "author":  "davidfowl",
+                                           "body":  "Critical, no but I can take it to API review and do the implementation if needed for .NET 7. It\u0027s currently a pit of failure (I filed this because I saw someone use it in a way that would fail).",
+                                           "updatedAt":  "2022-05-11T06:48:48Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5GMVcv",
+                                           "createdAt":  "2022-07-07T13:44:19Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOC8qdfA==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "masterged",
+                                                                               "createdAt":  "2023-05-29T18:15:58Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "lonix1",
+                                           "body":  "This would be highly appreciated!\r\n\r\nAnother use case. There\u0027s double detection of changes to `appsettings.json`. There are still open issues for that. Those issues and the docs recommend debouncing the detections. But using the change token approach needs an async overload. (I documented the problem [here](https://stackoverflow.com/q/72898878/9971404)).",
+                                           "updatedAt":  "2022-07-07T13:44:19Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5OBfoK",
+                                           "createdAt":  "2022-11-09T16:24:19Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dazinator",
+                                           "body":  "I worked around this a while ago: https://github.com/dazinator/Changify/blob/develop/src/Changify/Extensions/ChangeTokenExtensions.cs\r\n\r\nBasically, in order to use `ChangeToken.OnChange` you need:\r\n\r\n- `Func\u003cIChangeToken\u003e` produces the token.\r\n- `Action`` is called when the token changes.\r\n\r\nSo I wrote the above extension method for `Func\u003cIChangeToken\u003e` so you can do this:\r\n\r\n```cs\r\nFunc\u003cIChangeToken\u003e changeTokenProducer = GetOrInjectThis();\r\n\r\nawait changeTokenProducer.WaitOneAsync();\r\n\r\n// token has been signalled do your async work here.\r\nawait MyStuff();\r\n\r\n// One draw back of this approach is that it\u0027s one execution at a time, i.e so to listen for the next signal you have to make this call again or refactor this into a loop so can be used similar to ChangeToken.OnChange style.\r\n\r\n await changeTokenProducer.WaitOneAsync();\r\n````\r\n\r\n\r\n\r\n",
+                                           "updatedAt":  "2022-11-09T16:28:07Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5OCyfr",
+                                           "createdAt":  "2022-11-09T20:44:25Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOCvX7_A==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "dazinator",
+                                                                               "createdAt":  "2022-11-10T13:38:48Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "davidfowl",
+                                           "body":  "One other idea is an IAsyncEnumerable approach?",
+                                           "updatedAt":  "2022-11-09T20:44:25Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5bDzeo",
+                                           "createdAt":  "2023-04-28T15:18:27Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dazinator",
+                                           "body":  "Here is the implementation I landed on: https://github.com/dazinator/Changify/blob/develop/src/Changify/Extensions/ChangeTokenExtensions.cs#L78\r\n\r\nThe reason the solution looks like this, to me, is basically because I was already familiar with this `WaitOneAsync` api - and did not want the cognitive load of trying to make an async equivalent to this: https://github.com/dotnet/runtime/blob/3aaebebb9b766bf15e936f29ab90686de7c21840/src/libraries/Microsoft.Extensions.Primitives/src/ChangeToken.cs#L55 or solving from first principles ;-)\r\n\r\nand a test: https://github.com/dazinator/Changify/blob/develop/src/Changify.Tests/ChangeTokenExtensionsTests.cs#L76\r\n\r\nSaying that, even though it seems to be functional, I don\u0027t like the fact it\u0027s creating two TCS\u0027s per async callback. \r\n\r\n- The reason there is a single long running background task is it made it easy to process each token in a sequence for the duration of the subscription.\r\n- The reason this long runnign outer task doesn\u0027t _directly_ await each async callback when a token is signalled, but instead schedules it as an independent task, is that this allows uncaught exceptions (e.g from the async callbacks) to be surfaced as they would do in the synchronous scenario, as shown in the test, whilst keeping the overall subscription alive- i.e the outer task will just continue to schedule the next task for the next token when the isolated task completes. So it was really me trying too keep the exception behaviour the same that lead me down the path of needed another TCS here. \r\n\r\nAll in all I think this will serve my purposes for now, until either:\r\n- I want to revist from first principles again (i.e without skewing myself to use WaitOneAsync)\r\n- The dotnet team releases something better!\r\n- I (or someone else) creates a different consumer api over the top of change tokens - maybe `IAsyncEnumerable` based, I could imagine enumerating through an IAsyncEnumerable in a long running background thread for example to process something asynchronously in each iteration in response to a change token firing - basically this would not look like the current ChangeToken.OnChange api.\r\n\r\n@davidfowl  \r\none thing which I was curious about is that.. the consumer could `unregister` from callbacks at any point on another thread for example. Meanwhile an async callback could about to be invoked, or could even be running. It felt to me like it might be nice to supply a `CancellationToken` into the callback which could be signalled if the consumer unsubscribes. However this isn\u0027t part of the api at present. Use case would be, the async task does something resource intensive, and if the consumer is no longer interested in being notified, perhaps thats another way of them indicating that even if a callback is currently running, they wish it to be terminated? I am not sure about this perhaps this a seperate thing that they can workaround via their own mechanisms - passing state and such.\r\n",
+                                           "updatedAt":  "2023-04-28T21:16:40Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5bFSc2",
+                                           "createdAt":  "2023-04-28T21:27:34Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dazinator",
+                                           "body":  "@davidfowl \r\nI am also just geenrally curious as to why this `OnChange` method was not implemented as an extension method to `Func\u003cIChangeToken\u003e` to aid discoverability e.g current usage is like:\r\n\r\n``` csharp\r\n            var producer = new Func\u003cIChangeToken\u003e(() =\u003e\r\n            {\r\n                return someToken\r\n            });\r\n            ChangeToken.OnChange(producer, () =\u003e { });           \r\n```\r\n\r\nNo big deal but you have to be aware `ChangeToken` concrete class exists with this static method to discover it.\r\nThe Extension method style is obvioulsy similar but has the advantage of removing an explicit argument, and is better for discoverability imho:\r\n\r\n```csharp\r\n            var producer = new Func\u003cIChangeToken\u003e(() =\u003e\r\n            {\r\n                return someToken\r\n            });            \r\n            producer.OnChange(async () =\u003e { });\r\n```\r\n\r\nThis is why the solution I linked above I have gone with an exension method approach, but want to know if there is some valid reasons against that..",
+                                           "updatedAt":  "2023-04-28T21:27:34Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5bKOjS",
+                                           "createdAt":  "2023-05-01T06:44:17Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "davidfowl",
+                                           "body":  "We don\u0027t usually add extension methods on delegate types. ",
+                                           "updatedAt":  "2023-05-01T06:44:17Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5eliFO",
+                                           "createdAt":  "2023-06-12T09:02:24Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dazinator",
+                                           "body":  "Some arguments for introducung an `IChangeTokenProducer` interface:\r\n\r\n- Extenion methods such as `OnChange` or `OnChangeAsync`, `OnWaitOneAsync` etc could be introduced without violating your policy.\r\n- A composite builder could be introduced in future, `CompositeChangeToken` is already a thing, but no builder api to compose seperate producers (sources) together into a single composite producer is available.\r\n- often producers have to be disposable because they wrap disposable resources for their lifetimes such as file watchers or database connections in order to actively signal tokens. `Func\u003cIChangeToken\u003e` is nice for composability but not so good for lifetime management ",
+                                           "updatedAt":  "2024-05-02T16:20:16Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5mbPfw",
+                                           "createdAt":  "2023-09-13T22:57:21Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Neme12",
+                                           "body":  "What would the implementation be? Await every single consumer sequentially? Or Task.WhenAll? I think the latter is a much better option. We don\u0027t need to artifically delay the callbacks until some other unrelated previous callback finished executing.",
+                                           "updatedAt":  "2023-09-13T22:57:21Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc51-xWm",
+                                           "createdAt":  "2024-03-05T18:28:37Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "m17kea",
+                                           "body":  "Is this still on the radar? ",
+                                           "updatedAt":  "2024-03-05T18:28:37Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6Tzzi3",
+                                           "createdAt":  "2024-11-15T20:03:08Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "brunom",
+                                           "body":  "Another pit of failure of `ChangeToken.OnChange` is that it exposes users either to missing updates or re-entrancy. If like in the API Usage here the user loads the data and then calls `ChangeToken.OnChange`, she misses updates after the load and before calling  `ChangeToken.OnChange`. If she calls `ChangeToken.OnChange` before the first load, a fast update can call `changeTokenConsumer` before load finishes.\n\nSo `ChangeToken.OnChange` also needs an overload that after calling `changeTokenProducer` to get the first token immediately calls `changeTokenConsumer` once. In code, [`ChangeTokenRegistration.ChangeTokenRegistration`](https://github.com/dotnet/runtime/blob/3aaebebb9b766bf15e936f29ab90686de7c21840/src/libraries/Microsoft.Extensions.Primitives/src/ChangeToken.cs#L64) should call `ChangeTokenRegistration` instead of `changeTokenProducer` and `RegisterChangeTokenCallback`.\n\n@dazinator I think your `ChangeTokenExtensions` misses updates because it ignores the careful order on [`ChangeTokenRegistration.OnChangeTokenFired`](https://github.com/dotnet/runtime/blob/3aaebebb9b766bf15e936f29ab90686de7c21840/src/libraries/Microsoft.Extensions.Primitives/src/ChangeToken.cs#L75)",
+                                           "updatedAt":  "2024-11-15T20:03:08Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6T0HEO",
+                                           "createdAt":  "2024-11-15T20:56:55Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "julealgon",
+                                           "body":  "Can we also add cancellation support when making this change?\n\nWe are in the process of improving our APIs by adding cancellation to many different places, and it always makes me sad when I encounter some `async` native API that doesn\u0027t take `CancellationToken`.",
+                                           "updatedAt":  "2024-11-15T20:56:55Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6T0PXc",
+                                           "createdAt":  "2024-11-15T21:19:41Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "brunom",
+                                           "body":  "Pass the `IDisposable` return value to `CancellationToken.Register` to get cancellation.",
+                                           "updatedAt":  "2024-11-15T21:19:41Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6T2iq1",
+                                           "createdAt":  "2024-11-16T12:45:25Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dazinator",
+                                           "body":  "This suggestion is a bit out there, but curious whether it would make more sense to pivot to IObservable rather than change tokens given all the issues. For example its very easy to compose over IObservable and do things like buffering, debouncing, and there is also System.Reactive.Async.\n\nI guess one could use this right now, when OnChange fires, push to an observable and compose over that instead rather than trying to do everything in changetoken land. So change tokens just become a source / producer for an observable.",
+                                           "updatedAt":  "2024-11-16T12:51:30Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6UEY_C",
+                                           "createdAt":  "2024-11-18T21:34:52Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "brunom",
+                                           "body":  "@julealgon Maybe you meant cancelling `changeTokenConsumer` when the `IChangeToken` changes so `ChangeToken.OnChange` can rerun `changeTokenConsumer` promptly? That is useful.",
+                                           "updatedAt":  "2024-11-18T21:34:52Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6UKPOZ",
+                                           "createdAt":  "2024-11-19T13:26:30Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOD7jjug==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "brunom",
+                                                                               "createdAt":  "2024-11-19T14:42:09Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "julealgon",
+                                           "body":  "\u003e [@julealgon](https://github.com/julealgon) Maybe you meant cancelling `changeTokenConsumer` when the `IChangeToken` changes so `ChangeToken.OnChange` can rerun `changeTokenConsumer` promptly? That is useful.\n\n@brunom  Correct. I want the callback execution itself to be cancellable, so no resources are wasted in case of a larger cancellation.",
+                                           "updatedAt":  "2024-11-19T13:26:30Z"
+                                       }
+                                   ],
+                         "totalCount":  19
+                     },
+        "title":  "[API Proposal]: Add async overload of ChangeToken.OnChange",
+        "labels":  [
+                       "api-suggestion",
+                       "area-Extensions-Primitives"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/78241",
+        "createdAt":  "2022-11-11T19:06:06Z",
+        "number":  78241,
+        "author":  "Jay-Madden",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2022-11-15T22:48:28Z",
+        "body":  "### Background and motivation\r\n\r\n## Background and Motivation\r\nAttempting to log a header value from Headers.TryGetValue in c#11 wont compile due to StringValues\r\n\r\nThis causes a rather nasty error with logging. Take this code \r\n```cs\r\nif (_httpContextAccessor.HttpContext!.Request.Headers.TryGetValue(\"Origin\", out var origin))\r\n{\r\n    _logger.LogInformation(\"Site Login Request Initialized from Url: {Origin}\", origin);\r\n}\r\n```\r\n\r\nOrigin will error here with error `Possible null reference argument for parameter \u0027args\u0027 in \u0027Microsoft.Extensions.Logging.LoggerExtensions`\r\n\r\nBecause of the implicit conversion to string?[]? here due to logging methods taking a params object[ as an argument: \r\n\r\nhttps://github.com/dotnet/runtime/blob/2b1f57e08b26879e4fa99670df078b77c848d9e0/src/libraries/Microsoft.Extensions.Primitives/src/StringValues.cs#L81\r\n\r\n but that cause is incredibly non obvious. \r\n\r\n\r\n### API Proposal\r\n\r\nNot 100% sure what a good design for this is, but the current ergonomics are incredibly unpleasant. Having a struct that can represent null but implicitly converts to a ref type when targeting object/string is quite annoying. \r\n\r\nPerhaps an implicit conversion to an empty array for conversions to a non nullable object array.\r\n```cs\r\n        public static implicit operator object?[] (StringValues value)\r\n        {\r\n            return value.GetArrayValue() ?? new object[]{};\r\n        }\r\n``` \r\n\r\nJust throwing something out there, this has its own problems\r\n\r\n### API Usage\r\n\r\nSame as current, just different overload selected what passed to logging methods\r\n\r\n### Alternative Designs\r\n\r\nA named method could be a decent compromise here, while still a breaking change at least its visible.\r\n```cs\r\n\r\npublic object?[] AsStringArrayOrEmpty(StringValues value)\r\n{\r\n    value.GetArrayValue() ?? Array.Empty\u003cObject\u003e();\r\n}\r\n```\r\n\r\n### Risks\r\n\r\nChanging representations from null to empty array for specific conversions has the obvious implications of being a breaking change where the implicit null is a relied upon implementation detail.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOTm_4dg==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5ONMKs",
+                                           "createdAt":  "2022-11-11T19:06:10Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "I couldn\u0027t figure out the best area label to add to this issue. If you have write-permissions please help me learn by adding exactly one [area label](https://github.com/dotnet/runtime/blob/master/docs/area-owners.md).",
+                                           "updatedAt":  "2022-11-11T19:06:10Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5ONcEh",
+                                           "createdAt":  "2022-11-11T19:57:47Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Jay-Madden",
+                                           "body":  "Roslyn issue opened here https://github.com/dotnet/roslyn/issues/65369",
+                                           "updatedAt":  "2022-11-11T19:57:47Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5ONyeq",
+                                           "createdAt":  "2022-11-11T22:25:54Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-extensions-primitives\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Background and motivation\r\n\r\n## Background and Motivation\r\nAttempting to log a header value from Headers.TryGetValue in c#11 wont compile due to StringValues\r\n\r\nThis causes a rather nasty error with logging. Take this code \r\n```cs\r\nif (_httpContextAccessor.HttpContext!.Request.Headers.TryGetValue(\"Origin\", out var origin))\r\n{\r\n    _logger.LogInformation(\"Site Login Request Initialized from Url: {Origin}\", origin);\r\n}\r\n```\r\n\r\nOrigin will error here with error `Possible null reference argument for parameter \u0027args\u0027 in \u0027Microsoft.Extensions.Logging.LoggerExtensions`\r\n\r\nBecause of the implicit conversion to string?[]? here due to logging methods taking a params object[ as an argument: \r\n\r\nhttps://github.com/dotnet/runtime/blob/2b1f57e08b26879e4fa99670df078b77c848d9e0/src/libraries/Microsoft.Extensions.Primitives/src/StringValues.cs#L81\r\n\r\n but that cause is incredibly non obvious. \r\n\r\n\r\n### API Proposal\r\n\r\nNot 100% sure what a good design for this is, but the current ergonomics are incredibly unpleasant. Having a struct that can represent null but implicitly converts to a ref type when targeting object/string is quite annoying. \r\n\r\nPerhaps an implicit conversion to an empty array for conversions to a non nullable object array.\r\n```cs\r\n        public static implicit operator object?[] (StringValues value)\r\n        {\r\n            return value.GetArrayValue() ?? new object[]{};\r\n        }\r\n``` \r\n\r\nJust throwing something out there, this has its own problems\r\n\r\n### API Usage\r\n\r\nSame as current, just different overload selected what passed to logging methods\r\n\r\n### Alternative Designs\r\n\r\nA named method could be a decent compromise here, while still a breaking change at least its visible.\r\n```cs\r\n\r\npublic object?[] AsStringArrayOrEmpty(StringValues value)\r\n{\r\n    value.GetArrayValue() ?? Array.Empty\u003cObject\u003e();\r\n}\r\n```\r\n\r\n### Risks\r\n\r\nChanging representations from null to empty array for specific conversions has the obvious implications of being a breaking change where the implicit null is a relied upon implementation detail.\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003eJay-Madden\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`api-suggestion`, `untriaged`, `area-Extensions-Primitives`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2022-11-11T22:25:54Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5Ob_h2",
+                                           "createdAt":  "2022-11-15T22:37:50Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "RikkiGibson",
+                                           "body":  "Many conversion operators use NotNullIfNotNullAttribute to indicate that the conversion result is always not-null if the conversion operand is not-null. Is that something that should be used here?\r\n\r\nedit: oh, StringValues is a struct type, I think there\u0027s nothing to improve here in terms of annotations :)",
+                                           "updatedAt":  "2022-11-15T22:48:28Z"
+                                       }
+                                   ],
+                         "totalCount":  4
+                     },
+        "title":  "[API Proposal]: StringValues implicit conversion to string?[]? causes confusing error with Logging methods",
+        "labels":  [
+                       "api-suggestion",
+                       "area-Extensions-Primitives"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/119370",
+        "createdAt":  "2025-09-04T21:57:16Z",
+        "number":  119370,
+        "author":  "vsfeedback",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-09-19T17:14:20Z",
+        "body":  "_This issue has been moved from [a ticket on Developer Community](https://developercommunity.visualstudio.com/t/SystemStackOverflowException-in-System/10774059)._\n\n---\n[severity:It bothers me. A fix would be nice] [regression] [worked-in:17.11.5]\nAfter the application starts correctly (blazor based on net 8 updated to the latest version of the libraries) an internal problem occurs (System.StackOverflowException) that is not originated by my code.\nThis error occurs after some time that the application does not make requests and in the stack it starts with the following call:\nSystem.Private.CoreLib.dll!System.Threading.PortableThreadPool.WorkerThread.WorkerThreadStart()\n\nAnd loop in the function:\nSystem.Private.CoreLib.dll!System.Threading.CancellationTokenSource.Invoke(System.Delegate d, object state, System.Threading.CancellationTokenSource source)\n\nSee VSStackImage1 and VSStackImage2 images with the stack highlighted with red line\n\n---\n### Original Comments\n\n#### Feedback Bot on 10/23/2024, 02:47 AM: \n\n\u003cp\u003eWe have directed your feedback to the appropriate engineering team for further evaluation. The team will review the feedback and notify you about the next steps.\u003c/p\u003e\n\n#### Feedback Bot on 2/8/2025, 05:40 AM: \n\n\u003cp\u003eWe detected that this issue hasn’t received a lot of activity, votes, or comments in the past 90 days. Based on this, the issues severity and affected area, it’s my experience that this issue is unlikely to get fixed. To improve the situation, consider following best practices for quality problem reports, and giving us more details on how this issue is impacting you.\u003c/p\u003e\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOxXjT9Q==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc7CPr4I",
+                                           "createdAt":  "2025-09-05T16:04:05Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-extensions-primitives\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2025-09-05T16:04:05Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc7CPwfB",
+                                           "createdAt":  "2025-09-05T16:10:19Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "tarekgh",
+                                           "body":  "\u003cimg width=\"1847\" height=\"922\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/a38b3adc-cdd1-4e45-b3bd-355db95f8d0e\" /\u003e\n\n\u003cimg width=\"1852\" height=\"931\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/e78dfd5d-f4e3-413e-8af5-3dd971d65abc\" /\u003e",
+                                           "updatedAt":  "2025-09-05T16:10:19Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc7CQA6Y",
+                                           "createdAt":  "2025-09-05T16:35:58Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "tarekgh",
+                                           "body":  "I pinged the issuer of the issue on https://developercommunity.visualstudio.com/t/SystemStackOverflowException-in-System/10774059 to provide a sample repro for the problem. It is unactionable till we get the repo. Thanks!",
+                                           "updatedAt":  "2025-09-05T16:35:58Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc7CQBQt",
+                                           "createdAt":  "2025-09-05T16:36:27Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "This issue has been marked `needs-author-action` and may be missing some important information.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2025-09-05T16:36:27Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc7FeNP1",
+                                           "createdAt":  "2025-09-19T17:14:20Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "This issue has been automatically marked `no-recent-activity` because it has not had any activity for 14 days. It will be closed if no further activity occurs within 14 more days. Any new comment (by anyone, not necessarily the author) will remove `no-recent-activity`.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2025-09-19T17:14:20Z"
+                                       }
+                                   ],
+                         "totalCount":  5
+                     },
+        "title":  "System.StackOverflowException in System.Private.CoreLib.dll",
+        "labels":  [
+                       "area-Extensions-Primitives",
+                       "no-recent-activity",
+                       "needs-author-action"
+                   ]
+    }
+]

@@ -1,0 +1,785 @@
+﻿[
+    {
+        "url":  "https://github.com/dotnet/aspire/issues/4132",
+        "createdAt":  "2024-05-09T12:27:54Z",
+        "number":  4132,
+        "author":  "JohnGalt1717",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHODIo-og==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "martincostello",
+                                            "createdAt":  "2024-05-11T17:09:39Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "programmation",
+                                            "createdAt":  "2024-05-13T23:04:21Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "YohanSciubukgian",
+                                            "createdAt":  "2025-02-12T18:45:16Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "LeszekKalibrate",
+                                            "createdAt":  "2025-02-27T11:43:58Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "jonmikeli",
+                                            "createdAt":  "2025-04-09T08:28:53Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "DillonN",
+                                            "createdAt":  "2025-07-27T02:20:58Z"
+                                        }
+                                    ],
+                          "totalCount":  6
+                      },
+        "updatedAt":  "2025-06-14T05:55:16Z",
+        "body":  "One of the hardest things to do in K8s and other orchestrators (amongst others) is certificate management. And this isn\u0027t just at the ingress.  Best practices say that all coms within your k8s cluster should be encrypted and you should be using certificate validation because of the hacks against containers that can compromise your entire cluster.\r\n\r\nThere is a solution to this in the k8s world: cert-manager.  And in Azure it\u0027s KeyVault certificates.\r\n\r\nIn an ideal world, we would be able to define in Aspire Host something like the following:\r\n\r\nvar ca =  .AddCA({some params});\r\n\r\nThen, on each Micro Service/Resource add \r\n   .AddSigningCert(ca)\r\n   .AddCommsCert(ca)\r\n   \r\nAnd then\r\n\r\n.AddYarp()\r\n.AddSigningCert(ca)\r\n.AddPublicCert(domains, or whatever)\r\n\r\n\r\nFor developers, what this would do is use step-ca or something similar in a docker container, and then spin the certs from there for the whole thing, and on the Yarp ingress those certs would be added to trust on every platform (I know, hard on Linux, but do it anyhow please)\r\n\r\nAnd this would then generate the manifest information that would be necessary for Azure/AWS/Aspirate etc. to create the ingress, and setup all of the tooling internally and map it. \r\n\r\nI.e. in K8s this would spin cert-manager, define the CA resource, define certificates for each of the micro services spun from the cert-manager CA, setup Yarp for ingress, define all of the micro-services endpoints on that Yarp instance, and use cert-manager to acquire the cert from Azure KeyVault/let\u0027s encrypt/AWS\u0027s version etc.\r\n\r\nYou would be a hero if this worked, and you\u0027d be providing people with a HUGE reason to use C# in the world of micro-services and orchestration.  \r\n\r\nWhile I understand this is probably not doable for V1, it would be the next major win for V2 to have this because it squares the circle of everything other than just plain secrets and configmaps and is THE hardest thing to get right in this space.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOi0qbsg==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDOKYQzfc59uPqz",
+                                           "createdAt":  "2024-05-14T04:47:05Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "webprofusion-chrisc",
+                                           "body":  "A primary main concern for certificate setup is how you acquire the cert and keep it fresh, issuing a new cert on service startup is a massive no-no if using a public CA and instead you should probably pull from a secrets vault (otherwise you will quickly achieve your own denial-of-service via rate limits for issuance). Likewise if a service is long lived then it needs to refresh it\u0027s certificate(s) periodically. E.g. some CAs might issue a 24hr cert that would reasonably expire before the next service restart.\r\n\r\nIf issuance is outside the scope, then generically it\u0027s a secrets fetch/refresh problem. If issuance is in scope then you would need generic cert lifetime management hooks. Certs are typically for dns identifiers but they can cover many other things too, issuance can take seconds, minutes or hours (depending on the CA issuance process), so you can\u0027t block on issuance/renewal anywhere.\r\n\r\nBackground: I make a dotnet based ACME cert manager (for windows) and we have prototype k8s stuff, but it\u0027s clearly not a k8s specific problem.",
+                                           "updatedAt":  "2024-05-14T04:47:05Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc59x7a6",
+                                           "createdAt":  "2024-05-14T13:24:05Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "JohnGalt1717",
+                                           "body":  "So @webprofusion-chrisc did i miss anything that I should update in my proposal above?  My concept is that it\u0027s declaritive, and at dev time it\u0027s really spinning docker containers that do the CA and everything else, and then it just dumps the config, and then Aspirate etc. would then go and orchastrate cert-manager on k8s as an example, and Azure could do the same with Azure KeyVault.  (and there could be permutations with k8s and Azure Keyvault which can map those certs to file shares if you want)\r\n\r\nThis would abstract out what\u0027s actually happening, while doing the right work.\r\n\r\nOn spin up, it just loads the cer/key from the mapped directory into the containers with the mappings on the resources, the CA is responsible for (and should block until) it has refreshed all tokens on spin up in dev, and in k8s etc, that\u0027s a service that\u0027s running automatically doing it.",
+                                           "updatedAt":  "2024-05-14T13:24:05Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6LRKOi",
+                                           "createdAt":  "2024-09-08T03:34:41Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "davidfowl",
+                                           "body":  "cc @DamianEdwards @blowdart ",
+                                           "updatedAt":  "2024-09-08T03:34:41Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6LRbFu",
+                                           "createdAt":  "2024-09-08T08:40:51Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "webprofusion-chrisc",
+                                           "body":  "@JohnGalt1717 my main reticence about the idea is having CA as specific language as I feel they are step removed from aspire-land concerns. Secrets vaults (or perhaps well-known secrets like \u0027sql-server-connection-cert\u0027) seem like all that would be necessary.",
+                                           "updatedAt":  "2024-09-08T08:40:51Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6LRyB9",
+                                           "createdAt":  "2024-09-08T13:50:36Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "JohnGalt1717",
+                                           "body":  "@webprofusion-chrisc the purpose of Aspire is to make working in development like it\u0027s a production environment as easy as possible and being able to translate that design to production quickly and simply. Be that with Azure bicep or Aspir8, doesn\u0027t matter.\r\n\r\nIn all of those environments you will need to define certificates for many things (i.e. in k8s the docs clearly state that you should still be using TLS for all services internal coms because of security issues inside of k8s if someone gets inside the firewall).  DataProtection requires a certificate, OpenIddict and all OpenIDConnect implementations require certificates, most databases will require a client certificate to be configured correctly and securely.\r\n\r\nEven using YARP you need to issue a locally trusted certificate for development (i.e. you can use .net dev cert but...) and you need to be able to request your publicly trusted certificate from your cert store.  Aspire being able to have a language that can be used to express both of these is invaluable.\r\n\r\nThere could be multiple certificate providers supported, like AzureKeyVault can be the CA and issue certs. This could be one.  Cert-Manager on K8s is an obvious one too. I\u0027m sure AWS and Google Cloud also have the same.\r\n\r\nBeing able to spin up something that can be messaged for production of \"use your production way to create a certificate that does X,Y and Z\" is a baseline, otherwise it\u0027s outside of your configuration.  Being able to use something that is off the shelf and local for development and Testing instead of production/cloud issued is highly desirable just like local devs don\u0027t want to be using cloud Postgres for debugging.\r\n\r\n\r\nSo Building a CA and then issuing Certs and being able to share those certs between services is super valuable because it happens everywhere all the time in the real world.  And it makes testing sooo much better in your CI/CD pipeline too if done right.\r\n\r\n(secrets are the same, but separate request)",
+                                           "updatedAt":  "2024-09-08T13:52:16Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6LSpuy",
+                                           "createdAt":  "2024-09-09T01:16:58Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "webprofusion-chrisc",
+                                           "body":  "It could be that you\u0027re just using the term CA differently to how I interpret it. In my vocabulary a CA is a very high level part of the issuance food chain and is _not_ an interchangeable terms for a secrets store or other cert cache etc because a CA is literally a trusted _authority_, not a cert store.\r\n\r\nThe artifacts that really matter from a CA are it\u0027s issuing root, intermediates (possibly no need for those in dev) and your end-entity/leaf, which amounts to maybe 100 lines of code to simulate. \r\n\r\nOne thing that\u0027s making nervous about CA specific language for dependencies is that people often do (incorrectly) design container based solutions to _issue_  new certs on startups (instead of just pulling the latest), so if you have CI/CD which need trusted certs you can hit the public CA rate limit very quickly and I guess I\u0027m trying to encourage architectures that can be started up 100s of times per day. My own (aspire enabled) k8s development spins up 100-200 instances multiple times per day, on a single machine.",
+                                           "updatedAt":  "2024-09-09T01:16:58Z"
+                                       }
+                                   ],
+                         "totalCount":  6
+                     },
+        "title":  "Feature: Make Certificates first class citizens",
+        "labels":  [
+                       "area-meta"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspire/issues/4984",
+        "createdAt":  "2024-07-19T12:38:22Z",
+        "number":  4984,
+        "author":  "gentledepp",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHODH22FQ==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "rikbosch",
+                                            "createdAt":  "2024-07-24T13:26:01Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "willl",
+                                            "createdAt":  "2025-04-25T07:09:16Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "samrueby",
+                                            "createdAt":  "2025-05-28T16:44:18Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "nycdotnet",
+                                            "createdAt":  "2025-07-21T19:46:30Z"
+                                        }
+                                    ],
+                          "totalCount":  4
+                      },
+        "updatedAt":  "2025-01-15T08:23:50Z",
+        "body":  "### Is there an existing issue for this?\n\n- [X] I have searched the existing issues\n\n### Is your feature request related to a problem? Please describe the problem.\n\nThe aspire host allows me to also start basic .net 4.8 console and mvc projects.\r\nBut \r\n* for the MVC project it shows no endpoints in the Dashboard\r\n* and adding opentelemetry incl OTLP exporer did not allow me to see any traces.\r\n\r\nSee this discrussion for reference\r\n#4842 \r\n\n\n### Describe the solution you\u0027d like\n\nBest option:\r\nVS support for adding Aspire to an existing Asp.NET MVC project.\r\n\r\nGood enough:\r\nA step-by-step tutorial in how to set this up.\r\nI tried but failed unfortunately.\n\n### Additional context\n\n\r\nBackground information: We are trying to migrate an asp.net MVC app to Asp.Net Core using the [recommended approach](https://learn.microsoft.com/en-us/aspnet/core/migration/mvc?view=aspnetcore-8.0)\r\n\r\nThereby it would be nice if we could use Aspire to develop and run the old and new web app and also see which calls end up where (strangler fig pattern)",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOmIlFLQ==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6F_Mlh",
+                                           "createdAt":  "2024-07-24T13:27:39Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "rikbosch",
+                                           "body":  "Might be related to #4309 ?",
+                                           "updatedAt":  "2024-07-24T13:27:39Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6GcePI",
+                                           "createdAt":  "2024-07-29T10:52:29Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Sebbs128",
+                                           "body":  "I\u0027ve been working on a proof of concept to see how getting ASP.NET projects might work with Aspire. It\u0027s currently published to https://github.com/Sebbs128/AspireNetFramework. It\u0027s based a little on an IIS Express-based resource David Fowler shared in another issue/discussion (but pulls the existing site configs VS uses from `.vs/{solution name}/config/applicationhost.config`).\r\n\r\nI\u0027m definitely interested in trying to develop this further in a community-maintained library, as I don\u0027t believe MS understandably wants to support legacy ASP.NET in the main Aspire repo/packages.",
+                                           "updatedAt":  "2024-07-29T10:52:29Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6GgRL6",
+                                           "createdAt":  "2024-07-29T18:15:38Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "CZEMacLeod",
+                                           "body":  "This looks like a good start. I did some work to try and do something similar myself, but I was struggling to enumerate the PID for IISExpress after it launched, or work out how to tell VS to attach to it.\r\nHave you tried with the [MSBuild.SDK.SystemWeb](https://github.com/CZEMacLeod/MSBuild.SDK.SystemWeb) project type for your AspNet 4.x side?\r\nI did manage to inject all the OTEL / OTLP stuff and get the AspNet logging etc. working well with the Aspire dashboard.",
+                                           "updatedAt":  "2024-07-29T18:15:38Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6Gj3eX",
+                                           "createdAt":  "2024-07-30T06:14:54Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Sebbs128",
+                                           "body":  "I haven\u0027t tried with MSBuild.SDK.SystemWeb (I kind of forgot it exists 😅 Last I looked at it there was either some missing things that we needed or it was a bit too unofficial for us, but that\u0027s another conversation). So far I was trying to keep the project file within the realm of \"supported\" (eg. still using packages.config instead of PackageRef, although I know how to trick VS into upgrading a legacy-style ASP.NET project), since I figure that will be most projects that might use a potential future library.\r\n\r\nI\u0027d love to take a look at the OTEL/OTP stuff if you have any examples of what you did to get that working.\r\n\r\nAttaching VS to IISExpress is another thing I haven\u0027t yet figured out; manually attaching via Debug-\u003eAttach to process works fine, but I\u0027m planning on seeing if things like [these SO answers](https://stackoverflow.com/questions/19658269/visual-studio-attach-to-managed-process-programmatically) will work.",
+                                           "updatedAt":  "2024-07-30T06:14:54Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6HkLpv",
+                                           "createdAt":  "2024-08-07T21:49:14Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODtOigA==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "rikbosch",
+                                                                               "createdAt":  "2024-08-08T07:23:43Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "CZEMacLeod",
+                                           "body":  "@Sebbs128 Used a little bit of your example to redo [my implementation](https://github.com/CZEMacLeod/C3D.Extensions.Aspire.IISExpress)\r\nThere are a couple of examples there (they both use [MSBuild.SDK.SystemWeb](https://github.com/CZEMacLeod/MSBuild.SDK.SystemWeb) 😉)\r\nMy biggest issue is that I have 2 ways to try and get a debugger attached, and neither are very satisfactory. I don\u0027t know how to hook the IDE integration bit to attach to the PID - maybe better minds (or at least those more familiar with the DCP/Aspire inner workings) can enlighten me on this bit 😁.\r\n\r\nThe SO answers given require an Extension running in VS - you could try and create a WebApi of some kind in an extension to listen and attach, but I kind of think that is part of the VS integration already part of Aspire, so it would be a bit of reinventing the wheel.\r\nPerhaps we can get more info on how to use the native implementation of this and use that.\r\nI welcome feedback on the techniques, and the samples.",
+                                           "updatedAt":  "2024-08-07T21:49:14Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6HnRuK",
+                                           "createdAt":  "2024-08-08T08:13:54Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "gentledepp",
+                                           "body":  "What are you guys talking about?\r\nI just added aspire to my old ASP.NET MVC based solution, run the app host:\r\n```csharp\r\nvar builder = DistributedApplication.CreateBuilder(args);\r\n\r\nbuilder.AddProject\u003cProjects.iCL_Portal_Reporting_Host\u003e(\"dubidu-reporting-host\"); // a .NET 4.8 based console app\r\n\r\nbuilder.AddProject\u003cProjects.iCL_Portal_Web\u003e(\"dubidu-web\"); // an ASP.NET 4.8 web application \r\n\r\nbuilder.Build().Run();\r\n\r\n\r\n```\r\n\r\nAnd I _am_ attached with my debugger to IIS just fine.\r\nI did not have to do anything.\r\n\r\nAre we talking about the same thing here?\r\n\r\nHow exactly do you get your ASP.NET MVC apps traces and logs to the dashboard?",
+                                           "updatedAt":  "2024-08-08T08:13:54Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6Hp5IE",
+                                           "createdAt":  "2024-08-08T13:59:01Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOEDSKyA==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "hyporia",
+                                                                               "createdAt":  "2025-01-20T16:51:53Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "CZEMacLeod",
+                                           "body":  "@gentledepp Yes - you can add a legacy project format to aspire (although I don\u0027t think this worked originally). \r\nIt does not pick up the endpoints automatically however.\r\n\r\nYou have 2 things to do to get the telemetry back.\r\n1. Ensure you are running on http not https (there is an issue with grpc over https on net framework)\r\n2. Setup the telemetry in your `HttpApplication` `Application_Start` method (`global.asax.cs`).\r\n\r\nI\u0027ve added an example to [C3D.Extensions.Aspire.IISExpress](https://github.com/CZEMacLeod/C3D.Extensions.Aspire.IISExpress).\r\n\r\nYou can do step 2 either the same way as the `SimpleMVC` example, or I\u0027ve created a library with an inheritable `OpenTelemeteryApplication` which does all the hook up for you.\r\n\r\nThe problem is that if you use an SDK format project for ASP.Net 4.x, Aspire cannot handle the LaunchProfiles correctly.\r\nYou either get\r\n\u003e Missing components to configure and manage IIS express.\r\n\r\nor\r\n\r\n\u003e Unable to cast object of type \u0027Microsoft.WebTools.ProjectSystem.WebServer.IISExpressWebServer\u0027 to type \u0027Microsoft.WebTools.ProjectSystem.IWebServerDebuggingSupport\u0027.",
+                                           "updatedAt":  "2024-08-08T13:59:01Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6YiUUt",
+                                           "createdAt":  "2024-12-23T08:17:39Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "patiqs",
+                                           "body":  "\u003e 1. Ensure you are running on http not https (there is an issue with grpc over https on net framework)\n\nIs there a plan to support HTTPS for GRPC in .NET framework? I created an MVP that can be compiled with net48 and net8 too.\nBoth works with HTTP, but NET48 doesn\u0027t work with HTTPS.\n\nHere is my MVP that works with http, but https:\n\nProject.cs :\n```c#\nEnvironment.SetEnvironmentVariable(\"OTEL_EXPORTER_OTLP_ENDPOINT\", \"https://localhost:4317\");\n\nvar builder = Host.CreateApplicationBuilder();\nbuilder.Services.AddOpenTelemetry().UseOtlpExporter() ;\n\nvar app = builder.Build();\n\nawait app.RunAsync();\n``` \nTestApp.csproj:\n```c#\n\u003cProject Sdk=\"Microsoft.NET.Sdk.Web\"\u003e\n  \u003cPropertyGroup\u003e\n    \u003cOutputType\u003eExe\u003c/OutputType\u003e\n    \u003cTargetFrameworks\u003enet8.0;net48\u003c/TargetFrameworks\u003e\n  \u003c/PropertyGroup\u003e\n  \u003cItemGroup\u003e\n    \u003cPackageReference Include=\"Microsoft.Extensions.Hosting\" Version=\"9.0.0\" /\u003e\n    \u003cPackageReference Include=\"OpenTelemetry.Exporter.OpenTelemetryProtocol\" Version=\"1.10.0\" /\u003e\n  \u003c/ItemGroup\u003e\n\u003c/Project\u003e\n``` \n\ndocker-compose-aspire.yml\n```dockerfile\n#run with :  docker-compose -f docker-compose-aspire.yml up -d\nservices:\n  aspire-dashboard:\n    image: mcr.microsoft.com/dotnet/aspire-dashboard:9.0\n    environment:\n      - DOTNET_DASHBOARD_OTLP_ENDPOINT_URL=https://[::]:18889\n      - ASPNETCORE_URLS=https://+\n      - ASPNETCORE_HTTPS_PORTS=443\n      - ASPNETCORE_Kestrel__Certificates__Default__Password=****\n      - ASPNETCORE_Kestrel__Certificates__Default__Path=/etc/aspire/otel01.pfx\n    volumes:\n      - ./config:/etc/aspire\n    ports:\n      - 4317:18889\n      - 443:443\n    networks:\n      - aspiredashboardnet\n    restart: always\nnetworks:\n  aspiredashboardnet:\n``` ",
+                                           "updatedAt":  "2024-12-23T08:39:33Z"
+                                       }
+                                   ],
+                         "totalCount":  8
+                     },
+        "title":  "Support legacy Asp.Net MVC and console (e.g. topshelf) projects for simpler upgrade from NetFX to Net Core/8",
+        "labels":  [
+                       "area-meta"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspire/issues/6232",
+        "createdAt":  "2024-10-10T13:35:06Z",
+        "number":  6232,
+        "author":  "stephentoub",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-05-28T06:29:45Z",
+        "body":  "### Is there an existing issue for this?\n\n- [x] I have searched the existing issues\n\n### Describe the bug\n\nThe OpenAIClient that Aspire registers in DI doesn\u0027t respect other services registered in DI, in particular HttpClient. That means any configuration for HttpClient, such as resiliency pipelines from Microsoft.Extensions.Http.Resilience, an ILogger plugged into that HttpClient\u0027s logging, and so on, end up not being respected.\n\n### Expected Behavior\n\nIf no options were provided in DI explicitly, the Aspire component should respect any HttpClient that was registered in DI. Here\u0027s what Semantic Kernel does, for example:\nhttps://github.com/microsoft/semantic-kernel/blob/cd40e2e079f1a657b25334e004f3c2e36f24a59c/dotnet/src/Agents/OpenAI/OpenAIClientProvider.cs#L130-L140\nturning off the built-in resiliency mechanisms of OpenAIClient and instead deferring to the HttpClient and the policies configured for it.\n```C#\n    private static void ConfigureClientOptions(HttpClient? httpClient, ClientPipelineOptions options)\n    {\n        options.AddPolicy(CreateRequestHeaderPolicy(HttpHeaderConstant.Names.SemanticKernelVersion, HttpHeaderConstant.Values.GetAssemblyVersion(typeof(OpenAIAssistantAgent))), PipelinePosition.PerCall);\n\n        if (httpClient is not null)\n        {\n            options.Transport = new HttpClientPipelineTransport(httpClient);\n            options.RetryPolicy = new ClientRetryPolicy(maxRetries: 0); // Disable retry policy if and only if a custom HttpClient is provided.\n            options.NetworkTimeout = Timeout.InfiniteTimeSpan; // Disable default timeout\n        }\n    }\n```\n\n### Steps To Reproduce\n\n_No response_\n\n### Exceptions (if any)\n\n_No response_\n\n### .NET Version info\n\n_No response_\n\n### Anything else?\n\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOj8CPOQ==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6PYIYE",
+                                           "createdAt":  "2024-10-10T15:41:32Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "eerhardt",
+                                           "body":  "@annelo-msft @tg-msft @jsquire @KrzysztofCwalina @davidfowl @DamianEdwards - thoughts on how to think about the difference between the Azure.Core / System.ClientModel Http pipeline and the Http options configured via Microsoft.Extensions.Http (for example Microsoft.Extensions.Http.Resilience)?",
+                                           "updatedAt":  "2024-10-10T15:41:32Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6PYX0X",
+                                           "createdAt":  "2024-10-10T16:12:05Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOD1oScQ==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "jsquire",
+                                                                               "createdAt":  "2024-10-10T16:59:33Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "annelo-msft",
+                                           "body":  "We are currently working on AddClient extensions for SCM-based clients to support this and other DI scenarios.  These will support scenarios like this out of the box, and we hope the Aspire team will call these once available from Aspire component extensions.\n\nIn the meantime, I believe there\u0027s a relatively straightforward short term fix -- in [AspireOpenAIExtensions.cs](https://github.com/dotnet/aspire/blob/main/src/Components/Aspire.OpenAI/AspireOpenAIExtensions.cs#L127), I believe you should be able to check whether an HttpClient has been added to the service collection, and if it has, add a custom transport to the client options that uses the injected HttpClient.  The latter would look similar to the sample @stephentoub shared that SK is doing:\n\n```csharp\n  options.Transport = new HttpClientPipelineTransport(httpClient);\n```\n\nLet me know if this approach won\u0027t work for some reason.  Thanks!",
+                                           "updatedAt":  "2024-10-10T16:12:17Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6PZUuq",
+                                           "createdAt":  "2024-10-10T18:29:13Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "annelo-msft",
+                                           "body":  "Per offline conversation, this approach risks overwriting important Azure/SCM client default HttpClient settings, as well as silently ignoring service-specific resiliency settings provided by client authors.  We will need to evaluate and make a plan for dealing with redundant functionality provided by Azure.Core/SCM defaults and Azure/SCM client authors vs an injected HttpClient before considering this a viable approach.",
+                                           "updatedAt":  "2024-10-10T18:29:13Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6PZkdo",
+                                           "createdAt":  "2024-10-10T19:06:58Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "stephentoub",
+                                           "body":  "\u003e Per offline conversation, this approach risks overwriting important Azure/SCM client default HttpClient settings, as well as silently ignoring service-specific resiliency settings provided by client authors. We will need to evaluate and make a plan for dealing with redundant functionality provided by Azure.Core/SCM defaults and Azure/SCM client authors vs an injected HttpClient before considering this a viable approach.\n\nI think there are two conversations here: generally with regards to any possible SCM use, and specifically with regards to OpenAI.\n\nAre there OpenAI-specific policies that the approach in the opening post will overwrite?\n\nMy take is that this is an Aspire component, and Aspire has opinions about how all of this stuff should behave, which includes registering resilience policies in DI and using HttpClient from DI. Unless there\u0027s something else we\u0027re concerned would get overwritten, I\u0027d posit the right answer for now is for the Aspire.OpenAI component to grab the HttpClient from DI and use it to configure the OpenAIClientOptions, including disabling the OpenAIClient\u0027s built-in resilience mechanisms.",
+                                           "updatedAt":  "2024-10-10T19:07:42Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6PZr7w",
+                                           "createdAt":  "2024-10-10T19:25:13Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "annelo-msft",
+                                           "body":  "SCM does add custom settings to its default HttpClient in the same way that Azure.Core does.  We would need to provide a mechanism to maintain these settings.\n\nI am also concerned that -- while there aren\u0027t policies today I\u0027m aware of that have conflicting functionality with HttpClient -- this space is rapidly evolving and it seems likely that we could discover a need to customize e.g. retriable status codes.  Aspire may have a specific approach to this, but the OpenAI .NET client needs to function correctly outside of an Aspire context as well.  Depending on custom HttpClient injection prior to addressing the \"merge functional conflicts\" problem could cause changes/bug fixes made to the OpenAI .NET client to fail in Aspire components.",
+                                           "updatedAt":  "2024-10-10T19:25:54Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6PbBYa",
+                                           "createdAt":  "2024-10-10T23:34:33Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "stephentoub",
+                                           "body":  "\u003e SCM does add custom settings to its default HttpClient in the same way that Azure.Core does. We would need to provide a mechanism to maintain these settings.\n\nSpecific to OpenAIClient, can you elaborate on exactly what these are?\n\nThis issue is in the context of Aspire, and from my perspective one of the main purposes of Aspire integrations is to configure components in a consistent manner throughout Aspire apps. That includes defaulting the HTTP pipeline to include standard resiliency mechanisms, and respecting any and all configuration others do to the HTTP pipeline in the DI container. If someone wants to inject their own OpenAIClient with their own policy, they can, rather than using the Aspire helper to do so. If someone wants to configure the injected OpenAIClienOptions so that the Aspire helper uses that when constructing a client, they can. I simply want it to be case that doing the default thing with the Aspire.OpenAI component respects what\u0027s in DI. I find it very surprising when I resolve one of these OpenAIClients the Aspire component configured that it doesn\u0027t pay attention to any of the other handiers I\u0027ve explicitly configured in DI via the rest of the Microsoft.Extensions.* libraries.\n\nIf the Aspire component doesn\u0027t do this, I think we\u0027ll find that customers do. Customers already are, as highlighted by the SK example.",
+                                           "updatedAt":  "2024-10-10T23:41:16Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6Pgdjq",
+                                           "createdAt":  "2024-10-11T15:27:52Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "annelo-msft",
+                                           "body":  "\u003e one of the main purposes of Aspire integrations is to configure components in a consistent manner throughout Aspire apps\n\nI love consistency!  But it wouldn\u0027t be consistent with Azure components, correct?  If we haven\u0027t solved the general problem for Azure.Core?",
+                                           "updatedAt":  "2024-10-11T15:27:52Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6PgxZP",
+                                           "createdAt":  "2024-10-11T16:16:02Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "stephentoub",
+                                           "body":  "\u003e \u003e one of the main purposes of Aspire integrations is to configure components in a consistent manner throughout Aspire apps\n\u003e \n\u003e I love consistency! But it wouldn\u0027t be consistent with Azure components, correct? If we haven\u0027t solved the general problem for Azure.Core?\n\nI think the Azure.Core ones should default to using HttpClient from DI as well.\n\nBut OpenAIClient is also _not_ Azure. Yes, Azure has a derivative, but we shouldn\u0027t be making decisions about OpenAI based on what Azure\u0027s needs are.",
+                                           "updatedAt":  "2024-10-11T16:16:02Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6PwI85",
+                                           "createdAt":  "2024-10-14T16:43:31Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "annelo-msft",
+                                           "body":  "\u003e we shouldn\u0027t be making decisions about OpenAI based on what Azure\u0027s needs are\n\nNot in the abstract sense, no -- I completely agree that conceptually Azure and third-party services should be independent.  But in this concrete instance, both the OpenAI .NET client and the Azure.AI.OpenAI .NET client are SCM-based clients, and I believe SCM-based clients should all behave the same way, regardless of what platform users are working with.  Azure clients being Azure.Core-based make them SCM-based as well, so I think it will be broadly beneficial to solve the SCM/HttpClient integration problem before moving forward with this.\n\nOne example of an undesirable behavior that could happen today by injecting HttpClient as currently proposed for OpenAI is if an end-user wanted to customize the OpenAI client retry policy.  Aspire setting a custom retry policy on the OpenAI client to disable the SCM pipeline\u0027s retry policy would overwrite the user-specified policy.  I think at a minimum we would want to detect this case and throw an exception to allow the application developer to intervene, vs. failing silently.",
+                                           "updatedAt":  "2024-10-14T17:56:46Z"
+                                       }
+                                   ],
+                         "totalCount":  9
+                     },
+        "title":  "OpenAIClient is not respecting HttpClient from DI",
+        "labels":  [
+                       "area-integrations",
+                       "area-meta",
+                       "ai"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspire/issues/9042",
+        "createdAt":  "2025-05-01T01:44:58Z",
+        "number":  9042,
+        "author":  "mitchdenny",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHODCqwWw==",
+                          "nodes":  [
+                                        {
+                                            "content":  "EYES",
+                                            "user":  "Copilot",
+                                            "createdAt":  "2025-05-22T03:28:53Z"
+                                        }
+                                    ],
+                          "totalCount":  1
+                      },
+        "updatedAt":  "2025-07-29T11:42:47Z",
+        "body":  "## Updated Design for TrySubscribeOnce API\n\nThis issue is to introduce idempotent subscription support to eventing, similar to `TryAddLifecycleHook\u003cT\u003e`, but for distributed application events.\n\n### Proposed API: `TrySubscribeOnce`\n\nThis API will provide both resource and non-resource variants, mirroring the existing `Subscribe` methods. The callback uses `Func\u003cT, CancellationToken, Task\u003e`, and the API is generic for event type consistency.\n\n#### Non-resource event subscription\n\n```csharp\nbool TrySubscribeOnce\u003cT\u003e(\n    object key,\n    Func\u003cT, CancellationToken, Task\u003e callback,\n    [NotNullWhen(true)] out DistributedApplicationEventSubscription? subscription\n) where T : IDistributedApplicationEvent;\n\n// Overload: uses the IDistributedApplicationEventing instance as the key\nbool TrySubscribeOnce\u003cT\u003e(\n    Func\u003cT, CancellationToken, Task\u003e callback,\n    [NotNullWhen(true)] out DistributedApplicationEventSubscription? subscription\n) where T : IDistributedApplicationEvent;\n```\n\n#### Resource-scoped event subscription\n\n```csharp\nbool TrySubscribeOnce\u003cT\u003e(\n    IResource resource,\n    object key,\n    Func\u003cT, CancellationToken, Task\u003e callback,\n    [NotNullWhen(true)] out DistributedApplicationEventSubscription? subscription\n) where T : IDistributedApplicationResourceEvent;\n\n// Overload: uses the IDistributedApplicationEventing instance as the key\nbool TrySubscribeOnce\u003cT\u003e(\n    IResource resource,\n    Func\u003cT, CancellationToken, Task\u003e callback,\n    [NotNullWhen(true)] out DistributedApplicationEventSubscription? subscription\n) where T : IDistributedApplicationResourceEvent;\n```\n\n#### Behavior\n\n- The `key` can be any object. This enables idempotency per logical subscription and supports both arbitrary keys and the \"type as key\" lifecycle hook pattern.\n- If a subscription with the key already exists, the call is a no-op, returns `false`, and the out var is `null`.\n- If a subscription is added, the call returns `true` and the out var contains the subscription.\n- The `[NotNullWhen(true)]` attribute is used on the out parameter for better nullability analysis.\n- Reusing a key is expected and safe; this is the purpose of the API.\n- No migration or removal of lifecycle hook usage will be performed in this PR.\n\n#### Rationale\n\n- Mirrors the existing `Subscribe` API (generic, resource/non-resource, async callback).\n- Makes it easy to enforce \"subscribe once\" semantics.\n- Flexible: supports both \"type as key\" and arbitrary key scenarios.\n\n---\n\n_This issue description was updated to include the detailed API design and the use of `[NotNullWhen(true)]` for the out subscription parameter._\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOrctf5w==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6pgmnj",
+                                           "createdAt":  "2025-05-01T01:45:40Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "davidfowl",
+                                           "body":  "cc @afscrome ",
+                                           "updatedAt":  "2025-05-01T01:45:40Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6pigPI",
+                                           "createdAt":  "2025-05-01T08:44:37Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "afscrome",
+                                           "body":  "Not sure I understand what this is doing from the original issue.",
+                                           "updatedAt":  "2025-05-01T08:44:37Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6piwlb",
+                                           "createdAt":  "2025-05-01T09:23:53Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "davidfowl",
+                                           "body":  "Ability to do the equivalent of TryAddLifeCycleHook",
+                                           "updatedAt":  "2025-05-01T09:23:53Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6pjBkv",
+                                           "createdAt":  "2025-05-01T09:34:38Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "afscrome",
+                                           "body":  "Sweet.",
+                                           "updatedAt":  "2025-05-01T09:34:38Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6q9kbv",
+                                           "createdAt":  "2025-05-10T02:58:43Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "davidfowl",
+                                           "body":  "@mitchdenny let\u0027s do this in 9.3 and try to remove lifecycle hook usage.",
+                                           "updatedAt":  "2025-05-10T02:58:43Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6q-WAv",
+                                           "createdAt":  "2025-05-10T06:18:00Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "mitchdenny",
+                                           "body":  "Should SubscribeKeyed overwrite the callback or no-op.",
+                                           "updatedAt":  "2025-05-10T06:18:00Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6q-ceT",
+                                           "createdAt":  "2025-05-10T06:27:02Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "davidfowl",
+                                           "body":  "Noop. Maybe it should be TrySubscribe",
+                                           "updatedAt":  "2025-05-10T06:27:02Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6s15Bz",
+                                           "createdAt":  "2025-05-22T03:42:02Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "mitchdenny",
+                                           "body":  "\u003e Noop. Maybe it should be TrySubscribe\n\nI opted for TrySubscribeOnce to make it crystal clear. I also told copilot to implement an overload that doesn\u0027t take a key, in that case it\u0027ll use the IDistributedApplicationEventing as the key and this will mostly mimic the API behavior. Once we\u0027ve got the first cut of this is merged we should be able to go through and replace all usages of lifecycle hooks and add the obsolete attrbiute.",
+                                           "updatedAt":  "2025-05-22T03:42:02Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6s2hDK",
+                                           "createdAt":  "2025-05-22T05:39:19Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "davidfowl",
+                                           "body":  "We need to replace the usages of this so we can make sure the pattern works",
+                                           "updatedAt":  "2025-05-22T05:39:19Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6ty1_n",
+                                           "createdAt":  "2025-05-28T10:21:49Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOEUFuPw==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "ROCKET",
+                                                                               "user":  "Md1234-18",
+                                                                               "createdAt":  "2025-05-28T10:22:05Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "Md1234-18",
+                                           "body":  "IMEI NO:   355147556894750",
+                                           "updatedAt":  "2025-05-28T10:21:49Z"
+                                       }
+                                   ],
+                         "totalCount":  10
+                     },
+        "title":  "Add TrySubscribeOnce API in IDistributedApplicationEventing",
+        "labels":  [
+                       "area-meta"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspire/issues/9964",
+        "createdAt":  "2025-06-19T23:05:06Z",
+        "number":  9964,
+        "author":  "akhanalcs",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-06-21T10:30:27Z",
+        "body":  "### Is there an existing issue for this?\n\n- [x] I have searched the existing issues\n\n### Is your feature request related to a problem? Please describe the problem.\n\nVery recently found this tool and I like it a lot. Also I don\u0027t have a ton of familiarity with this, so I might be asking for something that Aspire already provides/ plan to provide.\n\nThe current path to production relies on generating a manifest that can be consumed by tools like the Azure Developer CLI (azd) to provision and deploy resources.\n\nWhile this is a great approach, the focus remains \"local-first.\" For developers, especially those newer to cloud-native architectures, this creates a gap between the seamless \"F5\" development loop and the complexities of a real-world production deployment. This leads to uncertainty and friction:\n\n- Delayed Complexity: Key decisions about production infrastructure, CI/CD, and environment-specific configurations are often postponed, leading to surprises late in the development cycle.\n- High Cognitive Load: The developer must manually discover and learn the manifest-to-deployment workflow, which feels disconnected from the initial project setup.\n- Lack of Visualization: There is no clear, visual representation of how the components defined in the AppHost project will map to actual cloud services in a target environment like Azure, AWS or GCP.\n\nThis creates an \"uneasy feeling\" where the developer is not confident how their local setup will translate to production.\n\n\n### Describe the solution you\u0027d like\n\nI propose enhancing .NET Aspire with a \"production-first\" mindset, making the path to production a well-lit, visible, and integral part of the development experience from the very beginning. This approach would treat production as the default target and local development as a high-fidelity simulation of it, much like the Node.js ecosystem\u0027s philosophy around `NODE_ENV=production`.\n\nHere are a few suggestions I can think of:\n\n1. Production-Aware Project Scaffolding\nExtend the `dotnet new` experience for Aspire. When creating a new project, the template could prompt for a target deployment environment.\n\n   ```bash\n   $ dotnet new aspire\n   ? What is your primary deployment target?\n   \u003e Azure Container Apps\n     AWS ECS\n     Kubernetes\n     (Deploy manually later)\n   ```\n\n   Based on the selection, the template would scaffold not only the Aspire project but also the necessary deployment assets. For example, if \"Azure Container Apps\" is chosen, it could generate:\n   - A pre-configured `azure.yaml` file for `azd`.\n   - Starter Bicep or Terraform files for infrastructure as code.\n   - A basic, ready-to-use GitHub Actions workflow (.github/workflows/deploy.yml) for CI/CD.\n\n2. Deployment Visualization in the Aspire Dashboard\n   Enhance the Aspire Dashboard with a \"Deployment Preview\" or \"Production Topology\" view. This feature would:\n   - Parse the application\u0027s manifest and any available deployment configuration (e.g., azure.yaml).\n   - Render a visual graph of the application as it would appear in the target cloud. \n\n   This would provide immediate visual feedback on the production architecture, directly connecting the code being written to its real-world deployment.\n\n3. Streamlined Deployment Commands\n   Integrate deployment initiation directly into the tooling. Once configured, a developer could intuitively run a command like `dotnet aspire deploy` command from the project root, further tightening the loop between development and deployment.\n\nBy making production considerations a first-class citizen and providing clear visualization, .NET Aspire can empower developers to build with confidence, knowing exactly where and how their application is designed to run.\n\n### Additional context\n\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOsm08xA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6yOVNF",
+                                           "createdAt":  "2025-06-20T07:21:37Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOEX1OJQ==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "HEART",
+                                                                               "user":  "mitchdenny",
+                                                                               "createdAt":  "2025-06-20T22:17:26Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "HEART",
+                                                                               "user":  "akhanalcs",
+                                                                               "createdAt":  "2025-06-20T22:43:15Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "jgrosic",
+                                                                               "createdAt":  "2025-06-22T09:38:06Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "elbruno",
+                                                                               "createdAt":  "2025-06-22T23:14:15Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "YohanSciubukgian",
+                                                                               "createdAt":  "2025-06-23T18:13:13Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "rogihee",
+                                                                               "createdAt":  "2025-06-25T05:42:42Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  6
+                                                         },
+                                           "author":  "davidfowl",
+                                           "body":  "Worthwhile reading these sections of the \"what\u0027s new in aspire\" \n\n- https://learn.microsoft.com/en-us/dotnet/aspire/whats-new/dotnet-aspire-9.2#-deployment-improvements\n- https://learn.microsoft.com/en-us/dotnet/aspire/whats-new/dotnet-aspire-9.3#deployment--publish\n\nI don\u0027t think we\u0027ll move away from local-first, BUT we\u0027re spending lots of time filling out our deployment story.\n\n\n\u003e This creates an \"uneasy feeling\" where the developer is not confident how their local setup will translate to production.\n\nDo you get this feeling when you use docker compose or when you need to do it manually? You don\u0027t have to use aspire\u0027s deployment technology to deploy, it\u0027s major added value if you have nothing though.\n\n\u003e Production-Aware Project Scaffolding\n\nThis is a reasonable ask and I think something we should do in the future.\n\n\u003e Deployment Visualization in the Aspire Dashboard\nEnhance the Aspire Dashboard with a \"Deployment Preview\" or \"Production Topology\" view. This feature would:\n\nUnsure about this one. No plans currently, needs more thought.\n\n\u003e Streamlined Deployment Commands\nIntegrate deployment initiation directly into the tooling. Once configured, a developer could intuitively run a command like dotnet aspire deploy command from the project root, further tightening the loop between development and deployment.\n\nThis is coming (in preview form) in the next version:\n\n\u003cimg width=\"713\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/42d26198-d596-4f50-bc27-ae81c1f06bf7\" /\u003e\n\nIt\u0027s still early days but we\u0027re iterating fast. Thank you for this thoughtful post!",
+                                           "updatedAt":  "2025-06-20T07:21:37Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6yZkTj",
+                                           "createdAt":  "2025-06-20T22:29:00Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOEXfL2Q==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "HEART",
+                                                                               "user":  "captainsafia",
+                                                                               "createdAt":  "2025-06-21T05:11:26Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "jgrosic",
+                                                                               "createdAt":  "2025-06-22T09:38:57Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  2
+                                                         },
+                                           "author":  "akhanalcs",
+                                           "body":  "Thank you for the thoughtful and detailed response.\n\nI\u0027ve taken a look through the linked documentation for the deployment improvements, and the progress on the \"deployment story\" is impressive!\nThe new Publishers extensibility and the upcoming `aspire deploy` CLI command are the kind of deployment tools I was hoping to see!\n\nYou mentioned that you don\u0027t think the team will move away from \"local-first\", and I understand that. \nMy suggestion for a \"production-first\" focus isn\u0027t meant to replace that, but to complement it.\n\nSince the ultimate goal of nearly all software is to run in production, making that the project\u0027s guiding principle right from `dotnet new` would build immense developer confidence and align with the values of intuitive, clear and robust engineering that eliminates late-cycle surprises.\n\nTo answer your question about the \"uneasy feeling\":\n\n\u003e Do you get this feeling when you use docker compose or when you need to do it manually?\n\nYes, absolutely. That feeling of unease comes from both. `docker-compose` also doesn\u0027t describe the target where my app will eventually run. That manual translation step is precisely where the anxiety and friction live.\n\nThis is the gap I believe Aspire is uniquely positioned to eliminate. Solving this \"dev-to-prod\" anxiety wouldn\u0027t just be a value-add; it would be a killer feature that makes Aspire a standout tool, potentially attracting developers from well beyond the .NET ecosystem.\n\nI\u0027m very happy to hear that the team considers \"Production-Aware Project Scaffolding\" as a reasonable future goal. I believe that feature, combined with the powerful deployment work you\u0027re already shipping, would make building and shipping software significantly easier.\n\nThanks again for the engaging discussion and all the great work on the project. \nLove this tool and I\u0027m excited to see how it evolves!",
+                                           "updatedAt":  "2025-06-20T22:29:00Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6ybTzE",
+                                           "createdAt":  "2025-06-21T10:12:42Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jzabroski",
+                                           "body":  "\u003e Deployment Visualization in the Aspire Dashboard Enhance the Aspire Dashboard with a \"Deployment Preview\" or \"Production Topology\" view. This feature would:\n\u003e \n\u003e * Parse the application\u0027s manifest and any available deployment configuration (e.g., azure.yaml).\n\u003e * Render a visual graph of the application as it would appear in the target cloud.\n\u003e \n\u003e This would provide immediate visual feedback on the production architecture, directly connecting the code being written to its real-world deployment.\n\nThis is probably the more interesting of the 3 ideas. Do you know of any similar architectures in other ecosystems that do provide such a feature? I think, while it sounds cool as a vision, the actual \"God is in the details\" moment has to come. Often, as my own observation, Microsoft engineers will imitate other ecosystems.\n\nSoapbox: But as far as I am aware, Aspire is somewhat unique but also lacking features of other cloud-first frameworks like Spring. Unironically, as a 25+ year veteran who has seen Microsoft blog posts and read through comments (e.g., when WPF was being developed), Microsoft Project Managers often overlook somewhat innocuous feedback like this gem when Aspire was first announced: https://devblogs.microsoft.com/dotnet/introducing-dotnet-aspire-simplifying-cloud-native-development-with-dotnet-8/?commentid=20044#comment-20044 - I don\u0027t think Aspire has the same benefit as Spring, where some of the core components came from Netflix\u0027s Ribbon project (e.g. [Spring Cloud LoadBalancer as Netflix Eureka](https://spring.io/blog/2020/03/25/spring-tips-spring-cloud-loadbalancer)) and were actually already battle-tested before being released.\n\nWhile Aspire has \"Microsoft.Extensions.ServiceDiscovery\", I think the applicable point to this post is that, Spring is cloud-first, not local-first, and many Spring shops actually don\u0027t test locally but rather in the cloud (some organizations even prefer this from a cybersecurity perspective and AWS _loves_ this from a billing usage perspective :)). So, rather than \"production-first\", it may make more sense to call it \"cloud-first\". Against this backdrop, I do think Aspire has a wonderful distinction as compared with Spring. But it will take feedback for them to approach things \"local-first, cloud-driven\". One thing Aspire does well is \"Find All References\" as compared with all the annotations in Spring. Spring\u0027s `@EnableDiscoveryClient` etc make it both more open-ended but harder to reason about through clicking around in your IDE.",
+                                           "updatedAt":  "2025-06-21T10:30:27Z"
+                                       }
+                                   ],
+                         "totalCount":  3
+                     },
+        "title":  "\"Production-First\" focus right from the start",
+        "labels":  [
+                       "area-meta"
+                   ]
+    }
+]

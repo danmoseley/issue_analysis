@@ -1,0 +1,697 @@
+﻿[
+    {
+        "url":  "https://github.com/dotnet/aspnetcore/issues/47146",
+        "createdAt":  "2023-03-11T01:04:57Z",
+        "number":  47146,
+        "author":  "SidRoblox",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-07-23T06:09:54Z",
+        "body":  "### Is there an existing issue for this?\r\n\r\n- [X] I have searched the existing issues\r\n\r\n### Is your feature request related to a problem? Please describe the problem.\r\n\r\nWhen using the JsonTranscoding Library and there is a non successful response the error response body contains an integer error code that corresponds to: \r\nhttps://github.com/googleapis/googleapis/blob/master/google/rpc/status.proto#L38\r\n\r\nFor ex:\r\n```\r\n{\r\n    \"code\": 10,\r\n    \"message\": \"TEST ERROR\",\r\n    \"details\": []\r\n}\r\n```\r\n\r\nIt would be great if we could have an option to update the JsonSerialization of the Status in the case of an error response to populate the enum name as a string instead of the integer error code.\r\n\r\n### Describe the solution you\u0027d like\r\n\r\nI would suggest that we update:\r\nhttps://github.com/dotnet/aspnetcore/blob/bec278eabea54f63da15e10e654bdfa4168a2479/src/Grpc/JsonTranscoding/src/Microsoft.AspNetCore.Grpc.JsonTranscoding/Internal/JsonRequestHelpers.cs#L85-L99\r\n\r\nTo allow for returning using a custom status message proto where the code was an enum instead of an integer:\r\nhttps://github.com/googleapis/googleapis/blob/master/google/rpc/code.proto\r\n\r\nThis would allow the json to contain the enum value instead of the integer code.\r\n\r\nWe could add an option to enable this functionality here: https://github.com/dotnet/aspnetcore/blob/bec278eabea54f63da15e10e654bdfa4168a2479/src/Grpc/JsonTranscoding/src/Microsoft.AspNetCore.Grpc.JsonTranscoding/GrpcJsonSettings.cs#L9\r\n\r\n\r\n### Additional context\r\n\r\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  null,
+                         "nodes":  [
+
+                                   ],
+                         "totalCount":  0
+                     },
+        "title":  "[JsonTranscoding] Requesting that when there is an error response the code field in google.grpc.Status gets json serialized as the enum value (string) instead of the int code",
+        "labels":  [
+                       "area-grpc"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspnetcore/issues/52552",
+        "createdAt":  "2023-12-03T18:03:10Z",
+        "number":  52552,
+        "author":  "zorix",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-07-23T06:09:54Z",
+        "body":  "### Is there an existing issue for this?\r\n\r\n- [X] I have searched the existing issues\r\n\r\n### Is your feature request related to a problem? Please describe the problem.\r\n\r\nAt this moment when json request is not valid or some field is bool instead of string or anything else, output returned by transcoder is very weak. for example when we send\r\n```json\r\n{\r\n    \"Option\": true\r\n}\r\n```\r\nbut out protobuf message expect some `enum` value, we will get something like this\r\n```json\r\n{\r\n    \"code\": 3,\r\n    \"message\": \"Unexpected JSON token: True.\",\r\n    \"details\": []\r\n}\r\n```\r\nWhen message contains more fields or even some array or some sub message it\u0027s getting very difficult to spot where is the issue for the user of the API\r\n\r\n\r\n### Describe the solution you\u0027d like\r\n\r\nSo it\u0027s my propsal and question at the same time(I didn\u0027t found an answer).\r\nWhy `InvalidOperationException` is used instead of `JsonException`?\r\nIn the example we can look into [this line](https://github.com/dotnet/aspnetcore/blob/61c585890c09e8a30f511d19c6c9c45e5e9f63b1/src/Grpc/JsonTranscoding/src/Microsoft.AspNetCore.Grpc.JsonTranscoding/Internal/Json/EnumConverter.cs#L43) `throw new InvalidOperationException($\"Unexpected JSON token: {reader.TokenType}.\");`\r\n\r\nWhen I changed exception type to `JsonException` then I could go to [exception handler](https://github.com/dotnet/aspnetcore/blob/61c585890c09e8a30f511d19c6c9c45e5e9f63b1/src/Grpc/JsonTranscoding/src/Microsoft.AspNetCore.Grpc.JsonTranscoding/Internal/JsonRequestHelpers.cs#L306-L315) and change it to something like\r\n```cs\r\n        catch (JsonException ex) when (ex.Message?.Contains(\"Path: \") ?? false)\r\n        {\r\n            GrpcServerLog.ErrorReadingMessage(serverCallContext.Logger, ex);\r\n            throw new RpcException(new Status(StatusCode.InvalidArgument, $\"{ex.Message} | Path: {ex.Path} | LineNumber: {ex.LineNumber} | BytePositionInLine: {ex.BytePositionInLine}.\", ex));\r\n        }\r\n        catch (JsonException ex)\r\n        {\r\n            GrpcServerLog.ErrorReadingMessage(serverCallContext.Logger, ex);\r\n            throw new RpcException(new Status(StatusCode.InvalidArgument, ex.Message, ex));\r\n        }\r\n```\r\nI also changed `\"Request JSON payload is not correctly formatted.\"` to `ex.Message`.\r\n\r\nI know about ugly why of checking for existence of `Path` in the message I created [issue .NET runtime to improve it](https://github.com/dotnet/runtime/issues/95205).\r\n\r\nReading [doc](https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/converters-how-to?pivots=dotnet-8-0) it says to me it\u0027s normal to throw this exception from converter\r\n\r\n### Additional context\r\n\r\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  null,
+                         "nodes":  [
+
+                                   ],
+                         "totalCount":  0
+                     },
+        "title":  "Grpc JsonTranscoding - use JsonException instead of InvalidOperationException",
+        "labels":  [
+                       "area-grpc"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspnetcore/issues/52952",
+        "createdAt":  "2023-12-21T21:01:52Z",
+        "number":  52952,
+        "author":  "speed2048",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-07-23T06:09:55Z",
+        "body":  "### Is there an existing issue for this?\n\n- [X] I have searched the existing issues\n\n### Describe the bug\n\nWhen debugging a GRPC server.\r\n\r\n I get a Continous exception  messages  Microsoft.AspNetCore.Connections.ConnectionResetException  in System.Private.CoreLib.dll or in System.Net.Security.dll\r\n \r\nThe code that does this is: \r\n  options.Listen(**IPAddress.Any**, portno, ListenOptions =\u003e\r\n   {\r\n       ListenOptions.UseHttps();\r\n   });\r\n\r\n\r\nIf I change it to:\r\n\r\n   options.Listen(**IPAddress.Loopback,** portno, ListenOptions =\u003e\r\n   {\r\n       ListenOptions.UseHttps();\r\n   });\r\n\r\nNo exceptions..\r\n\r\nNote; The application does work as intended but concerned of a lot of exceptions that there  may be a performance hit.\r\n\r\n\n\n### Expected Behavior\n\nThere should not be any exceptions occurring. \n\n### Steps To Reproduce\n\n_No response_\n\n### Exceptions (if any)\n\nContinous Microsoft.AspNetCore.Connections.ConnectionResetException  when options.Listen is set to IPAddress.Any\n\n### .NET Version\n\n8.0.100\n\n### Anything else?\n\n.NET SDK:\r\n Version:           8.0.100\r\n Commit:            57efcf1350\r\n Workload version:  8.0.100-manifests.3b83835e\r\n\r\nRuntime Environment:\r\n OS Name:     Windows\r\n OS Version:  10.0.22631\r\n OS Platform: Windows\r\n RID:         win-x64\r\n Base Path:   C:\\Program Files\\dotnet\\sdk\\8.0.100\\\r\n\r\n.NET workloads installed:\r\n Workload version: 8.0.100-manifests.3b83835e\r\n [android]\r\n   Installation Source: SDK 8.0.100, VS 17.9.34407.89\r\n   Manifest Version:    34.0.52/8.0.100\r\n   Manifest Path:       C:\\Program Files\\dotnet\\sdk-manifests\\8.0.100\\microsoft.net.sdk.android\\34.0.52\\WorkloadManifest.json\r\n   Install Type:              Msi\r\n\r\n [ios]\r\n   Installation Source: SDK 8.0.100, VS 17.9.34407.89\r\n   Manifest Version:    17.0.8490/8.0.100\r\n   Manifest Path:       C:\\Program Files\\dotnet\\sdk-manifests\\8.0.100\\microsoft.net.sdk.ios\\17.0.8490\\WorkloadManifest.json\r\n   Install Type:              Msi\r\n\r\n [maccatalyst]\r\n   Installation Source: SDK 8.0.100, VS 17.9.34407.89\r\n   Manifest Version:    17.0.8490/8.0.100\r\n   Manifest Path:       C:\\Program Files\\dotnet\\sdk-manifests\\8.0.100\\microsoft.net.sdk.maccatalyst\\17.0.8490\\WorkloadManifest.json\r\n   Install Type:              Msi\r\n\r\n [macos]\r\n   Installation Source: SDK 8.0.100\r\n   Manifest Version:    14.0.8490/8.0.100\r\n   Manifest Path:       C:\\Program Files\\dotnet\\sdk-manifests\\8.0.100\\microsoft.net.sdk.macos\\14.0.8490\\WorkloadManifest.json\r\n   Install Type:              Msi\r\n\r\n [maui]\r\n   Installation Source: SDK 8.0.100\r\n   Manifest Version:    8.0.3/8.0.100\r\n   Manifest Path:       C:\\Program Files\\dotnet\\sdk-manifests\\8.0.100\\microsoft.net.sdk.maui\\8.0.3\\WorkloadManifest.json\r\n   Install Type:              Msi\r\n\r\n [maui-windows]\r\n   Installation Source: VS 17.9.34407.89\r\n   Manifest Version:    8.0.3/8.0.100\r\n   Manifest Path:       C:\\Program Files\\dotnet\\sdk-manifests\\8.0.100\\microsoft.net.sdk.maui\\8.0.3\\WorkloadManifest.json\r\n   Install Type:              Msi\r\n\r\n\r\nHost:\r\n  Version:      8.0.0\r\n  Architecture: x64\r\n  Commit:       5535e31a71\r\n\r\n.NET SDKs installed:\r\n  7.0.404 [C:\\Program Files\\dotnet\\sdk]\r\n  8.0.100 [C:\\Program Files\\dotnet\\sdk]\r\n\r\n.NET runtimes installed:\r\n  Microsoft.AspNetCore.App 7.0.14 [C:\\Program Files\\dotnet\\shared\\Microsoft.AspNetCore.App]\r\n  Microsoft.AspNetCore.App 8.0.0 [C:\\Program Files\\dotnet\\shared\\Microsoft.AspNetCore.App]\r\n  Microsoft.NETCore.App 7.0.14 [C:\\Program Files\\dotnet\\shared\\Microsoft.NETCore.App]\r\n  Microsoft.NETCore.App 8.0.0 [C:\\Program Files\\dotnet\\shared\\Microsoft.NETCore.App]\r\n  Microsoft.WindowsDesktop.App 7.0.14 [C:\\Program Files\\dotnet\\shared\\Microsoft.WindowsDesktop.App]\r\n  Microsoft.WindowsDesktop.App 8.0.0 [C:\\Program Files\\dotnet\\shared\\Microsoft.WindowsDesktop.App]\r\n\r\nOther architectures found:\r\n  arm64 [C:\\Program Files\\dotnet]\r\n    registered at [HKLM\\SOFTWARE\\dotnet\\Setup\\InstalledVersions\\arm64\\InstallLocation]\r\n  x86   [C:\\Program Files (x86)\\dotnet]\r\n    registered at [HKLM\\SOFTWARE\\dotnet\\Setup\\InstalledVersions\\x86\\InstallLocation]\r\n\r\nEnvironment variables:\r\n  Not set\r\n\r\nglobal.json file:\r\n  Not found\r\n\r\nLearn more:\r\n  https://aka.ms/dotnet/info\r\n\r\nDownload .NET:\r\n  https://aka.ms/dotnet/download",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOb1p6hg==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDOAQzde85vVOva",
+                                           "createdAt":  "2023-12-22T15:50:50Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Tratcher",
+                                           "body":  "What\u0027s the message from the exception?\r\n\r\nWhat\u0027s in the debug level server logs?\r\n\r\nWhat if you use [ListenAnyIP](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.server.kestrel.core.kestrelserveroptions.listenanyip?view=aspnetcore-8.0#microsoft-aspnetcore-server-kestrel-core-kestrelserveroptions-listenanyip(system-int32)) instead?",
+                                           "updatedAt":  "2023-12-22T15:50:50Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOAQzde85vWUz2",
+                                           "createdAt":  "2023-12-22T23:13:10Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "speed2048",
+                                           "body":  "I tried ListenAnyIP and same results. code:\r\n\r\n  options.ListenAnyIP(portno, ListenOptions =\u003e\r\n  {\r\n      ListenOptions.UseHttps();\r\n  });\r\n\r\nDebug level on Server is info or Information.\r\n\r\nThe console output from the GRPC is not indicating any exceptions , its the Debug output screen from VS2022 that is showing the exceptions. I dont know how to catch those exceptions, any help would be appreciated to capture these exceptions.\r\n\r\n",
+                                           "updatedAt":  "2023-12-22T23:13:10Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOAQzde85vWnqG",
+                                           "createdAt":  "2023-12-23T04:26:40Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "speed2048",
+                                           "body":  "Was able to get trace logs of some exceptions it was throwing:\r\n\r\ndbug: Microsoft.AspNetCore.Hosting.Diagnostics[13]\r\n      Loaded hosting startup assembly Microsoft.WebTools.BrowserLink.Net\r\ninfo: Microsoft.AspNetCore.Mvc.Infrastructure.DefaultActionDescriptorCollectionProvider[1]\r\n      No action descriptors found. This may indicate an incorrectly configured application or missing application parts. To learn more, visit https://aka.ms/aspnet/mvc/app-parts\r\ninfo: Microsoft.Hosting.Lifetime[0]\r\n      Application started. Press Ctrl+C to shut down.\r\ninfo: Microsoft.Hosting.Lifetime[0]\r\n      Hosting environment: Development\r\ninfo: Microsoft.Hosting.Lifetime[0]\r\n      Content root path: E:\\Projects\\BoincSpy.NetCore\\BoincSpy.GRPC.Service\\BoincSpy.GRPC.Service\r\ndbug: Microsoft.Extensions.Hosting.Internal.Host[2]\r\n      Hosting started\r\ndbug: Microsoft.AspNetCore.Server.Kestrel.Connections[39]\r\n      Connection id \"0HN03DRNF19JO\" accepted.\r\ndbug: Microsoft.AspNetCore.Server.Kestrel.Connections[1]\r\n      Connection id \"0HN03DRNF19JO\" started.\r\ndbug: Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets[19]\r\n      Connection id \"0HN03DRNF19JO\" reset.\r\ndbug: Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware[1]\r\n      Failed to authenticate HTTPS connection.\r\n      Microsoft.AspNetCore.Connections.ConnectionResetException: An existing connection was forcibly closed by the remote host.\r\n       ---\u003e System.Net.Sockets.SocketException (10054): An existing connection was forcibly closed by the remote host.\r\n         --- End of inner exception stack trace ---\r\n         at System.IO.Pipelines.Pipe.GetReadResult(ReadResult\u0026 result)\r\n         at System.IO.Pipelines.Pipe.GetReadAsyncResult()\r\n         at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.DuplexPipeStream.ReadAsyncInternal(Memory`1 destination, CancellationToken cancellationToken)\r\n         at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource\u003cTResult\u003e.GetResult(Int16 token)\r\n         at System.Net.Security.SslStream.EnsureFullTlsFrameAsync[TIOAdapter](CancellationToken cancellationToken, Int32 estimatedSize)\r\n         at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource\u003cTResult\u003e.GetResult(Int16 token)\r\n         at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)\r\n         at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)\r\n         at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)\r\n         at Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware.OnConnectionAsync(ConnectionContext context)\r\ndbug: Microsoft.AspNetCore.Server.Kestrel.Connections[2]\r\n      Connection id \"0HN03DRNF19JO\" stopped.\r\ndbug: Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets[7]\r\n      Connection id \"0HN03DRNF19JO\" sending FIN because: \"The Socket transport\u0027s send loop completed gracefully.\"\r\ndbug: Microsoft.AspNetCore.Server.Kestrel.Connections[39]\r\n      Connection id \"0HN03DRNF19JP\" accepted.\r\ndbug: Microsoft.AspNetCore.Server.Kestrel.Connections[1]\r\n      Connection id \"0HN03DRNF19JP\" started.\r\ndbug: Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets[19]\r\n      Connection id \"0HN03DRNF19JP\" reset.\r\ndbug: Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware[1]\r\n      Failed to authenticate HTTPS connection.\r\n      Microsoft.AspNetCore.Connections.ConnectionResetException: An existing connection was forcibly closed by the remote host.\r\n       ---\u003e System.Net.Sockets.SocketException (10054): An existing connection was forcibly closed by the remote host.\r\n         --- End of inner exception stack trace ---\r\n         at System.IO.Pipelines.Pipe.GetReadResult(ReadResult\u0026 result)\r\n         at System.IO.Pipelines.Pipe.GetReadAsyncResult()\r\n         at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.DuplexPipeStream.ReadAsyncInternal(Memory`1 destination, CancellationToken cancellationToken)\r\n         at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource\u003cTResult\u003e.GetResult(Int16 token)\r\n         at System.Net.Security.SslStream.EnsureFullTlsFrameAsync[TIOAdapter](CancellationToken cancellationToken, Int32 estimatedSize)\r\n         at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource\u003cTResult\u003e.GetResult(Int16 token)\r\n         at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)\r\n         at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)\r\n         at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)\r\n         at Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware.OnConnectionAsync(ConnectionContext context)\r\ndbug: Microsoft.AspNetCore.Server.Kestrel.Connections[2]\r\n      Connection id \"0HN03DRNF19JP\" stopped.\r\ndbug: Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets[7]\r\n      Connection id \"0HN03DRNF19JP\" sending FIN because: \"The Socket transport\u0027s send loop completed gracefully.\"\r\ndbug: Microsoft.AspNetCore.Server.Kestrel.Connections[39]\r\n      Connection id \"0HN03DRNF19JQ\" accepted.\r\ndbug: Microsoft.AspNetCore.Server.Kestrel.Connections[1]\r\n      Connection id \"0HN03DRNF19JQ\" started.\r\ndbug: Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets[19]\r\n      Connection id \"0HN03DRNF19JQ\" reset.\r\ndbug: Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware[1]\r\n      Failed to authenticate HTTPS connection.\r\n      Microsoft.AspNetCore.Connections.ConnectionResetException: An existing connection was forcibly closed by the remote host.\r\n       ---\u003e System.Net.Sockets.SocketException (10054): An existing connection was forcibly closed by the remote host.\r\n         --- End of inner exception stack trace ---\r\n         at System.IO.Pipelines.Pipe.GetReadResult(ReadResult\u0026 result)\r\n         at System.IO.Pipelines.Pipe.GetReadAsyncResult()\r\n         at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.DuplexPipeStream.ReadAsyncInternal(Memory`1 destination, CancellationToken cancellationToken)\r\n         at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource\u003cTResult\u003e.GetResult(Int16 token)\r\n         at System.Net.Security.SslStream.EnsureFullTlsFrameAsync[TIOAdapter](CancellationToken cancellationToken, Int32 estimatedSize)\r\n         at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource\u003cTResult\u003e.GetResult(Int16 token)\r\n         at System.Net.Security.SslStream.ReceiveHandshakeFrameAsync[TIOAdapter](CancellationToken cancellationToken)\r\n         at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)\r\n         at System.Net.Security.SslStream.ProcessAuthenticationWithTelemetryAsync(Boolean isAsync, CancellationToken cancellationToken)\r\n         at Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware.OnConnectionAsync(ConnectionContext context)\r\ndbug: Microsoft.AspNetCore.Server.Kestrel.Connections[2]\r\n      Connection id \"0HN03DRNF19JQ\" stopped.\r\ndbug: Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets[7]\r\n      Connection id \"0HN03DRNF19JQ\" sending FIN because: \"The Socket transport\u0027s send loop completed gracefully.\"\r\ndbug: Microsoft.AspNetCore.Server.Kestrel.Connections[39]\r\n      Connection id \"0HN03DRNF19JR\" accepted.\r\ndbug: Microsoft.AspNetCore.Server.Kestrel.Connections[1]\r\n      Connection id \"0HN03DRNF19JR\" started.\r\ndbug: Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets[19]\r\n      Connection id \"0HN03DRNF19JR\" reset.\r\ndbug: Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets[19]\r\n      Connection id \"0HN03DRNF19JR\" reset.\r\ndbug: Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets[8]\r\n      Connection id \"0HN03DRNF19JR\" sending RST because: \"An existing connection was forcibly closed by the remote host.\"\r\ndbug: Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware[3]\r\n      Connection 0HN03DRNF19JR established using the following protocol: Tls13\r\ndbug: Microsoft.AspNetCore.Server.Kestrel.Http2[48]\r\n      Connection id \"0HN03DRNF19JR\" is closed. The last processed stream ID was 0.\r\ndbug: Microsoft.AspNetCore.Server.Kestrel.Http2[62]\r\n      The connection queue processing loop for 0HN03DRNF19JR completed.\r\ndbug: Microsoft.AspNetCore.Server.Kestrel.Connections[2]\r\n      Connection id \"0HN03DRNF19JR\" stopped.\r\ndbug: Microsoft.AspNetCore.Server.Kestrel.Connections[39]\r\n      Connection id \"0HN03DRNF19JS\" accepted.\r\ndbug: Microsoft.AspNetCore.Server.Kestrel.Connections[1]\r\n      Connection id \"0HN03DRNF19JS\" started.\r\ndbug: Microsoft.AspNetCore.Server.Kestrel.Https.Internal.HttpsConnectionMiddleware[3]\r\n      Connection 0HN03DRNF19JS established using the following protocol: Tls13\r\ndbug: Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets[19]\r\n      Connection id \"0HN03DRNF19JS\" reset.\r\ndbug: Microsoft.AspNetCore.Server.Kestrel.Http2[48]\r\n      Connection id \"0HN03DRNF19JS\" is closed. The last processed stream ID was 0.",
+                                           "updatedAt":  "2023-12-23T04:26:40Z"
+                                       }
+                                   ],
+                         "totalCount":  3
+                     },
+        "title":  "GRPC Server causing Microsoft.AspNetCore.Connections.ConnectionResetException when listening to IPAddress.Any",
+        "labels":  [
+                       "area-grpc"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspnetcore/issues/53223",
+        "createdAt":  "2024-01-08T23:01:30Z",
+        "number":  53223,
+        "author":  "richlander",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-07-23T06:09:55Z",
+        "body":  "I am testing gRPC services, but am running into some trouble.\r\n\r\nI am using the `grpc` template for the server and the documented client. I am using VS Code and am on Ubuntu 23.04 x64.\r\n\r\nhttps://learn.microsoft.com/en-us/aspnet/core/tutorials/grpc/grpc-start?view=aspnetcore-8.0\u0026tabs=visual-studio-code#create-the-greeter-client\r\n\r\nIf I launch the server as `./grpc`, everything works. If I launch it as `./child-directory/grpc`, it does not.\r\n\r\n![image](https://github.com/dotnet/aspnetcore/assets/2608468/7ac8d4d5-188b-41cc-8b1a-d7543494d6fd)\r\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  null,
+                         "nodes":  [
+
+                                   ],
+                         "totalCount":  0
+                     },
+        "title":  "gRPC service fails when called from parent directory",
+        "labels":  [
+                       "area-grpc"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspnetcore/issues/53431",
+        "createdAt":  "2024-01-17T09:34:49Z",
+        "number":  53431,
+        "author":  "jetmansion",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-07-23T06:09:56Z",
+        "body":  "### Is there an existing issue for this?\r\n\r\n- [X] I have searched the existing issues\r\n\r\n### Describe the bug\r\n\r\nJson Transcoding correctly supports the streaming of objects when calling a gRPC server streaming method. When testing an URL directly, multiple json objects are returned.\r\n\r\nThe generated swagger document however, describes the operation as only returning a single object instead of an array of objects. When generating client code from the swagger.json file, the code also will only return a single object.\r\n\r\nBelow snippet is from the swagger.json generated by the gRPC Transcoder sample application\r\n\r\n```\r\n       \"responses\": {\r\n          \"200\": {\r\n            \"description\": \"Success\",\r\n            \"content\": {\r\n              \"application/json\": {\r\n                \"schema\": {\r\n                  \"$ref\": \"#/components/schemas/HelloReply\"\r\n                }\r\n              }\r\n            }\r\n          }\r\n```\r\n\r\n### Expected Behavior\r\n\r\nBelow response would generate correct client code:\r\n\r\n```\r\n       \"responses\": {\r\n          \"200\": {\r\n            \"description\": \"Success\",\r\n            \"content\": {\r\n              \"application/json\": {\r\n                \"schema\": {\r\n                  \"type\": \"array\",\r\n                  \"items\": {\r\n                    \"$ref\": \"#/components/schemas/HelloReply\"\r\n                  }\r\n               }\r\n            }\r\n          }\r\n        }\r\n```\r\n\r\n### Steps To Reproduce\r\n\r\nCan be reproduced using the Transcoder sample: https://github.com/grpc/grpc-dotnet/tree/master/examples/Transcoder\r\n\r\n\r\n### Exceptions (if any)\r\n\r\n_No response_\r\n\r\n### .NET Version\r\n\r\n7.0\r\n\r\n### Anything else?\r\n\r\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOcST7Rw==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDOAQzde85xJPtH",
+                                           "createdAt":  "2024-01-18T10:54:45Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jetmansion",
+                                           "body":  "After further investigation, it looks like this is more a problem on the code generation side. However, what would help is that the content type returned would be \u0027application/x-ndjson\u0027 so that it is immediately obvious this is line delimited json. Hopefully the code generators can than take this into account.",
+                                           "updatedAt":  "2024-01-18T10:54:45Z"
+                                       }
+                                   ],
+                         "totalCount":  1
+                     },
+        "title":  "Swagger document generated for JSON Transcoding enabled grpc server stream response, returns only single object",
+        "labels":  [
+                       "area-grpc"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspnetcore/issues/53736",
+        "createdAt":  "2024-01-31T16:00:31Z",
+        "number":  53736,
+        "author":  "pjc50",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-07-23T06:09:56Z",
+        "body":  "### Is there an existing issue for this?\n\n- [X] I have searched the existing issues\n\n### Describe the bug\n\nAfter upgrading from dotnet 6 to dotnet 8, we started observing intermittent failures. Trying dotnet 7 also has the same failures.\r\n\r\nUnfortunately this bug is extremely intermittent. We have not been able to create a minimal reproduction case. So far it has only been observed on Mac systems with Java GRPC clients. I\u0027ve not been able to even trigger it on my desktop, only on CI systems. It is also very timing-sensitive; adding logging to either client or server tends to slow it down just enough for the bug not to manifest. Sorry.\r\n\r\nThere is only one client, with a thread making requests, a thread making healthcheck calls, and a thread processing a long-lived stream of events structured as an infinite stream of GRPC streaming responses. The failure is roughly four minutes in, and roughly at stream 256 (but not exactly! and it varies).\r\n\r\nOnce the response is lost the RPC that made it times out 30 seconds later with DEADLINE_EXCEEDED. However, in the meantime, healthcheck calls from the other thread work just fine.\r\n\r\nBy setting the log level to Trace I was able to obtain this:\r\n\r\nConnection id \"0HN12DQ56A4EB\" received HEADERS frame for stream ID 243 with length 25 and flags END_HEADERS, PRIORITY.\r\nConnection id \"0HN12DQ56A4EB\" received DATA frame for stream ID 243 with length 108 and flags END_STREAM.\r\nRequest starting HTTP/2 POST http://127.0.0.1:9091/StudioLinkProtocol.StudioLinkService/SetDeviceDescription - application/grpc -\r\nAll hosts are allowed.\r\n3 candidate(s) found for the request path \u0027/StudioLinkProtocol.StudioLinkService/SetDeviceDescription\u0027\r\nEndpoint \u0027gRPC - /StudioLinkProtocol.StudioLinkService/SetDeviceDescription\u0027 with route pattern \u0027/StudioLinkProtocol.StudioLinkService/SetDeviceDescription\u0027 is valid for the request path \u0027/StudioLinkProtocol.StudioLinkService/SetDeviceDescription\u0027\r\nEndpoint \u0027gRPC - Unimplemented method for StudioLinkProtocol.StudioLinkService\u0027 with route pattern \u0027StudioLinkProtocol.StudioLinkService/{unimplementedMethod:grpcunimplemented}\u0027 is valid for the request path \u0027/StudioLinkProtocol.StudioLinkService/SetDeviceDescription\u0027\r\nEndpoint \u0027gRPC - Unimplemented service\u0027 with route pattern \u0027{unimplementedService}/{unimplementedMethod:grpcunimplemented}\u0027 is valid for the request path \u0027/StudioLinkProtocol.StudioLinkService/SetDeviceDescription\u0027\r\nRequest matched endpoint \u0027gRPC - /StudioLinkProtocol.StudioLinkService/SetDeviceDescription\u0027\r\nThe endpoint does not specify the IRequestSizeLimitMetadata.\r\nExecuting endpoint \u0027gRPC - /StudioLinkProtocol.StudioLinkService/SetDeviceDescription\u0027\r\nRequest deadline timeout of 00:00:29.9999450 started.\r\nReading message.\r\nConnection id \"0HN12DQ56A4EB\", Request id \"0HN12DQ56A4EB:000000F3\": started reading request body.\r\nConnection id \"0HN12DQ56A4EB\", Request id \"0HN12DQ56A4EB:000000F3\": done reading request body.\r\nDeserializing 103 byte message to \u0027StudioLinkProtocol.SetDeviceDescriptionFile\u0027.\r\nReceived message.\r\nSending message.\r\nSerialized \u0027StudioLinkProtocol.OperationResult\u0027 to 0 byte message.\r\nMessage sent.\r\nRequest deadline stopped.\r\nExecuted endpoint \u0027gRPC - /StudioLinkProtocol.StudioLinkService/SetDeviceDescription\u0027\r\nRequest finished HTTP/2 POST http://127.0.0.1:9091/StudioLinkProtocol.StudioLinkService/SetDeviceDescription - 200 - application/grpc 50.2121ms\n\n### Expected Behavior\n\nAfter that I would expect to see\r\n\r\nConnection id \"0HN12DQ56A4EB\" sending HEADERS frame for stream ID 243 with length 4 and flags END_HEADERS.\r\nConnection id \"0HN12DQ56A4EB\" sending DATA frame for stream ID 243 with length 5 and flags NONE.\r\nConnection id \"0HN12DQ56A4EB\" sending HEADERS frame for stream ID 243 with length 1 and flags END_STREAM, END_HEADERS.\r\n\r\nHowever there are no such messages, and eventually the client gives up and sends\r\n\r\nConnection id \"0HN12DQ56A4EB\" received RST_STREAM frame for stream ID 243 with length 4 and flags 0x0.\r\n\n\n### Steps To Reproduce\n\nWe do not have a minimal reproduction case for this.\n\n### Exceptions (if any)\n\n_No response_\n\n### .NET Version\n\n8.0.101\n\n### Anything else?\n\nGrpc.AspNetCore 2.59.0\r\nMacOS 13.6.3 BuildVersion: 22G436 (Ventura)",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOcuNc8w==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDOAQzde85yaI3h",
+                                           "createdAt":  "2024-01-31T16:24:58Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "pjc50",
+                                           "body":  "It is possible that the preceding request is relevant, which transfers a large amount of data including a couple of window updates, settings, and ping frames.\r\n\r\nConnection id \"0HN12DQ56A4EB\" sending DATA frame for stream ID 241 with length 16384 and flags NONE.\r\nConnection id \"0HN12DQ56A4EB\" sending DATA frame for stream ID 241 with length 9510 and flags NONE.\r\nConnection id \"0HN12DQ56A4EB\" received PING frame for stream ID 0 with length 8 and flags NONE.\r\nConnection id \"0HN12DQ56A4EB\" sending PING frame for stream ID 0 with length 8 and flags ACK.\r\nConnection id \"0HN12DQ56A4EB\" received WINDOW_UPDATE frame for stream ID 0 with length 4 and flags 0x0.\r\nConnection id \"0HN12DQ56A4EB\" received WINDOW_UPDATE frame for stream ID 241 with length 4 and flags 0x0.\r\nConnection id \"0HN12DQ56A4EB\" received WINDOW_UPDATE frame for stream ID 0 with length 4 and flags 0x0.\r\nConnection id \"0HN12DQ56A4EB\" received SETTINGS frame for stream ID 0 with length 6 and flags NONE.\r\nConnection id \"0HN12DQ56A4EB\" sending SETTINGS frame for stream ID 0 with length 0 and flags ACK.\r\nConnection id \"0HN12DQ56A4EB\" sending DATA frame for stream ID 241 with length 16384 and flags NONE.\r\n(repeated many times)\r\nConnection id \"0HN12DQ56A4EB\" sending DATA frame for stream ID 241 with length 16384 and flags NONE.\r\nConnection id \"0HN12DQ56A4EB\" sending DATA frame for stream ID 241 with length 9510 and flags NONE.\r\nConnection id \"0HN12DQ56A4EB\" received PING frame for stream ID 0 with length 8 and flags NONE.\r\nConnection id \"0HN12DQ56A4EB\" sending PING frame for stream ID 0 with length 8 and flags ACK.\r\nConnection id \"0HN12DQ56A4EB\" received WINDOW_UPDATE frame for stream ID 241 with length 4 and flags 0x0.\r\nConnection id \"0HN12DQ56A4EB\" received WINDOW_UPDATE frame for stream ID 0 with length 4 and flags 0x0.\r\nConnection id \"0HN12DQ56A4EB\" received WINDOW_UPDATE frame for stream ID 241 with length 4 and flags 0x0.\r\nConnection id \"0HN12DQ56A4EB\" sending DATA frame for stream ID 241 with length 16384 and flags NONE.\r\nConnection id \"0HN12DQ56A4EB\" sending DATA frame for stream ID 241 with length 16384 and flags NONE.\r\nConnection id \"0HN12DQ56A4EB\" sending DATA frame for stream ID 241 with length 16384 and flags NONE.\r\nConnection id \"0HN12DQ56A4EB\" sending DATA frame for stream ID 241 with length 16384 and flags NONE.\r\nConnection id \"0HN12DQ56A4EB\" sending DATA frame for stream ID 241 with length 5732 and flags NONE.\r\nConnection id \"0HN12DQ56A4EB\" sending HEADERS frame for stream ID 241 with length 1 and flags END_STREAM, END_HEADERS.\r\nConnection id \"0HN12DQ56A4EB\" received SETTINGS frame for stream ID 0 with length 6 and flags NONE.\r\nConnection id \"0HN12DQ56A4EB\" sending SETTINGS frame for stream ID 0 with length 0 and flags ACK.\r\nConnection id \"0HN12DQ56A4EB\" received PING frame for stream ID 0 with length 8 and flags NONE.\r\nConnection id \"0HN12DQ56A4EB\" sending PING frame for stream ID 0 with length 8 and flags ACK.",
+                                           "updatedAt":  "2024-01-31T16:24:58Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOAQzde85ysiDT",
+                                           "createdAt":  "2024-02-02T16:59:29Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Tratcher",
+                                           "body":  "Receiving repeated SETTINGS frames is suspicious. Any chance you can get a trace of those? The connection logging middleware would help, or wireshark if it\u0027s decrypted.\r\nhttps://learn.microsoft.com/en-us/aspnet/core/fundamentals/servers/kestrel/connection-middleware?view=aspnetcore-8.0#connection-logging\r\n",
+                                           "updatedAt":  "2024-02-02T16:59:29Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOAQzde85yspj5",
+                                           "createdAt":  "2024-02-02T17:12:51Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "pjc50",
+                                           "body":  "I think that\u0027s possible, will see on Monday.",
+                                           "updatedAt":  "2024-02-02T17:12:51Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOAQzde85y4RKn",
+                                           "createdAt":  "2024-02-05T16:13:43Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "pjc50",
+                                           "body":  "Wireshark output for the last SETTINGS before the failure and its ack:\r\n\r\nFrame 30651: 71 bytes on wire (568 bits), 71 bytes captured (568 bits) on interface lo0, id 0\r\nNull/Loopback\r\nInternet Protocol Version 4, Src: 127.0.0.1, Dst: 127.0.0.1\r\nTransmission Control Protocol, Src Port: 61800, Dst Port: 9091, Seq: 9766, Ack: 2903349, Len: 15\r\nHyperText Transfer Protocol 2\r\n    Stream: SETTINGS, Stream ID: 0, Length 6\r\n        Length: 6\r\n        Type: SETTINGS (4)\r\n        Flags: 0x00\r\n        0... .... .... .... .... .... .... .... = Reserved: 0x0\r\n        .000 0000 0000 0000 0000 0000 0000 0000 = Stream Identifier: 0\r\n        Settings - Initial Windows size : 1559026\r\n            Settings Identifier: Initial Windows size (4)\r\n            Initial Window Size: 1559026\r\n\r\nFrame 30658: 65 bytes on wire (520 bits), 65 bytes captured (520 bits) on interface lo0, id 0\r\nNull/Loopback\r\nInternet Protocol Version 4, Src: 127.0.0.1, Dst: 127.0.0.1\r\n\r\nTransmission Control Protocol, Src Port: 9091, Dst Port: 61800, Seq: 2974777, Ack: 9781, Len: 9\r\nHyperText Transfer Protocol 2\r\n    Stream: SETTINGS, Stream ID: 0, Length 0\r\n        Length: 0\r\n        Type: SETTINGS (4)\r\n        Flags: 0x01, ACK\r\n        0... .... .... .... .... .... .... .... = Reserved: 0x0\r\n        .000 0000 0000 0000 0000 0000 0000 0000 = Stream Identifier: 0\r\n\r\n[Selected packets dotnet issue.zip](https://github.com/dotnet/aspnetcore/files/14168248/Selected.packets.dotnet.issue.zip)\r\n",
+                                           "updatedAt":  "2024-02-05T16:13:43Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOAQzde85y4UV-",
+                                           "createdAt":  "2024-02-05T16:20:00Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "pjc50",
+                                           "body":  "[Settings packets only.zip](https://github.com/dotnet/aspnetcore/files/14168320/Settings.packets.only.zip)\r\nAll 72 SETTINGS packets from that TCP stream.",
+                                           "updatedAt":  "2024-02-05T16:20:00Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOAQzde85y41zz",
+                                           "createdAt":  "2024-02-05T17:12:28Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Tratcher",
+                                           "body":  "Weird, the client keeps sending settings frames with increasing Initial Windows Size on the same connection. It starts at 1048576 and gets as high as 5093722. That\u0027s not illegal, just highly unusual. The server ack\u0027s so it should be fine. It should also only affect new requests, not ongoing streams. I wonder if a buffer gets dropped/replaced somewhere?",
+                                           "updatedAt":  "2024-02-05T17:12:28Z"
+                                       }
+                                   ],
+                         "totalCount":  6
+                     },
+        "title":  "Kestrel occasionally losing zero-size GRPC responses",
+        "labels":  [
+                       "area-grpc",
+                       "area-networking"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspnetcore/issues/55410",
+        "createdAt":  "2024-04-28T05:51:32Z",
+        "number":  55410,
+        "author":  "JamesNK",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHOC3iWBw==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "zs-dima",
+                                            "createdAt":  "2024-04-28T07:54:15Z"
+                                        }
+                                    ],
+                          "totalCount":  1
+                      },
+        "updatedAt":  "2025-07-23T06:09:56Z",
+        "body":  "### Is there an existing issue for this?\n\n- [X] I have searched the existing issues\n\n### Describe the bug\n\nThis change - https://github.com/dotnet/aspnetcore/pull/51394 - allowed the library to respect complex type errors. Since it was added, there is now a package for making this easy to do - https://github.com/grpc/grpc-dotnet/pull/2205.\r\n\r\nConsider using the new package.\n\n### Expected Behavior\n\n_No response_\n\n### Steps To Reproduce\n\n_No response_\n\n### Exceptions (if any)\n\n_No response_\n\n### .NET Version\n\n_No response_\n\n### Anything else?\n\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  null,
+                         "nodes":  [
+
+                                   ],
+                         "totalCount":  0
+                     },
+        "title":  "Use Grpc.StatusProto package from gRPC JSON transcoding",
+        "labels":  [
+                       "area-grpc"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspnetcore/issues/55733",
+        "createdAt":  "2024-05-15T13:02:25Z",
+        "number":  55733,
+        "author":  "abbottdev",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-07-23T06:09:57Z",
+        "body":  "### Is there an existing issue for this?\r\n\r\n- [X] I have searched the existing issues\r\n\r\n### Describe the bug\r\n\r\nWhen using the gRPC transcoding package, in combination with the gRPC swagger definitions, the generated documentation is incorrect when using enums.\r\n\r\nI\u0027ve spent some time narrowing this down and believe I\u0027ve reproduced the behaviour - it appears to be when using an **enum** in a `.proto` file. If an enum is **only** used in a response contract, then the generated swagger **correctly** states the response type to be a `string` type enum. \r\n\r\nHowever, when an enum is used in a `request` contract, then the swagger type is created as an integer **incorrectly**:\r\n![image](https://github.com/dotnet/aspnetcore/assets/3226335/0a4de5c0-a49c-40d9-9085-b3a830ba3e9a)\r\n\r\nGenerated from the following `.proto` file:\r\n[greet.proto.txt](https://github.com/dotnet/aspnetcore/files/15321872/greet.proto.txt)\r\n\r\n\r\n\r\n### Expected Behavior\r\n\r\nWhen using an `enum` in a `request` message for a gRPC transcoded API, the generated swagger definition should show that enum as a `string` when `WriteEnumsAsIntegers` is false.\r\n\r\n### Steps To Reproduce\r\n\r\nI\u0027ve created a repo here that demonstrates the issue: https://github.com/abbottdev/grpc-swagger-repo\r\n\r\nThis change _may_ be related to https://github.com/dotnet/aspnetcore/issues/51036 \r\n\r\nIf you clone the repo, `dotnet run` and browse to the swagger site: `http://localhost:5122/swagger/` you\u0027ll see the `ResponseOnlyEnum` generated type is a string, but the `RequestOnlyEnum` and `SharedEnum` are both created as `int32`\r\n\r\n\r\n\r\n### Exceptions (if any)\r\n\r\n_No response_\r\n\r\n### .NET Version\r\n\r\n8.0\r\n\r\n### Anything else?\r\n\r\nAsp.NET Core 8.0.5 and associated packages\r\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  null,
+                         "nodes":  [
+
+                                   ],
+                         "totalCount":  0
+                     },
+        "title":  "Microsoft.AspNetCore.Grpc.Swagger doesn\u0027t respect WriteEnumsAsIntegers for request contracts",
+        "labels":  [
+                       "area-grpc"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspnetcore/issues/55899",
+        "createdAt":  "2024-05-27T10:29:01Z",
+        "number":  55899,
+        "author":  "alrz",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-07-23T06:09:57Z",
+        "body":  "### Is there an existing issue for this?\n\n- [X] I have searched the existing issues\n\n### Describe the bug\n\n```protobuf\r\nservice SomeService {\r\n  rpc SomeMethod(SomeRpcMethodRequest) returns (google.protobuf.Empty) {\r\n    option (google.api.http) = {\r\n      post: \"/api/{some_field}\"\r\n      body: \"*\"\r\n    };\r\n  }\r\n}\r\nmessage SomeRpcMethodRequest {\r\n  string some_field = 1;\r\n  string another_field = 2;\r\n}  \r\n```\r\n\n\n### Expected Behavior\n\n\r\nThe body should be defined as the following:\r\n```json\r\n{ \"anotherField\": \"string\" }\r\n```\r\nBut it includes every field in the body including \"someField\"\r\n```json\r\n{ \"someField\": \"string\", \"anotherField\": \"string\" }\r\n```\n\n### Steps To Reproduce\n\n_No response_\n\n### Exceptions (if any)\n\n_No response_\n\n### .NET Version\n\n8.0\n\n### Anything else?\n\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  null,
+                         "nodes":  [
+
+                                   ],
+                         "totalCount":  0
+                     },
+        "title":  "gRPC json transcoding: Exclude fields referenced in the path from the body in swagger",
+        "labels":  [
+                       "area-grpc"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspnetcore/issues/58624",
+        "createdAt":  "2024-10-25T09:24:37Z",
+        "number":  58624,
+        "author":  "ahmednfwela",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-07-23T06:09:58Z",
+        "body":  "Consider the following minimal rpc:\n```protobuf\nrpc List(ListRequest) returns (ListResponse) {\n  option (google.api.http) = {\n    get: \"/api/notes/list\",\n  };\n}\n\nmessage ListRequest {\n  ListRequestRecursive tree = 1;\n}\nmessage ListRequestRecursive {\n  ListRequestRecursiveChildren children = 1;\n}\nmessage ListRequestRecursiveChildren {\n  repeated ListRequestRecursive  children = 1;\n}\nmessage ListResponse { }\n```\n\nThis causes the server to throw stack overflow exception as it goes into infinite loop starting from here:\n\nhttps://github.com/dotnet/aspnetcore/blob/de68d4212113859604d9e57cf7d674b167a8a317/src/Grpc/JsonTranscoding/src/Shared/ServiceDescriptorHelpers.cs#L505\n\nworkaround:\nuse POST instead of get:\n```protobuf\nrpc List(ListRequest) returns (ListResponse) {\n  option (google.api.http) = {\n    post: \"/api/notes/list\",\n    body: \"*\"\n  };\n}\n```",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  null,
+                         "nodes":  [
+
+                                   ],
+                         "totalCount":  0
+                     },
+        "title":  "Swagger grpc throws stack overflow exception when having recursive trees as query parameters",
+        "labels":  [
+                       "area-grpc"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspnetcore/issues/58709",
+        "createdAt":  "2024-10-30T01:12:19Z",
+        "number":  58709,
+        "author":  "maloo",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-07-23T06:09:58Z",
+        "body":  "### Is there an existing issue for this?\n\n- [x] I have searched the existing issues\n\n### Describe the bug\n\naspnetcore grpc reflection doesn\u0027t seem to work correctly on IIS/IISexpress:\n\nPS \u003e grpcurl localhost:44324 list\nFailed to list services: rpc error: code = Internal desc = server closed the stream without sending trailers\n\n### Expected Behavior\n\nPS \u003e grpcurl localhost:44324 list\ngrpc.reflection.v1alpha.ServerReflection\n...\n\n### Steps To Reproduce\n\nCreate a .NET 8 grpc service with reflection enabled and run it in IISexpress. This will fail as described above. Running the https profile works fine. Same issue on Server 2022+IIS.\n\n### Exceptions (if any)\n\n_No response_\n\n### .NET Version\n\n9.0.100-rc.2.24474.11\n\n### Anything else?\n\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOlYBf4A==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDOAQzde86UpkWz",
+                                           "createdAt":  "2024-11-22T14:45:21Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "sethsnel",
+                                           "body":  "I have a similar issue. Although we run .net 8 hosting bundle and .net 8 runtime for the gRPC server on windows 2022 with a build version of minimal 20348.\n\nWhen I test the service locally:\n1. Without debugging\n2. When app is started\n![Image](https://github.com/user-attachments/assets/ed697444-9fd8-4742-b600-a032139f4af3)\n\nThen when I test on remote:\n1. With site shutdown\n2. With site running\n![Image](https://github.com/user-attachments/assets/98e67afa-4530-47ae-9cd1-f6e5e0a40ee4)\n\n\nI would actually expect the output \"Failed to dial ...\" on attempt 1.\nBut when the site is running the \"failed to send trailers\" exception is shown (similar to issue starter).\nExtra weird observation: the web application calling the gRPC service does run on the remote machine. However it has page load times around 50s. Which I\u0027ve never seen before.\n\nAt the moment I have no clue on how to further investigate this issue. I try to collaborate with our infrastructure team to determine if perhaps http/2 is not fully supported. The symptoms just don\u0027t add up.\n\n@mgravell @JamesNK perhaps any ideas on which research steps to take to narrow down/isolate the issue?\n\n",
+                                           "updatedAt":  "2024-11-22T15:02:57Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOAQzde86VgF_g",
+                                           "createdAt":  "2024-11-29T18:02:24Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "maloo",
+                                           "body":  "I\u0027m also targeting IIS on Server 2022, just assumed it was easier for them to reproduce locally on IIS Express. They just released a new version of grpcurl, but I\u0027ve not had time to test it. I read they changed the dialer in go, so if the error was in dial then maybe it is worth a try...",
+                                           "updatedAt":  "2024-11-29T18:02:24Z"
+                                       }
+                                   ],
+                         "totalCount":  2
+                     },
+        "title":  "grpcurl reflection in IIS(express) error \"server closed the stream without sending trailers\"",
+        "labels":  [
+                       "area-grpc"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspnetcore/issues/60898",
+        "createdAt":  "2025-03-12T18:09:42Z",
+        "number":  60898,
+        "author":  "JeroMiya",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-07-23T06:09:58Z",
+        "body":  "### Is there an existing issue for this?\n\n- [x] I have searched the existing issues\n\n### Describe the bug\n\nI\u0027m attempting to use both GRPC json transcoding and the swagger interface. This application will have both grpc services and traditional web services. I want to use string json values for enums, so I configure json like so:\n\n```CSharp\nbuilder.Services\n    .AddControllers()\n    .AddJsonOptions(j =\u003e\n    {\n        j.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());\n    });\n```\n\nI also add grpc to the swagger gen:\n\n```CSharp\nbuilder.Services.AddGrpcSwagger();\n```\n\nWhen configuring json transcoding, I use the default `WriteEnumsAsIntegers` set to `false`, but even explicitly setting it the result is the same:\n\n```CSharp\nbuilder.Services\n    .AddGrpc()\n    .AddJsonTranscoding(opts =\u003e\n    {\n        opts.JsonSettings.WriteEnumsAsIntegers = false;\n    });\n```\n\nHere I\u0027m defining an enum in the proto file:\n\n```\nenum EnumParam {\n    ENUM_PARAM_UNSPECIFIED = 0;\n    ENUM_PARAM_VALUE1 = 1;\n    ENUM_PARAM_VALUE2 = 2;\n}\n```\n\nAnd here I\u0027m defining an rpc method (the `Request` message is not shown, but has a `param` field of type `EnumParam`):\n\n```\n  rpc GetMethod(Request) returns (Reply) {\n    option (google.api.http) = {\n      get: \"/v1/{param}\"\n    };\n  }\n```\n\nWhen I open up the swagger UI for the API, the UI correctly lists `Value1` and `Value2` as valid values for the `param` argument of the `GetMethod`. However, when making the request through the UI, the following error is given:\n\n```\nInvalid value \u0027Value1\u0027 for enum type EnumParam.\n```\n\nNow, when I remove the `JsonStringEnumConverter` in the json settings, and go to the swagger page, the dropdown for the enum parameter no longer lists strings values, but rather integer values (in this case 1 and 2 for `Value1` and `Value2`, however the requests parse the enums properly.\n\n### Expected Behavior\n\nWhen using `JsonStringEnumConverter`, I would expect the values to be parsed correctly when selected in the swagger UI. Further, given that GRPC enums are serialized as strings by default, I think the default behavior, at least when `WriteEnumsAsIntegers` is set to `false`, is to still serialize gRPC json-transcoded endpoints as string values, even without a `JsonStringEnumConverter` specified for Asp.net controllers.\n\n### Steps To Reproduce\n\nSorry I don\u0027t have a repro repo and the original source is under NDA. If you create a basic gRPC service from the template with the above additions/changes described above, you should be able to reproduce this issue, but let me know and I can work on a small repro repo - it will take some time.\n\n### Exceptions (if any)\n\n```\n2025-03-12T14:05:49 info: Grpc.AspNetCore.Grpc.JsonTranscoding.ServerCallHandler[7]\n2025-03-12T14:05:49       Error reading message.\n2025-03-12T14:05:49       System.InvalidOperationException: Invalid value \u0027Value1\u0027 for enum type EnumParam.\n2025-03-12T14:05:49          at Grpc.Shared.ServiceDescriptorHelpers.ConvertValue(Object value, FieldDescriptor descriptor)\n2025-03-12T14:05:49          at Grpc.Shared.ServiceDescriptorHelpers.SetValue(IMessage message, FieldDescriptor field, Object values)\n2025-03-12T14:05:49          at Grpc.Shared.ServiceDescriptorHelpers.RecursiveSetValue(IMessage currentValue, List`1 pathDescriptors, Object values)\n2025-03-12T14:05:49          at Microsoft.AspNetCore.Grpc.JsonTranscoding.Internal.JsonRequestHelpers.ReadMessage[TRequest](JsonTranscodingServerCallContext serverCallContext, JsonSerializerOptions serializerOptions)\n```\n\n### .NET Version\n\n9.0.200\n\n### Anything else?\n\n```\n.NET SDK:\n Version:           9.0.200\n Commit:            90e8b202f2\n Workload version:  9.0.200-manifests.69179adf\n MSBuild version:   17.13.8+cbc39bea8\n\nRuntime Environment:\n OS Name:     Windows\n OS Version:  10.0.26100\n OS Platform: Windows\n RID:         win-x64\n Base Path:   C:\\Program Files\\dotnet\\sdk\\9.0.200\\\n\n.NET workloads installed:\n [wasm-tools-net6]\n   Installation Source: VS 17.13.35825.156\n   Manifest Version:    9.0.2/9.0.100\n   Manifest Path:       C:\\Program Files\\dotnet\\sdk-manifests\\9.0.100\\microsoft.net.workload.mono.toolchain.net6\\9.0.2\\WorkloadManifest.json\n   Install Type:              Msi\n\n [wasm-tools-net8]\n   Installation Source: VS 17.13.35825.156\n   Manifest Version:    9.0.2/9.0.100\n   Manifest Path:       C:\\Program Files\\dotnet\\sdk-manifests\\9.0.100\\microsoft.net.workload.mono.toolchain.net8\\9.0.2\\WorkloadManifest.json\n   Install Type:              Msi\n\n [wasm-tools]\n   Installation Source: VS 17.13.35825.156\n   Manifest Version:    9.0.2/9.0.100\n   Manifest Path:       C:\\Program Files\\dotnet\\sdk-manifests\\9.0.100\\microsoft.net.workload.mono.toolchain.current\\9.0.2\\WorkloadManifest.json\n   Install Type:              Msi\n\n [aspire]\n   Installation Source: VS 17.13.35825.156\n   Manifest Version:    8.2.2/8.0.100\n   Manifest Path:       C:\\Program Files\\dotnet\\sdk-manifests\\8.0.100\\microsoft.net.sdk.aspire\\8.2.2\\WorkloadManifest.json\n   Install Type:              Msi\n\nConfigured to use loose manifests when installing new manifests.\n\nHost:\n  Version:      9.0.2\n  Architecture: x64\n  Commit:       80aa709f5d\n\n.NET SDKs installed:\n  9.0.200 [C:\\Program Files\\dotnet\\sdk]\n\n.NET runtimes installed:\n  Microsoft.AspNetCore.App 6.0.36 [C:\\Program Files\\dotnet\\shared\\Microsoft.AspNetCore.App]\n  Microsoft.AspNetCore.App 8.0.13 [C:\\Program Files\\dotnet\\shared\\Microsoft.AspNetCore.App]\n  Microsoft.AspNetCore.App 9.0.2 [C:\\Program Files\\dotnet\\shared\\Microsoft.AspNetCore.App]\n  Microsoft.NETCore.App 6.0.36 [C:\\Program Files\\dotnet\\shared\\Microsoft.NETCore.App]\n  Microsoft.NETCore.App 8.0.13 [C:\\Program Files\\dotnet\\shared\\Microsoft.NETCore.App]\n  Microsoft.NETCore.App 9.0.2 [C:\\Program Files\\dotnet\\shared\\Microsoft.NETCore.App]\n  Microsoft.WindowsDesktop.App 6.0.36 [C:\\Program Files\\dotnet\\shared\\Microsoft.WindowsDesktop.App]\n  Microsoft.WindowsDesktop.App 8.0.13 [C:\\Program Files\\dotnet\\shared\\Microsoft.WindowsDesktop.App]\n  Microsoft.WindowsDesktop.App 9.0.2 [C:\\Program Files\\dotnet\\shared\\Microsoft.WindowsDesktop.App]\n\nOther architectures found:\n  x86   [C:\\Program Files (x86)\\dotnet]\n    registered at [HKLM\\SOFTWARE\\dotnet\\Setup\\InstalledVersions\\x86\\InstallLocation]\n\nEnvironment variables:\n  Not set\n\nglobal.json file:\n  Not found\n\nLearn more:\n  https://aka.ms/dotnet/info\n\nDownload .NET:\n  https://aka.ms/dotnet/download\n```",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOqhqUHg==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDOAQzde86jaXxM",
+                                           "createdAt":  "2025-03-20T20:33:43Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "JeroMiya",
+                                           "body":  "I still think the default behavior needs to be fixed so that this isn\u0027t necessary, but we did find a workaround. We need to customize the mapping in the swagger UI for enums used in either the path or as a query parameter in the grpc transcoded endpoints. Enums used only in the body of a request or response message appear to be handled properly already in the generated swagger document.\n\n```CSharp\n    /// \u003csummary\u003e\n    /// This is only needed for gRPC enums used in either the path or query params in a\n    /// json transcoded enpoint. Enums used only in the body of the request or response message\n    /// are already handled correctly.\n    /// \u003c/summary\u003e\n    private static SwaggerGenOptions MapGrpcEnumType\u003cT\u003e(this SwaggerGenOptions options)\n        where T : struct, Enum\n    {\n        options.MapType\u003cT\u003e(() =\u003e new OpenApiSchema\n        {\n            Type = \"string\",\n            Enum = [.. Enum.GetValues\u003cT\u003e()\n                    .Select(value =\u003e new OpenApiString(GetGrpcStringValue(value)))]\n        });\n        return options;\n    }\n\n    /// \u003csummary\u003e\n    /// This only works for Enums generated by the gRPC tooling, which adds\n    /// OriginalNameAttribute to each value.\n    /// \u003c/summary\u003e\n    private static string GetGrpcStringValue\u003cT\u003e(T value) where T : struct, Enum\n    {\n        FieldInfo field = value.GetType().GetField(value.ToString())\n            ?? throw new InvalidOperationException($\"Unable to get FieldInfo for value {value}\");\n        OriginalNameAttribute attribute = field.GetCustomAttribute\u003cOriginalNameAttribute\u003e()\n            ?? throw new InvalidOperationException($\"Unable to get OriginalNameAttribute of value {value}\");\n\n        return attribute.Name;\n    }\n\n// during startup:\nbuilder.Services.AddSwaggerGen(options =\u003e\n{\n    // etc...\n    options.MapGrpcEnumType\u003cEnumParam\u003e();\n});\n```",
+                                           "updatedAt":  "2025-03-20T20:33:43Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOAQzde86qGYc5",
+                                           "createdAt":  "2025-05-06T09:04:01Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Zetanova",
+                                           "body":  "When `JsonSettings.WriteEnumsAsIntegers = true` the produced Json contains the numeric value as expected.\nBut the produced openapi doc does not differ from `JsonSettings.WriteEnumsAsIntegers = false` \n\nThe openapi doc does not validate the produced json successfully. \n \nMicrosoft.AspNetCore.Grpc.JsonTranscoding 8.0.15\n",
+                                           "updatedAt":  "2025-05-06T09:04:01Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOAQzde86qGpQe",
+                                           "createdAt":  "2025-05-06T09:27:14Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Zetanova",
+                                           "body":  "In openapi 3.1, it is possible to declare a type array.\nThen it would be possible to include both enum-value and enum-name with `type: [number, string]`\n\nWith openapi 3.0 there is no nice way to support both enum-value and enum-name",
+                                           "updatedAt":  "2025-05-06T09:27:14Z"
+                                       }
+                                   ],
+                         "totalCount":  3
+                     },
+        "title":  "gRPC Transcoding: Invalid value for enum error when string enums enabled, integer values in swagger when string enums disabled",
+        "labels":  [
+                       "area-grpc"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspnetcore/issues/60929",
+        "createdAt":  "2025-03-14T10:00:34Z",
+        "number":  60929,
+        "author":  "ThisIsAlsoMyPassword",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-07-23T06:09:59Z",
+        "body":  "### Is there an existing issue for this?\n\n- [x] I have searched the existing issues\n\n### Describe the bug\n\nWe have an ASP.NET application providing a number of gRPC services that works well hosted in Kestrel that we need to host with IIS10.\nIn IIS, gRPC calls the result in a success status code work fine. The trouble begins when the service reports an error status code. Any status code in the service always results in status code 13 (Internal) in the client. After lots of searching I found some mention of similar problems, that did not seem to get to the core of the problem. Most notably an [issue ](https://github.com/grpc/grpc-dotnet/issues/2062) in the dotnet-grpc repo that lead @JamesNK to open [this issue](https://github.com/grpc/grpc-dotnet/issues/2062) in this repo here. I can\u0027t tell if those lead to any action. It seems to have moved to .NET8 milestone but the issue seems to persist in .NET9.\nIn the aforementioned issue the problem was complicated by the reporter using a proxy service, so I decided to create a minimal example for myself to get to the root of the problem.\n\n### Expected Behavior\n\nAn ASP.NET application hosted in IIS10 meeting the minimal requirements for servicing gRPC services propagates RpcExceptions thrown in the service correctly to the client, no matter the gRPC implementation.\n\n### Steps To Reproduce\n\n### 1. Create the following minimal example, based on the [Greeter-Service](https://github.com/grpc/grpc-dotnet/tree/5816e69828ece5b5f3474d98057c2bc89a64dfd7/examples/Greeter)\nGreeterService.cs\n```C#\nusing Greet;\nusing Grpc.Core;\n\nnamespace Server\n{\n    public class GreeterService : Greeter.GreeterBase\n    {\n        private readonly ILogger _logger;\n\n        public GreeterService(ILoggerFactory loggerFactory)\n        {\n            _logger = loggerFactory.CreateLogger\u003cGreeterService\u003e();\n        }\n\n        public override Task\u003cHelloReply\u003e SayHello(HelloRequest request, ServerCallContext context)\n        {\n            _logger.LogInformation($\"Sending hello to {request.Name}\");\n            throw new RpcException(new Status(StatusCode.PermissionDenied, \"error\"));\n        }\n    }\n}\n```\nProgram.cs\n```C#\nusing Grpc.Core.Interceptors;\nusing Grpc.Core;\nusing Server;\nvar builder = WebApplication.CreateBuilder(args);\n\n// Add services to the container.\nbuilder.Services.AddGrpc(o =\u003e\n{\n    o.Interceptors.Add\u003cWriteResponseHeadersInterceptor\u003e();\n});\nbuilder.Services.AddGrpcReflection();\nvar app = builder.Build();\n\n// Configure the HTTP request pipeline.\napp.MapGrpcService\u003cGreeterService\u003e();\napp.MapGrpcReflectionService();\napp.MapGet(\"/\", () =\u003e \"Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909\");\n\napp.Run();\n\npublic class WriteResponseHeadersInterceptor : Interceptor\n{\n    public override async Task\u003cTResponse\u003e UnaryServerHandler\u003cTRequest, TResponse\u003e(TRequest request, ServerCallContext context, UnaryServerMethod\u003cTRequest, TResponse\u003e continuation)\n    {\n        // await context.WriteResponseHeadersAsync(new());\n        return await base.UnaryServerHandler(request, context, continuation);\n    }\n}\n\n```\n\nThe Program.cs contains an interceptor with the suggested workaround. The line providing the actual \"fix\" is commented out because the observed behavior is the same.\n\n### 2. Start with IIS from Visual Studio\n\n![Image](https://github.com/user-attachments/assets/9c181ce7-33e6-4117-ac7e-241ced936edf)\n\n### 3. Test with grpcurl\n\n![Image](https://github.com/user-attachments/assets/83f6ef18-9e12-487e-b6fe-8bde79ee3e07)\n\n### 4. Positive-Control with Kestrel\n\n![Image](https://github.com/user-attachments/assets/b33d3eb7-1ea0-4bc5-9f7e-795c0da78131)\n\n![Image](https://github.com/user-attachments/assets/fd6bf2aa-eecd-4fae-9c5f-6f6b3f73a878)\n\nThe same behavior can be observed with Postman. The clients that connect to the production server use the C++ gRPC implementation and seem to suffer the same problem.\n\nI can\u0027t think of a more minimal example than this. As far as I can tell, all prerequisites for using gRPC in IIS10 should be met (see below) and I would expect that status codes to be propagated correctly to any client regardless of the gRPC implementation.\n\nI\u0027m still hoping I\u0027m doing something wrong and there is an easy fix!\n\n### Exceptions (if any)\n\n_No response_\n\n### .NET Version\n\n9.0.103\n\n### Anything else?\n\nBelow are the version of the products I used locally for the minimal example. On the actual server where the problem surfaced we use Windows Server 2022 Version 10.0.20348 Build 20348\n\n\n### Version information\n#### Visual Studio\nMicrosoft Visual Studio Professional 2022 (64-bit) - Current\nVersion 17.12.5 \n#### Windows\nMicrosoft Windows 11 Pro\n10.0.22631 Build 22631\n#### grpcurl\nv1.9.3\n#### Build-Target\nnet8/net9",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOsd6wmA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDOAQzde86x3rCY",
+                                           "createdAt":  "2025-06-18T13:12:34Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "JDr111",
+                                           "body":  "Has there been any progress on this issue? I am encountering the same issue, and it\u0027s proving to be a significant problem in my specific use case. The issue was previously described in [#47183](https://github.com/dotnet/aspnetcore/issues/47183), but let me share my own observations.\n\n### The setup\nWe have a C++ gRPC client connecting to an ASP.NET Core gRPC server, which can be run inside of Kestrel, but in the end we\u0027re required to deploy it to IIS in production.\n\nThe C++ client makes a call to an endpoint on the server, which is purposefully set up to produce an RpcException, that is, a header-only response in terms of HTTP/2. The call is made via HTTPS/TLS, and Wireshark was set up to decrypt the traffic.\n\n### Observed behavior - scenario 1: C# gRPC server in IIS\n\n![Image](https://github.com/user-attachments/assets/d8994f75-4e84-46bd-aee7-40a59cce30bb)\n\nHere, we see the gRPC server hosted in IIS first returns a HEADERS frame with HTTP status 200 and END_HEADERS flag, which contains all response headers, including those of the RpcException (grpc-status, grpc-message):\n\n![Image](https://github.com/user-attachments/assets/a76fa3e2-0d99-423b-b9bc-b87f9cc985b4)\n\nThis is followed by an empty DATA frame with the END_STREAM flag set:\n\n![Image](https://github.com/user-attachments/assets/df98736e-0759-4368-861c-a24ca3d49e0c)\n\nThe C++ client reports an error with status UNKNOWN, and message \"Stream removed\".\n\n### Observed behavior - scenario 2: C# gRPC server in Kestrel\n\n![Image](https://github.com/user-attachments/assets/7cdb03d0-bd84-430a-8ed2-7b75e6c62e6a)\n\nThe response from Kestrel is very different. The first part is a HEADERS frame with HTTP status 200, which only contains basic headers with server information, etc., but not the RpcException information:\n\n![Image](https://github.com/user-attachments/assets/2586ff91-6822-40f6-979f-ec015ca8626d)\n\nThis is followed by another HEADERS frame, which contains RpcException headers (grpc-status, grpc-message), as well as the END_STREAM flag:\n\n![Image](https://github.com/user-attachments/assets/df99c8ed-bcb4-4d8f-81d3-a7a23df965f3)\n\nCuriously, both HEADER frames have the END_HEADERS flag set. Is that supposed to happen?\n\nNo DATA frames are found in the response from Kestrel.\n\nThe C++ client reports the correct error code and message.\n\n### Observations\n\nThe big difference here is that IIS sends all response headers in a single HEADER frame, while Kestrel sends basic responses headers in one HEADER frame, and the response headers related to RpcException in another HEADER frame. I am not well versed with either the HTTP/2 or gRPC specs, so I am unsure which of the two is supposed to be correct.\n\nThis behavior is the same regardless of the version of Windows Server on which the C# gRPC server is hosted (I tried Windows Server 2022 and Windows Server 2025), and the version of .NET runtime/hosting bundle (I tried 8.0.16, 8.0.17 and 9.0.6).\n\nOne curious observation however - a C# gRPC client making a call to the same endpoint on the C# gRPC server hosted in IIS actually works, and interprets the RpcException correctly. The C# client seems smart enough to not mind the empty DATA frame IIS sends.\n\nFrom these observations, I suspect the issue is either in the ANCM (ASP.NET Core Module) for IIS, or IIS itself. I do know that ASP.NET Core\u0027s support in IIS started with out-of-process hosting, which put IIS into the role of a reverse proxy, which are known to modify headers in various different ways. I don\u0027t know how in-process hosting works under the hood, but is there a possibility there\u0027s something in either the ACNM or IIS that\u0027s merging the HEADER frames?\n\nI did notice that sometimes response headers aren\u0027t immediately sent to the client when the server is either in IIS or behind a reverse proxy. They get sent with the first DATA frame that goes from the server to the client. I first noticed this behavior when I put a gRPC server in Kestrel behind YARP reverse proxy in an unrelated project.\n\nSimilar thing occurs when the gRPC server is in IIS. I had a client-side streaming endpoint set up. The client sent the initial request, then waited for the response headers before continuing with uploading data. With Kestrel, this worked fine as the response headers arrived immediately after sending them from server-side. However, in IIS, the response headers never physically left the server machine, and I had to turn the client-side streaming endpoint into a bidirectional streaming endpoint, and send an empty message from the server to client in order to force the response headers to be physically sent to the client.\n\nCould this be messing with the headers-only responses, that response headers aren\u0027t being sent out immediately, but rather with the first DATA frame, which is why IIS sends out an empty DATA frame when the response is header-only?\n\nOr perhaps we just missed something when configuring IIS for gRPC, and it doesn\u0027t work \"out-of-the-box\"?\n\n### Why this matters\n\nThe biggest problem with this is that this issue prevents people from using gRPC\u0027s exception mechanism to implement features such as sending application-specific error codes or retry-with-backoff mechanisms. Features like these then form the base for implementing a \"slots\" mechanism to limit the number of clients that are allowed to call a specific endpoint on the server at the same time. This is relevant for scenarios where a large number of clients need to upload vast amounts of data at the same time. In my specific case, this can be thousands of clients with tens of gigabytes of data per client that is to be uploaded to the server (cluster) via gRPC streaming.\n\nMy use case has a strong preference for writing the client in C++, as there\u0027s a strong need to minimize external dependencies, which can be done by statically linking everything possible. Simply copy the executable to any computer, and it should run. All this while maintaining a manageable executable size (I\u0027m at 12 MB in release configuration).\n\nOne could easily argue - just use Kestrel. Sure, but we need enterprise-grade scalability and manageability that currently only IIS can offer.\n\nMicrosoft claims IIS supports gRPC. My observation is that its support is broken.\n\n### To sum up\n\n- C# gRPC client works with C# gRPC server hosted in IIS (and Kestrel)\n- C++ and other gRPC clients do not work with C# gRPC server hosted in IIS (but work with Kestrel)\n\nIf this issue isn\u0027t resolved, I see only two options:\n\n- Use Kestrel, which isn\u0027t ideal for large-scale enterprise deployments\n- Write the client in C#, interop with C++ code for critical parts (performance and otherwise), and use Native AOT to statically link to external dependencies such as Sqlite to produce a single executable file in Release configurations. This will almost certainly result in a larger executable file, which I guess is an acceptable trade-off as long as it\u0027s not 100+ MB, however architecting a solution like this is a rather big rabbit hole I\u0027d like to avoid if possible. And even then, who said this issue won\u0027t pop up in the C# implementation of gRPC in the future?",
+                                           "updatedAt":  "2025-06-18T13:15:27Z"
+                                       }
+                                   ],
+                         "totalCount":  1
+                     },
+        "title":  "ASP.NET gRPC service in IIS10 does propagate gRPC status codes",
+        "labels":  [
+                       "feature-iis",
+                       "area-grpc"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspnetcore/issues/61178",
+        "createdAt":  "2025-03-27T03:36:17Z",
+        "number":  61178,
+        "author":  "wtgodbe",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-09-20T00:03:12Z",
+        "body":  "## Build Information\nBuild: https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_build/results?buildId=995186\u0026view=logs\u0026j=1b89928a-2219-5ef9-602f-f95beb3da4dc\nBuild error leg or test failing: Build / Build: Windows x64/x86/arm64 / Build x64\nPull request: https://github.com/dotnet/aspnetcore/pull/61011\n\u003c!-- Error message template  --\u003e\n## Error Message\n\nFill the error message using [step by step known issues guidance](https://github.com/dotnet/arcade/blob/main/Documentation/Projects/Build%20Analysis/KnownIssueJsonStepByStep.md).\n\n\u003c!-- Use ErrorMessage for String.Contains matches. Use ErrorPattern for regex matches (single line/no backtracking). Set BuildRetry to `true` to retry builds with this error. Set ExcludeConsoleLog to `true` to skip helix logs analysis. --\u003e\n\n```json\n{\n  \"ErrorMessage\": \"error : Cannot create a file when that file already exists.\",\n  \"ErrorPattern\": \"\",\n  \"BuildRetry\": true,\n  \"ExcludeConsoleLog\": true\n}\n```\n\n\r\n\u003c!-- Known issue validation start --\u003e\r\n ### Known issue validation\r\n**Build: :mag_right:** https://dev.azure.com/dnceng-public/public/_build/results?buildId=995186\r\n**Error message validated:** `[error : Cannot create a file when that file already exists.`]\r\n**Result validation:** :white_check_mark: Known issue matched with the provided build.\r\n**Validation performed at:** 3/27/2025 3:36:33 AM UTC\r\n\u003c!-- Known issue validation end --\u003e\r\n\u003c!--Known issue error report start --\u003e\r\n\r\n### Report\r\n|Build|Definition|Step Name|Console log|Pull Request|\r\n|---|---|---|---|---|\r\n|[1153506](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1153506)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1153506/logs/28)||\r\n|[1153420](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1153420)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1153420/logs/239)|dotnet/aspnetcore#63749|\r\n|[2797561](https://dev.azure.com/dnceng/internal/_build/results?buildId=2797561)|dotnet-aspnetcore|Build x64|[Log](https://dev.azure.com/dnceng/7ea9116e-9fac-403d-b258-b31fcf1bb293/_apis/build/builds/2797561/logs/689)||\r\n|[1153253](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1153253)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1153253/logs/241)||\r\n|[1152825](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1152825)|dotnet/aspnetcore|Run build.cmd|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1152825/logs/360)|dotnet/aspnetcore#63734|\r\n|[1153231](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1153231)|dotnet/aspnetcore|Build (No NodeJS)|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1153231/logs/225)|dotnet/aspnetcore#63740|\r\n|[1153209](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1153209)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1153209/logs/225)|dotnet/aspnetcore#63720|\r\n|[1153154](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1153154)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1153154/logs/36)|dotnet/aspnetcore#63740|\r\n|[1152952](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1152952)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1152952/logs/43)||\r\n|[1152923](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1152923)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1152923/logs/238)||\r\n|[1152810](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1152810)|dotnet/aspnetcore|Run build.cmd|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1152810/logs/326)|dotnet/aspnetcore#63642|\r\n|[1152807](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1152807)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1152807/logs/331)|dotnet/aspnetcore#63684|\r\n|[1152804](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1152804)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1152804/logs/250)|dotnet/aspnetcore#63657|\r\n|[1152710](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1152710)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1152710/logs/9)||\r\n|[1152671](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1152671)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1152671/logs/55)||\r\n|[1152484](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1152484)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1152484/logs/43)||\r\n|[1152208](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1152208)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1152208/logs/9)||\r\n|[1152185](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1152185)|dotnet/aspnetcore|Run build.cmd|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1152185/logs/256)|dotnet/aspnetcore#63708|\r\n|[1152151](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1152151)|dotnet/aspnetcore|Run build.cmd|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1152151/logs/245)||\r\n|[1151994](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1151994)|dotnet/aspnetcore|Build|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1151994/logs/86)||\r\n|[1151986](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1151986)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1151986/logs/55)||\r\n|[1151993](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1151993)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1151993/logs/251)||\r\n|[1151905](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1151905)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1151905/logs/327)|dotnet/aspnetcore#63708|\r\n|[1151974](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1151974)|dotnet/aspnetcore|Run build.cmd|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1151974/logs/256)|dotnet/aspnetcore#63687|\r\n|[1151929](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1151929)|dotnet/aspnetcore|Build|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1151929/logs/42)||\r\n|[1151751](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1151751)|dotnet/aspnetcore|Build|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1151751/logs/44)||\r\n|[1151560](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1151560)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1151560/logs/276)|dotnet/aspnetcore#62080|\r\n|[2796001](https://dev.azure.com/dnceng/internal/_build/results?buildId=2796001)|dotnet-aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng/7ea9116e-9fac-403d-b258-b31fcf1bb293/_apis/build/builds/2796001/logs/55)||\r\n|[1151248](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1151248)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1151248/logs/228)|dotnet/aspnetcore#63711|\r\n|[2795953](https://dev.azure.com/dnceng/internal/_build/results?buildId=2795953)|dotnet-aspnetcore|Build x64|[Log](https://dev.azure.com/dnceng/7ea9116e-9fac-403d-b258-b31fcf1bb293/_apis/build/builds/2795953/logs/597)||\r\n|[1151084](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1151084)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1151084/logs/250)|dotnet/aspnetcore#63710|\r\n|[1151030](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1151030)|dotnet/aspnetcore|Run build.cmd|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1151030/logs/326)|dotnet/aspnetcore#62885|\r\n|[1150804](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1150804)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1150804/logs/10)||\r\n|[1150554](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1150554)|dotnet/aspnetcore|Build (No NodeJS)|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1150554/logs/249)|dotnet/aspnetcore#63625|\r\n|[1150272](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1150272)|dotnet/aspnetcore|Build|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1150272/logs/56)|dotnet/aspnetcore#63666|\r\n|[1149944](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1149944)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1149944/logs/237)|dotnet/aspnetcore#63697|\r\n|[1149931](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1149931)|dotnet/aspnetcore|Build (No NodeJS)|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1149931/logs/202)|dotnet/aspnetcore#61947|\r\n|[1148636](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1148636)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1148636/logs/182)||\r\n|[1148543](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1148543)|dotnet/aspnetcore|Build (No NodeJS)|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1148543/logs/145)|dotnet/aspnetcore#63685|\r\n|[1148379](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1148379)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1148379/logs/169)|dotnet/aspnetcore#63657|\r\n|[1148248](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1148248)|dotnet/aspnetcore|Build (No NodeJS)|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1148248/logs/238)|dotnet/aspnetcore#63540|\r\n|[1148112](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1148112)|dotnet/aspnetcore|Build (No NodeJS)|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1148112/logs/252)||\r\n|[1148056](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1148056)|dotnet/aspnetcore|Run build.cmd|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1148056/logs/245)|dotnet/aspnetcore#63681|\r\n|[1148047](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1148047)|dotnet/aspnetcore|Run build.cmd|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1148047/logs/256)|dotnet/aspnetcore#63680|\r\n|[1148029](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1148029)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1148029/logs/239)|dotnet/aspnetcore#63679|\r\n|[1147766](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1147766)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1147766/logs/43)||\r\n|[1147296](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1147296)|dotnet/aspnetcore|Build|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1147296/logs/56)|dotnet/aspnetcore#63291|\r\n|[1147154](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1147154)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1147154/logs/55)|dotnet/aspnetcore#63665|\r\n|[1146665](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1146665)|dotnet/aspnetcore|Run build.cmd|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1146665/logs/579)|dotnet/aspnetcore#62903|\r\n|[1146569](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1146569)|dotnet/aspnetcore|Build (No NodeJS)|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1146569/logs/360)|dotnet/aspnetcore#63659|\r\n|[1146498](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1146498)|dotnet/aspnetcore|Build (No NodeJS)|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1146498/logs/236)|dotnet/aspnetcore#63616|\r\n|[1146414](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1146414)|dotnet/aspnetcore|Run build.cmd|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1146414/logs/259)||\r\n|[1146353](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1146353)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1146353/logs/42)|dotnet/aspnetcore#63643|\r\n|[1146344](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1146344)|dotnet/aspnetcore|Run build.cmd|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1146344/logs/268)||\r\n|[1146251](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1146251)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1146251/logs/42)||\r\n|[1145951](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1145951)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1145951/logs/9)||\r\n|[1145777](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1145777)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1145777/logs/83)||\r\n|[1145596](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1145596)|dotnet/aspnetcore|Run build.cmd|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1145596/logs/245)||\r\n|[1145599](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1145599)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1145599/logs/9)||\r\n|[1145600](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1145600)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1145600/logs/236)|dotnet/aspnetcore#63625|\r\n|[1145502](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1145502)|dotnet/aspnetcore|Run build.cmd|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1145502/logs/243)|dotnet/aspnetcore#63643|\r\n|[1145452](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1145452)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1145452/logs/146)|dotnet/aspnetcore#63640|\r\n|[1145444](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1145444)|dotnet/aspnetcore|Run build.cmd|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1145444/logs/155)||\r\n|[1145445](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1145445)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1145445/logs/36)||\r\n|[1145358](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1145358)|dotnet/aspnetcore|Build x64|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1145358/logs/224)|dotnet/aspnetcore#63642|\r\n|[1145284](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1145284)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1145284/logs/243)|dotnet/aspnetcore#63540|\r\n|[1145250](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1145250)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1145250/logs/226)|dotnet/aspnetcore#63549|\r\n|[1145241](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1145241)|dotnet/aspnetcore|Build (No NodeJS)|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1145241/logs/225)|dotnet/aspnetcore#63640|\r\n|[1144833](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1144833)|dotnet/aspnetcore|Build x64|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1144833/logs/221)|dotnet/aspnetcore#63631|\r\n|[1144825](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1144825)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1144825/logs/10)||\r\n|[1144716](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1144716)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1144716/logs/42)||\r\n|[1144694](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1144694)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1144694/logs/42)||\r\n|[1144591](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1144591)|dotnet/aspnetcore|Run build.cmd|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1144591/logs/245)||\r\n|[1144608](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1144608)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1144608/logs/269)||\r\n|[1144437](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1144437)|dotnet/aspnetcore|Build x64|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1144437/logs/225)||\r\n|[1144414](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1144414)|dotnet/aspnetcore|Run build.cmd|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1144414/logs/258)|dotnet/aspnetcore#62885|\r\n|[1144289](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1144289)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1144289/logs/55)|dotnet/aspnetcore#63594|\r\n|[1144251](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1144251)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1144251/logs/43)||\r\n|[1144071](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1144071)|dotnet/aspnetcore|Run build.cmd|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1144071/logs/241)|dotnet/aspnetcore#63496|\r\n|[1144072](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1144072)|dotnet/aspnetcore|Build|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1144072/logs/56)|dotnet/aspnetcore#63496|\r\n|[1144074](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1144074)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1144074/logs/42)|dotnet/aspnetcore#63540|\r\n|[1144053](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1144053)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1144053/logs/226)|dotnet/aspnetcore#63612|\r\n|[1144004](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1144004)|dotnet/aspnetcore|Build|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1144004/logs/53)||\r\n|[1143882](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1143882)|dotnet/aspnetcore|Build|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1143882/logs/31)||\r\n|[1143413](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1143413)|dotnet/aspnetcore|Build x64|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1143413/logs/235)|dotnet/aspnetcore#62885|\r\n|[2789657](https://dev.azure.com/dnceng/internal/_build/results?buildId=2789657)|dotnet-aspnetcore|Build x64|[Log](https://dev.azure.com/dnceng/7ea9116e-9fac-403d-b258-b31fcf1bb293/_apis/build/builds/2789657/logs/444)||\r\n|[1143347](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1143347)|dotnet/aspnetcore|Run build.cmd|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1143347/logs/261)|dotnet/aspnetcore#62885|\r\n|[1143293](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1143293)|dotnet/aspnetcore|Run build.cmd|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1143293/logs/257)||\r\n|[1143294](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1143294)|dotnet/aspnetcore|Build|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1143294/logs/56)||\r\n|[1142895](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1142895)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1142895/logs/9)||\r\n|[1142835](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1142835)|dotnet/aspnetcore|Build|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1142835/logs/55)|dotnet/aspnetcore#63594|\r\n|[1142688](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1142688)|dotnet/aspnetcore|Build|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1142688/logs/44)||\r\n|[1142598](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1142598)|dotnet/aspnetcore|Build (No NodeJS)|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1142598/logs/226)||\r\n|[1142532](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1142532)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1142532/logs/243)||\r\n|[1142475](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1142475)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1142475/logs/238)|dotnet/aspnetcore#63588|\r\n|[1142379](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1142379)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1142379/logs/241)||\r\n|[1142200](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1142200)|dotnet/aspnetcore|Run build.cmd|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1142200/logs/256)|dotnet/aspnetcore#63511|\r\n|[1142107](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1142107)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1142107/logs/225)|dotnet/aspnetcore#63583|\r\n|[1142059](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1142059)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1142059/logs/10)||\r\n|[1142047](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1142047)|dotnet/aspnetcore|Build shared fx|[Log](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_apis/build/builds/1142047/logs/42)||\r\nDisplaying 100 of 224 results\r\n#### Summary\r\n|24-Hour Hit Count|7-Day Hit Count|1-Month Count|\r\n|---|---|---|\r\n|16|48|224|\r\n\u003c!--Known issue error report end --\u003e",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOu3gV_A==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDOAQzde862lN5l",
+                                           "createdAt":  "2025-07-11T17:51:22Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOEc1Mzw==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "wtgodbe",
+                                                                               "createdAt":  "2025-08-01T17:02:42Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "lewing",
+                                           "body":  "This appears to always fail in src\\Grpc\\JsonTranscoding\\src\\Microsoft.AspNetCore.Grpc.Swagger\\Microsoft.AspNetCore.Grpc.Swagger.csproj",
+                                           "updatedAt":  "2025-07-11T17:51:22Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOAQzde867eBX8",
+                                           "createdAt":  "2025-08-01T17:02:46Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "wtgodbe",
+                                           "body":  "More info at https://github.com/dotnet/aspnetcore/issues/32219",
+                                           "updatedAt":  "2025-08-01T17:02:46Z"
+                                       }
+                                   ],
+                         "totalCount":  2
+                     },
+        "title":  "Known Build Error: error : Cannot create a file when that file already exists.",
+        "labels":  [
+                       "area-infrastructure",
+                       "area-grpc",
+                       "Known Build Error"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspnetcore/issues/61808",
+        "createdAt":  "2025-05-06T08:40:50Z",
+        "number":  61808,
+        "author":  "Zetanova",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-07-23T06:09:59Z",
+        "body":  "### Is there an existing issue for this?\n\n- [x] I have searched the existing issues\n\n### Describe the bug\n\nWhen using the protobuf enum `option allow_alias = true` then SwaggerGen throws on mutliple enum-names for a single enum-value.\n\n### Expected Behavior\n\nThe first enum string value should be used.\n\n```protobuf\nenum OrderStatus {\n\toption allow_alias = true;\n\n        ORDER_STATUS_UNSPECIFIED = 0;\n        PENDING = 1;\n\tORDER_STATUS_PENDING = 1;\n\n        //...\n}\n```\n\n\"PENDING\" should be used in the openapi doc.\n\nMaybe it is possible to accept/define all aliases in the openapi doc.\n\n\n### Steps To Reproduce\n\nCreate a protobuf file with an enum that uses `option allow_alias = true`\n\n### Exceptions (if any)\n\n```\nSwashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Failed to generate Operation for action - . See inner exception\n ---\u003e Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Failed to generate schema for type - MyName.Protos.SomeMessage. See inner exception\n ---\u003e System.InvalidOperationException: Sequence contains more than one matching element\n   at System.Linq.ThrowHelper.ThrowMoreThanOneMatchException()\n   at System.Linq.Enumerable.TryGetSingle[TSource](IEnumerable`1 source, Func`2 predicate, Boolean\u0026 found)\n   at System.Linq.Enumerable.SingleOrDefault[TSource](IEnumerable`1 source, Func`2 predicate)\n   at Microsoft.AspNetCore.Grpc.Swagger.Internal.GrpcDataContractResolver.\u003c\u003ec__DisplayClass4_0.\u003cGetDataContractForType\u003eb__0(Object value)\n   at System.Linq.Enumerable.DistinctIterator`1.MoveNext()\n   at System.Linq.Enumerable.SelectEnumerableIterator`2.MoveNext()\n   at System.Collections.Generic.List`1.AddRange(IEnumerable`1 collection)\n   at Swashbuckle.AspNetCore.SwaggerGen.SchemaGenerator.CreatePrimitiveSchema(DataContract dataContract)\n   at Swashbuckle.AspNetCore.SwaggerGen.SchemaGenerator.GenerateReferencedSchema(DataContract dataContract, SchemaRepository schemaRepository, Func`1 definitionFactory)\n   at Swashbuckle.AspNetCore.SwaggerGen.SchemaGenerator.GenerateConcreteSchema(DataContract dataContract, SchemaRepository schemaRepository)\n   at Swashbuckle.AspNetCore.SwaggerGen.SchemaGenerator.CreateObjectSchema(DataContract dataContract, SchemaRepository schemaRepository)\n   at Swashbuckle.AspNetCore.SwaggerGen.SchemaGenerator.GenerateReferencedSchema(DataContract dataContract, SchemaRepository schemaRepository, Func`1 definitionFactory)\n   at Swashbuckle.AspNetCore.SwaggerGen.SchemaGenerator.GenerateConcreteSchema(DataContract dataContract, SchemaRepository schemaRepository)\n   at Swashbuckle.AspNetCore.SwaggerGen.SchemaGenerator.CreateObjectSchema(DataContract dataContract, SchemaRepository schemaRepository)\n   at Swashbuckle.AspNetCore.SwaggerGen.SchemaGenerator.GenerateReferencedSchema(DataContract dataContract, SchemaRepository schemaRepository, Func`1 definitionFactory)\n   at Swashbuckle.AspNetCore.SwaggerGen.SchemaGenerator.GenerateConcreteSchema(DataContract dataContract, SchemaRepository schemaRepository)\n   at Swashbuckle.AspNetCore.SwaggerGen.SchemaGenerator.CreateObjectSchema(DataContract dataContract, SchemaRepository schemaRepository)\n   at Swashbuckle.AspNetCore.SwaggerGen.SchemaGenerator.GenerateReferencedSchema(DataContract dataContract, SchemaRepository schemaRepository, Func`1 definitionFactory)\n   at Swashbuckle.AspNetCore.SwaggerGen.SchemaGenerator.GenerateConcreteSchema(DataContract dataContract, SchemaRepository schemaRepository)\n   at Swashbuckle.AspNetCore.SwaggerGen.SchemaGenerator.GenerateSchema(Type modelType, SchemaRepository schemaRepository, MemberInfo memberInfo, ParameterInfo parameterInfo, ApiParameterRouteInfo routeInfo)\n   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateSchema(Type type, SchemaRepository schemaRepository, PropertyInfo propertyInfo, ParameterInfo parameterInfo, ApiParameterRouteInfo routeInfo)\n   --- End of inner exception stack trace ---\n   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateSchema(Type type, SchemaRepository schemaRepository, PropertyInfo propertyInfo, ParameterInfo parameterInfo, ApiParameterRouteInfo routeInfo)\n   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.CreateResponseMediaType(Type modelType, SchemaRepository schemaRespository)\n   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.\u003c\u003ec__DisplayClass42_0.\u003cGenerateResponse\u003eb__2(String contentType)\n   at System.Linq.Enumerable.ToDictionary[TSource,TKey,TElement](IEnumerable`1 source, Func`2 keySelector, Func`2 elementSelector, IEqualityComparer`1 comparer)\n   at System.Linq.Enumerable.ToDictionary[TSource,TKey,TElement](IEnumerable`1 source, Func`2 keySelector, Func`2 elementSelector)\n   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateResponse(ApiDescription apiDescription, SchemaRepository schemaRepository, String statusCode, ApiResponseType apiResponseType)\n   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateResponses(ApiDescription apiDescription, SchemaRepository schemaRepository)\n   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperationAsync(OpenApiDocument document, ApiDescription apiDescription, SchemaRepository schemaRepository, Func`3 parametersGenerator, Func`3 bodyGenerator, Func`3 applyFilters)\n   --- End of inner exception stack trace ---\n   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperationAsync(OpenApiDocument document, ApiDescription apiDescription, SchemaRepository schemaRepository, Func`3 parametersGenerator, Func`3 bodyGenerator, Func`3 applyFilters)\n   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperationAsync(OpenApiDocument document, ApiDescription apiDescription, SchemaRepository schemaRepository)\n   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperationsAsync(OpenApiDocument document, IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)\n   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePathsAsync(OpenApiDocument document, IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository, Func`4 operationsGenerator)\n   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePathsAsync(OpenApiDocument document, IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)\n   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwaggerAsync(String documentName, String host, String basePath)\n   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)\n   at Microsoft.WebTools.BrowserLink.Net.BrowserLinkMiddleware.InvokeAsync(HttpContext context)\n   at Microsoft.AspNetCore.Watch.BrowserRefresh.BrowserRefreshMiddleware.InvokeAsync(HttpContext context)\n   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpProtocol.ProcessRequests[TContext](IHttpApplication`1 application)\n```\n\n### .NET Version\n\ndotnet 8\n\n### Anything else?\n\nMicrosoft.AspNetCore.Grpc.JsonTranscoding 8.0.15",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  null,
+                         "nodes":  [
+
+                                   ],
+                         "totalCount":  0
+                     },
+        "title":  "gRPC Transcoding: SwaggerGen can not handle the enum option allow_alias",
+        "labels":  [
+                       "area-grpc"
+                   ]
+    }
+]

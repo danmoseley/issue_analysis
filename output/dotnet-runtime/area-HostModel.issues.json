@@ -1,0 +1,1197 @@
+﻿[
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/3829",
+        "createdAt":  "2019-11-04T20:58:43Z",
+        "number":  3829,
+        "author":  "nguerrera",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHOA0QO3A==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "peterhuene",
+                                            "createdAt":  "2019-11-04T20:59:37Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "swaroop-sridhar",
+                                            "createdAt":  "2019-11-04T23:41:20Z"
+                                        }
+                                    ],
+                          "totalCount":  2
+                      },
+        "updatedAt":  "2021-08-10T13:07:04Z",
+        "body":  "Today, the SDK does a search and replace in the apphost, to find the placeholder. However, the offset to the placeholder is fixed for any given apphost pack. It would be cleaner if this offset could be determined when the apphost template is built and described in a simple sidecar file.\r\n\r\nThe code that does the search fails on some filesystems today, due to MAP_SHARED not being implemented. We could implement the search a different way, but risk regressing perf for an operation that needn\u0027t be done on every end-user\u0027s build, and can be done once in our build.  \r\n\r\ncc @peterhuene @swaroop-sridhar @jeffschwMSFT ",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOIMFngg==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDU0OTU0NTg1OA==",
+                                           "createdAt":  "2019-11-04T21:03:40Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "nguerrera",
+                                           "body":  "The idea of providing the offset was raised in the initial PR that implemented search and replace: https://github.com/dotnet/sdk/pull/978#issuecomment-285845299\r\n\r\nWe were missing the additional data point that the memory mapped code would fail on some filesystems, though.\r\n",
+                                           "updatedAt":  "2019-11-04T21:03:40Z"
+                                       }
+                                   ],
+                         "totalCount":  1
+                     },
+        "title":  "Provide offset to placeholder in apphost pack",
+        "labels":  [
+                       "area-HostModel"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/38013",
+        "createdAt":  "2020-06-17T07:05:39Z",
+        "number":  38013,
+        "author":  "swaroop-sridhar",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-08-19T15:46:05Z",
+        "body":  "This test is failing non-deterministically in the lab, and is therefore disabled temporarily.\r\nThe likely problem is that the TestFixture is shared across runs in a `[Theory]`.\r\nThis issue tracks re-enabling the test.\r\n\r\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOKB5BKw==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY0NTE5MzI0NA==",
+                                           "createdAt":  "2020-06-17T07:05:41Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @vitek-karas, @swaroop-sridhar\nNotify danmosemsft if you want to be subscribed.",
+                                           "updatedAt":  "2020-06-17T07:05:41Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY3MzA3MTI5Nw==",
+                                           "createdAt":  "2020-08-12T19:40:02Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @vitek-karas, @swaroop-sridhar, @agocke\nSee info in area-owners.md if you want to be subscribed.",
+                                           "updatedAt":  "2020-08-12T19:40:02Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY3MzA3MTQwMw==",
+                                           "createdAt":  "2020-08-12T19:40:15Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "NikolaMilosavljevic",
+                                           "body":  "@swaroop-sridhar , this seems like app-host related and not a setup issue. If you feel that setup is more appropriate, please provide the reasoning for moving back to infrastructure-installer or setup areas.",
+                                           "updatedAt":  "2020-08-12T19:40:15Z"
+                                       }
+                                   ],
+                         "totalCount":  3
+                     },
+        "title":  "Enable Apphost.Bundle.Test Bundle_can_be_renamed() ",
+        "labels":  [
+                       "area-HostModel"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/41693",
+        "createdAt":  "2020-09-01T19:35:06Z",
+        "number":  41693,
+        "author":  "externl",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-09-16T22:02:07Z",
+        "body":  "\u003c!--This is just a template - feel free to delete any and all of it and replace as appropriate.--\u003e\r\n\r\n### Description\r\nAt some point in the last few weeks C# apps using TLS started crashing on a project I work on. After comparing `Console.app` logs with a colleague who is running with the same system configuration, we noticed one noticeable difference:\r\n\r\n```\r\ncode requirement check failed (-67050), client is not Apple-signed\r\n```\r\n\r\nAfter digging closer we noticed that dotnet apps on my colleague\u0027s Macbook were not signed at all while, mine had a bogus signature.\r\n\r\nIt seems that for some reason, when I created an app using the `\u003cUseAppHost\u003eTrue\u003c/UseAppHost\u003e` property, the signature is not removed from the `apphost` app after copying it (https://github.com/dotnet/runtime/blob/6072e4d3a7a2a1493f514cdf4be75a3d56580e84/src/installer/managed/Microsoft.NET.HostModel/AppHost/HostWriter.cs#L128 ?). This seems to lead to internal errors when using TLS (see a stack at the end). \r\n\r\n\u003c!--\r\n* Please share a clear and concise description of the problem.\r\n* Include minimal steps to reproduce the problem if possible. E.g.: the smallest possible code snippet; or a small repo to clone, with steps to run it.\r\n* What behavior are you seeing, and what behavior would you expect?\r\n  --\u003e\r\n\r\n#### How to reproduce\r\n```\r\n❯ mkdir foo \u0026\u0026 cd foo\r\n❯ dotnet new console\r\n*** edit project foo.csproj to include \u003cUseAppHost\u003eTrue\u003c/UseAppHost\u003e ***\r\n❯ dotnet build\r\n```\r\n\r\nThe generated `foo` binary now has an invalid signature.\r\n```\r\n❯ codesign -v bin/Debug/netcoreapp3.1/foo\r\nbin/Debug/netcoreapp3.1/foo: invalid signature (code or signature have been modified)\r\nIn architecture: x86_64\r\n```\r\n\r\n#### Expected result\r\n```\r\n❯ codesign -v bin/Debug/netcoreapp3.1/foo\r\nbin/Debug/netcoreapp3.1/foo: code object is not signed at all\r\nIn architecture: x86_64\r\n```\r\n\r\n### Configuration\r\n```\r\n❯ dotnet --info\r\n.NET Core SDK (reflecting any global.json):\r\n Version:   3.1.401\r\n Commit:    39d17847db\r\n\r\nRuntime Environment:\r\n OS Name:     Mac OS X\r\n OS Version:  10.15\r\n OS Platform: Darwin\r\n RID:         osx.10.15-x64\r\n Base Path:   /usr/local/share/dotnet/sdk/3.1.401/\r\n\r\nHost (useful for support):\r\n  Version: 3.1.7\r\n  Commit:  fcfdef8d6b\r\n\r\n.NET Core SDKs installed:\r\n  3.1.401 [/usr/local/share/dotnet/sdk]\r\n\r\n.NET Core runtimes installed:\r\n  Microsoft.AspNetCore.App 3.1.7 [/usr/local/share/dotnet/shared/Microsoft.AspNetCore.App]\r\n  Microsoft.NETCore.App 3.1.7 [/usr/local/share/dotnet/shared/Microsoft.NETCore.App]\r\n\r\nTo install additional .NET Core runtimes or SDKs:\r\n  https://aka.ms/dotnet-download\r\n```\r\n\u003c!--\r\n* Which version of .NET is the code running on?\r\n* What OS and version, and what distro if applicable?\r\n* What is the architecture (x64, x86, ARM, ARM64)?\r\n* Do you know whether it is specific to that configuration?\r\n  --\u003e\r\n\r\n### Regression?\r\nYes. Though it works fine for my colleagues. Just failing for me\r\n\u003c!--\r\n* Did this work in a previous build or release of .NET Core, or from .NET Framework? If you can try a previous release or build to find out, that can help us narrow down the problem. If you don\u0027t know, that\u0027s OK.\r\n  --\u003e\r\n\r\n### Other information\r\n* One notable thing that happened recently is that I installed, and then uninstalled quickly after, the Xcode 12 and Apple Configurator beta.\r\n\r\n\u003c!--\r\n* Please include any relevant stack traces or error messages. If possible please include text as text rather than images (so it shows up in searches).\r\n* If you have an idea where the problem might lie, let us know that here. Please include any pointers to code, relevant changes, or related issues you know of.\r\n* Do you know of any workarounds?\r\n  --\u003e\r\n\r\nCode sign info detail for foo\r\n```\r\n❯ codesign -dv bin/Debug/netcoreapp3.1/foo\r\nExecutable=/Users/joe/workspace/foo/bin/Debug/netcoreapp3.1/foo\r\nIdentifier=client-555549446e4495955e3d30318046040352838d5a\r\nFormat=Mach-O thin (x86_64)\r\nCodeDirectory v=20100 size=832 flags=0x2(adhoc) hashes=21+2 location=system\r\nSignature=adhoc\r\nInfo.plist=not bound\r\nTeamIdentifier=not set\r\nSealed Resources=none\r\nInternal requirements count=0 size=12\r\n```\r\n\r\nThe SSL/TLS exception (probably not relevant)\r\n```\r\n   ---\u003e System.Security.Authentication.AuthenticationException: Authentication failed, see inner exception.\r\n    ---\u003e Interop+AppleCrypto+SslException: Internal error\r\n      --- End of inner exception stack trace ---\r\n      at System.Net.Security.SslStream.StartSendAuthResetSignal(ProtocolToken message, AsyncProtocolRequest asyncRequest, ExceptionDispatchInfo exception)\r\n      at System.Net.Security.SslStream.CheckCompletionBeforeNextReceive(ProtocolToken message, AsyncProtocolRequest asyncRequest)\r\n      at System.Net.Security.SslStream.StartSendBlob(Byte[] incoming, Int32 count, AsyncProtocolRequest asyncRequest)\r\n      at System.Net.Security.SslStream.ProcessReceivedBlob(Byte[] buffer, Int32 count, AsyncProtocolRequest asyncRequest)\r\n      at System.Net.Security.SslStream.StartReadFrame(Byte[] buffer, Int32 readBytes, AsyncProtocolRequest asyncRequest)\r\n      at System.Net.Security.SslStream.PartialFrameCallback(AsyncProtocolRequest asyncRequest)\r\n   --- End of stack trace from previous location where exception was thrown ---\r\n      at System.Net.Security.SslStream.ThrowIfExceptional()\r\n      at System.Net.Security.SslStream.InternalEndProcessAuthentication(LazyAsyncResult lazyResult)\r\n      at System.Net.Security.SslStream.EndProcessAuthentication(IAsyncResult result)\r\n      at System.Net.Security.SslStream.EndAuthenticateAsServer(IAsyncResult asyncResult)\r\n      at System.Net.Security.SslStream.\u003c\u003ec.\u003cAuthenticateAsServerAsync\u003eb__69_1(IAsyncResult iar)\r\n      at System.Threading.Tasks.TaskFactory`1.FromAsyncCoreLogic(IAsyncResult iar, Func`2 endFunction, Action`1 endAction, Task`1 promise, Boolean requiresSynchronization)\r\n   --- End of stack trace from previous location where exception was thrown ---\r\n```\r\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOxLlquA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY4NTA4ODI2OQ==",
+                                           "createdAt":  "2020-09-01T19:35:09Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @dotnet/ncl\nSee info in area-owners.md if you want to be subscribed.",
+                                           "updatedAt":  "2020-09-01T19:35:09Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY4NTA5NDU1MA==",
+                                           "createdAt":  "2020-09-01T19:49:15Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @vitek-karas, @swaroop-sridhar, @agocke\nSee info in area-owners.md if you want to be subscribed.",
+                                           "updatedAt":  "2020-09-01T19:49:15Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY4NTA5NTk1Mw==",
+                                           "createdAt":  "2020-09-01T19:52:12Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "agocke",
+                                           "body":  "I believe this is expected -- in order to publish a binary, that binary needs to be signed. Since the apphost is now part of your app you\u0027ll have to sign it with your own key.",
+                                           "updatedAt":  "2020-09-01T19:52:12Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY4NTA5OTczMQ==",
+                                           "createdAt":  "2020-09-01T20:00:04Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "externl",
+                                           "body":  "Which is expected, the binary not being signed at all or having an invalid signature? Which do you get?\r\n\r\nMy colleagues who try to reproduce as explained above get an unsigned binary. I get one with an invalid signature. ",
+                                           "updatedAt":  "2020-09-01T20:00:28Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY4NTEwMDgyOQ==",
+                                           "createdAt":  "2020-09-01T20:02:19Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "agocke",
+                                           "body":  "Invalid signature -- to ship the binary we have to sign it, but once it gets included in your app, the signature will no longer be valid (since it will be pointing at your code).",
+                                           "updatedAt":  "2020-09-01T20:02:19Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY4NTEwMDkzOQ==",
+                                           "createdAt":  "2020-09-01T20:02:36Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "agocke",
+                                           "body":  "@vitek-karas to confirm my understanding here",
+                                           "updatedAt":  "2020-09-01T20:02:36Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY4NTEwMTg2Ng==",
+                                           "createdAt":  "2020-09-01T20:04:33Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "externl",
+                                           "body":  "From my reading of [CreateHostApp](https://github.com/dotnet/runtime/blob/6072e4d3a7a2a1493f514cdf4be75a3d56580e84/src/installer/managed/Microsoft.NET.HostModel/AppHost/HostWriter.cs#L34) it should  [remove the signature](https://github.com/dotnet/runtime/blob/6072e4d3a7a2a1493f514cdf4be75a3d56580e84/src/installer/managed/Microsoft.NET.HostModel/AppHost/HostWriter.cs#L128). That\u0027s what everyone else who\u0027s tried gets.",
+                                           "updatedAt":  "2020-09-01T20:05:10Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY4NTEwMjEwNA==",
+                                           "createdAt":  "2020-09-01T20:05:03Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOB_ul4Q==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "agocke",
+                                                                               "createdAt":  "2020-09-01T20:05:34Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "externl",
+                                                                               "createdAt":  "2020-09-01T20:05:49Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "richardlalancetteyoui",
+                                                                               "createdAt":  "2021-10-25T16:03:04Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  3
+                                                         },
+                                           "author":  "swaroop-sridhar",
+                                           "body":  "When you build the app with `UseAppHost` it is expected that the signature on the apphost is removed and re-written wrt your app. That is, `foo` should be unsigned. \r\n",
+                                           "updatedAt":  "2020-09-01T20:05:03Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY4NTEwMjY2OA==",
+                                           "createdAt":  "2020-09-01T20:06:16Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOBPHjNg==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "externl",
+                                                                               "createdAt":  "2020-09-01T20:07:41Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "agocke",
+                                           "body":  "My mistake! Let\u0027s investigate the broken signature.",
+                                           "updatedAt":  "2020-09-01T20:06:16Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY4NTEwMzQ1MA==",
+                                           "createdAt":  "2020-09-01T20:07:58Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "agocke",
+                                           "body":  "Also, let\u0027s see if this behavior repro\u0027s in 5.0. @externl do you happen to have a .NET 5 copy that you can build with?",
+                                           "updatedAt":  "2020-09-01T20:07:58Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY4NTEwMzc0Mg==",
+                                           "createdAt":  "2020-09-01T20:08:33Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "externl",
+                                           "body":  "The fact that I\u0027m getting a bogus adhoc signature kind of leads me to think there\u0027s something up with the fact that I installed the xcode 12 beta",
+                                           "updatedAt":  "2020-09-01T20:08:33Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY4NTEwNDQzNQ==",
+                                           "createdAt":  "2020-09-01T20:10:02Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOBPHkTQ==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "swaroop-sridhar",
+                                                                               "createdAt":  "2020-09-01T20:10:11Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "externl",
+                                           "body":  "\u003e Also, let\u0027s see if this behavior repro\u0027s in 5.0. @externl do you happen to have a .NET 5 copy that you can build with?\r\n\r\nIs `dotnet-sdk-preview` (dotnet-sdk-5.0.100-preview.5.20279.10-osx-x64.pkg) from brew fine?",
+                                           "updatedAt":  "2020-09-01T20:10:02Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY4NTEwNTE3Ng==",
+                                           "createdAt":  "2020-09-01T20:11:49Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "agocke",
+                                           "body":  "Preview 5 is a bit old, but this code hasn\u0027t churned much so it\u0027s probably fine.",
+                                           "updatedAt":  "2020-09-01T20:11:49Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY4NTEwNTE5NA==",
+                                           "createdAt":  "2020-09-01T20:11:51Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "swaroop-sridhar",
+                                           "body":  "However, I wasn\u0027t able to repro the failure -- not sure how to take any further action. Can you please share the `otool` output for the broken binary? List of load commands to see if there\u0027s a signature LC_CODE_SIGNATURE segment? Thanks.",
+                                           "updatedAt":  "2020-09-01T20:11:51Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY4NTEwNTkyMQ==",
+                                           "createdAt":  "2020-09-01T20:13:22Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "externl",
+                                           "body":  "Seems to work fine with .NET 5\r\n```\r\n❯ codesign -v bin/Debug/net5.0/foo\r\nbin/Debug/net5.0/foo: code object is not signed at all\r\nIn architecture: x86_64\r\n```",
+                                           "updatedAt":  "2020-09-01T20:13:22Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY4NTEwODI0OA==",
+                                           "createdAt":  "2020-09-01T20:18:01Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "agocke",
+                                           "body":  "Huh. @swaroop-sridhar since CreateAppHost ships inside the SDK I assume this is fixed if the .NET 5 SDK is used to build netcoreapp3.1 apps as well?",
+                                           "updatedAt":  "2020-09-01T20:18:01Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY4NTEwODY1MQ==",
+                                           "createdAt":  "2020-09-01T20:18:53Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "swaroop-sridhar",
+                                           "body":  "This issue was fixed in 5, and ported to 3.1 and 2.1 2.2 releases.",
+                                           "updatedAt":  "2020-09-01T20:18:53Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY4NTEwOTUxMQ==",
+                                           "createdAt":  "2020-09-01T20:20:43Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "externl",
+                                           "body":  "Hmm.... so, there\u0027s no `LC_CODE_SIGNATURE` segment in the `foo` binary.\r\n```\r\n❯ otool -l bin/Debug/netcoreapp3.1/foo\r\n...\r\nLoad command 15\r\n      cmd LC_DATA_IN_CODE\r\n  cmdsize 16\r\n  dataoff 76632\r\n datasize 8\r\n```\r\n\r\n\r\n```\r\n❯ otool -l /usr/local/share/dotnet/packs/Microsoft.NETCore.App.Host.osx-x64/3.1.7/runtimes/osx-x64/native/apphost\r\n...\r\nLoad command 15\r\n      cmd LC_DATA_IN_CODE\r\n  cmdsize 16\r\n  dataoff 76632\r\n datasize 8\r\nLoad command 16\r\n      cmd LC_CODE_SIGNATURE\r\n  cmdsize 16\r\n  dataoff 85120\r\n datasize 34592\r\n```",
+                                           "updatedAt":  "2020-09-01T20:21:51Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY4NTExMTM5NQ==",
+                                           "createdAt":  "2020-09-01T20:24:23Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "swaroop-sridhar",
+                                           "body":  "OK @externl  that\u0027s the expected behavior. \r\nNot sure why codesign would report a bad signature on this binary. Could be a bad interaction of `codesign` tool with XCode? \r\nIs this deterministic on every build of 3.1.4 SDK? ",
+                                           "updatedAt":  "2020-09-01T20:24:23Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY4NTExMjg4Nw==",
+                                           "createdAt":  "2020-09-01T20:27:16Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "externl",
+                                           "body":  "\u003e Not sure why codesign would report a bad signature on this binary. Could be a bad interaction of codesign tool with XCode?\r\n\r\nPossibly, but I don\u0027t know how. My `codesign` binary is the as my coworkers. It\u0027s not just codeisgn that\u0027s the issue. As the OS in general think it\u0027s signed as I get Console warnings about it when using SSL as described above.\r\n\r\nEDIT: What changed between 3.1 and 5 that could cause it to work?\r\n\r\n\u003e Is this deterministic on every build of 3.1.4 SDK?\r\n\r\nYea, every time with `3.1.401` SDK\r\n\r\n\r\n",
+                                           "updatedAt":  "2020-09-01T20:32:05Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY4NTExODQ5MQ==",
+                                           "createdAt":  "2020-09-01T20:37:06Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "swaroop-sridhar",
+                                           "body":  "\u003e Hmm.... so, there\u0027s no `LC_CODE_SIGNATURE` segment in the `foo` binary.\r\n\r\nCan you also confirm that the total expected load commands are 15? ",
+                                           "updatedAt":  "2020-09-01T20:37:06Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY4NTEyMTM0Mg==",
+                                           "createdAt":  "2020-09-01T20:42:34Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "externl",
+                                           "body":  "Not sure if this is what you mean. But 0 - 15 are listed. I assume they\u0027re correct.\r\n\r\n```\r\n❯ otool -l bin/Debug/netcoreapp3.1/foo | grep \"Load command\"\r\nLoad command 0\r\nLoad command 1\r\nLoad command 2\r\nLoad command 3\r\nLoad command 4\r\nLoad command 5\r\nLoad command 6\r\nLoad command 7\r\nLoad command 8\r\nLoad command 9\r\nLoad command 10\r\nLoad command 11\r\nLoad command 12\r\nLoad command 13\r\nLoad command 14\r\nLoad command 15\r\n```",
+                                           "updatedAt":  "2020-09-01T20:42:34Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY4NTEyMjY1OQ==",
+                                           "createdAt":  "2020-09-01T20:45:32Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "swaroop-sridhar",
+                                           "body":  "I was asking to check the fact that `ncmds` value in the header is 16 (at the start of `otool -l` output)",
+                                           "updatedAt":  "2020-09-01T20:45:32Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY4NTEyMzI4Nw==",
+                                           "createdAt":  "2020-09-01T20:46:49Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "externl",
+                                           "body":  "Ah, got it. Yes, it\u0027s 16\r\n\r\n```\r\n❯ otool -l bin/Debug/netcoreapp3.1/foo\r\nbin/Debug/netcoreapp3.1/foo:\r\nMach header\r\n      magic cputype cpusubtype  caps    filetype ncmds sizeofcmds      flags\r\n 0xfeedfacf 16777223          3  0x80           2    16       2048 0x00a18085\r\n```",
+                                           "updatedAt":  "2020-09-01T20:46:49Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY4NTEyNDI2NQ==",
+                                           "createdAt":  "2020-09-01T20:48:55Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "swaroop-sridhar",
+                                           "body":  "Is there any binary difference between the `foo` executable generated on this machine vs any other machine where the signature works? ",
+                                           "updatedAt":  "2020-09-01T20:48:55Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY4NTEyODA3Mw==",
+                                           "createdAt":  "2020-09-01T20:56:56Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "externl",
+                                           "body":  "I\u0027ll have to check with my colleagues in the morning and get back to you.",
+                                           "updatedAt":  "2020-09-01T20:56:56Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY4NTc4NDI4Mg==",
+                                           "createdAt":  "2020-09-02T14:44:37Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "externl",
+                                           "body":  "@swaroop-sridhar The two binaries are identical (same sha), which makes it even weirder.",
+                                           "updatedAt":  "2020-09-02T14:54:32Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY4NTc5ODYwNg==",
+                                           "createdAt":  "2020-09-02T15:07:11Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "externl",
+                                           "body":  "Looking closer my `foo` binary has the same identifier as the other clients that are failing\r\n\r\n```\r\n❯ codesign -dv client\r\nExecutable=/Users/joe/src/github.com/zeroc-ice/ice/csharp/test/Ice/acm/msbuild/client/netcoreapp3.1/client\r\nIdentifier=client-555549446e4495955e3d30318046040352838d5a\r\nFormat=Mach-O thin (x86_64)\r\nCodeDirectory v=20100 size=832 flags=0x2(adhoc) hashes=21+2 location=system\r\nSignature=adhoc\r\nInfo.plist=not bound\r\nTeamIdentifier=not set\r\nSealed Resources=none\r\nInternal requirements count=0 size=12\r\n```\r\n\r\n```\r\n~/src/github.com/zeroc-ice/ice/csharp/test/Ice/acm/msbuild/server/netcoreapp3.1 master\r\n❯ codesign -dv server\r\nExecutable=/Users/joe/src/github.com/zeroc-ice/ice/csharp/test/Ice/acm/msbuild/server/netcoreapp3.1/server\r\nIdentifier=client-555549446e4495955e3d30318046040352838d5a\r\nFormat=Mach-O thin (x86_64)\r\nCodeDirectory v=20100 size=832 flags=0x2(adhoc) hashes=21+2 location=system\r\nSignature=adhoc\r\nInfo.plist=not bound\r\nTeamIdentifier=not set\r\nSealed Resources=none\r\nInternal requirements count=0 size=12\r\n```\r\n\r\n```\r\n❯ codesign -dv foo\r\nExecutable=/Users/joe/Downloads/foo\r\nIdentifier=client-555549446e4495955e3d30318046040352838d5a\r\nFormat=Mach-O thin (x86_64)\r\nCodeDirectory v=20100 size=832 flags=0x2(adhoc) hashes=21+2 location=system\r\nSignature=adhoc\r\nInfo.plist=not bound\r\nTeamIdentifier=not set\r\nSealed Resources=none\r\nInternal requirements count=0 size=12\r\n```\r\n\r\nFor some reason all the binaries created from `apphost` seem to have the same identifier (`client-555549446e4495955e3d30318046040352838d5a`).\r\n\r\napphost itself is slightly different\r\n```\r\n❯ codesign -dv /usr/local/share/dotnet/packs/Microsoft.NETCore.App.Host.osx-x64/3.1.7/runtimes/osx-x64/native/apphost\r\nExecutable=/usr/local/share/dotnet/packs/Microsoft.NETCore.App.Host.osx-x64/3.1.7/runtimes/osx-x64/native/apphost\r\nIdentifier=apphost-555549446e4495955e3d30318046040352838d5a\r\nFormat=Mach-O thin (x86_64)\r\nCodeDirectory v=20500 size=988 flags=0x10000(runtime) hashes=21+5 location=embedded\r\nSignature size=8980\r\nTimestamp=Jul 24, 2020 at 12:31:28 AM\r\nInfo.plist=not bound\r\nTeamIdentifier=UBF8T346G9\r\nRuntime Version=10.13.0\r\nSealed Resources=none\r\nInternal requirements count=1 size=208\r\n```\r\n\r\nThe identifier number seems to be backed into `apphost` (I guess in its signature).\r\n```\r\n❯ rg 555549446e4495955e3d30318046040352838d5a /usr/local/share/dotnet/packs/Microsoft.NETCore.App.Host.osx-x64/3.1.7/runtimes/osx-x64/native/apphost\r\nBinary file matches (found \"\\u{0}\" byte around offset 5)\r\n```",
+                                           "updatedAt":  "2020-09-02T15:08:05Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY4NTg1NjUwNg==",
+                                           "createdAt":  "2020-09-02T16:37:57Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "externl",
+                                           "body":  "@swaroop-sridhar @agocke I found the issue and how to reproduce it!\r\n\r\nI searched my computer for `555549446e4495955e3d30318046040352838d5a` and found an entry in a sqlite db at `/private/var/db/DetachedSignatures`. \r\n\r\nAccording to this [forums post](https://developer.apple.com/forums/thread/131498)\r\n\u003e /var/db/DetachedSignatures is only used if the system has to synthesise a code signature for an app that doesn’t have one (for example, you add a firewall exception for an app that’s unsigned) \r\n\r\nI deleted the entry for `client-555549446e4495955e3d30318046040352838d5a` (well, I deleted then recreated an empty file) and everything started working again. Codesign verification passed.\r\n\r\nIt\u0027s easy to reproduce the issue:\r\n1. Enable macOS firewall\r\n2. Create a binary like `foo` but one that listens on the network (not loopback but the interface ip)\r\n3. Deny that binary when the firewall asks\r\n4. Now codesign verification will fail for all dotnet binaries created from `apphost`.\r\n\r\nI guess because of the way `apphost` is used to create binaries macOS is detecting anything crated from it as having the same signature?\r\n\r\nSome thoughts:\r\n1. This is not great because adding a firewall rule for one unsigned dotnet binary created from `apphost` breaks lots of things \r\n2. I wonder if it also means that granting firewall access would allow firewall access for any dotnet binary created form `apphost` \r\n\r\nEDIT: I didn\u0027t test but suspect this will also still affect .NET 5 ",
+                                           "updatedAt":  "2020-09-02T17:02:25Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY4NTk5NDg4MA==",
+                                           "createdAt":  "2020-09-02T21:00:21Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "swaroop-sridhar",
+                                           "body":  "Thanks for the explanation @externl. \r\n\r\nEach binary like `foo` is typically different (not bit-equivalent) from another  because it contains an embedded path to the main assembly to execute. It is rather unfortunate if blocking one dotnet app host blocks all other apps. Is it possible to add an exception for a manually-unsigned `apphost` executable to work-around the problem? \r\n\r\nThis is something we could discuss with the MacOS firewall team, but not sure there\u0027s anything actionable in the .net SDK. \r\n",
+                                           "updatedAt":  "2020-09-02T21:00:21Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY4NjAwMjc4Mg==",
+                                           "createdAt":  "2020-09-02T21:12:03Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "externl",
+                                           "body":  "Unfortunately it\u0027s more than just the firewall issue though as it causes macOS to think that all the binaries are signed with an invalid signature. Even after removing the firewall rule the entry remains in the db. Any code signing verification will fail, which seems to happen indirectly sometimes, such as when using ssl/tls (see my original stack). \r\n\r\nI also suspect there are other was than the firewall for binaries to be added to this ` /private/var/db/DetachedSignatures` db.",
+                                           "updatedAt":  "2020-09-02T21:12:03Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDgwMTIzOTc3NQ==",
+                                           "createdAt":  "2021-03-17T16:46:17Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "vitek-karas",
+                                           "body":  "/cc @VSadov \r\n\r\nJust an idea - maybe aside from writing the name of the app into the `apphost` when we process it in `CreateAppHost` we could also write a newly generated GUID into it - to make sure the binary contents of the file is different every time. \r\n\r\nWell - something like this - maybe something like the project GUID from msbuild - so that the build is deterministic.",
+                                           "updatedAt":  "2021-03-17T16:46:17Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc7EuWq4",
+                                           "createdAt":  "2025-09-16T22:02:06Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Due to lack of recent activity, this issue has been marked as a candidate for backlog cleanup.  It will be closed if no further activity occurs within 14 more days. Any new comment (by anyone, not necessarily the author) will undo this process.\n\nThis process is part of our [issue cleanup automation](https://github.com/dotnet/runtime/blob/main/docs/issue-cleanup.md).\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2025-09-16T22:02:06Z"
+                                       }
+                                   ],
+                         "totalCount":  33
+                     },
+        "title":  "AppHost signature not being removed  on macOS ",
+        "labels":  [
+                       "area-HostModel",
+                       "no-recent-activity",
+                       "backlog-cleanup-candidate"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/51771",
+        "createdAt":  "2021-04-24T00:04:39Z",
+        "number":  51771,
+        "author":  "marcpopMSFT",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2022-07-26T23:41:14Z",
+        "body":  "### Description\r\nThe SDK team has a test that verifies retrying when there is an apphost creation failure:\r\nhttps://github.com/dotnet/sdk/blob/a30e465a2e2ea4e2550f319a2dc088daaafe5649/src/Tests/Microsoft.NET.Build.Tests/AppHostTests.cs#L257\r\n\r\nFrom digging into our test timing data, this test is now taking \u003e 2 minutes.  This appears to be because HostWriter.CreateAppHost is taking ~60 seconds to fail.  I verified the issue is in CreateAppHost by creating a small console app that called that and found it was near instance to trigger the exception with a copy of Microsoft.Net.HostModel.dll from 5.0.202 and very long time with 6.0.100-preview 4 SDK.\r\n\r\nBelow is simple repro I pulled while paused in the test (ie the test is holding a lock on hte apphost)\r\n```var AppHostSourcePath = \"C:\\\\Program Files\\\\dotnet\\\\packs\\\\Microsoft.NETCore.App.Host.win-x64\\\\5.0.5\\\\runtimes\\\\win-x64\\\\native\\\\apphost.exe\";\r\nvar IntermediateAssembly = \"d:\\\\repos\\\\sdk\\\\artifacts\\\\tmp\\\\Debug\\\\It_retries_on-- - EA39C758\\\\RetryAppHost\\\\obj\\\\Debug\\\\net5.0\\\\RetryAppHost.dll\";\r\nvar AppHostDestinationPath = \"d:\\\\repos\\\\sdk\\\\artifacts\\\\tmp\\\\Debug\\\\It_retries_on---EA39C758\\\\RetryAppHost\\\\obj\\\\Debug\\\\net5.0\\\\apphost.exe\";\r\nvar AppBinaryName = \"RetryAppHost.dll\";\r\nvar isGUI = true;\r\nvar resourcesAssembly = IntermediateAssembly;\r\n\r\n HostWriter.CreateAppHost(appHostSourceFilePath: AppHostSourcePath,\r\n              appHostDestinationFilePath: AppHostDestinationPath,\r\n               appBinaryFilePath: AppBinaryName,\r\n               windowsGraphicalUserInterface: isGUI,\r\n               assemblyToCopyResorcesFrom: resourcesAssembly);\r\n```\r\n\r\n### Configuration\r\nWindows, x64.\r\n\r\n### Regression?\r\n\r\nRegression from 5.0\r\n\r\n### Data\r\nTest timing comparing a recent run in main vs. 5.0.3xx branches shows 124 seconds for main for the test and 11 seconds for 5.0.3xx.\r\n\r\nhttps://dev.azure.com/dnceng/public/_build/results?buildId=1105065\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=33748752\u0026resultId=100507\u0026paneView=debug\r\nhttps://dev.azure.com/dnceng/public/_build/results?buildId=1104827\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=33743876\u0026resultId=100183\u0026paneView=debug\r\n\r\nWhile this is a failure scenario, taking a whole minute to fail is a poor customer experience.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOMTu-yQ==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDgyNTk5OTA0OQ==",
+                                           "createdAt":  "2021-04-24T00:04:41Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @vitek-karas, @agocke\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Description\r\nThe SDK team has a test that verifies retrying when there is an apphost creation failure:\r\nhttps://github.com/dotnet/sdk/blob/a30e465a2e2ea4e2550f319a2dc088daaafe5649/src/Tests/Microsoft.NET.Build.Tests/AppHostTests.cs#L257\r\n\r\nFrom digging into our test timing data, this test is now taking \u003e 2 minutes.  This appears to be because HostWriter.CreateAppHost is taking ~60 seconds to fail.  I verified the issue is in CreateAppHost by creating a small console app that called that and found it was near instance to trigger the exception with a copy of Microsoft.Net.HostModel.dll from 5.0.202 and very long time with 6.0.100-preview 4 SDK.\r\n\r\nBelow is simple repro I pulled while paused in the test (ie the test is holding a lock on hte apphost)\r\n```var AppHostSourcePath = \"C:\\\\Program Files\\\\dotnet\\\\packs\\\\Microsoft.NETCore.App.Host.win-x64\\\\5.0.5\\\\runtimes\\\\win-x64\\\\native\\\\apphost.exe\";\r\nvar IntermediateAssembly = \"d:\\\\repos\\\\sdk\\\\artifacts\\\\tmp\\\\Debug\\\\It_retries_on-- - EA39C758\\\\RetryAppHost\\\\obj\\\\Debug\\\\net5.0\\\\RetryAppHost.dll\";\r\nvar AppHostDestinationPath = \"d:\\\\repos\\\\sdk\\\\artifacts\\\\tmp\\\\Debug\\\\It_retries_on---EA39C758\\\\RetryAppHost\\\\obj\\\\Debug\\\\net5.0\\\\apphost.exe\";\r\nvar AppBinaryName = \"RetryAppHost.dll\";\r\nvar isGUI = true;\r\nvar resourcesAssembly = IntermediateAssembly;\r\n\r\n HostWriter.CreateAppHost(appHostSourceFilePath: AppHostSourcePath,\r\n              appHostDestinationFilePath: AppHostDestinationPath,\r\n               appBinaryFilePath: AppBinaryName,\r\n               windowsGraphicalUserInterface: isGUI,\r\n               assemblyToCopyResorcesFrom: resourcesAssembly);\r\n```\r\n\r\n### Configuration\r\nWindows, x64.\r\n\r\n### Regression?\r\n\r\nRegression from 5.0\r\n\r\n### Data\r\nTest timing comparing a recent run in main vs. 5.0.3xx branches shows 124 seconds for main for the test and 11 seconds for 5.0.3xx.\r\n\r\nhttps://dev.azure.com/dnceng/public/_build/results?buildId=1105065\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=33748752\u0026resultId=100507\u0026paneView=debug\r\nhttps://dev.azure.com/dnceng/public/_build/results?buildId=1104827\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=33743876\u0026resultId=100183\u0026paneView=debug\r\n\r\nWhile this is a failure scenario, taking a whole minute to fail is a poor customer experience.\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003emarcpopMSFT\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-HostModel`, `tenet-performance`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2021-04-24T00:04:41Z"
+                                       }
+                                   ],
+                         "totalCount":  1
+                     },
+        "title":  "CreateAppHost on a locked file takes much longer to fail in net6 than it did in net5",
+        "labels":  [
+                       "tenet-performance",
+                       "area-HostModel"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/74163",
+        "createdAt":  "2022-08-18T17:56:07Z",
+        "number":  74163,
+        "author":  "jkoritzinsky",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2022-08-18T17:57:39Z",
+        "body":  "From #72394:\r\n\r\nThe problem seems to be that the new `mono.tools` subset now builds `dotnet-pgo.csproj`, which tries to create an `osx-x64` shim apphost:\r\n```\r\n    \u003cPackAsToolShimRuntimeIdentifiers\u003ewin-x64;win-x86;win-arm;osx-x64\u003c/PackAsToolShimRuntimeIdentifiers\u003e\r\n```\r\n\r\nThis in turn pulls in code in `src/installer/managed/Microsoft.NET.HostModel/AppHost/MachOUtils.cs` to manipulate MachO binaries, but that whole file unfortunately fundamentally seems to assume little-endian byte order, as it just mmaps the binary and then overlays structures over the mmap.\r\n\r\nSo the question is, what is the best way to fix this?  Of course, we could try to rewrite `MachOUtils.cs` to be endian-independent.  But I\u0027m wondering if we even need to build this on s390x?   Do you think it would make sense to skip building `dotnet-pgo` completely (or at least building the `osx-x64` shim), either whenever `PrimaryRuntimeFlavor` is `Mono` or specificially just on s390x due to the endian issue?\r\n\r\nAre the tools in `dotnet-pgo` even useful at all on a system where we\u0027re not supporting CoreCLR at all?\r\n\r\n_Originally posted by @uweigand in https://github.com/dotnet/runtime/issues/72394#issuecomment-1210592766_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOSLROOA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5ItEjv",
+                                           "createdAt":  "2022-08-18T17:56:12Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "I couldn\u0027t figure out the best area label to add to this issue. If you have write-permissions please help me learn by adding exactly one [area label](https://github.com/dotnet/runtime/blob/master/docs/area-owners.md).",
+                                           "updatedAt":  "2022-08-18T17:56:12Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5ItEmd",
+                                           "createdAt":  "2022-08-18T17:56:24Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @vitek-karas, @agocke\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\nFrom #72394:\r\n\r\nThe problem seems to be that the new `mono.tools` subset now builds `dotnet-pgo.csproj`, which tries to create an `osx-x64` shim apphost:\r\n```\r\n    \u003cPackAsToolShimRuntimeIdentifiers\u003ewin-x64;win-x86;win-arm;osx-x64\u003c/PackAsToolShimRuntimeIdentifiers\u003e\r\n```\r\n\r\nThis in turn pulls in code in `src/installer/managed/Microsoft.NET.HostModel/AppHost/MachOUtils.cs` to manipulate MachO binaries, but that whole file unfortunately fundamentally seems to assume little-endian byte order, as it just mmaps the binary and then overlays structures over the mmap.\r\n\r\nSo the question is, what is the best way to fix this?  Of course, we could try to rewrite `MachOUtils.cs` to be endian-independent.  But I\u0027m wondering if we even need to build this on s390x?   Do you think it would make sense to skip building `dotnet-pgo` completely (or at least building the `osx-x64` shim), either whenever `PrimaryRuntimeFlavor` is `Mono` or specificially just on s390x due to the endian issue?\r\n\r\nAre the tools in `dotnet-pgo` even useful at all on a system where we\u0027re not supporting CoreCLR at all?\r\n\r\n_Originally posted by @uweigand in https://github.com/dotnet/runtime/issues/72394#issuecomment-1210592766_\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003ejkoritzinsky\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-HostModel`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2022-08-18T17:56:24Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5ItE44",
+                                           "createdAt":  "2022-08-18T17:57:39Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jkoritzinsky",
+                                           "body":  "Extracting this comment out to a separate issue so if we hit it again, we can reference this (and consider fixing).\r\n\r\nThe existing case was mitigated by skipping building `dotnet-pgo.csproj` on S390X: https://github.com/dotnet/runtime/pull/74147",
+                                           "updatedAt":  "2022-08-18T17:57:39Z"
+                                       }
+                                   ],
+                         "totalCount":  3
+                     },
+        "title":  "MachOUtils.cs is not endian-independent.",
+        "labels":  [
+                       "area-HostModel"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/91486",
+        "createdAt":  "2023-09-01T23:14:32Z",
+        "number":  91486,
+        "author":  "VSadov",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-05-14T16:06:19Z",
+        "body":  "I wonder if we could set some environment variable to enable test features instead of patching a guid inside the binary.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOZam_jw==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5liL_m",
+                                           "createdAt":  "2023-09-01T23:15:09Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @vitek-karas, @agocke\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\nnull\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003eVSadov\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-HostModel`, `untriaged`, `needs-area-label`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2023-09-01T23:15:09Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5lqbnU",
+                                           "createdAt":  "2023-09-04T18:56:42Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "vitek-karas",
+                                           "body":  "Just curious - why we can\u0027t resign the binary after the modification?\r\n\r\nThe general idea around this \"test only product behavior\" was to make it as close to 0 cost as possible at runtime when disabled. The static variable is kind of the next best thing after modifying the executable code itself which would be even more complex.\r\n\r\nBut I\u0027m definitely open to ideas here - it\u0027s always been a bit of a sore spot.",
+                                           "updatedAt":  "2023-09-04T18:56:42Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5lqb-P",
+                                           "createdAt":  "2023-09-04T18:59:07Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "vitek-karas",
+                                           "body":  "Also of note - the current design means that I can\u0027t get a `dotnet.exe` signed by MS to work differently, since the binary modification will invalidate the signature. Similarly for `hostfxr.dll` and so on. While this might be a complex thing to handle in testing, it alleviates basically any security concerns around this \"test only\" feature.",
+                                           "updatedAt":  "2023-09-04T18:59:07Z"
+                                       }
+                                   ],
+                         "totalCount":  3
+                     },
+        "title":  "TestOnlyProductBehavior infrastructure used in installer tests patches codesigned binaries on macos resulting in test failuress.",
+        "labels":  [
+                       "area-HostModel"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/94961",
+        "createdAt":  "2023-11-18T21:39:22Z",
+        "number":  94961,
+        "author":  "kidq330",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-08-17T17:36:23Z",
+        "body":  "### Description\r\n\r\nMy container engine is podman, running on MacOS 14.1. I tried two containers, dotnet/sdk with SDK 8.0 and a devcontainers image with SDK 7.0. I can `dotnet new console` in any directory inside the container, but `dotnet build` succeeds in all except those that are subdirs of the bound directory. Setting the podman machine to rootful does not fix the issue,\r\n\r\n### Reproduction Steps\r\n\r\nLogs from the two containers I tested on:\r\n\r\nmcr.microsoft.com/dotnet/sdk:8.0.100-1-bookworm-slim-amd64\r\n```\r\nkidp330@MacBook-Pro-Kuba ~ % mkdir repo                    \r\nkidp330@MacBook-Pro-Kuba ~ % docker image ls                                                    \r\nREPOSITORY                              TAG             IMAGE ID      CREATED       SIZE\r\nmcr.microsoft.com/dotnet/sdk            latest          bb9bebd66b37  16 hours ago  845 MB\r\ndocker.io/library/rust                  latest          68ce12c6ea1a  2 days ago    1.49 GB\r\nmcr.microsoft.com/devcontainers/dotnet  1-7.0-bullseye  8f132fca64bb  2 days ago    1.34 GB\r\nghcr.io/livebook-dev/livebook           latest          56037244a320  9 days ago    620 MB\r\nkidp330@MacBook-Pro-Kuba ~ % docker run -dt --name=test8 --pull=always --volume=$HOME/repo:/app mcr.microsoft.com/dotnet/sdk\r\nTrying to pull mcr.microsoft.com/dotnet/sdk:latest...\r\nGetting image source signatures\r\nCopying blob sha256:88e622ea1fdf216299c152286eaad38c5cab5994b4eecbea326a36b26e2c8f54\r\nCopying blob sha256:578acb154839e9d0034432e8f53756d6f53ba62cf8c7ea5218a2476bf5b58fc9\r\nCopying blob sha256:b5c13ee662c35d35968b2f5b551d00f381cdbfaf913250b092ee1c26f90ab07e\r\nCopying blob sha256:b87d321f96b647df074dfa0e9e3b55d4fc31d54c20fc5c4a2a729f922b610790\r\nCopying blob sha256:27ff45226a4f5002e32cdceb9f75f9b76186f8e22fce8353971566b7c545e1b9\r\nCopying blob sha256:8543982bc2b334aa9a0c115ac8cdc059fbe32595f6154ad889a963ab39041d26\r\nCopying blob sha256:deff372137179efabc8725bc8ce6525ef0ad1c4e5ab204567910f14565dd72ec\r\nCopying blob sha256:0acb879b400f61145e7817e77566552ee0e700331653675c9f3ac5dfa08844f5\r\nCopying blob sha256:9b0191e154388074566e23565eb927df1c6a7494458b7b42a94c898e291dfd06\r\nCopying config sha256:bb9bebd66b3722f29d0f88c32fcbe6aa7d2ecccf39d358b39f1fa28b34de6943\r\nWriting manifest to image destination\r\n882092c3549bf76cf6b65b68307589754a1d182aeb50df6d81f76ab9b92c6b54\r\nkidp330@MacBook-Pro-Kuba ~ % docker exec --workdir=/app/ -- test8 bash -c \"dotnet --info \u0026\u0026 dotnet new console \u0026\u0026 dotnet build\"\r\n.NET SDK:\r\n Version:           8.0.100\r\n Commit:            57efcf1350\r\n Workload version:  8.0.100-manifests.6c33ef20\r\n\r\nRuntime Environment:\r\n OS Name:     debian\r\n OS Version:  12\r\n OS Platform: Linux\r\n RID:         linux-x64\r\n Base Path:   /usr/share/dotnet/sdk/8.0.100/\r\n\r\n.NET workloads installed:\r\n Workload version: 8.0.100-manifests.6c33ef20\r\nThere are no installed workloads to display.\r\n\r\nHost:\r\n  Version:      8.0.0\r\n  Architecture: x64\r\n  Commit:       5535e31a71\r\n\r\n.NET SDKs installed:\r\n  8.0.100 [/usr/share/dotnet/sdk]\r\n\r\n.NET runtimes installed:\r\n  Microsoft.AspNetCore.App 8.0.0 [/usr/share/dotnet/shared/Microsoft.AspNetCore.App]\r\n  Microsoft.NETCore.App 8.0.0 [/usr/share/dotnet/shared/Microsoft.NETCore.App]\r\n\r\nOther architectures found:\r\n  None\r\n\r\nEnvironment variables:\r\n  Not set\r\n\r\nglobal.json file:\r\n  Not found\r\n\r\nLearn more:\r\n  https://aka.ms/dotnet/info\r\n\r\nDownload .NET:\r\n  https://aka.ms/dotnet/download\r\nThe template \"Console App\" was created successfully.\r\n\r\nProcessing post-creation actions...\r\nRestoring /app/app.csproj:\r\n  Determining projects to restore...\r\n  Restored /app/app.csproj (in 393 ms).\r\nRestore succeeded.\r\n\r\n\r\nMSBuild version 17.8.3+195e7f5a3 for .NET\r\n  Determining projects to restore...\r\n  All projects are up-to-date for restore.\r\n\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018: The \"CreateAppHost\" task failed unexpectedly. [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018: System.IO.IOException: Invalid argument [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at System.IO.MemoryMappedFiles.MemoryMappedView.CreateView(SafeMemoryMappedFileHandle memMappedFileHandle, MemoryMappedFileAccess access, Int64 requestedOffset, Int64 requestedSize) [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.NET.HostModel.AppHost.MachOUtils.RemoveSignature(FileStream stream) [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.NET.HostModel.AppHost.HostWriter.\u003c\u003ec__DisplayClass2_0.\u003cCreateAppHost\u003eb__1() [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.NET.HostModel.RetryUtil.RetryOnIOError(Action func) [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.NET.HostModel.AppHost.HostWriter.CreateAppHost(String appHostSourceFilePath, String appHostDestinationFilePath, String appBinaryFilePath, Boolean windowsGraphicalUserInterface, String assemblyToCopyResourcesFrom, Boolean enableMacOSCodeSign) [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.NET.Build.Tasks.CreateAppHost.ExecuteCore() [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.NET.Build.Tasks.TaskBase.Execute() [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.Build.BackEnd.TaskExecutionHost.Microsoft.Build.BackEnd.ITaskExecutionHost.Execute() [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.Build.BackEnd.TaskBuilder.ExecuteInstantiatedTask(ITaskExecutionHost taskExecutionHost, TaskLoggingContext taskLoggingContext, TaskHost taskHost, ItemBucket bucket, TaskExecutionMode howToExecuteTask) [/app/app.csproj]\r\n\r\nBuild FAILED.\r\n\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018: The \"CreateAppHost\" task failed unexpectedly. [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018: System.IO.IOException: Invalid argument [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at System.IO.MemoryMappedFiles.MemoryMappedView.CreateView(SafeMemoryMappedFileHandle memMappedFileHandle, MemoryMappedFileAccess access, Int64 requestedOffset, Int64 requestedSize) [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.NET.HostModel.AppHost.MachOUtils.RemoveSignature(FileStream stream) [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.NET.HostModel.AppHost.HostWriter.\u003c\u003ec__DisplayClass2_0.\u003cCreateAppHost\u003eb__1() [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.NET.HostModel.RetryUtil.RetryOnIOError(Action func) [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.NET.HostModel.AppHost.HostWriter.CreateAppHost(String appHostSourceFilePath, String appHostDestinationFilePath, String appBinaryFilePath, Boolean windowsGraphicalUserInterface, String assemblyToCopyResourcesFrom, Boolean enableMacOSCodeSign) [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.NET.Build.Tasks.CreateAppHost.ExecuteCore() [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.NET.Build.Tasks.TaskBase.Execute() [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.Build.BackEnd.TaskExecutionHost.Microsoft.Build.BackEnd.ITaskExecutionHost.Execute() [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.Build.BackEnd.TaskBuilder.ExecuteInstantiatedTask(ITaskExecutionHost taskExecutionHost, TaskLoggingContext taskLoggingContext, TaskHost taskHost, ItemBucket bucket, TaskExecutionMode howToExecuteTask) [/app/app.csproj]\r\n    0 Warning(s)\r\n    1 Error(s)\r\n\r\nTime Elapsed 00:01:00.80\r\n```\r\n\r\n```\r\nkidp330@MacBook-Pro-Kuba ~ % mkdir repo                                                                                                              \r\nkidp330@MacBook-Pro-Kuba ~ % docker run -dt --name=test7 --pull=always --volume=$HOME/repo:/app mcr.microsoft.com/devcontainers/dotnet:1-7.0-bullseye\r\nTrying to pull mcr.microsoft.com/devcontainers/dotnet:1-7.0-bullseye...\r\nGetting image source signatures\r\nCopying blob sha256:1bc79da9412fe139a000b9d28f81c2f8fed6e3314c886f474cae11f757ebb752\r\nCopying blob sha256:0bc8ff246cb8ff91066742f8f7ded40397e7aaaa925200b7bec5382d1ffcd6a0\r\nCopying blob sha256:76940af183830cbd6864465abc88c2837efe39136d6acac8c1a6558362a92c04\r\nCopying blob sha256:09caf63e17c0d596f4389424369dfb4b192843788339cf990ff6a88254277dc7\r\nCopying blob sha256:141b2765ba417a76927bc048f2d3bc139dd3d69403335f523249088aa1f0c714\r\nCopying blob sha256:6a1b5510888f1ade5bfc15cdff37fbb5c9b2affae8ee456e4850f0bdbf331560\r\nCopying blob sha256:2b331be7bed9204337b399eb1c7dee88402cfcb1b8c6216b56e07c571dd383d3\r\nCopying blob sha256:00a8de677ed7f64bfb45365b935a51cb17dcbdc68066f0f67295dbb442e6d883\r\nCopying blob sha256:b95b492fdac0e0bad1ced2d9cac52ef135ecb8312debfa29f7b502770f3fe53c\r\nCopying blob sha256:01f9d888cb8adfc316dbda1c0511c0d84c3bc7c615430cc9a3cd0f32ea75135e\r\nCopying blob sha256:676d6375e84d282d58ceb561bf92ee8c93c90e021d4361f37a6a2b3db69a4f80\r\nCopying blob sha256:6ca3a9910dde664e33c9fec59e28cc1ac5b6f2a455cc22f420b4e2a9df2e9efe\r\nCopying blob sha256:7ba22011df8103bfd4b89fb86d33dfe30576b82f1d49d62691a0a3a85882b9c8\r\nCopying blob sha256:d8f14775c8c1cb2bf1b88a6e2a2f62af009b33f77ef3cfb184032e88616df0b3\r\nCopying blob sha256:1867307e1fe5effb9f647ce1008e8b7e4db75bf44d8542f342751492ff6cb44b\r\nCopying config sha256:8f132fca64bb2f542df1235ec2de1d128045fc304e8392f367b77e2836bd202d\r\nWriting manifest to image destination\r\n1fae25947f0bdb9ab57043afc20b2ed2e41dc5dab0cc6f92a91ea272fdf5cfa8\r\nkidp330@MacBook-Pro-Kuba ~ % docker exec --workdir=/app/ -- test7 bash -c \"dotnet --info \u0026\u0026 dotnet new console \u0026\u0026 dotnet build\"\r\n.NET SDK:\r\n Version:   7.0.404\r\n Commit:    22f221a24c\r\n\r\nRuntime Environment:\r\n OS Name:     debian\r\n OS Version:  11\r\n OS Platform: Linux\r\n RID:         debian.11-x64\r\n Base Path:   /usr/share/dotnet/sdk/7.0.404/\r\n\r\nHost:\r\n  Version:      7.0.14\r\n  Architecture: x64\r\n  Commit:       808851b07a\r\n\r\n.NET SDKs installed:\r\n  7.0.404 [/usr/share/dotnet/sdk]\r\n\r\n.NET runtimes installed:\r\n  Microsoft.AspNetCore.App 7.0.14 [/usr/share/dotnet/shared/Microsoft.AspNetCore.App]\r\n  Microsoft.NETCore.App 7.0.14 [/usr/share/dotnet/shared/Microsoft.NETCore.App]\r\n\r\nOther architectures found:\r\n  None\r\n\r\nEnvironment variables:\r\n  Not set\r\n\r\nglobal.json file:\r\n  Not found\r\n\r\nLearn more:\r\n  https://aka.ms/dotnet/info\r\n\r\nDownload .NET:\r\n  https://aka.ms/dotnet/download\r\nThe template \"Console App\" was created successfully.\r\n\r\nProcessing post-creation actions...\r\nRestoring /app/app.csproj:\r\n  Determining projects to restore...\r\n  Restored /app/app.csproj (in 76 ms).\r\nRestore succeeded.\r\n\r\n\r\nMSBuild version 17.7.4+3ebbd7c49 for .NET\r\n  Determining projects to restore...\r\n  All projects are up-to-date for restore.\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018: The \"CreateAppHost\" task failed unexpectedly. [/app/app.csproj]\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018: System.IO.IOException: Invalid argument [/app/app.csproj]\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018:    at System.IO.MemoryMappedFiles.MemoryMappedView.CreateView(SafeMemoryMappedFileHandle memMappedFileHandle, MemoryMappedFileAccess access, Int64 requestedOffset, Int64 requestedSize) [/app/app.csproj]\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018:    at System.IO.MemoryMappedFiles.MemoryMappedFile.CreateViewAccessor(Int64 offset, Int64 size, MemoryMappedFileAccess access) [/app/app.csproj]\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018:    at Microsoft.NET.HostModel.AppHost.MachOUtils.RemoveSignature(FileStream stream) [/app/app.csproj]\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018:    at Microsoft.NET.HostModel.AppHost.HostWriter.\u003c\u003ec__DisplayClass2_0.\u003cCreateAppHost\u003eb__2() [/app/app.csproj]\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018:    at Microsoft.NET.HostModel.RetryUtil.RetryOnIOError(Action func) [/app/app.csproj]\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018:    at Microsoft.NET.HostModel.AppHost.HostWriter.CreateAppHost(String appHostSourceFilePath, String appHostDestinationFilePath, String appBinaryFilePath, Boolean windowsGraphicalUserInterface, String assemblyToCopyResourcesFrom, Boolean enableMacOSCodeSign) [/app/app.csproj]\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018:    at Microsoft.NET.Build.Tasks.CreateAppHost.ExecuteCore() [/app/app.csproj]\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018:    at Microsoft.NET.Build.Tasks.TaskBase.Execute() [/app/app.csproj]\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018:    at Microsoft.Build.BackEnd.TaskExecutionHost.Microsoft.Build.BackEnd.ITaskExecutionHost.Execute() [/app/app.csproj]\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018:    at Microsoft.Build.BackEnd.TaskBuilder.ExecuteInstantiatedTask(ITaskExecutionHost taskExecutionHost, TaskLoggingContext taskLoggingContext, TaskHost taskHost, ItemBucket bucket, TaskExecutionMode howToExecuteTask) [/app/app.csproj]\r\n\r\nBuild FAILED.\r\n\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018: The \"CreateAppHost\" task failed unexpectedly. [/app/app.csproj]\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018: System.IO.IOException: Invalid argument [/app/app.csproj]\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018:    at System.IO.MemoryMappedFiles.MemoryMappedView.CreateView(SafeMemoryMappedFileHandle memMappedFileHandle, MemoryMappedFileAccess access, Int64 requestedOffset, Int64 requestedSize) [/app/app.csproj]\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018:    at System.IO.MemoryMappedFiles.MemoryMappedFile.CreateViewAccessor(Int64 offset, Int64 size, MemoryMappedFileAccess access) [/app/app.csproj]\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018:    at Microsoft.NET.HostModel.AppHost.MachOUtils.RemoveSignature(FileStream stream) [/app/app.csproj]\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018:    at Microsoft.NET.HostModel.AppHost.HostWriter.\u003c\u003ec__DisplayClass2_0.\u003cCreateAppHost\u003eb__2() [/app/app.csproj]\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018:    at Microsoft.NET.HostModel.RetryUtil.RetryOnIOError(Action func) [/app/app.csproj]\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018:    at Microsoft.NET.HostModel.AppHost.HostWriter.CreateAppHost(String appHostSourceFilePath, String appHostDestinationFilePath, String appBinaryFilePath, Boolean windowsGraphicalUserInterface, String assemblyToCopyResourcesFrom, Boolean enableMacOSCodeSign) [/app/app.csproj]\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018:    at Microsoft.NET.Build.Tasks.CreateAppHost.ExecuteCore() [/app/app.csproj]\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018:    at Microsoft.NET.Build.Tasks.TaskBase.Execute() [/app/app.csproj]\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018:    at Microsoft.Build.BackEnd.TaskExecutionHost.Microsoft.Build.BackEnd.ITaskExecutionHost.Execute() [/app/app.csproj]\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018:    at Microsoft.Build.BackEnd.TaskBuilder.ExecuteInstantiatedTask(ITaskExecutionHost taskExecutionHost, TaskLoggingContext taskLoggingContext, TaskHost taskHost, ItemBucket bucket, TaskExecutionMode howToExecuteTask) [/app/app.csproj]\r\n    0 Warning(s)\r\n    1 Error(s)\r\n\r\nTime Elapsed 00:01:00.43\r\n```\r\n\r\n### Expected behavior\r\n\r\nThe `Hello World` project builds successfully\r\n\r\n### Actual behavior\r\n\r\nBuild fails with the following exception:\r\n```\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018: The \"CreateAppHost\" task failed unexpectedly. [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018: System.IO.IOException: Invalid argument [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at System.IO.MemoryMappedFiles.MemoryMappedView.CreateView(SafeMemoryMappedFileHandle memMappedFileHandle, MemoryMappedFileAccess access, Int64 requestedOffset, Int64 requestedSize) [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.NET.HostModel.AppHost.MachOUtils.RemoveSignature(FileStream stream) [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.NET.HostModel.AppHost.HostWriter.\u003c\u003ec__DisplayClass2_0.\u003cCreateAppHost\u003eb__1() [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.NET.HostModel.RetryUtil.RetryOnIOError(Action func) [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.NET.HostModel.AppHost.HostWriter.CreateAppHost(String appHostSourceFilePath, String appHostDestinationFilePath, String appBinaryFilePath, Boolean windowsGraphicalUserInterface, String assemblyToCopyResourcesFrom, Boolean enableMacOSCodeSign) [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.NET.Build.Tasks.CreateAppHost.ExecuteCore() [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.NET.Build.Tasks.TaskBase.Execute() [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.Build.BackEnd.TaskExecutionHost.Microsoft.Build.BackEnd.ITaskExecutionHost.Execute() [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.Build.BackEnd.TaskBuilder.ExecuteInstantiatedTask(ITaskExecutionHost taskExecutionHost, TaskLoggingContext taskLoggingContext, TaskHost taskHost, ItemBucket bucket, TaskExecutionMode howToExecuteTask) [/app/app.csproj]\r\n    0 Warning(s)\r\n    1 Error(s)\r\n\r\nTime Elapsed 00:01:00.80\r\n```\r\n\r\n### Regression?\r\n\r\n_No response_\r\n\r\n### Known Workarounds\r\n\r\nSet `UseAppHost` to false\r\n\r\n### Configuration\r\n\r\n_No response_\r\n\r\n### Other information\r\n\r\nI have used the same setup with podman on ubuntu (and windows about a month ago), so this might turn out to be specific to macos",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOiMm9kg==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5sVzse",
+                                           "createdAt":  "2023-11-18T21:39:29Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @vitek-karas, @agocke\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Description\n\nMy container engine is podman, running on MacOS 14.1. I tried two containers, dotnet/sdk with SDK 8.0 and a devcontainers image with SDK 7.0. I can `dotnet new console` in any directory inside the container, but `dotnet build` succeeds in all except those that are subdirs of the bound directory. Setting the podman machine to rootful does not fix the issue,\n\n### Reproduction Steps\n\nLogs from the two containers I tested on:\r\n\r\nmcr.microsoft.com/dotnet/sdk:8.0.100-1-bookworm-slim-amd64\r\n```\r\nkidp330@MacBook-Pro-Kuba ~ % mkdir repo                    \r\nkidp330@MacBook-Pro-Kuba ~ % docker image ls                                                    \r\nREPOSITORY                              TAG             IMAGE ID      CREATED       SIZE\r\nmcr.microsoft.com/dotnet/sdk            latest          bb9bebd66b37  16 hours ago  845 MB\r\ndocker.io/library/rust                  latest          68ce12c6ea1a  2 days ago    1.49 GB\r\nmcr.microsoft.com/devcontainers/dotnet  1-7.0-bullseye  8f132fca64bb  2 days ago    1.34 GB\r\nghcr.io/livebook-dev/livebook           latest          56037244a320  9 days ago    620 MB\r\nkidp330@MacBook-Pro-Kuba ~ % docker run -dt --name=test8 --pull=always --volume=$HOME/repo:/app mcr.microsoft.com/dotnet/sdk\r\nTrying to pull mcr.microsoft.com/dotnet/sdk:latest...\r\nGetting image source signatures\r\nCopying blob sha256:88e622ea1fdf216299c152286eaad38c5cab5994b4eecbea326a36b26e2c8f54\r\nCopying blob sha256:578acb154839e9d0034432e8f53756d6f53ba62cf8c7ea5218a2476bf5b58fc9\r\nCopying blob sha256:b5c13ee662c35d35968b2f5b551d00f381cdbfaf913250b092ee1c26f90ab07e\r\nCopying blob sha256:b87d321f96b647df074dfa0e9e3b55d4fc31d54c20fc5c4a2a729f922b610790\r\nCopying blob sha256:27ff45226a4f5002e32cdceb9f75f9b76186f8e22fce8353971566b7c545e1b9\r\nCopying blob sha256:8543982bc2b334aa9a0c115ac8cdc059fbe32595f6154ad889a963ab39041d26\r\nCopying blob sha256:deff372137179efabc8725bc8ce6525ef0ad1c4e5ab204567910f14565dd72ec\r\nCopying blob sha256:0acb879b400f61145e7817e77566552ee0e700331653675c9f3ac5dfa08844f5\r\nCopying blob sha256:9b0191e154388074566e23565eb927df1c6a7494458b7b42a94c898e291dfd06\r\nCopying config sha256:bb9bebd66b3722f29d0f88c32fcbe6aa7d2ecccf39d358b39f1fa28b34de6943\r\nWriting manifest to image destination\r\n882092c3549bf76cf6b65b68307589754a1d182aeb50df6d81f76ab9b92c6b54\r\nkidp330@MacBook-Pro-Kuba ~ % docker exec --workdir=/app/ -- test8 bash -c \"dotnet --info \u0026\u0026 dotnet new console \u0026\u0026 dotnet build\"\r\n.NET SDK:\r\n Version:           8.0.100\r\n Commit:            57efcf1350\r\n Workload version:  8.0.100-manifests.6c33ef20\r\n\r\nRuntime Environment:\r\n OS Name:     debian\r\n OS Version:  12\r\n OS Platform: Linux\r\n RID:         linux-x64\r\n Base Path:   /usr/share/dotnet/sdk/8.0.100/\r\n\r\n.NET workloads installed:\r\n Workload version: 8.0.100-manifests.6c33ef20\r\nThere are no installed workloads to display.\r\n\r\nHost:\r\n  Version:      8.0.0\r\n  Architecture: x64\r\n  Commit:       5535e31a71\r\n\r\n.NET SDKs installed:\r\n  8.0.100 [/usr/share/dotnet/sdk]\r\n\r\n.NET runtimes installed:\r\n  Microsoft.AspNetCore.App 8.0.0 [/usr/share/dotnet/shared/Microsoft.AspNetCore.App]\r\n  Microsoft.NETCore.App 8.0.0 [/usr/share/dotnet/shared/Microsoft.NETCore.App]\r\n\r\nOther architectures found:\r\n  None\r\n\r\nEnvironment variables:\r\n  Not set\r\n\r\nglobal.json file:\r\n  Not found\r\n\r\nLearn more:\r\n  https://aka.ms/dotnet/info\r\n\r\nDownload .NET:\r\n  https://aka.ms/dotnet/download\r\nThe template \"Console App\" was created successfully.\r\n\r\nProcessing post-creation actions...\r\nRestoring /app/app.csproj:\r\n  Determining projects to restore...\r\n  Restored /app/app.csproj (in 393 ms).\r\nRestore succeeded.\r\n\r\n\r\nMSBuild version 17.8.3+195e7f5a3 for .NET\r\n  Determining projects to restore...\r\n  All projects are up-to-date for restore.\r\n\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018: The \"CreateAppHost\" task failed unexpectedly. [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018: System.IO.IOException: Invalid argument [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at System.IO.MemoryMappedFiles.MemoryMappedView.CreateView(SafeMemoryMappedFileHandle memMappedFileHandle, MemoryMappedFileAccess access, Int64 requestedOffset, Int64 requestedSize) [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.NET.HostModel.AppHost.MachOUtils.RemoveSignature(FileStream stream) [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.NET.HostModel.AppHost.HostWriter.\u003c\u003ec__DisplayClass2_0.\u003cCreateAppHost\u003eb__1() [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.NET.HostModel.RetryUtil.RetryOnIOError(Action func) [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.NET.HostModel.AppHost.HostWriter.CreateAppHost(String appHostSourceFilePath, String appHostDestinationFilePath, String appBinaryFilePath, Boolean windowsGraphicalUserInterface, String assemblyToCopyResourcesFrom, Boolean enableMacOSCodeSign) [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.NET.Build.Tasks.CreateAppHost.ExecuteCore() [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.NET.Build.Tasks.TaskBase.Execute() [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.Build.BackEnd.TaskExecutionHost.Microsoft.Build.BackEnd.ITaskExecutionHost.Execute() [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.Build.BackEnd.TaskBuilder.ExecuteInstantiatedTask(ITaskExecutionHost taskExecutionHost, TaskLoggingContext taskLoggingContext, TaskHost taskHost, ItemBucket bucket, TaskExecutionMode howToExecuteTask) [/app/app.csproj]\r\n\r\nBuild FAILED.\r\n\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018: The \"CreateAppHost\" task failed unexpectedly. [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018: System.IO.IOException: Invalid argument [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at System.IO.MemoryMappedFiles.MemoryMappedView.CreateView(SafeMemoryMappedFileHandle memMappedFileHandle, MemoryMappedFileAccess access, Int64 requestedOffset, Int64 requestedSize) [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.NET.HostModel.AppHost.MachOUtils.RemoveSignature(FileStream stream) [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.NET.HostModel.AppHost.HostWriter.\u003c\u003ec__DisplayClass2_0.\u003cCreateAppHost\u003eb__1() [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.NET.HostModel.RetryUtil.RetryOnIOError(Action func) [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.NET.HostModel.AppHost.HostWriter.CreateAppHost(String appHostSourceFilePath, String appHostDestinationFilePath, String appBinaryFilePath, Boolean windowsGraphicalUserInterface, String assemblyToCopyResourcesFrom, Boolean enableMacOSCodeSign) [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.NET.Build.Tasks.CreateAppHost.ExecuteCore() [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.NET.Build.Tasks.TaskBase.Execute() [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.Build.BackEnd.TaskExecutionHost.Microsoft.Build.BackEnd.ITaskExecutionHost.Execute() [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.Build.BackEnd.TaskBuilder.ExecuteInstantiatedTask(ITaskExecutionHost taskExecutionHost, TaskLoggingContext taskLoggingContext, TaskHost taskHost, ItemBucket bucket, TaskExecutionMode howToExecuteTask) [/app/app.csproj]\r\n    0 Warning(s)\r\n    1 Error(s)\r\n\r\nTime Elapsed 00:01:00.80\r\n```\r\n\r\n```\r\nkidp330@MacBook-Pro-Kuba ~ % mkdir repo                                                                                                              \r\nkidp330@MacBook-Pro-Kuba ~ % docker run -dt --name=test7 --pull=always --volume=$HOME/repo:/app mcr.microsoft.com/devcontainers/dotnet:1-7.0-bullseye\r\nTrying to pull mcr.microsoft.com/devcontainers/dotnet:1-7.0-bullseye...\r\nGetting image source signatures\r\nCopying blob sha256:1bc79da9412fe139a000b9d28f81c2f8fed6e3314c886f474cae11f757ebb752\r\nCopying blob sha256:0bc8ff246cb8ff91066742f8f7ded40397e7aaaa925200b7bec5382d1ffcd6a0\r\nCopying blob sha256:76940af183830cbd6864465abc88c2837efe39136d6acac8c1a6558362a92c04\r\nCopying blob sha256:09caf63e17c0d596f4389424369dfb4b192843788339cf990ff6a88254277dc7\r\nCopying blob sha256:141b2765ba417a76927bc048f2d3bc139dd3d69403335f523249088aa1f0c714\r\nCopying blob sha256:6a1b5510888f1ade5bfc15cdff37fbb5c9b2affae8ee456e4850f0bdbf331560\r\nCopying blob sha256:2b331be7bed9204337b399eb1c7dee88402cfcb1b8c6216b56e07c571dd383d3\r\nCopying blob sha256:00a8de677ed7f64bfb45365b935a51cb17dcbdc68066f0f67295dbb442e6d883\r\nCopying blob sha256:b95b492fdac0e0bad1ced2d9cac52ef135ecb8312debfa29f7b502770f3fe53c\r\nCopying blob sha256:01f9d888cb8adfc316dbda1c0511c0d84c3bc7c615430cc9a3cd0f32ea75135e\r\nCopying blob sha256:676d6375e84d282d58ceb561bf92ee8c93c90e021d4361f37a6a2b3db69a4f80\r\nCopying blob sha256:6ca3a9910dde664e33c9fec59e28cc1ac5b6f2a455cc22f420b4e2a9df2e9efe\r\nCopying blob sha256:7ba22011df8103bfd4b89fb86d33dfe30576b82f1d49d62691a0a3a85882b9c8\r\nCopying blob sha256:d8f14775c8c1cb2bf1b88a6e2a2f62af009b33f77ef3cfb184032e88616df0b3\r\nCopying blob sha256:1867307e1fe5effb9f647ce1008e8b7e4db75bf44d8542f342751492ff6cb44b\r\nCopying config sha256:8f132fca64bb2f542df1235ec2de1d128045fc304e8392f367b77e2836bd202d\r\nWriting manifest to image destination\r\n1fae25947f0bdb9ab57043afc20b2ed2e41dc5dab0cc6f92a91ea272fdf5cfa8\r\nkidp330@MacBook-Pro-Kuba ~ % docker exec --workdir=/app/ -- test7 bash -c \"dotnet --info \u0026\u0026 dotnet new console \u0026\u0026 dotnet build\"\r\n.NET SDK:\r\n Version:   7.0.404\r\n Commit:    22f221a24c\r\n\r\nRuntime Environment:\r\n OS Name:     debian\r\n OS Version:  11\r\n OS Platform: Linux\r\n RID:         debian.11-x64\r\n Base Path:   /usr/share/dotnet/sdk/7.0.404/\r\n\r\nHost:\r\n  Version:      7.0.14\r\n  Architecture: x64\r\n  Commit:       808851b07a\r\n\r\n.NET SDKs installed:\r\n  7.0.404 [/usr/share/dotnet/sdk]\r\n\r\n.NET runtimes installed:\r\n  Microsoft.AspNetCore.App 7.0.14 [/usr/share/dotnet/shared/Microsoft.AspNetCore.App]\r\n  Microsoft.NETCore.App 7.0.14 [/usr/share/dotnet/shared/Microsoft.NETCore.App]\r\n\r\nOther architectures found:\r\n  None\r\n\r\nEnvironment variables:\r\n  Not set\r\n\r\nglobal.json file:\r\n  Not found\r\n\r\nLearn more:\r\n  https://aka.ms/dotnet/info\r\n\r\nDownload .NET:\r\n  https://aka.ms/dotnet/download\r\nThe template \"Console App\" was created successfully.\r\n\r\nProcessing post-creation actions...\r\nRestoring /app/app.csproj:\r\n  Determining projects to restore...\r\n  Restored /app/app.csproj (in 76 ms).\r\nRestore succeeded.\r\n\r\n\r\nMSBuild version 17.7.4+3ebbd7c49 for .NET\r\n  Determining projects to restore...\r\n  All projects are up-to-date for restore.\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018: The \"CreateAppHost\" task failed unexpectedly. [/app/app.csproj]\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018: System.IO.IOException: Invalid argument [/app/app.csproj]\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018:    at System.IO.MemoryMappedFiles.MemoryMappedView.CreateView(SafeMemoryMappedFileHandle memMappedFileHandle, MemoryMappedFileAccess access, Int64 requestedOffset, Int64 requestedSize) [/app/app.csproj]\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018:    at System.IO.MemoryMappedFiles.MemoryMappedFile.CreateViewAccessor(Int64 offset, Int64 size, MemoryMappedFileAccess access) [/app/app.csproj]\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018:    at Microsoft.NET.HostModel.AppHost.MachOUtils.RemoveSignature(FileStream stream) [/app/app.csproj]\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018:    at Microsoft.NET.HostModel.AppHost.HostWriter.\u003c\u003ec__DisplayClass2_0.\u003cCreateAppHost\u003eb__2() [/app/app.csproj]\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018:    at Microsoft.NET.HostModel.RetryUtil.RetryOnIOError(Action func) [/app/app.csproj]\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018:    at Microsoft.NET.HostModel.AppHost.HostWriter.CreateAppHost(String appHostSourceFilePath, String appHostDestinationFilePath, String appBinaryFilePath, Boolean windowsGraphicalUserInterface, String assemblyToCopyResourcesFrom, Boolean enableMacOSCodeSign) [/app/app.csproj]\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018:    at Microsoft.NET.Build.Tasks.CreateAppHost.ExecuteCore() [/app/app.csproj]\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018:    at Microsoft.NET.Build.Tasks.TaskBase.Execute() [/app/app.csproj]\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018:    at Microsoft.Build.BackEnd.TaskExecutionHost.Microsoft.Build.BackEnd.ITaskExecutionHost.Execute() [/app/app.csproj]\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018:    at Microsoft.Build.BackEnd.TaskBuilder.ExecuteInstantiatedTask(ITaskExecutionHost taskExecutionHost, TaskLoggingContext taskLoggingContext, TaskHost taskHost, ItemBucket bucket, TaskExecutionMode howToExecuteTask) [/app/app.csproj]\r\n\r\nBuild FAILED.\r\n\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018: The \"CreateAppHost\" task failed unexpectedly. [/app/app.csproj]\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018: System.IO.IOException: Invalid argument [/app/app.csproj]\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018:    at System.IO.MemoryMappedFiles.MemoryMappedView.CreateView(SafeMemoryMappedFileHandle memMappedFileHandle, MemoryMappedFileAccess access, Int64 requestedOffset, Int64 requestedSize) [/app/app.csproj]\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018:    at System.IO.MemoryMappedFiles.MemoryMappedFile.CreateViewAccessor(Int64 offset, Int64 size, MemoryMappedFileAccess access) [/app/app.csproj]\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018:    at Microsoft.NET.HostModel.AppHost.MachOUtils.RemoveSignature(FileStream stream) [/app/app.csproj]\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018:    at Microsoft.NET.HostModel.AppHost.HostWriter.\u003c\u003ec__DisplayClass2_0.\u003cCreateAppHost\u003eb__2() [/app/app.csproj]\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018:    at Microsoft.NET.HostModel.RetryUtil.RetryOnIOError(Action func) [/app/app.csproj]\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018:    at Microsoft.NET.HostModel.AppHost.HostWriter.CreateAppHost(String appHostSourceFilePath, String appHostDestinationFilePath, String appBinaryFilePath, Boolean windowsGraphicalUserInterface, String assemblyToCopyResourcesFrom, Boolean enableMacOSCodeSign) [/app/app.csproj]\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018:    at Microsoft.NET.Build.Tasks.CreateAppHost.ExecuteCore() [/app/app.csproj]\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018:    at Microsoft.NET.Build.Tasks.TaskBase.Execute() [/app/app.csproj]\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018:    at Microsoft.Build.BackEnd.TaskExecutionHost.Microsoft.Build.BackEnd.ITaskExecutionHost.Execute() [/app/app.csproj]\r\n/usr/share/dotnet/sdk/7.0.404/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(594,5): error MSB4018:    at Microsoft.Build.BackEnd.TaskBuilder.ExecuteInstantiatedTask(ITaskExecutionHost taskExecutionHost, TaskLoggingContext taskLoggingContext, TaskHost taskHost, ItemBucket bucket, TaskExecutionMode howToExecuteTask) [/app/app.csproj]\r\n    0 Warning(s)\r\n    1 Error(s)\r\n\r\nTime Elapsed 00:01:00.43\r\n```\n\n### Expected behavior\n\nThe `Hello World` project builds successfully\n\n### Actual behavior\n\nBuild fails with the following exception:\r\n```\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018: The \"CreateAppHost\" task failed unexpectedly. [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018: System.IO.IOException: Invalid argument [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at System.IO.MemoryMappedFiles.MemoryMappedView.CreateView(SafeMemoryMappedFileHandle memMappedFileHandle, MemoryMappedFileAccess access, Int64 requestedOffset, Int64 requestedSize) [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.NET.HostModel.AppHost.MachOUtils.RemoveSignature(FileStream stream) [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.NET.HostModel.AppHost.HostWriter.\u003c\u003ec__DisplayClass2_0.\u003cCreateAppHost\u003eb__1() [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.NET.HostModel.RetryUtil.RetryOnIOError(Action func) [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.NET.HostModel.AppHost.HostWriter.CreateAppHost(String appHostSourceFilePath, String appHostDestinationFilePath, String appBinaryFilePath, Boolean windowsGraphicalUserInterface, String assemblyToCopyResourcesFrom, Boolean enableMacOSCodeSign) [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.NET.Build.Tasks.CreateAppHost.ExecuteCore() [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.NET.Build.Tasks.TaskBase.Execute() [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.Build.BackEnd.TaskExecutionHost.Microsoft.Build.BackEnd.ITaskExecutionHost.Execute() [/app/app.csproj]\r\n/usr/share/dotnet/sdk/8.0.100/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets(709,5): error MSB4018:    at Microsoft.Build.BackEnd.TaskBuilder.ExecuteInstantiatedTask(ITaskExecutionHost taskExecutionHost, TaskLoggingContext taskLoggingContext, TaskHost taskHost, ItemBucket bucket, TaskExecutionMode howToExecuteTask) [/app/app.csproj]\r\n    0 Warning(s)\r\n    1 Error(s)\r\n\r\nTime Elapsed 00:01:00.80\r\n```\n\n### Regression?\n\n_No response_\n\n### Known Workarounds\n\nSet `UseAppHost` to false\n\n### Configuration\n\n_No response_\n\n### Other information\n\n_No response_\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003ekidp330\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-HostModel`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2023-11-18T21:39:29Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6Iyb2S",
+                                           "createdAt":  "2024-08-17T17:36:22Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "agocke",
+                                           "body":  "This is likely specific to some restrictions in this environment about memory mapped files. We currently use memory mapped files to write the apphost and the alternatives have other problems. I don’t anticipate changing this any time soon, unless an API equivalent to memory mapping becomes available on this platform combination. Also, memory mapping is a posix standard, so it not working is probably a broad weakness of podman + Mac. ",
+                                           "updatedAt":  "2024-08-17T17:36:22Z"
+                                       }
+                                   ],
+                         "totalCount":  2
+                     },
+        "title":  "`CreateAppHost` fails when building in a bound volume directory inside a dotnet/sdk container",
+        "labels":  [
+                       "area-HostModel"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/101548",
+        "createdAt":  "2024-04-25T14:16:39Z",
+        "number":  101548,
+        "author":  "am11",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-06-30T19:26:23Z",
+        "body":  "There is a single usage of Bundle ctor in SDK and a few usages in installer tests in runtime repo. Runtime does a [better](https://github.com/dotnet/runtime/blob/3f30cb9c9b392d127c0e4fbea2333dd1e6b82803/src/installer/managed/Microsoft.NET.HostModel/Bundle/TargetInfo.cs#L34-L35) job at detecting the current OS/arch when these arguments are null, while SDK is mostly out-of-sync ([today OS is](https://github.com/dotnet/sdk/blob/26f1dfd98476c1abe307a9497f80eb5d4a3c60ed/src/Tasks/Microsoft.NET.Build.Tasks/GenerateBundle.cs#L37), and a few days ago riscv/loogarch were missing).\r\n\r\nI\u0027m not sure about the policy of breaking HostModel public API, but ideally we should just delete these arguments and let hostmodel take care of platform detection in one place. Alternatively, we can just cleanup the SDK code for DRY:\r\n\r\n```diff\r\n--- a/dotnet/sdk/src/Tasks/Microsoft.NET.Build.Tasks/GenerateBundle.cs\r\n+++ b/dotnet/sdk/src/Tasks/Microsoft.NET.Build.Tasks/GenerateBundle.cs\r\n@@ -34,19 +34,6 @@ public class GenerateBundle : TaskBase\r\n \r\n         protected override void ExecuteCore()\r\n         {\r\n-            OSPlatform targetOS = RuntimeIdentifier.StartsWith(\"win\") ? OSPlatform.Windows :\r\n-                                  RuntimeIdentifier.StartsWith(\"osx\") ? OSPlatform.OSX : OSPlatform.Linux;\r\n-\r\n-            Architecture targetArch = RuntimeIdentifier.EndsWith(\"-x64\") || RuntimeIdentifier.Contains(\"-x64-\") ? Architecture.X64 :\r\n-                                      RuntimeIdentifier.EndsWith(\"-x86\") || RuntimeIdentifier.Contains(\"-x86-\") ? Architecture.X86 :\r\n-                                      RuntimeIdentifier.EndsWith(\"-arm64\") || RuntimeIdentifier.Contains(\"-arm64-\") ? Architecture.Arm64 :\r\n-                                      RuntimeIdentifier.EndsWith(\"-arm\") || RuntimeIdentifier.Contains(\"-arm-\") ? Architecture.Arm :\r\n-#if !NETFRAMEWORK\r\n-                                      RuntimeIdentifier.EndsWith(\"-riscv64\") || RuntimeIdentifier.Contains(\"-riscv64-\") ? Architecture.RiscV64 :\r\n-                                      RuntimeIdentifier.EndsWith(\"-loongarch64\") || RuntimeIdentifier.Contains(\"-loongarch64-\") ? Architecture.LoongArch64 :\r\n-#endif\r\n-                                      throw new ArgumentException(nameof(RuntimeIdentifier));\r\n-\r\n             BundleOptions options = BundleOptions.None;\r\n             options |= IncludeNativeLibraries ? BundleOptions.BundleNativeBinaries : BundleOptions.None;\r\n             options |= IncludeAllContent ? BundleOptions.BundleAllContent : BundleOptions.None;\r\n@@ -58,10 +45,8 @@ protected override void ExecuteCore()\r\n                 AppHostName,\r\n                 OutputDir,\r\n                 options,\r\n-                targetOS,\r\n-                targetArch,\r\n-                version,\r\n-                ShowDiagnosticOutput);\r\n+                targetFrameworkVersion: version,\r\n+                diagnosticOutput: ShowDiagnosticOutput);\r\n \r\n             var fileSpec = new List\u003cFileSpec\u003e(FilesToBundle.Length);\r\n```",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOtAhMGw==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc570VsO",
+                                           "createdAt":  "2024-04-25T14:16:49Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "am11",
+                                           "body":  "cc @akoeplinger",
+                                           "updatedAt":  "2024-04-25T14:16:49Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc570V0t",
+                                           "createdAt":  "2024-04-25T14:17:02Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @vitek-karas, @agocke\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2024-04-25T14:17:02Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc60BoIw",
+                                           "createdAt":  "2025-06-30T18:43:43Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "elinor-fung",
+                                           "body":  "The target runtime identifier is not necessarily the same as the current one, so we can\u0027t remove the OS/arch arguments entirely from `Bundler`. Maybe the SDK could do something like explicitly check if (target) `RuntimeIdentifier` is the same as `RuntimeInformation.RuntimeIdentifier` and only  pass OS and arch if they are different.",
+                                           "updatedAt":  "2025-06-30T18:43:43Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc60CEwb",
+                                           "createdAt":  "2025-06-30T19:26:23Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOEYi7YQ==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "elinor-fung",
+                                                                               "createdAt":  "2025-06-30T20:55:38Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "am11",
+                                           "body":  "Ah I see. We can make it non-optional argument and delete auto inference from ctor.\n\nhttps://github.com/dotnet/runtime/blob/c02569bcf67543806f6b0ba8923ff3a313f830f2/src/installer/managed/Microsoft.NET.HostModel/Bundle/Bundler.cs#L42-L43\n\n(`null` is only passed from unit tests)",
+                                           "updatedAt":  "2025-06-30T19:26:23Z"
+                                       }
+                                   ],
+                         "totalCount":  4
+                     },
+        "title":  "OS/arch optional arguments in Bundler and TargetInfo",
+        "labels":  [
+                       "area-HostModel"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/112134",
+        "createdAt":  "2025-02-04T17:29:36Z",
+        "number":  112134,
+        "author":  "ViktorHofer",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-07-25T22:07:10Z",
+        "body":  "Discussed in https://github.com/dotnet/runtime/pull/109852. We should explore if HostModel can use live SRM.\n\nhttps://github.com/dotnet/runtime/blob/d44116e0dc18ffd94b910bd03cdcf2c8219a59bd/src/installer/managed/Microsoft.NET.HostModel/Microsoft.NET.HostModel.csproj#L22-L23",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOnQ6Y6w==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc6dCS7-",
+                                           "createdAt":  "2025-02-04T17:30:00Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-system-reflection-metadata\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2025-02-04T17:30:00Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6dDpjr",
+                                           "createdAt":  "2025-02-04T20:22:08Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @vitek-karas, @agocke\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2025-02-04T20:22:08Z"
+                                       }
+                                   ],
+                         "totalCount":  2
+                     },
+        "title":  "Make HostModel use live System.Reflection.Metadata",
+        "labels":  [
+                       "area-HostModel"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/113707",
+        "createdAt":  "2025-03-19T19:46:22Z",
+        "number":  113707,
+        "author":  "akoeplinger",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHODASHTg==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "hoyosjs",
+                                            "createdAt":  "2025-03-19T20:19:50Z"
+                                        }
+                                    ],
+                          "totalCount":  1
+                      },
+        "updatedAt":  "2025-05-15T20:52:34Z",
+        "body":  "I noticed this today after an internal discussion on Teams related to https://github.com/dotnet/cli-lab/pull/346.\n\nWhen you publish a self-contained app on macOS today the apphost in the output directory doesn\u0027t contain any entitlements:\n\n```bash\n$ dotnet new console -o signtest\n$ dotnet publish --self-contained\n\n$ codesign -d --entitlements - --xml bin/Release/net9.0/osx-x64/publish/signtest\nExecutable=/Users/alexander/dev/test/signtest/bin/Release/net9.0/osx-x64/publish/signtest\n```\n\ncontrast this to the apphost in the apphost pack:\n\n```\n$ codesign -d --entitlements - --xml /Users/alexander/.nuget/packages/microsoft.netcore.app.host.osx-x64/9.0.2/runtimes/osx-x64/native/apphost\nExecutable=/Users/alexander/.nuget/packages/microsoft.netcore.app.host.osx-x64/9.0.2/runtimes/osx-x64/native/apphost\n\u003c?xml version=\"1.0\" encoding=\"UTF-8\"?\u003e\u003c!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"https://www.apple.com/DTDs/PropertyList-1.0.dtd\"\u003e\u003cplist version=\"1.0\"\u003e\u003cdict\u003e\u003ckey\u003ecom.apple.security.cs.allow-dyld-environment-variables\u003c/key\u003e\u003ctrue/\u003e\u003ckey\u003ecom.apple.security.cs.allow-jit\u003c/key\u003e\u003ctrue/\u003e\u003ckey\u003ecom.apple.security.cs.debugger\u003c/key\u003e\u003ctrue/\u003e\u003ckey\u003ecom.apple.security.cs.disable-library-validation\u003c/key\u003e\u003ctrue/\u003e\u003ckey\u003ecom.apple.security.get-task-allow\u003c/key\u003e\u003ctrue/\u003e\u003c/dict\u003e\u003c/plist\u003e\n```\n\nThis has the entitlements we embed during the runtime build from https://github.com/dotnet/runtime/blob/main/eng/native/entitlements.plist\n\nIt looks like the code in [HostWriter.cs](https://github.com/dotnet/runtime/blob/6a23f1caa3ed2baeda3d9962d2ffb983bf996bef/src/installer/managed/Microsoft.NET.HostModel/AppHost/HostWriter.cs#L150-L155) which gets invoked by the CreateAppHost msbuild task in the dotnet sdk to ad-hoc sign the binary doesn\u0027t preserve the entitlements.\n\nThis means that developers who want to sign the apphost using a real certificate and enable the hardened runtime option need to re-add the entitlements again which is not obvious, see https://github.com/dotnet/sdk/issues/24337 which now also uses outdated entitlements compared to what we use nowadays. The list on the public docs page is outdated too: https://learn.microsoft.com/en-us/dotnet/core/install/macos-notarization-issues#default-entitlements\n\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOq_YK3g==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc6jMWP_",
+                                           "createdAt":  "2025-03-19T19:47:11Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @vitek-karas, @agocke\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2025-03-19T19:47:11Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6jQTAi",
+                                           "createdAt":  "2025-03-20T02:37:15Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "agocke",
+                                           "body":  "I believe this is supposed to be identical to what comes out of macOS ad-hoc codesign. Is that true? Or are they different?",
+                                           "updatedAt":  "2025-03-20T02:38:37Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6jZzbk",
+                                           "createdAt":  "2025-03-20T19:21:31Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "akoeplinger",
+                                           "body":  "it depends on the option, `codesign` has `--preserve-metadata=entitlements` which does that",
+                                           "updatedAt":  "2025-03-20T19:21:31Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6kM7rP",
+                                           "createdAt":  "2025-03-26T15:35:03Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "am11",
+                                           "body":  "\u003e It looks like the code in [HostWriter.cs](https://github.com/dotnet/runtime/blob/6a23f1caa3ed2baeda3d9962d2ffb983bf996bef/src/installer/managed/Microsoft.NET.HostModel/AppHost/HostWriter.cs#L150-L155) which gets invoked by the CreateAppHost msbuild task in the dotnet sdk to ad-hoc sign the binary doesn\u0027t preserve the entitlements.\n\nIs it a regression from .NET 9? The code you are referring to was added in .NET 10: https://github.com/dotnet/runtime/pull/108992, and the second part is in progress https://github.com/dotnet/runtime/pull/110417.\n\ncc @jtschuster @filipnavara",
+                                           "updatedAt":  "2025-03-26T15:35:03Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6kM9b_",
+                                           "createdAt":  "2025-03-26T15:36:51Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOELkjAA==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "edvilme",
+                                                                               "createdAt":  "2025-03-26T17:27:51Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "akoeplinger",
+                                           "body":  "no it\u0027s not a regression. in net9 we used the `codesign` tool directly but didn\u0027t pass the `--preserve-metadata=entitlements` either",
+                                           "updatedAt":  "2025-03-26T15:36:51Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6r9gre",
+                                           "createdAt":  "2025-05-15T20:52:33Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOEST59w==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "am11",
+                                                                               "createdAt":  "2025-05-15T21:38:00Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "HEART",
+                                                                               "user":  "akoeplinger",
+                                                                               "createdAt":  "2025-05-15T22:12:39Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  2
+                                                         },
+                                           "author":  "jtschuster",
+                                           "body":  "Investigated an issue today that wound up being due to this. I\u0027ll look into how much this would take to implement in the manager signer.",
+                                           "updatedAt":  "2025-05-15T20:52:33Z"
+                                       }
+                                   ],
+                         "totalCount":  6
+                     },
+        "title":  "Codesigning the apphost on macOS should preserve entitlements",
+        "labels":  [
+                       "area-HostModel"
+                   ]
+    }
+]

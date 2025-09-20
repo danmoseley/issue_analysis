@@ -1,0 +1,101 @@
+﻿[
+    {
+        "url":  "https://github.com/dotnet/aspire/issues/11024",
+        "createdAt":  "2025-08-20T15:53:28Z",
+        "number":  11024,
+        "author":  "captainsafia",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-08-21T04:12:29Z",
+        "body":  "I\u0027ve noticed that when I invoke the deploy command from the VS Code extension, it searches the workspace for available AppHosts.\n\nIt would be great if the extension could detect the AppHost I have open (I had one open in this case) and pick that one for deployment.\n\nI experienced this with the `deploy` command but I assume other commands triggered from the VS Code extension have the same behavior.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  null,
+                         "nodes":  [
+
+                                   ],
+                         "totalCount":  0
+                     },
+        "title":  "Deploy command via VS Code extension should target open AppHost is available",
+        "labels":  [
+                       "area-extension"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspire/issues/11528",
+        "createdAt":  "2025-09-19T23:28:14Z",
+        "number":  11528,
+        "author":  "eerhardt",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-09-19T23:42:58Z",
+        "body":  "When I deploy an app through `\u003e Aspire: Deploy app host` in the VS Code extension, and the app has parameters, I get a pop up message box\n\n\u003cimg width=\"791\" height=\"205\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/6ed0bec8-c13c-42dd-8a4f-8d8e4cee89a4\" /\u003e\n\nI shouldn\u0027t get this box. It is jarring given that I already typed in the Azure Subscription, Region, and Resource Group name at the top. Having an alert box pop up here doesn\u0027t make sense. I should just prompt for more values.\n\nFunny enough, clicking \"No\" brings the message box back up. I can keep clicking \"No\" and the window pops back up.\n\ncc @adamint @captainsafia ",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOxYrEzA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDOKYQzfc7FisTM",
+                                           "createdAt":  "2025-09-19T23:42:58Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "captainsafia",
+                                           "body":  "This happens because we share the ParameterProcessor code with the implementation used by the dashboard which keeps prompting with the \"There are unresolved parameters that need to be set.\" notification until all values are set.\n\nThere\u0027s two ways to resolve this issue:\n\n- Create different implementations for the ParameterProcessor between PublishMode and RunMode like we did for the ProvisioningContext.\n- Revert the change to support notification prompts in the PublishingActivityReporter and auto-accept them (can be spooky if there are legit cases where cancellation needs to be handled).",
+                                           "updatedAt":  "2025-09-19T23:42:58Z"
+                                       }
+                                   ],
+                         "totalCount":  1
+                     },
+        "title":  "[VS Code Extension] Aspire:Deploy with unresolved parameters pops an alert window",
+        "labels":  [
+                       "area-deployment",
+                       "area-extension"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspire/issues/11529",
+        "createdAt":  "2025-09-19T23:30:41Z",
+        "number":  11529,
+        "author":  "eerhardt",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-09-19T23:30:46Z",
+        "body":  "When I deploy an app through `\u003e Aspire: Deploy app host` in the VS Code extension, and the app has parameters, I get prompted for the values at the top.\n\n\u003cimg width=\"1115\" height=\"154\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/533355b2-20bc-41ce-8ef5-74de1d601132\" /\u003e\n\nWhen I click to a different window (not hitting escape or Enter, just click to a different window), it cancels the deployment:\n\n\u003cimg width=\"1458\" height=\"199\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/3fc66573-7352-4231-b900-db0cffc83762\" /\u003e\n\nThe top prompt should allow me to click to a different window so I can copy/paste the values I want.\n\ncc @adamint ",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  null,
+                         "nodes":  [
+
+                                   ],
+                         "totalCount":  0
+                     },
+        "title":  "[VS Code Extension] Aspire:Deploy with unresolved parameters cancels the deploy when I click to another window",
+        "labels":  [
+                       "area-extension"
+                   ]
+    }
+]

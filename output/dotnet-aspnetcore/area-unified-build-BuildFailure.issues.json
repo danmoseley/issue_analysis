@@ -1,0 +1,73 @@
+﻿{
+    "url":  "https://github.com/dotnet/aspnetcore/issues/61368",
+    "createdAt":  "2025-04-07T17:46:51Z",
+    "number":  61368,
+    "author":  "mmitche",
+    "reactions":  {
+                      "hasNextPage":  false,
+                      "endCursor":  null,
+                      "nodes":  [
+
+                                ],
+                      "totalCount":  0
+                  },
+    "updatedAt":  "2025-08-01T17:03:48Z",
+    "body":  "**Issue**\n\n```\n    C:\\Program Files\\Microsoft Visual Studio\\2022\\Preview\\Common7\\IDE\\CommonExtensions\\Microsoft\\NuGet\\NuGet.targets(183,5): error : Cannot create a file when that file already exists. [D:\\a\\_work\\1\\s\\src\\aspnetcore\\src\\Grpc\\JsonTranscoding\\src\\Microsoft.AspNetCore.Grpc.JsonTranscoding\\Microsoft.AspNetCore.Grpc.JsonTranscoding.csproj]\n```\n\n\n**Instances:**\n - https://dev.azure.com/dnceng/internal/_build/results?buildId=2679991\u0026view=logs\u0026j=9050e078-31bf-5111-d8ec-8b6fa95caf9c\u0026t=4df1dbeb-294c-5d6e-97b8-581fe506c270\u0026l=3721\n - https://dev.azure.com/dnceng/internal/_build/results?buildId=2680647\u0026view=logs\u0026j=9050e078-31bf-5111-d8ec-8b6fa95caf9c\u0026t=4df1dbeb-294c-5d6e-97b8-581fe506c270\u0026l=4131",
+    "comments":  {
+                     "hasNextPage":  false,
+                     "endCursor":  "Y3Vyc29yOnYyOpHOuUwOMA==",
+                     "nodes":  [
+                                   {
+                                       "id":  "IC_kwDOAQzde86mJ5td",
+                                       "createdAt":  "2025-04-08T20:42:12Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  "wtgodbe",
+                                       "body":  "May be worth trying to repro locally - lock the project.assets.json file \u0026 run a build",
+                                       "updatedAt":  "2025-04-08T20:42:12Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDOAQzde862B08Y",
+                                       "createdAt":  "2025-07-09T20:35:53Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  "mmitche",
+                                       "body":  "Seen a couple times lately.",
+                                       "updatedAt":  "2025-07-09T20:35:53Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDOAQzde865TA4w",
+                                       "createdAt":  "2025-07-23T13:57:18Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  "mmitche",
+                                       "body":  "https://dev.azure.com/dnceng/internal/_build/results?buildId=2756210\u0026view=logs\u0026j=f6ff5446-2d93-5aab-14d7-13789bf77510\u0026t=2501a9c4-8484-506e-1a7b-678062e06b72\u0026l=1430",
+                                       "updatedAt":  "2025-07-23T13:57:18Z"
+                                   }
+                               ],
+                     "totalCount":  3
+                 },
+    "title":  "UB Build Failure: aspnetcore -  Cannot create a file when that file already exists",
+    "labels":  [
+                   "area-infrastructure",
+                   "area-unified-build-BuildFailure"
+               ]
+}

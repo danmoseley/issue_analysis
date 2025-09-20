@@ -1,0 +1,573 @@
+﻿[
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/54617",
+        "createdAt":  "2021-06-23T17:10:08Z",
+        "number":  54617,
+        "author":  "lambdageek",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2022-07-05T15:39:44Z",
+        "body":  "hot reload is not supported for AOTd assemblies.\r\n\r\nInstead of disabling the test with `[ActiveIssue]` we need to update `ApplyUpdateUtil.IsSupported` to detect that we\u0027re in AOT and disable the test.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOPJfeHQ==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDg2NzAxMzc5OA==",
+                                           "createdAt":  "2021-06-23T17:10:12Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "I couldn\u0027t figure out the best area label to add to this issue. If you have write-permissions please help me learn by adding exactly one [area label](https://github.com/dotnet/runtime/blob/master/docs/area-owners.md).",
+                                           "updatedAt":  "2021-06-23T17:10:12Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDg2NzI1NTQyOA==",
+                                           "createdAt":  "2021-06-24T01:04:18Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to \u0027arch-wasm\u0027: @lewing\nSee info in area-owners.md if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\nhot reload is not supported for AOTd assemblies.\r\n\r\nInstead of disabling the test with `[ActiveIssue]` we need to update `ApplyUpdateUtil.IsSupported` to detect that we\u0027re in AOT and disable the test.\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003elambdageek\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`arch-wasm`, `area-EnC-mono`, `disabled-test`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e6.0.0\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2021-06-24T01:04:18Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDg2Nzk3MDc4MA==",
+                                           "createdAt":  "2021-06-24T21:42:52Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "radical",
+                                           "body":  "@lambdageek Should https://github.com/dotnet/runtime/issues/53565 be closed in favor of this?",
+                                           "updatedAt":  "2021-06-24T21:42:52Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDg2ODEyNDI0NQ==",
+                                           "createdAt":  "2021-06-25T01:40:42Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOBwHRXA==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "radical",
+                                                                               "createdAt":  "2021-06-25T01:41:25Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "lambdageek",
+                                           "body":  "Oh darn, I missed that we already had an issue.  I guess we should close the older one, since this one now has a reference in the code",
+                                           "updatedAt":  "2021-06-25T01:40:42Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc41L4bd",
+                                           "createdAt":  "2021-08-04T02:18:34Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOB1EUnA==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "lambdageek",
+                                                                               "createdAt":  "2021-08-04T13:34:19Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "lewing",
+                                           "body":  "@lambdageek This is listed in a couple active issues now so I tried to make the description and milestone match, feel free update.",
+                                           "updatedAt":  "2021-08-04T02:18:34Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc48j-AF",
+                                           "createdAt":  "2022-01-19T04:08:51Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "safern",
+                                           "body":  "I just hit this test failure while adding the new `runtime-extra-platforms` pipeline even though the test is conditioned:\r\n\r\nhttps://github.com/dotnet/runtime/blob/c50185bb24ace683f2ce6c5e4351ce2104bd1349/src/libraries/System.Runtime.Loader/tests/ApplyUpdateTest.cs#L332\r\n\r\ncan someone please take a look? \r\n\r\nHere are some files to help the investigation:\r\n- [console.log](https://helixre8s23ayyeko0k025g8.blob.core.windows.net/dotnet-runtime-refs-pull-62564-merge-234ef3cf07f94222bd/normal-System.Runtime.Loader.Tests/1/console.d802e1cd.log?sv=2019-07-07\u0026se=2022-02-08T01%3A37%3A35Z\u0026sr=c\u0026sp=rl\u0026sig=kQikZ4iLo7H1%2Ba%2BwBtEOM2GcL4Xw2EZ6nRVL%2FgcniKs%3D)\r\n- [AOTBuild.binlog](https://helixre8s23ayyeko0k025g8.blob.core.windows.net/dotnet-runtime-refs-pull-62564-merge-234ef3cf07f94222bd/normal-System.Runtime.Loader.Tests/1/xharness-output/AOTBuild.binlog?sv=2019-07-07\u0026se=2022-02-08T01%3A37%3A35Z\u0026sr=c\u0026sp=rl\u0026sig=kQikZ4iLo7H1%2Ba%2BwBtEOM2GcL4Xw2EZ6nRVL%2FgcniKs%3D)\r\n- [wasm-console.log](https://helixre8s23ayyeko0k025g8.blob.core.windows.net/dotnet-runtime-refs-pull-62564-merge-234ef3cf07f94222bd/normal-System.Runtime.Loader.Tests/1/xharness-output/wasm-console.log?sv=2019-07-07\u0026se=2022-02-08T01%3A37%3A35Z\u0026sr=c\u0026sp=rl\u0026sig=kQikZ4iLo7H1%2Ba%2BwBtEOM2GcL4Xw2EZ6nRVL%2FgcniKs%3D)\r\n\r\n",
+                                           "updatedAt":  "2022-01-19T04:12:04Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc48lOpA",
+                                           "createdAt":  "2022-01-19T11:50:34Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "radical",
+                                           "body":  "This is being hit on [rolling builds](https://dev.azure.com/dnceng/public/_build/results?buildId=1560207\u0026view=logs\u0026j=f217f715-90ad-5404-53bd-b93e3b80f465\u0026t=9df76bd4-3041-5537-002b-9e29a53263b9), [log](https://helixre8s23ayyeko0k025g8.blob.core.windows.net/dotnet-runtime-refs-heads-main-ba3239781d404b14a8/normal-System.Runtime.Loader.Tests/1/console.93714cdc.log?sv=2019-07-07\u0026se=2022-02-08T08%3A57%3A47Z\u0026sr=c\u0026sp=rl\u0026sig=BKfnADhVFUIc%2BvVpHkP5nPnPu50f2GTO0b4yq96BzVk%3D) too.\r\n\r\n```\r\n[09:18:20] fail: [FAIL] System.Reflection.Metadata.ApplyUpdateTest.TestAddStaticLambda\r\n[09:18:20] info: Assert.Equal() Failure\r\n[09:18:20] info:               ↓ (pos 4)\r\n[09:18:20] info: Expected: abcd1abcd\r\n[09:18:20] info: Actual:   abcd\r\n[09:18:20] info:               ↑ (pos 4)\r\n[09:18:20] info:    at System.Reflection.RuntimeMethodInfo.InvokeWorker(Object , BindingFlags , Span`1 )\r\n[09:18:20] fail: Running test using direct invoke\r\n                 \r\n[09:18:20] fail: Applying metadata update for System.Reflection.Metadata.ApplyUpdate.Test.CustomAttributeUpdate.dll, revision 1\r\n                 \r\n[09:18:20] fail: Running test using direct invoke\r\n                 \r\n[09:18:20] fail: Applying metadata update for System.Reflection.Metadata.ApplyUpdate.Test.AddLambdaCapturingThis.dll, revision 1\r\n                 \r\n[09:18:20] fail: [FAIL] System.Reflection.Metadata.ApplyUpdateTest.TestAddLambdaCapturingThis\r\n[09:18:20] info: Assert.Equal() Failure\r\n[09:18:20] info:           ↓ (pos 0)\r\n[09:18:20] info: Expected: 42123abcd\r\n[09:18:20] info: Actual:   123\r\n[09:18:20] info:           ↑ (pos 0)\r\n[09:18:20] info:    at System.Reflection.RuntimeMethodInfo.InvokeWorker(Object , BindingFlags , Span`1 )\r\n[09:18:20] fail: Running test using direct invoke\r\n                 \r\n[09:18:20] fail: Applying metadata update for System.Reflection.Metadata.ApplyUpdate.Test.AddStaticField.dll, revision 1\r\n                 \r\n[09:18:20] fail: [FAIL] System.Reflection.Metadata.ApplyUpdateTest.TestAddStaticField\r\n[09:18:20] info: Assert.Equal() Failure\r\n[09:18:20] info:           ↓ (pos 0)\r\n[09:18:20] info: Expected: 4567\r\n[09:18:20] info: Actual:   abcd\r\n[09:18:20] info:           ↑ (pos 0)\r\n[09:18:20] info:    at System.Reflection.RuntimeMethodInfo.InvokeWorker(Object , BindingFlags , Span`1 )\r\n```",
+                                           "updatedAt":  "2022-01-19T11:54:46Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc48l94d",
+                                           "createdAt":  "2022-01-19T15:33:11Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "lambdageek",
+                                           "body":  "@radical please disable the failing tests for AOT configurations. Hot reload is not supported for AOTd assemblies",
+                                           "updatedAt":  "2022-01-19T15:33:11Z"
+                                       }
+                                   ],
+                         "totalCount":  8
+                     },
+        "title":  "Hot reload doesn\u0027t work on Browser AOT",
+        "labels":  [
+                       "arch-wasm",
+                       "disabled-test",
+                       "area-EnC-mono"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/66513",
+        "createdAt":  "2022-03-11T17:31:20Z",
+        "number":  66513,
+        "author":  "lambdageek",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-10-29T20:30:30Z",
+        "body":  "Depends on dotnet/hotreload-utils#152.  For `[CreateNewOnMetadataUpdate]` types, we would really like to know in unit tests the ids of the new types that get generated in the deltas since the type names are going to be mangled.  Once hotreload-utils are updated to serialize the type ids, we need to update `ApplyUpdateUtils` to read them and make them available to the tests.  (And also the test .csproj needs to be updated to bundle the `.handler.json` files with the app).\r\n\r\nContributes to #57365",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  null,
+                         "nodes":  [
+
+                                   ],
+                         "totalCount":  0
+                     },
+        "title":  "[hot reload] Update test infrastructure to consume metadata update handler type ids",
+        "labels":  [
+                       "test-enhancement",
+                       "area-EnC-mono"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/102080",
+        "createdAt":  "2024-05-10T14:11:27Z",
+        "number":  102080,
+        "author":  "lambdageek",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-07-23T21:05:02Z",
+        "body":  "Related Roslyn issue: https://github.com/dotnet/roslyn/issues/73421\r\n\r\nThe `[UnsafeAccessorAttribute]` ([API Proposal](https://github.com/dotnet/runtime/issues/81741)) is used on `static extern` functions to instruct the .NET runtime to generate an accessor method to a type member that bypass the normal .NET visibility checks.\r\n\r\n```csharp\r\n   public class MyClass\r\n   {\r\n      private int _hidden;\r\n      ...\r\n    }\r\n\r\n    public static partial class AccessHelpers\r\n    {\r\n        [UnsafeAccessor(UnsafeAccessorKind.Field, Name=\"_hidden\")]\r\n        public static extern ref int GetHiddenField(MyClass c);    // runtime generated implementation\r\n    }\r\n\r\n    ...\r\n\r\n    public static MyClass DeserializeMyClass(string s)\r\n    {\r\n        MyClass x = new MyClass();\r\n        ref int hiddenFieldRef = ref AccessHelpers.GetHiddenField(x);\r\n        hiddenFieldRef = int.Parse(s);\r\n        return x;\r\n     }    \r\n}\r\n```\r\n\r\nWith `[UnsafeAccessor]` it becomes possible to use source-generated reflection-free serializers that can serialize and deserialize fields of user-defined classes.  For example, a user may add a new field `_hidden` to `MyClass` and the source generator will add a new accessor method to `AccessHelpers` and generate a method `DeserializeMyClass` that uses the access method to populate the hidden field.\r\n\r\nCurrently if the user adds a second private field `_hidden2` and the generator adds a new `static extern` method, EnC will report a rude edit:\r\n\r\n```\r\nerror ENC0025: Adding an extern method requires restarting the application.\r\n```\r\n\r\nNote that it should work with generics, too\r\n\r\n\r\nAfter Roslyn adds support for EnC deltas to include `static extern` methods, we need to validate that such deltas are processed appropriately by the .NET runtimes:\r\n\r\n- [ ] Validate/implement CoreCLR hot reload support for `static extern` methods\r\n- [ ] Validate/implement Mono hot reload support for `static extern` methods\r\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOfXTSYg==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc59cySG",
+                                           "createdAt":  "2024-05-10T14:21:05Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @tommcdon\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2024-05-10T14:21:05Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc59dNJi",
+                                           "createdAt":  "2024-05-10T15:28:30Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "AaronRobinsonMSFT",
+                                           "body":  "Is this a .NET 9 ask?",
+                                           "updatedAt":  "2024-05-10T15:28:30Z"
+                                       }
+                                   ],
+                         "totalCount":  2
+                     },
+        "title":  "[hot reload] Validate / Implement support for adding `static extern` methods",
+        "labels":  [
+                       "enhancement",
+                       "area-Diagnostics-coreclr",
+                       "area-EnC-mono"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/108097",
+        "createdAt":  "2024-09-21T02:31:33Z",
+        "number":  108097,
+        "author":  "tmat",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-07-30T16:21:47Z",
+        "body":  "### Description\n\nMono throws when member accessibility is changed during debugging\n\n### Reproduction Steps\n\nUse Roslyn build from PR: https://github.com/dotnet/roslyn/pull/75191 for repro.\r\n\r\n1) Create Blazor WASM app\r\n2) Replace `@code` block in `Counter.razor` with:\r\n\r\n```\r\n@code {\r\n    private int currentCount = 0;\r\n\r\n    public void IncrementCount()\r\n    {\r\n        currentCount++;\r\n        var c = new C();\r\n        //c.x = 1;\r\n    }\r\n\r\n    class C\r\n    {\r\n        //public\r\n        int x;\r\n    }\r\n}\r\n```\r\n\r\n3) Place breakpoint to `IncrementCount` and F5.\r\n4) Click \"Increment\" button and uncomment commented code after hitting the breakpoint.\r\n5) Step\n\n### Expected behavior\n\nAssignment to `x` is successfully executed.\n\n### Actual behavior\n\nOne of the following:\r\n1) \r\nThe Blazor app crashes and disconnects:\r\n```\r\n19:29 41.06 BlazorApp26 (Web assembly): [Error] Applying updates to the application failed. The request sent to the browser failed: Web socket connection to the browser has been closed:  The request sent to the browser failed: Web socket connection to the browser has been closed: \r\n19:29 41.06 An unexpected error has occurred, any pending updates have been discarded.\r\n```\r\n\r\n2) VS crashes,\r\n \r\n3) VS debugger shows exception in JavaScript:\r\n\r\n```\r\nError: [MONO] * Assertion at /__w/1/s/src/mono/mono/component/hot_reload.c:2236, condition `\u003cdisabled\u003e\u0027 not met\r\n    at ht (https://localhost:7139/_framework/dotnet.runtime.js:3:12765)\r\n    at Ll (https://localhost:7139/_framework/dotnet.runtime.js:3:176248)\r\n    at https://localhost:7139/_framework/dotnet.native.wasm:wasm-function[119]:0xa308\r\n    at https://localhost:7139/_framework/dotnet.native.wasm:wasm-function[634]:0x3f446\r\n    at https://localhost:7139/_framework/dotnet.native.wasm:wasm-function[550]:0x3bd96\r\n    at https://localhost:7139/_framework/dotnet.native.wasm:wasm-function[554]:0x3beb7\r\n    at https://localhost:7139/_framework/dotnet.native.wasm:wasm-function[556]:0x3befa\r\n    at https://localhost:7139/_framework/dotnet.native.wasm:wasm-function[555]:0x3becd\r\n    at https://localhost:7139/_framework/dotnet.native.wasm:wasm-function[1552]:0x83413\r\n    at https://localhost:7139/_framework/dotnet.native.wasm:wasm-function[2424]:0xbae9e\r\n```\n\n### Regression?\n\nNo\n\n### Known Workarounds\n\n_No response_\n\n### Configuration\n\n_No response_\n\n### Other information\n\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOjhfv1A==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc6M9lo8",
+                                           "createdAt":  "2024-09-21T02:35:05Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "tmat",
+                                           "body":  "@lambdageek ptal. Would be nice to get fixed for .NET 9, if not too difficult.",
+                                           "updatedAt":  "2024-09-21T02:35:05Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6M-7vB",
+                                           "createdAt":  "2024-09-21T20:15:16Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "lambdageek",
+                                           "body":  "@tmat what\u0027s allowed? changing toward more visibility? or is `public`-\u003e`private` also legal?  mono pretty intentionally assumes that there are no changes to any `MONO_TABLE_FIELD` entries (only additions to a class that is being defined in the current update are allowed):\r\n\r\nhttps://github.com/dotnet/runtime/blob/b5f53494d6541a1ef9b7d0e13214d5e5e5cec594/src/mono/mono/component/hot_reload.c#L2235-L2237",
+                                           "updatedAt":  "2024-09-21T20:15:16Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6NKhNF",
+                                           "createdAt":  "2024-09-23T13:55:08Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "lambdageek",
+                                           "body":  "I can\u0027t really tell without trying it, but this seems fairly straightforward (although I can\u0027t tell how risky it might be for .NET 9):\r\nreplace the assertion by an `if`; allow the table update if it\u0027s a modification; then trigger `mono_field_resolve_type` for the modified field (assuming the parent class has already been inited) and allow it to overwrite the field\u0027s MonoType with an updated one with updated attributes.\r\n\r\n@tmat what happens if an SRE method was JITed with a `public` version of the field but now it\u0027s become private.  What is supposed to tell the JIT to make a new version with an updated accessibility check?\r\n\r\n",
+                                           "updatedAt":  "2024-09-23T13:55:08Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6NKhuZ",
+                                           "createdAt":  "2024-09-23T13:55:59Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "lambdageek",
+                                           "body":  "attn @tommcdon ",
+                                           "updatedAt":  "2024-09-23T13:55:59Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6NNc0p",
+                                           "createdAt":  "2024-09-23T18:55:36Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "tmat",
+                                           "body":  "\u003e changing toward more visibility? or is public-\u003eprivate also legal? \r\n\r\nAny visibility changes would be allowed.",
+                                           "updatedAt":  "2024-09-23T18:55:36Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6NNgzE",
+                                           "createdAt":  "2024-09-23T19:03:33Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "tmat",
+                                           "body":  "\u003e @tmat what happens if an SRE method was JITed with a public version of the field but now it\u0027s become private. What is supposed to tell the JIT to make a new version with an updated accessibility check?\r\n\r\nNot sure I understand the scenario. What does SRE mean? System.Reflection.Emit? \r\nThere shouldn\u0027t be a need for any extra accessibility checks or notifications. The JITed code should be able to access the member until the code is recompiled (the referring method is updated) regardless of whether or not the accessibility of the referred member changes after the JIT checks the visibility.\r\n\r\n",
+                                           "updatedAt":  "2024-09-23T19:03:33Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6NNzVc",
+                                           "createdAt":  "2024-09-23T19:38:36Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "lambdageek",
+                                           "body":  "\u003e \u003e @tmat what happens if an SRE method was JITed with a public version of the field but now it\u0027s become private. What is supposed to tell the JIT to make a new version with an updated accessibility check?\r\n\u003e \r\n\u003e Not sure I understand the scenario. What does SRE mean? System.Reflection.Emit? There shouldn\u0027t be a need for any extra accessibility checks or notifications. The JITed code should be able to access the member until the code is recompiled (the referring method is updated) regardless of whether or not the accessibility of the referred member changes after the JIT checks the visibility.\r\n\r\nI\u0027m thinking of a scenario like this:\r\n\r\n```csharp\r\nusing System.Reflection;\r\nusing System.Reflection.Emit;\r\n\r\npublic class C {\r\n    /*private*/ public int X; /// EnC: change this\r\n    public void Increment()\r\n    {\r\n        X++;\r\n    }\r\n}\r\npublic class Program\r\n{\r\n    public static void Main()\r\n    {\r\n        var c = new C();\r\n        var f1 = GenerateGetter();\r\n        while (true)\r\n        {\r\n            c.Increment();\r\n            Foo(f1, c);   // Q: this should always succeed?\r\n            var f2 = GenerateGetter();\r\n            Foo(f2, c);   // Q: after edit, this should throw FieldAccessException?\r\n            System.Threading.Thread.Sleep(1000);\r\n        }\r\n    }\r\n\r\n    public static void Foo(Func\u003cC,int\u003e func, C c)\r\n    {\r\n        int i = func(c);\r\n        Console.WriteLine ($\"i = {i}\");\r\n    }\r\n\r\n    public static Func\u003cC,int\u003e GenerateGetter()\r\n    {\r\n        var fi = typeof(C).GetField(\"X\", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);\r\n\r\n        var an = new AssemblyName(\"x1\");\r\n        var ab = AssemblyBuilder.DefineDynamicAssembly(an, AssemblyBuilderAccess.RunAndCollect);\r\n        var modb = ab.DefineDynamicModule(an.FullName);\r\n        var tb = modb.DefineType(\"GetterHolder\", TypeAttributes.Public);\r\n        var methodName = \"GetX\";\r\n        var mb = tb.DefineMethod(methodName, MethodAttributes.Public | MethodAttributes.Static, typeof(int), [ typeof(C) ]);\r\n        var ilg = mb.GetILGenerator();\r\n        ilg.Emit(OpCodes.Ldarg_0);\r\n        ilg.Emit(OpCodes.Ldfld, fi);\r\n        ilg.Emit(OpCodes.Ret);\r\n        \r\n        var ti = tb.CreateType();\r\n        var mi = ti.GetMethod (methodName, BindingFlags.Public | BindingFlags.Static);\r\n        \r\n        return (Func\u003cC,int\u003e)Delegate.CreateDelegate(typeof(Func\u003cC,int\u003e), mi);\r\n    }\r\n}\r\n```\r\n\r\nSuppose you run this app and then change `C.X` from `public` to `private`.  Is the expected behavior that `f1` will still be able to access `X`? but `f2` will now begin throwing `FieldAccessException` ?\r\n",
+                                           "updatedAt":  "2024-09-23T19:38:36Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6NOijh",
+                                           "createdAt":  "2024-09-23T21:12:39Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODzSvJg==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "lambdageek",
+                                                                               "createdAt":  "2024-09-23T22:31:46Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "tmat",
+                                           "body":  "I think so, as long as `f1` is jitted before the change is applied. The CLR behaves that way.\r\n\r\n",
+                                           "updatedAt":  "2024-09-23T21:12:54Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6NPfZb",
+                                           "createdAt":  "2024-09-23T22:33:36Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "lambdageek",
+                                           "body":  "Thanks.  In that case, I think the change I summarized in https://github.com/dotnet/runtime/issues/108097#issuecomment-2368344901 should be sufficient",
+                                           "updatedAt":  "2024-09-23T22:33:36Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6NQedY",
+                                           "createdAt":  "2024-09-24T01:11:30Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "lewing",
+                                           "body":  "Just so I\u0027m clear, are any of the 3 things that might happen what is supposed to happen when EnC can\u0027t continue?",
+                                           "updatedAt":  "2024-09-24T01:11:30Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6NQfK7",
+                                           "createdAt":  "2024-09-24T01:15:07Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODzThMw==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "lewing",
+                                                                               "createdAt":  "2024-09-24T01:32:06Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "tmat",
+                                           "body":  "If Roslyn sends invalid update to the runtime the behavior is undefined. It\u0027s Roslyn\u0027s responsibility to block rude edits. That said, as much as possible a better failure than crashing VS or debugger would be certainly desirable.\r\n\r\nIdeally, the runtime would send message to the debugger that EnC/Hot Reload failed and an error code.",
+                                           "updatedAt":  "2024-09-24T01:18:49Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6NQfwv",
+                                           "createdAt":  "2024-09-24T01:17:55Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "tmat",
+                                           "body":  "However, I can see that it might be hard to do so if an issue is found in the middle of updating various data structures (i.e. rolling back partial updates).",
+                                           "updatedAt":  "2024-09-24T01:17:55Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6N3-jf",
+                                           "createdAt":  "2024-09-27T23:12:01Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "lambdageek",
+                                           "body":  "@tmat Do we also need to support changing method/property/event/nested class accessibility? or is this just about fields?\r\n",
+                                           "updatedAt":  "2024-09-27T23:12:01Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6OF-_U",
+                                           "createdAt":  "2024-09-30T18:54:17Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOD0I7og==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "lambdageek",
+                                                                               "createdAt":  "2024-09-30T19:21:55Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "tmat",
+                                           "body":  "@lambdageek All members and types.",
+                                           "updatedAt":  "2024-09-30T18:54:17Z"
+                                       }
+                                   ],
+                         "totalCount":  14
+                     },
+        "title":  "EnC: Mono throws when member accessibility is changed",
+        "labels":  [
+                       "in-pr",
+                       "area-EnC-mono"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/114526",
+        "createdAt":  "2025-04-11T08:06:17Z",
+        "number":  114526,
+        "author":  "pavelsavara",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-05-22T19:51:32Z",
+        "body":  "",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOrP78Ig==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc6mqgZ9",
+                                           "createdAt":  "2025-04-11T08:06:53Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to \u0027arch-wasm\u0027: @lewing\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2025-04-11T08:06:53Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6nuJUa",
+                                           "createdAt":  "2025-04-17T19:58:52Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "lewing",
+                                           "body":  "cc @thaystg ",
+                                           "updatedAt":  "2025-04-17T19:58:52Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6s_vwi",
+                                           "createdAt":  "2025-05-22T19:51:31Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @tommcdon\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2025-05-22T19:51:31Z"
+                                       }
+                                   ],
+                         "totalCount":  3
+                     },
+        "title":  "[browser] hot reload tests deadlock on linux",
+        "labels":  [
+                       "arch-wasm",
+                       "disabled-test",
+                       "area-Diagnostics-coreclr",
+                       "area-EnC-mono",
+                       "os-browser"
+                   ]
+    }
+]

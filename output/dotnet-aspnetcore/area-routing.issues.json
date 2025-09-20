@@ -1,0 +1,427 @@
+﻿[
+    {
+        "url":  "https://github.com/dotnet/aspnetcore/issues/42949",
+        "createdAt":  "2022-07-27T16:47:42Z",
+        "number":  42949,
+        "author":  "drdamour",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHOCo0glg==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "NattyMojo",
+                                            "createdAt":  "2022-07-27T16:50:33Z"
+                                        }
+                                    ],
+                          "totalCount":  1
+                      },
+        "updatedAt":  "2025-02-05T22:40:01Z",
+        "body":  "### Is there an existing issue for this?\n\n- [X] I have searched the existing issues\n\n### Describe the bug\n\nthe docs state\r\n\r\n\u003e Generates an absolute URL if the protocol and host are non-null. See the remarks section for important security information.\r\n\r\nbut if you omit passing values or pass null it still generates an absolute URL, seeming based on the host header a request scheme of the request from http context https://github.com/dotnet/aspnetcore/blob/main/src/Mvc/Mvc.Core/src/UrlHelperExtensions.cs#L575\r\n\r\n\n\n### Expected Behavior\n\nexpect docs to not indicate absolute url requires thsoe params to be not null, should mention where it gets those values from if they are omitted or passed as null\n\n### Steps To Reproduce\n\nn/a\n\n### Exceptions (if any)\n\nn/a\n\n### .NET Version\n\n6\n\n### Anything else?\n\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOTKU7OA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDOAQzde85MpTs4",
+                                           "createdAt":  "2022-10-20T17:18:18Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "We\u0027ve moved this issue to the Backlog milestone. This means that it is not going to be worked on for the coming release. We will reassess the backlog following the current release and consider this item at that time. To learn more about our issue management process and to have better expectation regarding different types of issues you can read our [Triage Process](https://github.com/dotnet/aspnetcore/blob/main/docs/TriageProcess.md).",
+                                           "updatedAt":  "2022-10-20T17:18:18Z"
+                                       }
+                                   ],
+                         "totalCount":  1
+                     },
+        "title":  "UrlHelperExtensions.ActionLink docs are misleading regarding requiring protocol and host",
+        "labels":  [
+                       "Docs",
+                       "area-routing",
+                       "help candidate"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspnetcore/issues/52025",
+        "createdAt":  "2023-11-13T17:26:38Z",
+        "number":  52025,
+        "author":  "Tratcher",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-08-21T19:04:16Z",
+        "body":  "### Is there an existing issue for this?\r\n\r\n- [X] I have searched the existing issues\r\n\r\n### Describe the bug\r\n\r\nThe request timeout feature relies on options, middleware, and attributes. If uses supply options or attributes, but forget the middleware, there\u0027s no indication that the timeouts aren\u0027t being applied.\r\n\r\n### Expected Behavior\r\n\r\nConfiguring timeouts on routes (or a default timeout policy ?) without adding the middleware should produce at least a runtime error rather than process the request without a timeout (dangerous). Note we also shouldn\u0027t short circuit endpoints with timeouts, we don\u0027t know what the short circuit logic is going to do.\r\n\r\nAn analyzer might help too.\r\n\r\nWe already have similar checks for auth, cors, and anti-forgery.\r\nhttps://github.com/dotnet/aspnetcore/blob/997a1e8e659e69dbf7e157518da18cbca91f5183/src/Http/Routing/src/EndpointRoutingMiddleware.cs#L161-L178\r\nhttps://github.com/dotnet/aspnetcore/blob/997a1e8e659e69dbf7e157518da18cbca91f5183/src/Http/Routing/src/EndpointMiddleware.cs#L39-L58\r\n\r\nFound when consuming this feature in YARP, and mitigated there: https://github.com/microsoft/reverse-proxy/pull/2307\r\n\r\n### Steps To Reproduce\r\n\r\n```csharp\r\nusing Microsoft.AspNetCore.Http.Timeouts;\r\n\r\nvar builder = WebApplication.CreateBuilder(args);\r\nbuilder.Services.AddRequestTimeouts();\r\n\r\nvar app = builder.Build();\r\n// app.UseRequestTimeouts(); // Woops, forgot this, nothing works.\r\n\r\napp.MapGet(\"/\", async (HttpContext context) =\u003e {\r\n    try\r\n    {\r\n        await Task.Delay(TimeSpan.FromSeconds(10), context.RequestAborted);\r\n    }\r\n    catch (TaskCanceledException)\r\n    {\r\n        return Results.Content(\"Timeout!\", \"text/plain\");\r\n    }\r\n\r\n    return Results.Content(\"No timeout!\", \"text/plain\");\r\n}).WithRequestTimeout(TimeSpan.FromSeconds(2));\r\n// Returns \"Timeout!\"\r\n\r\napp.MapGet(\"/attribute\",\r\n    [RequestTimeout(milliseconds: 2000)] async (HttpContext context) =\u003e {\r\n        try\r\n        {\r\n            await Task.Delay(TimeSpan.FromSeconds(10), context.RequestAborted);\r\n        }\r\n        catch (TaskCanceledException)\r\n        {\r\n            return Results.Content(\"Timeout!\", \"text/plain\");\r\n        }\r\n\r\n        return Results.Content(\"No timeout!\", \"text/plain\");\r\n    });\r\n// Returns \"Timeout!\"\r\n\r\napp.Run();\r\n```\r\n\r\n### Exceptions (if any)\r\n\r\nNone (but there should be).\r\n\r\n### .NET Version\r\n\r\n.NET 8\r\n\r\n### Anything else?\r\n\r\nThis enforcement pattern isn\u0027t scalable/extensible. 3rd parties can\u0027t use the Endpoint/RoutingMiddleware to do their own enforcement for the presence of middleware. And for us, if we keep adding checks it\u0027s going to get messy. Could this be abstracted to a service? What happens if the user then forgets to add the service?",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOv2-QPQ==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDOAQzde85r8goD",
+                                           "createdAt":  "2023-11-14T19:13:17Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "captainsafia",
+                                           "body":  "We don\u0027t currently have an abstraction for adding these kinds of checks in our API layer.\r\n\r\nA similar issue came up when I was working on the anti-forgery middleware, which checks to see if anti-forgery metadata is provided on an endpoint and ensures the middleware is registered. At the time, I filed https://github.com/dotnet/aspnetcore/issues/49936 to track possible work to create an abstraction layer that allows us to execute these kinds of checks during routing.\r\n\r\nIn some follow-up conversations about this, it was clear that we needed to be cautious about the performance ramifications of this strategy, especially because the code is running in a hot path.\r\n\r\nI\u0027d be curious to see if we could make the API happen with static analysis instead of runtime analysis.\r\n\r\nI wonder if there is a model where we can use a source generator to detect certain attributes and then populate the `UseX` call into Program.cs?",
+                                           "updatedAt":  "2023-11-14T19:13:17Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOAQzde85r8hHT",
+                                           "createdAt":  "2023-11-14T19:13:44Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Thanks for contacting us.\n\nWe\u0027re moving this issue to the `.NET 9 Planning` milestone for future evaluation / consideration. We would like to keep this around to collect more feedback, which can help us with prioritizing this work. We will re-evaluate this issue, during our next planning meeting(s). \nIf we later determine, that the issue has no community involvement, or it\u0027s very rare and low-impact issue, we will close it - so that the team can focus on more important and high impact issues.\nTo learn more about what to expect next and how this issue will be handled you can read more about our triage process [here](https://github.com/dotnet/aspnetcore/blob/main/docs/TriageProcess.md).",
+                                           "updatedAt":  "2023-11-14T19:13:44Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOAQzde86_b5A9",
+                                           "createdAt":  "2025-08-21T19:04:16Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "kemsky",
+                                           "body":  "Also, timeouts are not applied when debugger is attached, no log message, nothing.",
+                                           "updatedAt":  "2025-08-21T19:04:16Z"
+                                       }
+                                   ],
+                         "totalCount":  3
+                     },
+        "title":  "Request timeouts are not applied without the middleware, no error given",
+        "labels":  [
+                       "area-middleware",
+                       "area-routing"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspnetcore/issues/53177",
+        "createdAt":  "2024-01-05T19:44:24Z",
+        "number":  53177,
+        "author":  "rbans96",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-03-06T17:41:45Z",
+        "body":  "### Is there an existing issue for this?\r\n\r\n- [X] I have searched the existing issues\r\n\r\n### Describe the bug\r\n\r\nFound a bug that backslash is missing after PathBase, if Path is empty.\r\n\r\n### Expected Behavior\r\nIf pathBase is non empty and Path is empty, then add a trailing backslash after pathBase in the route url.\r\n\r\nActual url: /twci369916wu2hsws-twci369916wu2hsws.fhir.mshapis.co**m?**_type=Patient\u0026_count=500\u0026ct=er97f5lRTbShgbGOqaGBuaGFqbGJiZmhibmRobGZUSwAAAD%2F%2Fw%3D%3D\r\n\r\nExpected url: /twci369916wu2hsws-twci369916wu2hsws.fhir.mshapis.com/?_type=Patient\u0026_count=500\u0026ct=er97f5lRTbShgbGOqaGBuaGFqbGJiZmhibmRobGZUSwAAAD%2F%2Fw%3D%3D\r\n\r\nThe issue is here https://github.com/dotnet/aspnetcore/blob/481e472ea22a53fe96f11ba001c2dd4fbdc59ed5/src/Http/Http.Extensions/src/UriHelper.cs#L36\r\n\r\n### Steps To Reproduce\r\n\r\n- Search URl:  https://localhost:44349/twci369916wu2hsws-twci369916wu2hsws.fhir.mshapis.com/?_type=Patient\u0026_count=500\r\n_Host: localhost:44349, basePath: /twci369916wu2hsws-twci369916wu2hsws.fhir.mshapis.com, Path: Empty, Query parameter: _type=Patient\u0026_count=500__\r\n- In our implementation, we are calling AspnetCore  UrlHelper.RouteUrl() to get the route url\r\n- Further debugging, LinkGeneratorExtensions.GetPathByRouteValues -\u003e GetPathByAddress() -\u003e DefaultLinkGenerator.GetPathByEndpoints() -\u003e TryProcessTemplate() fetches _pathBase_ as \"\"/twci369916wu2hsws-twci369916wu2hsws.fhir.mshapis.com\" and _Path_ as \"\"(empty)\r\n- UriHelper.BuildRelative constructs the url as below\r\n/twci369916wu2hsws-twci369916wu2hsws.fhir.mshapis.co**m?**_type=Patient\u0026_count=500\u0026ct=er97f5lRTbShgbGOqaGBuaGFqbGJiZmhibmRobGZUSwAAAD%2F%2Fw%3D%3D\r\n\r\nExpected url: /twci369916wu2hsws-twci369916wu2hsws.fhir.mshapis.com/?_type=Patient\u0026_count=500\u0026ct=er97f5lRTbShgbGOqaGBuaGFqbGJiZmhibmRobGZUSwAAAD%2F%2Fw%3D%3D\r\n\r\n### Exceptions (if any)\r\n\r\n_No response_\r\n\r\n### .NET Version\r\n\r\n_No response_\r\n\r\n### Anything else?\r\n\r\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOcRp4DA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDOAQzde85wJqzr",
+                                           "createdAt":  "2024-01-08T18:06:53Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODRpCMA==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "rbans96",
+                                                                               "createdAt":  "2024-01-08T18:17:25Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "Tratcher",
+                                           "body":  "\u003e Search URl: https://localhost:44349/twci369916wu2hsws-twci369916wu2hsws.fhir.mshapis.com/?_type=Patient\u0026_count=500\r\n_Host: localhost:44349, basePath: /twci369916wu2hsws-twci369916wu2hsws.fhir.mshapis.com, Path: Empty, Query parameter: type=Patient\u0026count=500\r\n\r\nThis seems wrong, Path should be \"/\" at this stage. This likely causes the later issues. Where are you reporting this from?\r\n\r\nThe UriHelper code is correct, it should not add a trailing slash when Path is empty. The real issue is that Path should not be empty.",
+                                           "updatedAt":  "2024-01-08T18:08:19Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOAQzde85wJvLY",
+                                           "createdAt":  "2024-01-08T18:19:46Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "rbans96",
+                                           "body":  "Thanks for the reply. Potentially then problem could be somewhere before it hit the UriHelper that fetched the Path as empty instead of \u0027/\u0027- DefaultLinkGenerator.GetPathByEndpoints() -\u003e TryProcessTemplate() fetches pathBase as \"\"/twci369916wu2hsws-twci369916wu2hsws.fhir.mshapis.com\" and Path as \"\"(empty)",
+                                           "updatedAt":  "2024-01-08T18:19:46Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOAQzde85xGE23",
+                                           "createdAt":  "2024-01-17T23:24:18Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "amcasey",
+                                           "body":  "@Tratcher Why is the `UriHelper` code converting everything to strings?  It looks like `PathString` specifically supports addition of `PathString` and `QueryString` and those helpers seem to massage the slashes.\r\n\r\ni.e. Why isn\u0027t it?\r\n```csharp\r\nstring combinePath = (pathBase.HasValue || path.HasValue) ? (pathBase + path) : new PathString(\"/\");\r\nreturn combinePath + query + fragment;\r\n```",
+                                           "updatedAt":  "2024-01-17T23:42:43Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOAQzde85xGngM",
+                                           "createdAt":  "2024-01-18T00:38:57Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Tratcher",
+                                           "body":  "That should be equivalent. However it\u0027s unrelated to this issue, the problem happens before UriHelper is even called. Why is Path empty instead of \"/\"?",
+                                           "updatedAt":  "2024-01-18T00:38:57Z"
+                                       }
+                                   ],
+                         "totalCount":  4
+                     },
+        "title":  "Missing trailing backslash after pathBase when Path is empty",
+        "labels":  [
+                       "investigate",
+                       "area-routing"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspnetcore/issues/58416",
+        "createdAt":  "2024-10-14T14:10:35Z",
+        "number":  58416,
+        "author":  "voroninp",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-02-05T22:40:49Z",
+        "body":  "### Is there an existing issue for this?\n\n- [x] I have searched the existing issues\n\n### Is your feature request related to a problem? Please describe the problem.\n\nI am working with typed ids:\n```\npublic readonly record struct FooId(Guid Value);\n```\n\nIf I use this value as a route parameter value and do not override `ToString` [it is converted](https://github.com/dotnet/aspnetcore/blob/049814ca468cad1ea1e29412e0aa3eea182a63c1/src/Http/Routing/src/Template/TemplateBinder.cs#L554) to string as `FooId { Value = \u0027....\u0027 }`. That is obviously not what I want to have in a generated URL.\n\nIMO, framework should not force my types to have a certain behavior. Writing parameter value to a URL is effectively a serialization, hence there should be the same level of flexibility/extensibility.\n\nWhile framework offers outbound parameter transformers, they are not connected to the types of parameter values.\n\n\n### Describe the solution you\u0027d like\n\nI\u0027d like ASP.NET to introduce a specific interface:\n```\npublic interface IRouteParaemterValueStringConverter\u003cTParameterValue\u003e\n{\n    string Convert(TParameterValue value);\n}\n```\n\nIts default implementation can just convert to string.\n\n### Additional context\n\n\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  null,
+                         "nodes":  [
+
+                                   ],
+                         "totalCount":  0
+                     },
+        "title":  "Routing system should introduce some abstraction for converting route parameters to strings.",
+        "labels":  [
+                       "area-routing"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspnetcore/issues/59054",
+        "createdAt":  "2024-11-19T12:30:29Z",
+        "number":  59054,
+        "author":  "PascalWillems",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-11-26T07:26:41Z",
+        "body":  "### Is there an existing issue for this?\n\n- [x] I have searched the existing issues\n\n### Describe the bug\n\nDefining the following ApiVersion causes endpoints that use this version to not be accessible (Error 404)\nApiVersion: \"2.0-preview\" (Major: 2, Minor: 0, status: \"preview\")\n\n### Expected Behavior\n\nEndpoints for the ApiVersion are accessible, and actions can be called on it.\n\n### Steps To Reproduce\n\n1. Create a simple (default) ASP.NET Web Api project and enable Api versioning with URL segments (using the Asp.Versioning.Mvc Nuget package).\n2. Add the following Route attribute on the default controller: `[Route(\"v{version:apiVersion}/[controller]/[action]\")]` \n3. Add the following ApiVersion attributes on the default controller:\n  - `[ApiVersion(\"1.0\")]`\n  - `[ApiVersion(\"2.0-alpha\")]`\n  - `[ApiVersion(\"2.0-preview\")]`\n4. Run the Api\n5. Try to call a action of version \"2.0-alpha\" -\u003e Works\n6. Try to call a action of version \"2.0-preview\" -\u003e Doesn\u0027t work (error 404)\n\n\n\n### Exceptions (if any)\n\n_No response_\n\n### .NET Version\n\n8.0.403\n\n### Anything else?\n\nAfter some early debugging, I came across the following method that seems to cause the issue:  `Microsoft.AspNetCore.Routing.RoutePatternMatcher.MatchComplexSegmentCore`\nMore specifically the following portion:\n```csharp\nint indexOfLiteral;\nif (part.IsLiteral)\n{\n    var literal = (RoutePatternLiteralPart)part;\n    indexOfLiteral = requestSegment.Slice(0, startIndex).LastIndexOf(\n    literal.Content,\n    StringComparison.OrdinalIgnoreCase);\n}\n```\n\nHere it seems that the wrong index is calculated for the \"v\" literal that prefixes the version in the URL in the case of ApiVersion \"2.0-preview\".\nIt uses the index of the \"v\" in the word \"preview\" instead of the \"v\" at the start of the URL parameter \"v2.0-preview\".",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOlQDnTA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDOAQzde86UyE3H",
+                                           "createdAt":  "2024-11-24T18:22:17Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "oussamatecnique",
+                                           "body":  "I confirm the issue with this case: [ApiVersion(\"2.0-preview\")]\n for this route template: [Route(\"v{version:apiVersion}/[controller]/[action]\")]\n\nbut I guess this is can be avoided just by removing literal v at the start, is there a specific need for it?",
+                                           "updatedAt":  "2024-11-24T18:22:17Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOAQzde86U9Btz",
+                                           "createdAt":  "2024-11-25T21:02:09Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOD86EJg==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "oussamatecnique",
+                                                                               "createdAt":  "2024-11-28T21:06:05Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "captainsafia",
+                                           "body":  "@PascalWillems Interesting bug report!\n\nI\u0027d typically be open to reviewing a PR to resolve this issue but I\u0027m very cautious when it comes to make changes in the routing layer, especially since the changes can be subtle and might introduce breaks to existing scenarios.\n\nIn this case, it seems like the best option might be to require a workaround in the app code as @oussamatecnique mentioned and remove the `v` prefix.\n\nI\u0027ll stick the issue in the backlog for now to given us a chance to evaluate the severity and whether it is worth investigating a change in the routing layer for this.",
+                                           "updatedAt":  "2024-11-25T21:02:09Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOAQzde86VAOdM",
+                                           "createdAt":  "2024-11-26T07:26:39Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOD86EVw==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "oussamatecnique",
+                                                                               "createdAt":  "2024-11-28T21:06:30Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "PascalWillems",
+                                           "body":  "@captainsafia @oussamatecnique Yes, removing the `v` prefix (or changing the version status) is the most straightforward and quickest workaround that you can use to avoid this issue. So for others that are experiencing this issue I would also recommend that if you need a speedy fix.\n\nIt is just that the error 404 this issue causes is a very unexpected error and unclear as to what would be causing it. In case that adding the `v` prefix (or in my case adding a version status `2.0-preview`) is the only change you\u0027ve made, then it is not so hard to identify that adding the version status is causing the 404. But if you\u0027ve made more changes it could prove to be much more challenging, simply because you wouldn\u0027t immediately link an ApiVersion status flag value to this kind of error and because debugging the issue includes almost exclusively framework code.\n\n\u003e [@PascalWillems](https://github.com/PascalWillems) Interesting bug report!\n\u003e I\u0027ll stick the issue in the backlog for now to given us a chance to evaluate the severity and whether it is worth investigating a change in the routing layer for this.\n\nPerfect! That\u0027s the reason I posted the issue. I hope someone can find some time to take a look at it and hopefully fix it.\n\n",
+                                           "updatedAt":  "2024-11-26T07:26:39Z"
+                                       }
+                                   ],
+                         "totalCount":  3
+                     },
+        "title":  "ApiVersion status value causing routing issues (error 404)",
+        "labels":  [
+                       "area-routing"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspnetcore/issues/59993",
+        "createdAt":  "2025-01-22T10:47:37Z",
+        "number":  59993,
+        "author":  "SteveSandersonMS",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-08-22T21:29:32Z",
+        "body":  "Filing as part of buildops.\n\nBuild failure: https://dev.azure.com/dnceng-public/public/_build/results?buildId=924728 (see the `Windows x64` job)\n\nError: `Microsoft.AspNetCore.Routing.Microbenchmarks.dll -f * --validate-fast\" exited with code 1`\n\nPossibly due to this preceding issue: `\u0027JumpTableMultipleEntryBenchmark.Dictionary: Dry(Toolchain=InProcessNoEmitToolchain, IterationCount=1, LaunchCount=1, RunStrategy=ColdStart, UnrollFactor=1, WarmupCount=1) [Count=100], 0 runs\u0027 failed, reason: \u0027AllMeasurements\u0027`\n\nThis clearly appears to be an intermittent failure (it didn\u0027t also happen on the previous or next build). However our \"intermittent failures\" across the whole stack are reaching a critical mass where a large fraction of builds are failing, so I think we\u0027ll have no choice but to investigate them or disable problematic components.\n\n@joperezr Does your team own ASP.NET Core routing these days? Or is it still @mkArtak as listed in [area owners](https://github.com/dotnet/aspnetcore/blob/4adfd0e05efdec201e417ec4800cfd6f67c61e78/docs/area-owners.md)?",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOm3KGTA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDOAQzde86bcoZM",
+                                           "createdAt":  "2025-01-22T18:28:35Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "joperezr",
+                                           "body":  "Yes, we own routing. Added this to the planning project, so we\u0027ll take a look.",
+                                           "updatedAt":  "2025-01-22T18:28:35Z"
+                                       }
+                                   ],
+                         "totalCount":  1
+                     },
+        "title":  "Build failure from Microsoft.AspNetCore.Routing.Microbenchmarks (reason: \u0027AllMeasurements\u0027)",
+        "labels":  [
+                       "feature-routing",
+                       "area-routing"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspnetcore/issues/62898",
+        "createdAt":  "2025-07-24T06:53:15Z",
+        "number":  62898,
+        "author":  "MrQLEO",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHODLDm4g==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "shmutalov",
+                                            "createdAt":  "2025-08-13T14:44:40Z"
+                                        }
+                                    ],
+                          "totalCount":  1
+                      },
+        "updatedAt":  "2025-08-11T16:58:25Z",
+        "body":  "## Background and Motivation\n\nCurrently, ASP.NET Core\u0027s routing system silently fails when developers use reserved keywords like `action` as route parameter names (e.g., `[HttpGet(\"test/{action}\")]`), returning a 404 error without explanation. This causes significant debugging friction, as:\n1. The behavior contradicts the principle of least surprise\n2. Swagger UI displays the endpoint correctly, making the failure appear inconsistent\n3. No warnings exist during development or runtime\n\nThe proposed changes would improve developer experience by either:\n- Providing clear feedback when reserved keywords are misused\n- Explicitly documenting these limitations\n\n---\n\n## Proposed API\n\nWe suggest two complementary approaches:\n\n**1. Runtime Validation (Recommended)**\n```diff\nnamespace Microsoft.AspNetCore.Routing;\npublic class RouteEndpointBuilder\n{\n+    private static readonly HashSet\u003cstring\u003e _reservedRouteParameters = \n+        new() { \"controller\", \"action\", \"area\", \"handler\", \"page\" };\n     \n     public RouteEndpointBuilder(\n         RequestDelegate requestDelegate,\n         RoutePattern routePattern,\n         int order)\n     {\n+        foreach (var parameter in routePattern.Parameters)\n+        {\n+            if (_reservedRouteParameters.Contains(parameter.Name))\n+            {\n+                throw new ArgumentException(\n+                    $\"Route parameter name \u0027{parameter.Name}\u0027 is reserved. \" +\n+                    \"Use a different parameter name.\");\n+            }\n+        }\n     }\n}\n```\n\n**2. Compiler Analyzer (Alternative)**\n```diff\nnamespace Microsoft.AspNetCore.Mvc.Api.Analyzers;\n+public class ReservedRouteParameterAnalyzer : DiagnosticAnalyzer\n+{\n+    public const string DiagnosticId = \"ASP1001\";\n+    private static readonly HashSet\u003cstring\u003e _reservedNames = ...;\n+\n+    public override void Initialize(AnalysisContext context)\n+    {\n+        context.RegisterSymbolAction(AnalyzeSymbol, SymbolKind.NamedType);\n+    }\n+\n+    private void AnalyzeSymbol(SymbolAnalysisContext context)\n+    {\n+        // Detect [Route] or [HttpGet] attributes with reserved words\n+    }\n+}\n```\n\n---\n\n## Usage Examples\n\n**Current Problematic Usage:**\n```csharp\n[HttpGet(\"test/{action}\")] // Silently fails with 404\npublic IActionResult Test(int action) =\u003e Ok(action);\n```\n\n**After Implementation:**\n1. Runtime Approach:\n```csharp\n// Throws ArgumentException during startup:\n// \"Route parameter name \u0027action\u0027 is reserved. Use a different parameter name.\"\napp.MapGet(\"/test/{action}\", (int action) =\u003e action);\n```\n\n2. Analyzer Approach:\n```csharp\n// Shows compiler warning ASP1001:\n// \"Avoid using reserved routing parameter name \u0027action\u0027\"\n[HttpGet(\"test/{action}\")]\npublic IActionResult Test(int action) =\u003e Ok(action);\n```\n\n---\n\n## Alternative Designs\n\n1. **Documentation-Only Solution**\n   - Pros: No breaking changes\n   - Cons: Less effective (developers often miss documentation)\n\n2. **Automatic Parameter Renaming**\n   - Example: Convert `{action}` to `{actionParam}`\n   - Rejected: Too magical, could cause confusion\n\n3. **Warning Instead of Error**\n   - Rejected: Silent failures should be eliminated\n\nComparison with other frameworks:\n- Laravel: Explicitly reserves `controller`/`action`\n- Spring: Uses path variables without similar restrictions\n\n---\n\n## Risks\n\n1. **Breaking Changes**\n   - Mitigation: Introduce as warning first in .NET 8, convert to error in .NET 9\n\n2. **Performance Impact**\n   - The route pattern validation occurs once at startup\n   - Negligible runtime overhead (\u003c0.1% in benchmarks)\n\n3. **False Positives**\n   - Unlikely, as the reserved words list is small and well-defined\n\n---\n\nThis proposal balances immediate usability improvements with long-term maintainability. The runtime validation approach provides the clearest developer feedback while maintaining backward compatibility when not using reserved words.\n\n\u003cimg width=\"1499\" height=\"836\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/91af9578-bd49-49fb-9062-7a3665290fcd\" /\u003e",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOupSBug==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDOAQzde866dFqw",
+                                           "createdAt":  "2025-07-28T17:07:51Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "halter73",
+                                           "body":  "I think the analyzer approach could make sense for when you have an MVC controller action with an \"action\" parameter. I don\u0027t think \"action\" is globally reserved though. That\u0027s just an MVC thing. For instance, this works just fine:\n\n```csharp\napp.MapGet(\"/test/{action}\", (int action) =\u003e action);\n```\n\nMaking a GET request to `/test/42\" will produce a 200-status JSON response of \"42\".",
+                                           "updatedAt":  "2025-07-28T17:07:51Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOAQzde866lIG6",
+                                           "createdAt":  "2025-07-29T01:45:49Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "MrQLEO",
+                                           "body":  "\u003e I think the analyzer approach could make sense for when you have an MVC controller action with an \"action\" parameter. I don\u0027t think \"action\" is globally reserved though. That\u0027s just an MVC thing. For instance, this works just fine:\n\u003e \n\u003e app.MapGet(\"/test/{action}\", (int action) =\u003e action);\n\u003e Making a GET request to `/test/42\" will produce a 200-status JSON response of \"42\".\n\nThank you for catching this important distinction @halter73! You\u0027re absolutely correct - after thorough testing, I can confirm:\n\n1. **Minimal APIs handle `{action}` correctly**  \n   ```csharp\n   app.MapGet(\"/test/{action}\", (int action) =\u003e action); // Works as expected\n   ```\n   This returns `200 OK` with the parameter value as documented.\n\n2. **The issue is specific to MVC Controllers**  \n   The routing conflict only occurs when:\n   ```csharp\n   [HttpGet(\"test/{action}\")] // MVC Controller\n   public IActionResult Test(int action) =\u003e Ok(action); // 404 occurs\n   ```",
+                                           "updatedAt":  "2025-07-29T01:45:49Z"
+                                       }
+                                   ],
+                         "totalCount":  2
+                     },
+        "title":  "Improve route parameter name conflict detection for reserved keywords (e.g. \"action\"",
+        "labels":  [
+                       "area-routing"
+                   ]
+    }
+]

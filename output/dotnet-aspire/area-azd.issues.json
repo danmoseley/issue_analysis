@@ -1,0 +1,149 @@
+﻿{
+    "url":  "https://github.com/dotnet/aspire/issues/10829",
+    "createdAt":  "2025-08-04T17:26:29Z",
+    "number":  10829,
+    "author":  "kijanawoodard",
+    "reactions":  {
+                      "hasNextPage":  false,
+                      "endCursor":  null,
+                      "nodes":  [
+
+                                ],
+                      "totalCount":  0
+                  },
+    "updatedAt":  "2025-09-12T20:50:26Z",
+    "body":  "### Is there an existing issue for this?\n\n- [x] I have searched the existing issues\n\n### Describe the bug\n\nThis is a little difficult to describe and, as of now, I cannot repro in a minimal project.\n\nWhat happened is I suddenly ran into timeouts connecting to redis from my web project.\nTo get things working again, I added `.WithPassword(null)` to the AddRedis call. Everything was fine again.\n\nI attempted to make a minimal repro with `aspire-starter`. Everything worked.\nIn my main project, I commented out `.WithPassword(null)`. With logging, I can see that the connection string with a password was present.\n\nEverything worked fine!\n\nI was stumped. Then it occurred to me to make a minor update to the web project and deploy.  \nThe connect timeouts reappeared.\n\nAt this point, I tried the same change in the minimal project. No effect. Everything continued to work with the password.\n\nI\u0027m not sure what could be causing the problem.\n\nHere are some differences between the main project and the minimal project:\n\n### Deployment\nMain project is deployed by a github pipeline created with `azd pipeline config`.\nMinimal project is deployed with `azd up`.\n\n### Secrets\nMain project uses key vault for some secrets in the app. I notice in the ACA portal that the redis connection string is listed \"Reference a secret\" just like my other key vault secrets, but the redis connection string and password are not in key vault. should they be? Is this something I should indicate somehow in AppHost.cs? [side note: I haven\u0027t figured out where the ACA secrets are stored/viewable yet].\n\nMinimal project does not use key vault.\n\n\n### Expected Behavior\n\nRedeploying the web project should not break the connection to redis.\n\n### Steps To Reproduce\n\nAs mentioned above, I haven\u0027t been able to make a minimal repro yet that breaks. But I can reliably break the main app. If needed, I\u0027ll keep trying to make the minimal repro more like the main project.\n\nI\u0027m a bit limited on being able to break the main project right now as users are on the system.\n\n### Exceptions (if any)\n\nTimeout connecting to redis. NOAUTH.\n\n### .NET Version info\n\n.NET SDK:\n Version:           9.0.302\n Commit:            bb2550b9af\n Workload version:  9.0.300-manifests.183aaee6\n MSBuild version:   17.14.13+65391c53b\n\nRuntime Environment:\n OS Name:     Windows\n OS Version:  10.0.26100\n OS Platform: Windows\n RID:         win-x64\n Base Path:   C:\\Program Files\\dotnet\\sdk\\9.0.302\\\n\n.NET workloads installed:\n [maccatalyst]\n   Installation Source: VS 17.14.36301.6\n   Manifest Version:    18.5.9207/9.0.100\n   Manifest Path:       C:\\Program Files\\dotnet\\sdk-manifests\\9.0.100\\microsoft.net.sdk.maccatalyst\\18.5.9207\\WorkloadManifest.json\n   Install Type:              Msi\n\n [ios]\n   Installation Source: VS 17.14.36301.6\n   Manifest Version:    18.5.9207/9.0.100\n   Manifest Path:       C:\\Program Files\\dotnet\\sdk-manifests\\9.0.100\\microsoft.net.sdk.ios\\18.5.9207\\WorkloadManifest.json\n   Install Type:              Msi\n\n [android]\n   Installation Source: VS 17.14.36301.6\n   Manifest Version:    35.0.78/9.0.100\n   Manifest Path:       C:\\Program Files\\dotnet\\sdk-manifests\\9.0.100\\microsoft.net.sdk.android\\35.0.78\\WorkloadManifest.json\n   Install Type:              Msi\n\n [aspire]\n   Installation Source: VS 17.14.36301.6\n   Manifest Version:    8.2.2/8.0.100\n   Manifest Path:       C:\\Program Files\\dotnet\\sdk-manifests\\8.0.100\\microsoft.net.sdk.aspire\\8.2.2\\WorkloadManifest.json\n   Install Type:              Msi\n\n [maui-windows]\n   Installation Source: VS 17.14.36301.6\n   Manifest Version:    9.0.51/9.0.100\n   Manifest Path:       C:\\Program Files\\dotnet\\sdk-manifests\\9.0.100\\microsoft.net.sdk.maui\\9.0.51\\WorkloadManifest.json\n   Install Type:              Msi\n\nConfigured to use loose manifests when installing new manifests.\n\nHost:\n  Version:      9.0.7\n  Architecture: x64\n  Commit:       3c298d9f00\n\n.NET SDKs installed:\n  8.0.100-rc.2.23502.2 [C:\\Program Files\\dotnet\\sdk]\n  9.0.205 [C:\\Program Files\\dotnet\\sdk]\n  9.0.302 [C:\\Program Files\\dotnet\\sdk]\n\n.NET runtimes installed:\n  Microsoft.AspNetCore.App 6.0.36 [C:\\Program Files\\dotnet\\shared\\Microsoft.AspNetCore.App]\n  Microsoft.AspNetCore.App 7.0.20 [C:\\Program Files\\dotnet\\shared\\Microsoft.AspNetCore.App]\n  Microsoft.AspNetCore.App 8.0.0-rc.2.23480.2 [C:\\Program Files\\dotnet\\shared\\Microsoft.AspNetCore.App]\n  Microsoft.AspNetCore.App 8.0.18 [C:\\Program Files\\dotnet\\shared\\Microsoft.AspNetCore.App]\n  Microsoft.AspNetCore.App 9.0.6 [C:\\Program Files\\dotnet\\shared\\Microsoft.AspNetCore.App]\n  Microsoft.AspNetCore.App 9.0.7 [C:\\Program Files\\dotnet\\shared\\Microsoft.AspNetCore.App]\n  Microsoft.NETCore.App 6.0.36 [C:\\Program Files\\dotnet\\shared\\Microsoft.NETCore.App]\n  Microsoft.NETCore.App 7.0.20 [C:\\Program Files\\dotnet\\shared\\Microsoft.NETCore.App]\n  Microsoft.NETCore.App 8.0.0-rc.2.23479.6 [C:\\Program Files\\dotnet\\shared\\Microsoft.NETCore.App]\n  Microsoft.NETCore.App 8.0.18 [C:\\Program Files\\dotnet\\shared\\Microsoft.NETCore.App]\n  Microsoft.NETCore.App 9.0.6 [C:\\Program Files\\dotnet\\shared\\Microsoft.NETCore.App]\n  Microsoft.NETCore.App 9.0.7 [C:\\Program Files\\dotnet\\shared\\Microsoft.NETCore.App]\n  Microsoft.WindowsDesktop.App 6.0.36 [C:\\Program Files\\dotnet\\shared\\Microsoft.WindowsDesktop.App]\n  Microsoft.WindowsDesktop.App 7.0.20 [C:\\Program Files\\dotnet\\shared\\Microsoft.WindowsDesktop.App]\n  Microsoft.WindowsDesktop.App 8.0.0-rc.2.23479.10 [C:\\Program Files\\dotnet\\shared\\Microsoft.WindowsDesktop.App]\n  Microsoft.WindowsDesktop.App 8.0.18 [C:\\Program Files\\dotnet\\shared\\Microsoft.WindowsDesktop.App]\n  Microsoft.WindowsDesktop.App 9.0.6 [C:\\Program Files\\dotnet\\shared\\Microsoft.WindowsDesktop.App]\n  Microsoft.WindowsDesktop.App 9.0.7 [C:\\Program Files\\dotnet\\shared\\Microsoft.WindowsDesktop.App]\n\nOther architectures found:\n  x86   [C:\\Program Files (x86)\\dotnet]\n    registered at [HKLM\\SOFTWARE\\dotnet\\Setup\\InstalledVersions\\x86\\InstallLocation]\n\nEnvironment variables:\n  Not set\n\nglobal.json file:\n  Not found\n\nLearn more:\n  https://aka.ms/dotnet/info\n\nDownload .NET:\n  https://aka.ms/dotnet/download\n\n### Anything else?\n\n## Aspire Redis Setup\n\n### AppHost.cs\n\n```\nvar redis = builder.AddRedis(\"redis\")\n    .WithImageTag(\"8.0.3\")\n    .WithRedisInsight(resourceBuilder =\u003e resourceBuilder.WithHostPort(5540).WithDataVolume(\"redis-insight\"))\n    .WithDataVolume(\"redis-data\")\n    .WithPersistence(TimeSpan.FromSeconds(1))\n    .PublishAsAzureContainerApp(configure: (infrastructure, app) =\u003e\n    {\n        app.Template.Scale.MaxReplicas = 1;\n    });\n```\n\n### Program.cs\n\n```\nbuilder.AddRedisClient(connectionName: \"redis\");\n```\n\nNOTE:\nSince I can\u0027t find the ACA secrets in the azure portal and the secrets all come out as REDACTED in the aspire dashboard, it\u0027s very difficult to pin down whether the password changed for one side but not the other or some other anamoly.\n\nTo see the redis connection string, in Program.cs I have the following code:\n\n```\nvar redisConnectionString = builder.Configuration.GetConnectionString(\"redis\");\nif (string.IsNullOrWhiteSpace(redisConnectionString)) throw new InvalidOperationException(\"Redis connection string is missing\");\n\nConsole.WriteLine($\"redisConnectionString: {redisConnectionString}\");\n```",
+    "comments":  {
+                     "hasNextPage":  false,
+                     "endCursor":  "Y3Vyc29yOnYyOpHOw-hmXw==",
+                     "nodes":  [
+                                   {
+                                       "id":  "IC_kwDOKYQzfc672-0b",
+                                       "createdAt":  "2025-08-04T17:28:00Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  "MihuBot",
+                                       "body":  "Possible related and/or duplicate issue:\n- https://github.com/dotnet/aspire/issues/8897",
+                                       "updatedAt":  "2025-08-04T17:28:00Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDOKYQzfc673GvE",
+                                       "createdAt":  "2025-08-04T17:40:30Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  "kijanawoodard",
+                                       "body":  "The next time I get a window to break prod for a bit, I have a line of inquiry.\n\nI can see \"redis_password\" in `config.json` infra::parameters for the envrionment.\n\nI have two other things in there that are secrets that are working and they are showing up in key vault.\nThe \"showing up in key vault\" part makes sense to me because I explicitly add them to key vault in AppHost.cs.\n\nThe thing that\u0027s different is the other two are listed in `azure-dev.yml`. The `redis_password` one is not.\nI also notice that the working secrets are named with an `AZUIRE_` prefix that I didn\u0027t give them.\n\nI didn\u0027t notice this prefix at first because, by chance (Murphy\u0027s Law), the other secrets start with `AZURE_AD`. So now in `azure-dev.yml` they are named `AZURE_AZURE_AD....`\n\nI did try to run `azd pipeline config` again, but no new lines were added so I abandoned this idea earlier today. Now I want to try it again.\n",
+                                       "updatedAt":  "2025-08-04T17:52:24Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDOKYQzfc673gVX",
+                                       "createdAt":  "2025-08-04T18:19:05Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  "kijanawoodard",
+                                       "body":  "Fwiw, I found the ACA secrets under the Container -\u003e Security -\u003e Secrets.",
+                                       "updatedAt":  "2025-08-04T18:19:05Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDOKYQzfc674xiF",
+                                       "createdAt":  "2025-08-04T20:18:39Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  "kijanawoodard",
+                                       "body":  "Ok! I am now able to repro in the minimal project.\n\nIt looks like it boils down to the redis password not being in the `azure-dev-.yml`.\nhttps://github.com/kijanawoodard/TestRedisPassword/commit/99f609d11e680bb39733ab8db5d58c56bbce337f#L50\n\nThe secrets are present in both the web front end and the redis container apps. [screenshots upon request]\nHowever, the connection isn\u0027t happening for some reason. [still investigating next level cause]\n\nSo...\n\nI\u0027m wondering how to stay out of this trap.\n\nWhen I first noticed that the redis password wasn\u0027t in the yml `env` like the other secrets, I tried to `azd pipeline config`, but the yml file wasn\u0027t updated.\n\nI don\u0027t know why when I change something about the redis container everything is fixed, but when I change the web front end, the connection is broken. That seems like a point of concern. \n\nIt should either always be broken or always work.",
+                                       "updatedAt":  "2025-08-04T21:55:44Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDOKYQzfc678Eea",
+                                       "createdAt":  "2025-08-05T02:47:36Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  "davidfowl",
+                                       "body":  "cc @vhvb1989 ",
+                                       "updatedAt":  "2025-08-05T02:47:36Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDOKYQzfc6-V53k",
+                                       "createdAt":  "2025-08-16T05:44:09Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  "vhvb1989",
+                                       "body":  "@kijanawoodard , this issue might be fixed already but you might have to update your gh-action workflow. Can you share it here?  ",
+                                       "updatedAt":  "2025-08-16T05:44:09Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDOKYQzfc6-mOty",
+                                       "createdAt":  "2025-08-18T16:50:12Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  "kijanawoodard",
+                                       "body":  "@vhvb1989 do you mean fixed by me? if so, yes.\n\nthe trick was that in the config.json I noticed a infra.parameter for redis_password, that wasn\u0027t in the workflow.\nadding the following fixed it. I haven\u0027t had the problem since.\nenv:\n          AZURE_REDIS_PASSWORD: ${{ secrets.AZURE_REDIS_PASSWORD }}\n\nHOWEVER:\n\nthe real problem is this was a pretty sharp stone to step on. It wasn\u0027t at all clear as the error messages led me down several different (incorrect) path. figuring out the above was purely \"pattern matching in anger\".\n\nI believe the root cause is that I did the `azd pipeline config` before I added redis.\nEverything \"works\" on first deploy, so there\u0027s no indicator you\u0027ve made a mistake and need to update the gh-action workflow.",
+                                       "updatedAt":  "2025-08-18T16:50:12Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDOKYQzfc7D6GZf",
+                                       "createdAt":  "2025-09-12T20:50:26Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  "kijanawoodard",
+                                       "body":  "@vhvb1989 I believe @maddymontaquila ran into this on last week\u0027s Aspire Friday.",
+                                       "updatedAt":  "2025-09-12T20:50:26Z"
+                                   }
+                               ],
+                     "totalCount":  8
+                 },
+    "title":  "Web Project Loses Redis Auth",
+    "labels":  [
+                   "azure",
+                   "area-deployment",
+                   "area-azd"
+               ]
+}

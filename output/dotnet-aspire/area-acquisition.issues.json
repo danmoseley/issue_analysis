@@ -1,0 +1,986 @@
+﻿[
+    {
+        "url":  "https://github.com/dotnet/aspire/issues/4558",
+        "createdAt":  "2024-06-18T02:06:28Z",
+        "number":  4558,
+        "author":  "v-sherryfan",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-06-02T18:29:18Z",
+        "body":  "**REGRESSION INFO:** Reproduced on both VS 17.10 and 17.11\r\n\r\n**INSTALL STEPS**\r\n1. Clean machine: Win11 x64 22h2 JPN\r\n2. Install latest released VS 17.10.2\r\n    - Web workload\r\n\r\n**ACTUAL**\r\nAspire SDK component descriptions are not localized\r\n![image](https://github.com/dotnet/aspire/assets/71361488/abc3378b-6f92-4c65-8f1a-47d2a9f0ea31)\r\n\r\n**NOTE:**\r\n   - Reproduced on CHS / TRK / FRA / JPN OS.\r\n\r\n**EXPECTED**\r\nAspire SDK component descriptions should be localized\r\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOiK612Q==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6ByP5K",
+                                           "createdAt":  "2024-06-19T02:41:50Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "mitchdenny",
+                                           "body":  "@joperezr PTAL.",
+                                           "updatedAt":  "2024-06-19T02:41:50Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6DLwCl",
+                                           "createdAt":  "2024-07-01T19:45:18Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "danmoseley",
+                                           "body":  "@vijayrkn with Jose out, do you know where localized strings for this would come from? Perhaps it\u0027s not this repo.\r\n\r\nHere, we only have this\r\nhttps://github.com/dotnet/aspire/blob/20e641941f344b48061aec7dc5237c478e70e6d8/eng/workloads/workloads.csproj#L56\r\n\r\nThis may also be affected by workloads changes @joperezr  is working on.",
+                                           "updatedAt":  "2024-07-01T19:45:18Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6FKH34",
+                                           "createdAt":  "2024-07-17T18:52:39Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "joperezr",
+                                           "body":  "I don\u0027t think we currently localize this, even outside of the repo. @joeloff @timheuer do you know if this can get localized?",
+                                           "updatedAt":  "2024-07-17T18:52:39Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6FKsnq",
+                                           "createdAt":  "2024-07-17T20:11:14Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "radical",
+                                           "body":  "Wasm does it like this:\r\nhttps://github.com/dotnet/runtime/blob/5f52977c066a29d124694eb423eff0b866df37a7/src/mono/nuget/Microsoft.NET.Workload.Mono.Toolchain.Current.Manifest/localize/WorkloadManifest.pl.json#L1-L3 https://github.com/dotnet/runtime/tree/5f52977c066a29d124694eb423eff0b866df37a7/src/mono/nuget/Microsoft.NET.Workload.Mono.Toolchain.Current.Manifest/localize",
+                                           "updatedAt":  "2024-07-17T20:11:14Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6IrrXZ",
+                                           "createdAt":  "2024-08-16T09:19:35Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "v-sherryfan",
+                                           "body":  "@mitchdenny @joperezr This issue is not localized on all non-ENUs, and considering this is not friendly on localized VS 17.12. I see it was moved to the backlog, so can we increase the priority and solve it before VS 17.12 is released?",
+                                           "updatedAt":  "2024-08-16T09:19:35Z"
+                                       }
+                                   ],
+                         "totalCount":  5
+                     },
+        "title":  "[WebToolsE2E][Aspire] On non-ENU OS, the description of the Aspire SDK component in the VS installer is not localized.",
+        "labels":  [
+                       "area-engineering-systems",
+                       "area-tooling",
+                       "area-acquisition"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspire/issues/5795",
+        "createdAt":  "2024-09-20T00:11:46Z",
+        "number":  5795,
+        "author":  "DamianEdwards",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-05-30T14:08:44Z",
+        "body":  "The correct term for the app host project is \"app host project\". When used in a situation that dictates PascalCase, e.g. project names, this becomes \"AppHost\". Title case would be \"App host\". We aren\u0027t consistent throughout the product today, e.g. in warning messages, template titles and descriptions, doc comments, etc., and should clean them up.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOrjHVGQ==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6OGPrA",
+                                           "createdAt":  "2024-09-30T19:34:44Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "IEvangelist",
+                                           "body":  "In docs, we strive to be consistent with our usage. When speaking about it conceptually, we call it \"app host\". When we refer to it in the content of the project itself, we say \"AppHost\". We do use the heading \"App host usage\" in integration docs, but that\u0027s because we\u0027re talking about it conceptually and we\u0027re required to use sentence case in headings in docs.",
+                                           "updatedAt":  "2024-09-30T19:34:44Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6OGRgl",
+                                           "createdAt":  "2024-09-30T19:39:14Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "DamianEdwards",
+                                           "body":  "Thanks @IEvangelist. So how would it be used when referring to the project in the conceptual/generic sense, rather than a specific example? i.e. \"Update your app host project to...\" or \"Update your AppHost project to...\"? IIUC I\u0027m thinking it\u0027s the former?",
+                                           "updatedAt":  "2024-09-30T19:39:14Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6OJhWG",
+                                           "createdAt":  "2024-10-01T05:52:48Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "mitchdenny",
+                                           "body":  "How should we refer to it in XML docs (just checking for future because I know I\u0027ve been inconsistent).",
+                                           "updatedAt":  "2024-10-01T05:52:48Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6uMdUZ",
+                                           "createdAt":  "2025-05-30T14:08:43Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "danmoseley",
+                                           "body":  "@IEvangelist could you asnwer q\u0027s above?",
+                                           "updatedAt":  "2025-05-30T14:08:43Z"
+                                       }
+                                   ],
+                         "totalCount":  4
+                     },
+        "title":  "Ensure correct term is used when referring to the app host project",
+        "labels":  [
+                       "good first issue",
+                       "area-templates",
+                       "area-acquisition"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspire/issues/6184",
+        "createdAt":  "2024-10-08T11:58:52Z",
+        "number":  6184,
+        "author":  "KarlWindhager",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHODIRz4w==",
+                          "nodes":  [
+                                        {
+                                            "content":  "EYES",
+                                            "user":  "awaters-frontact",
+                                            "createdAt":  "2024-11-15T05:31:40Z"
+                                        },
+                                        {
+                                            "content":  "EYES",
+                                            "user":  "estei",
+                                            "createdAt":  "2024-11-27T08:43:05Z"
+                                        },
+                                        {
+                                            "content":  "EYES",
+                                            "user":  "NxSoftware",
+                                            "createdAt":  "2024-12-29T14:06:02Z"
+                                        },
+                                        {
+                                            "content":  "EYES",
+                                            "user":  "gukoff",
+                                            "createdAt":  "2025-02-18T14:05:54Z"
+                                        },
+                                        {
+                                            "content":  "EYES",
+                                            "user":  "jvarsl",
+                                            "createdAt":  "2025-06-04T08:28:17Z"
+                                        },
+                                        {
+                                            "content":  "EYES",
+                                            "user":  "felix-barz-brickmakers",
+                                            "createdAt":  "2025-06-27T05:34:34Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "felix-barz-brickmakers",
+                                            "createdAt":  "2025-06-27T05:34:37Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "mllab-nl",
+                                            "createdAt":  "2025-07-14T15:27:24Z"
+                                        },
+                                        {
+                                            "content":  "EYES",
+                                            "user":  "mllab-nl",
+                                            "createdAt":  "2025-07-14T15:27:25Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "Mihier-Roy",
+                                            "createdAt":  "2025-07-23T12:28:45Z"
+                                        },
+                                        {
+                                            "content":  "EYES",
+                                            "user":  "Mihier-Roy",
+                                            "createdAt":  "2025-07-23T12:28:46Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "DillonN",
+                                            "createdAt":  "2025-07-24T03:07:15Z"
+                                        }
+                                    ],
+                          "totalCount":  12
+                      },
+        "updatedAt":  "2025-08-28T23:57:47Z",
+        "body":  "### Is there an existing issue for this?\n\n- [X] I have searched the existing issues\n\n### Describe the bug\n\nIn our team we have developers with different operating systems. Whenever one or the other checks in their changes, the package.lock.json is updated for the os dependent Aspire packages:\r\n\r\n`Aspire.Dashboard.Sdk.osx-arm64` vs `Aspire.Dashboard.Sdk.win-x64`\r\n`Aspire.Hosting.Orchestration.osx-arm64` vs `Aspire.Hosting.Orchestration.win-x64`\r\n\r\nIt is not a big issue, but a nuisance, as it is a change file in every other commit and Pull Request.\n\n### Expected Behavior\n\n_No response_\n\n### Steps To Reproduce\n\n_No response_\n\n### Exceptions (if any)\n\n_No response_\n\n### .NET Version info\n\n_No response_\n\n### Anything else?\n\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOwNahJw==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6PFRun",
+                                           "createdAt":  "2024-10-08T18:17:05Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "eerhardt",
+                                           "body":  "cc @joperezr @radical ",
+                                           "updatedAt":  "2024-10-08T18:17:05Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6PFWS3",
+                                           "createdAt":  "2024-10-08T18:27:32Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "joperezr",
+                                           "body":  "Hello @KarlWindhager, thanks for logging the issue. You are correct, the experience today of using aspire if you have `RestorePackagesWithLockFile` set to true in your project and you are checking this file in, is not great. This is because, as you noted, the dashboard and dcp dependencies that are brought in by the project will change based on the platform that is being used to build the project. We can take a closer look at this, but it would be hard to fix as we want to prevent forcing people to have to download dashboard and dcp for all platforms, which would be one way of fixing this.",
+                                           "updatedAt":  "2024-10-08T18:27:32Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6QW6hZ",
+                                           "createdAt":  "2024-10-18T09:11:38Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "michaelschaffer-doka",
+                                           "body":  "Hello @joperezr!\nI\u0027m also in the team of @KarlWindhager and face the same issue. We tried to reference both the win-x64 as well as the osx-arm64 versions of those packages in our apphost project file (as you mentioned that as a workaround) since it is no issue for us to download dashboard and dcp for both platforms.\n\nUnfortunately this leads to the following issue on my mac:\n```\nSystem.IO.FileNotFoundException: The Aspire orchestration component is not installed at \"/Users/user/.nuget/packages/aspire.hosting.orchestration.win-x64/8.2.1/tools/dcp\". The application cannot be run without it.\nFile name: \u0027/Users/user/.nuget/packages/aspire.hosting.orchestration.win-x64/8.2.1/tools/dcp\u0027\n   at Aspire.Hosting.Dcp.DcpDependencyCheck.GetDcpInfoAsync(CancellationToken cancellationToken) in /_/src/Aspire.Hosting/Dcp/DcpDependencyCheck.cs:line 50\n```\n\nSo this means it somehow \"thinks\" that we are running on windows now and obviously is then using the wrong tools.\n\nWhen adding the following assembly metadata attributes to my apphost project it would work theoretically:\n```\n[assembly: System.Reflection.AssemblyMetadata(\"dcpclipath\", \"path-to-osx-version-of-dcp/dcp\")]\n[assembly: System.Reflection.AssemblyMetadata(\"dcpextensionpaths\", \"/path-to-dcp-ext/\")]\n[assembly: System.Reflection.AssemblyMetadata(\"dcpbinpath\", \"/path-to-dcpbin/\")]\n[assembly: System.Reflection.AssemblyMetadata(\"aspiredashboardpath\", \"/path-to-aspire-dashboard/Aspire.Dashboard.dll\")]\n```\nBut then I have to hardcode those paths into my Program.cs which is not really a good solution.\n\nIs there any setting that I can use so that aspire \"knows\" both on windows and on macos which dcp/dashboard tools to use, even though both of the packages are referenced?",
+                                           "updatedAt":  "2024-10-18T09:11:38Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6RWapf",
+                                           "createdAt":  "2024-10-25T18:41:29Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "joperezr",
+                                           "body":  "Hey @michaelhahn-doka, sorry for the delay in the response. Yeah, the problem you are hitting is that since you are referencing both packages, then both of the props files from each of the packages are getting loaded into your project\u0027s evaluation, and that would make it such that one would be overriding the other so it would depend on the order in which they are imported (which AFAIK is non-deterministic) whether they work or not. This is, of course, not a supported scenario.\n\nI would not suggest setting the AssemblyMetadata attributes yourself, and instead I would probably try setting [the properties](https://github.com/dotnet/aspire/blob/2f5d5de219a653a1961b4943616e91717a0643d7/eng/dcppack/Aspire.Hosting.Orchestration.targets#L3-L12) drive these attributes in a targets file that gets imported late on your build that would override the ones being imported by both of the packages.",
+                                           "updatedAt":  "2024-10-25T18:41:29Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6RaO7J",
+                                           "createdAt":  "2024-10-26T12:53:21Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "michaelschaffer-doka",
+                                           "body":  "\u003e Hey [@michaelhahn-doka](https://github.com/michaelhahn-doka), sorry for the delay in the response. Yeah, the problem you are hitting is that since you are referencing both packages, then both of the props files from each of the packages are getting loaded into your project\u0027s evaluation, and that would make it such that one would be overriding the other so it would depend on the order in which they are imported (which AFAIK is non-deterministic) whether they work or not. This is, of course, not a supported scenario.\n\u003e \n\u003e I would not suggest setting the AssemblyMetadata attributes yourself, and instead I would probably try setting [the properties](https://github.com/dotnet/aspire/blob/2f5d5de219a653a1961b4943616e91717a0643d7/eng/dcppack/Aspire.Hosting.Orchestration.targets#L3-L12) drive these attributes in a targets file that gets imported late on your build that would override the ones being imported by both of the packages.\n\nThanks for your reply but how would I handle the path resolution properly since with every update of the package the path to the dcp directory as well as the dashboardpath would change, right?",
+                                           "updatedAt":  "2024-10-26T12:53:21Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6e5jdd",
+                                           "createdAt":  "2025-02-18T14:31:58Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOEafjnQ==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "mllab-nl",
+                                                                               "createdAt":  "2025-07-14T15:27:21Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "gukoff",
+                                           "body":  "\u003e It is not a big issue, but a nuisance, as it is a change file in every other commit and Pull Request.\n\nI\u0027d argue this is a big issue. The current lock file can be built only on a specific platform. There\u0027s an extra chore for the dev team. And the team relies on the tribal knowledge of how to handle this nuisance.\n\nAs a workaround, I moved Aspire AppHost to a separate project with a single `Program.cs` and selectively disabled lock files only for this project:\n\n```xml\n\u003cSdk Name=\"Aspire.AppHost.Sdk\" Version=\"9.0.0\" /\u003e\n\n\u003cPropertyGroup\u003e\n    \u003cRestorePackagesWithLockFile\u003efalse\u003c/RestorePackagesWithLockFile\u003e\n    \u003cRestoreLockedMode\u003efalse\u003c/RestoreLockedMode\u003e\n\u003c/PropertyGroup\u003e\n\n\u003cItemGroup\u003e\n    \u003cPackageReference Include=\"Aspire.Hosting.AppHost\" /\u003e\n\u003c/ItemGroup\u003e\n```\n\n\u003e Hello @KarlWindhager, thanks for logging the issue. You are correct, the experience today of using aspire if you have RestorePackagesWithLockFile set to true in your project and you are checking this file in, is not great. This is because, as you noted, the dashboard and dcp dependencies that are brought in by the project will change based on the platform that is being used to build the project. We can take a closer look at this, but it would be hard to fix as we want to prevent forcing people to have to download dashboard and dcp for all platforms, which would be one way of fixing this.\n\nI believe the `packages.lock.json` file [can be cross-platform](https://stackoverflow.com/questions/57161512/nuget-lock-file-fails-to-restore-with-locked-mode/68185904#68185904), ensuring that on each platform only the specific package for this platform will be restored. I wonder if you can use this feature to specify the exact dependencies for each platform?\n\nIn my lock file, most dependencies seem to be under the `net9.0` key:\n\n\u003cimg width=\"885\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/eacbff6d-1f22-4b71-91c5-54dab96d0417\" /\u003e\n\nWhile some dependencies, presumably those platform-dependent, are under the keys such as `net9.0/osx-x64` or `net9.0/linux-x64`:\n\n\u003cimg width=\"836\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/d571d101-1840-4f1f-ad53-61d12b95ea12\" /\u003e",
+                                           "updatedAt":  "2025-02-19T15:58:32Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6hZU5e",
+                                           "createdAt":  "2025-03-08T00:20:54Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "joperezr",
+                                           "body":  "\u003e In my lock file, most dependencies seem to be under the net9.0 key:\n\nRight, the packages that get dynamically added are not RID-specific per se, as this is not a fully supported feature by NuGet anyway. Both the DCP and Dashboard dependencies would be under the `net9.0` key.",
+                                           "updatedAt":  "2025-03-08T00:20:54Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc60654i",
+                                           "createdAt":  "2025-07-04T10:08:25Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOEafixQ==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "mllab-nl",
+                                                                               "createdAt":  "2025-07-14T15:25:59Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "jvarsl",
+                                           "body":  "Is this issue not applicable to pipelines too? Developer commits `packages.lock.json` on his machine (Windows), CI/CD agent is on Linux. CI/CD locked-mode restore fails. This is how I originally ran into this issue but don\u0027t see anyone raising it.\n\n\n`src/MyApp.AppHost/packages.lock.json` (made on Windows)\n\n```json\n{\n  \"version\": 2,\n  \"dependencies\": {\n    \"net9.0\": {\n      \"Aspire.Dashboard.Sdk.win-x64\": {\n        \"type\": \"Direct\",\n        \"requested\": \"[9.*, )\",\n        \"resolved\": \"9.3.1\",\n        \"contentHash\": \"0BAjVEMMBOkGaxVK3AioTiJKN2nyB+0hjvf8k2ek9LUIMowE2WvQfGUZhdZJaqmfqUCMdmFuhqNzkgubclIcXQ==\"\n      },\n      \"Aspire.Hosting.Orchestration.win-x64\": {\n        \"type\": \"Direct\",\n        \"requested\": \"[9.*, )\",\n        \"resolved\": \"9.3.1\",\n        \"contentHash\": \"8tA+G0AHRF2DCg0WVwvXTwDGZYXetRlG9E+5UIfdB10lj6MqOSEVr6/1h9lIAQuTwy8HWtI7o8GyDotKg5AWeQ==\"\n      }\n    }\n    // other dependencies\n  }\n}\n```\n\n`Ubuntu` CI/CD agent\n\n```\n\"/agent/_work/1/s/MyApp.slnx\" (Restore target) (1) -\u003e\n(Restore target) -\u003e \n  /agent/_work/1/s/src/MyApp.AppHost/MyApp.AppHost.csproj : error NU1004: A new package reference was found Aspire.Dashboard.Sdk.linux-x64 for the project target framework net9.0.The packages lock file is inconsistent with the project dependencies so restore can\u0027t be run in locked mode. Disable the RestoreLockedMode MSBuild property or pass an explicit --force-evaluate option to run restore to update the lock file. [/agent/_work/1/s/MyApp.slnx]\n\n    0 Warning(s)\n    1 Error(s)\n```\n\t\n\t\n\nI run Aspire only locally. Restoring packages on solution level rather than per project are much faster so in pipelines I restore whole solution and I don\u0027t do anything else with Aspire in CI/CD. I disabled package locks on AppHost so Aspire could download Linux dependencies on CI/CD.\n\n```xml\n\t\t\u003c!-- Aspire uses OS specific SDK so cannot use lock file --\u003e\n\t\t\u003cRestorePackagesWithLockFile\u003efalse\u003c/RestorePackagesWithLockFile\u003e\n\t\t\u003cRestoreLockedMode\u003efalse\u003c/RestoreLockedMode\u003e\n```\n\nBy removing lock-files on AppHost I made AppHost restore unpredictably but I wasn\u0027t deploying it so hopefully packages aren\u0027t transcending to my deployable projects.\nToday, one Microsoft package has invalid dependencies bug (https://github.com/AzureAD/microsoft-identity-web/issues/3406) and it\u0027s taking down my pipelines because unlocked AppHost runs into invalid dependencies.\n\nIt\u0027s quite a big issue that lock files cannot be used unless I\u0027m missing something.",
+                                           "updatedAt":  "2025-07-04T10:08:25Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc61jZLN",
+                                           "createdAt":  "2025-07-07T17:07:15Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "joperezr",
+                                           "body":  "@jvarsl thanks for your comment. Probably obvious, but I\u0027m assuming that for your scenario lock files are required and something like Central Package management with transitive version pinning is not good enough?",
+                                           "updatedAt":  "2025-07-07T17:07:15Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc61j8lr",
+                                           "createdAt":  "2025-07-07T18:06:15Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jvarsl",
+                                           "body":  "Hi @joperezr, my scenario is that my area\u0027s developers and architects decided wildcards + lock files are how projects have to be done to ensure packages stay somewhat up to date. 🙃 We\u0027re on ADO and don\u0027t have Dependabot.",
+                                           "updatedAt":  "2025-07-07T18:06:15Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc61kD7N",
+                                           "createdAt":  "2025-07-07T18:18:32Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "joperezr",
+                                           "body":  "I see. The nice thing about CPM and not using wildcards is that it makes builds deterministic. Since you are in ADO and one of your goals is to stay updated, I wonder if this dotnet tool might help you: https://github.com/dotnet-outdated/dotnet-outdated. It supports CPM and even new .slnx format\n",
+                                           "updatedAt":  "2025-07-07T18:18:59Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc7AullT",
+                                           "createdAt":  "2025-08-28T13:07:46Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOEgEJ5g==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "awaters-frontact",
+                                                                               "createdAt":  "2025-08-28T20:49:49Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "hiniko",
+                                           "body":  "We hit this issue after enabling `\u003cRestorePackagesWithLockFile\u003e` so we could use the caching in the setup `setup-dotnet` as [per the docs](https://github.com/actions/setup-dotnet?tab=readme-ov-file#caching-nuget-packages). \n\nLocking is also suggested and we are interested, but with devs on Windows and macOS as well as CI in linux it\u0027s we\u0027ve had to disable packages for our Aspire project.",
+                                           "updatedAt":  "2025-08-28T13:07:46Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc7A1jSC",
+                                           "createdAt":  "2025-08-28T23:36:34Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "maddymontaquila",
+                                           "body":  "@baronfel is there anything planned here for supporting RID specific packages on lockfiles?",
+                                           "updatedAt":  "2025-08-28T23:36:34Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc7A1qEn",
+                                           "createdAt":  "2025-08-28T23:57:47Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "baronfel",
+                                           "body":  "Not directly, no. We have an ongoing discussion with @jeffkl, @nkolev92 and the rest of the team about the best way to manage it over at https://github.com/dotnet/sdk/issues/48795\n\nIn the meantime the proposal is:\n* Instead of PackageReference, use a PackageDownload\n* Manually compute the Imports of the props and targets inside the packages you download in this way using the NuGet-generated Path properties for each download\n\n\n",
+                                           "updatedAt":  "2025-08-28T23:57:47Z"
+                                       }
+                                   ],
+                         "totalCount":  14
+                     },
+        "title":  "OS dependent packages update package.lock.json",
+        "labels":  [
+                       "area-acquisition"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspire/issues/6855",
+        "createdAt":  "2024-12-02T17:35:19Z",
+        "number":  6855,
+        "author":  "fekberg",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-02-19T17:40:37Z",
+        "body":  "### Is there an existing issue for this?\n\n- [x] I have searched the existing issues\n\n### Describe the bug\n\nWhile running a newly setup AppHost, .NET 9.0, I am getting the following error:\n\n`Failed to run Aspire.RuntimeIdentifier.Tool. Exit code: 1. Output: This program is blocked by group policy. For more information, contact your system administrator`.\n\nRunning Visual Studio as Administrator does not produce this error.  Not sure exactly what group policy is blocking this.\n\nHappy to fill in with more details. All we did was create a new AppHost, and reference our projects (all .NET 9).\n\n### Expected Behavior\n\nShould be able to run the AppHost without being administrator.\n\n### Steps To Reproduce\n\n1. Have an IT department that locks everything down\n2. Create a new .NET Aspire Starter Solution\n\n### Exceptions (if any)\n\nFailed to run Aspire.RuntimeIdentifier.Tool. Exit code: 1. Output: This program is blocked by group policy. For more information, contact your system administrator.\n\n### .NET Version info\n\n.NET SDK:\n Version:           9.0.100\n Commit:            59db016f11\n Workload version:  9.0.100-manifests.c6f19616\n MSBuild version:   17.12.7+5b8665660\n\nRuntime Environment:\n OS Name:     Windows\n OS Version:  10.0.19045\n OS Platform: Windows\n RID:         win-x64\n Base Path:   C:\\Program Files\\dotnet\\sdk\\9.0.100\\\n\n.NET workloads installed:\n [aspire]\n   Installation Source: SDK 9.0.100, VS 17.12.35410.144, VS 17.12.35506.116\n   Manifest Version:    8.2.2/8.0.100\n   Manifest Path:       C:\\Program Files\\dotnet\\sdk-manifests\\8.0.100\\microsoft.net.sdk.aspire\\8.2.2\\WorkloadManifest.json\n   Install Type:              Msi\n\n [wasm-tools]\n   Installation Source: SDK 9.0.100\n   Manifest Version:    9.0.0/9.0.100\n   Manifest Path:       C:\\Program Files\\dotnet\\sdk-manifests\\9.0.100\\microsoft.net.workload.mono.toolchain.current\\9.0.0\\WorkloadManifest.json\n   Install Type:              Msi\n\nConfigured to use loose manifests when installing new manifests.\n\nHost:\n  Version:      9.0.0\n  Architecture: x64\n  Commit:       9d5a6a9aa4\n\n.NET SDKs installed:\n  9.0.100-rc.2.24474.11 [C:\\Program Files\\dotnet\\sdk]\n  9.0.100 [C:\\Program Files\\dotnet\\sdk]\n\n.NET runtimes installed:\n  Microsoft.AspNetCore.App 8.0.10 [C:\\Program Files\\dotnet\\shared\\Microsoft.AspNetCore.App]\n  Microsoft.AspNetCore.App 8.0.11 [C:\\Program Files\\dotnet\\shared\\Microsoft.AspNetCore.App]\n  Microsoft.AspNetCore.App 9.0.0-rc.2.24474.3 [C:\\Program Files\\dotnet\\shared\\Microsoft.AspNetCore.App]\n  Microsoft.AspNetCore.App 9.0.0 [C:\\Program Files\\dotnet\\shared\\Microsoft.AspNetCore.App]\n  Microsoft.NETCore.App 8.0.10 [C:\\Program Files\\dotnet\\shared\\Microsoft.NETCore.App]\n  Microsoft.NETCore.App 8.0.11 [C:\\Program Files\\dotnet\\shared\\Microsoft.NETCore.App]\n  Microsoft.NETCore.App 9.0.0-rc.2.24473.5 [C:\\Program Files\\dotnet\\shared\\Microsoft.NETCore.App]\n  Microsoft.NETCore.App 9.0.0 [C:\\Program Files\\dotnet\\shared\\Microsoft.NETCore.App]\n  Microsoft.WindowsDesktop.App 8.0.10 [C:\\Program Files\\dotnet\\shared\\Microsoft.WindowsDesktop.App]\n  Microsoft.WindowsDesktop.App 8.0.11 [C:\\Program Files\\dotnet\\shared\\Microsoft.WindowsDesktop.App]\n  Microsoft.WindowsDesktop.App 9.0.0-rc.2.24474.4 [C:\\Program Files\\dotnet\\shared\\Microsoft.WindowsDesktop.App]\n  Microsoft.WindowsDesktop.App 9.0.0 [C:\\Program Files\\dotnet\\shared\\Microsoft.WindowsDesktop.App]\n\nOther architectures found:\n  x86   [C:\\Program Files (x86)\\dotnet]\n    registered at [HKLM\\SOFTWARE\\dotnet\\Setup\\InstalledVersions\\x86\\InstallLocation]\n\nEnvironment variables:\n  Not set\n\nglobal.json file:\n  Not found\n\nLearn more:\n  https://aka.ms/dotnet/info\n\nDownload .NET:\n  https://aka.ms/dotnet/download\n\n\n### Anything else?\n\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOnxrJJg==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6VwhMx",
+                                           "createdAt":  "2024-12-02T19:15:33Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "davidfowl",
+                                           "body":  "First time seeing this one! \n\ncc @joperezr ",
+                                           "updatedAt":  "2024-12-02T19:15:33Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6V7mOV",
+                                           "createdAt":  "2024-12-03T19:57:28Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "joperezr",
+                                           "body":  "I see, yeah, depending on how lock down an environment is, this may be an issue. To provide some background, one of the main things that the Aspire SDK does, is that it dynamically adds a reference to the Orchestrator (DCP) and Dashboard NuGet packages that are needed for the architecture of the machine that is performing the build. These will be needed when you run your app, and we do it dynamically as they are big dependencies (especially DCP) so we want to make sure we only restore the ones that you need based on your architecture. We determine which is the right NuGet package to download by executing a tool (the Aspire.RuntimeIdentifier.Tool) which mostly just takes your running runtime identifier, and using NuGet APIs it determines which is the right set of packages you need for your platform. This tool runs out of the main build process, which as seen here can run into issues if this is not something allowed in your environment.\n\nThis won\u0027t be an issue in Aspire 10, as the plan is to move the logic currently executed by the tool to an in-proc task inside the SDK, but in the meantime we do rely on this external tool. The recommendation of course is to check if your IT department can somehow allow this tool to run (It is authenticode signed by Microsoft), but there may be some other non-supported workarounds in case that is not an option. Let me know if that is something you want to consider.",
+                                           "updatedAt":  "2024-12-03T19:57:28Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6WAEua",
+                                           "createdAt":  "2024-12-04T08:56:49Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "fekberg",
+                                           "body":  "Thanks for the insight!\n\nWhat\u0027s the ETA of a Aspire 10 preview? That might be a faster alternative than waiting for IT to sort this out.\n\nOtherwise I might just have to convince the team to run as admin until 10 is out.",
+                                           "updatedAt":  "2024-12-04T08:56:49Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6WHn0X",
+                                           "createdAt":  "2024-12-04T21:17:54Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOEbpZ5Q==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "HOORAY",
+                                                                               "user":  "fekberg",
+                                                                               "createdAt":  "2024-12-12T07:59:54Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "HOORAY",
+                                                                               "user":  "EugeneKrapivin",
+                                                                               "createdAt":  "2025-03-27T13:30:34Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "HOORAY",
+                                                                               "user":  "adeel41",
+                                                                               "createdAt":  "2025-07-23T15:07:34Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  3
+                                                         },
+                                           "author":  "joperezr",
+                                           "body":  "No ETA as of yet, but very likely won\u0027t happen before February 2025.\n\nThe workaround I was talking about above that you may want to try is to add this to your AppHost project file:\n\n```xml\n\u003cPropertyGroup\u003e\n  \u003cSkipAddAspireDefaultReferences\u003etrue\u003c/SkipAddAspireDefaultReferences\u003e\n\u003c/PropertyGroup\u003e\n\n\u003cItemGroup\u003e\n  \u003cPackageReference Include=\"Aspire.Dashboard.Sdk.$(NETCoreSdkRuntimeIdentifier)\" Version=\"9.0.0\" /\u003e\n  \u003cPackageReference Include=\"Aspire.Hosting.Orchestration.$(NETCoreSdkRuntimeIdentifier)\" Version=\"9.0.0\" /\u003e\n\u003c/ItemGroup\u003e\n```\n\nNote that while the above will likely work, it will not work on some platforms where we don\u0027t explicitly cross-compile. This is particularly applicable to different Linux OSes (for example, rhel). See https://github.com/dotnet/aspire/issues/5486 if you want more details on why this may not work in some distros and why we went with the tool approach instead.  ",
+                                           "updatedAt":  "2024-12-04T21:17:54Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6XR9ih",
+                                           "createdAt":  "2024-12-12T08:00:45Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "fekberg",
+                                           "body":  "\u003e No ETA as of yet, but very likely won\u0027t happen before February 2025.\n\u003e \n\u003e The workaround I was talking about above that you may want to try is to add this to your AppHost project file:\n\u003e \n\u003e ```xml\n\u003e \u003cPropertyGroup\u003e\n\u003e   \u003cSkipAddAspireDefaultReferences\u003etrue\u003c/SkipAddAspireDefaultReferences\u003e\n\u003e \u003c/PropertyGroup\u003e\n\u003e \n\u003e \u003cItemGroup\u003e\n\u003e   \u003cPackageReference Include=\"Aspire.Dashboard.Sdk.$(NETCoreSdkRuntimeIdentifier)\" Version=\"9.0.0\" /\u003e\n\u003e   \u003cPackageReference Include=\"Aspire.Hosting.Orchestration.$(NETCoreSdkRuntimeIdentifier)\" Version=\"9.0.0\" /\u003e\n\u003e \u003c/ItemGroup\u003e\n\u003e ```\n\u003e \n\u003e Note that while the above will likely work, it will not work on some platforms where we don\u0027t explicitly cross-compile. This is particularly applicable to different Linux OSes (for example, rhel). See https://github.com/dotnet/aspire/issues/5486 if you want more details on why this may not work in some distros and why we went with the tool approach instead.  \n\nThank you! That worked very well 🙏",
+                                           "updatedAt":  "2024-12-12T08:00:45Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6dt5LL",
+                                           "createdAt":  "2025-02-09T03:48:53Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "davidfowl",
+                                           "body":  "We should add this to known issues with workaround in the docs @IEvangelist ",
+                                           "updatedAt":  "2025-02-09T03:48:53Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6fEo2c",
+                                           "createdAt":  "2025-02-19T14:18:58Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "rlarno",
+                                           "body":  "Same but different?\n\nWe just upgraded a solution to Aspire v9, and had to add the above workaround, because we encountered this issue on our (Azure DevOps) build pipeline:\n\u003e /home/vsts/work/1/.nuget/packages/aspire.apphost.sdk/9.0.0/Sdk/Sdk.targets(128,5): error : Failed to run Aspire.RuntimeIdentifier.Tool. Exit code: 127. Output: /usr/bin/sh: 2: /tmp/tmp2df6eb66d2234a50986c07d959de8653.exec.cmd: /usr/lib/mono/msbuild//dotnet: not found [/home/vsts/work/1/s/src/OurApp.AppHost/AppHost.csproj]\n\n\nbut as we are using central package management, I added the workaround, **without the version numbers**\n```xml\n\u003cPropertyGroup\u003e\n  \u003cSkipAddAspireDefaultReferences\u003etrue\u003c/SkipAddAspireDefaultReferences\u003e\n\u003c/PropertyGroup\u003e\n\n\u003cItemGroup\u003e\n  \u003cPackageReference Include=\"Aspire.Dashboard.Sdk.$(NETCoreSdkRuntimeIdentifier)\"  /\u003e\n  \u003cPackageReference Include=\"Aspire.Hosting.Orchestration.$(NETCoreSdkRuntimeIdentifier)\"  /\u003e\n\u003c/ItemGroup\u003e\n```\nWhen building ~~locally this works and~~ we are able to start the application, yet on the build pipeline we now get this error.\n\n\u003e Errors in /home/vsts/work/1/s/src/OurApp.AppHost/AppHost.csproj\n    NU1008: Projects that use central package version management should not define the version on the PackageReference items but on the PackageVersion items: Aspire.Dashboard.Sdk.linux-x64;Aspire.Hosting.Orchestration.linux-x64.)\n\n\u003e locally:\n\u003e     R:\\OurApp\\src\\OurApp.AppHost\\AppHost.csproj : error NU1010: The PackageReference items Aspire.Dashboard.Sdk.win-x64;Aspire.Hosting.Orchestration.win-x64 do not have corresponding PackageVersion.\n\nany ideas how to get around this?",
+                                           "updatedAt":  "2025-02-19T16:36:07Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6fGskm",
+                                           "createdAt":  "2025-02-19T17:40:36Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "rlarno",
+                                           "body":  "I added these to my `Directory.Packages.props` to work around this issue.\n\n```xml\n    \u003cPackageVersion Include=\"Aspire.Dashboard.Sdk.win-x64\" Version=\"9.0.0\" /\u003e\n    \u003cPackageVersion Include=\"Aspire.Hosting.Orchestration.win-x64\" Version=\"9.0.0\" /\u003e\n    \u003cPackageVersion Include=\"Aspire.Dashboard.Sdk.linux-x64\" Version=\"9.0.0\" /\u003e\n    \u003cPackageVersion Include=\"Aspire.Hosting.Orchestration.linux-x64\" Version=\"9.0.0\" /\u003e\n```\n",
+                                           "updatedAt":  "2025-02-19T17:40:36Z"
+                                       }
+                                   ],
+                         "totalCount":  8
+                     },
+        "title":  "Failed to run Aspire.RuntimeIdentifier.Tool. Exit code: 1. Output: This program is blocked by group policy",
+        "labels":  [
+                       "documentation",
+                       "area-acquisition"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspire/issues/7530",
+        "createdAt":  "2025-02-11T09:52:03Z",
+        "number":  7530,
+        "author":  "v-sherryfan",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-04-15T17:16:31Z",
+        "body":  "**INSTALL STEPS**\n\n1. Clean machine: Win11 x64 23h2\n2. Install VS 17.13 GA \n3. Install the latest Aspire 9.1.0-preview.1.25110.10\n    - Apply dotnet9 Feed\n\n**REPRO STEPS**\n\n1. Create an Aspire Starter App 9.0 project \n2. In the same solution, add an Aspire Starter App 9.1 project\n\n\n**ACTUAL**\nMultiple versions of the same SDK \"Aspire.AppHost.Sdk\" cannot be specified. The previously resolved SDK version \"9.0.0\" from location \"C:\\Users\\xxx\\source\\repos\\AspireApp14\\AspireApp14.AppHost\\AspireApp14.AppHost.csproj\" will be used and the version \"9.1.0-preview.1.25110.10\" will be ignored.\n![Image](https://github.com/user-attachments/assets/0d97739e-082b-4bb7-a256-eb199ada0f35)\n\n**Workaround:**\n- Reopen VS and the warning will disappear\n\n**EXPECTED**\nWithout any warning\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOnfieYQ==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6d-J5h",
+                                           "createdAt":  "2025-02-11T09:57:43Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "v-sherryfan",
+                                           "body":  "This seems to be a similar case to [#6838](https://github.com/dotnet/aspire/issues/6838). But that one is different as a scenario because that involves 2 apphost projects.",
+                                           "updatedAt":  "2025-02-11T09:57:43Z"
+                                       }
+                                   ],
+                         "totalCount":  1
+                     },
+        "title":  "[WebToolsE2E][Aspire] Create an aspire 9.0 project and then add an aspire 9.1 project in the same solution and get a warning: \"The previously resolved SDK version \"9.0.0\" will be used and the version \"9.1.0\" will be ignored\".",
+        "labels":  [
+                       "area-acquisition"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspire/issues/7593",
+        "createdAt":  "2025-02-13T16:19:13Z",
+        "number":  7593,
+        "author":  "afscrome",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-02-18T23:39:43Z",
+        "body":  "I\u0027ve seen this on two project upgrades in Visual Studio.  After upgrading the sdk in a csproj file \n\n```diff\n- \u003cSdk Name=\"Aspire.AppHost.Sdk\" Version=\"9.0.0\" /\u003e\n+ \u003cSdk Name=\"Aspire.AppHost.Sdk\" Version=\"9.1.0-preview.1.25111.2\" /\u003e\n```\n\nThe following warning pops up:\n```\nMultiple versions of the same SDK \"Aspire.AppHost.Sdk\" cannot be specified. The previously resolved SDK version \"9.0.0\" from location \"\u003cREDACTED\u003e\\My.Project.csproj\" will be used and the version \"9.1.0-preview.1.25111.2\" will be ignored.\n```\n\nEverything seems to work despite the warning, and the warning disappears after restarting VS.\n\nVS Version Info:\n```\nMicrosoft Visual Studio Enterprise 2022\nVersion 17.13.0\nVisualStudio.17.Release/17.13.0+35806.99\nMicrosoft .NET Framework\nVersion 4.8.09032\n\nInstalled Version: Enterprise\n\nVisual C++ 2022   00476-80000-00000-AA768\nMicrosoft Visual C++ 2022\n\nASP.NET and Web Tools   17.13.124.35287\nASP.NET and Web Tools\n\nAzure App Service Tools v3.0.0   17.13.124.35287\nAzure App Service Tools v3.0.0\n\nAzure Functions and Web Jobs Tools   17.13.124.35287\nAzure Functions and Web Jobs Tools\n\nC# Tools   4.13.0-3.25105.4+400efa2d94b217101a0ca61e84a3812fdc2fec52\nC# components used in the IDE. Depending on your project type and settings, a different version of the compiler may be used.\n\nCommon Azure Tools   1.10\nProvides common services for use by Azure Mobile Services and Microsoft Azure Tools.\n\nGitHub Copilot   17.13.430.18484\nGitHub Copilot is an AI pair programmer that helps you write code faster and with less work.\n\nMicrosoft Azure Tools for Visual Studio   2.9\nSupport for Azure Cloud Services projects\n\nMicrosoft JVM Debugger   1.0\nProvides support for connecting the Visual Studio debugger to JDWP compatible Java Virtual Machines\n\nNode.js Tools   1.5.61125.7 Commit Hash:d387982a7546304d617ed77b6d390e04b6558274\nAdds support for developing and debugging Node.js apps in Visual Studio\n\nNuGet Package Manager   6.13.1\nNuGet Package Manager in Visual Studio. For more information about NuGet, visit https://docs.nuget.org/\n\nOffice Developer Tools for Visual Studio   17.10.35513.00\nMicrosoft Office Developer Tools for Visual Studio\n\nRazor (ASP.NET Core)   17.13.3.2507801+90f580c3fa0908ad7d593a4ca7622e78a61aa927\nProvides languages services for ASP.NET Core Razor.\n\nSQL Server Data Tools   17.13.3.1\nMicrosoft SQL Server Data Tools\n\nTest Adapter for Boost.Test   1.0\nEnables Visual Studio\u0027s testing tools with unit tests written for Boost.Test.  The use terms and Third Party Notices are available in the extension installation directory.\n\nTest Adapter for Google Test   1.0\nEnables Visual Studio\u0027s testing tools with unit tests written for Google Test.  The use terms and Third Party Notices are available in the extension installation directory.\n\nTypeScript Tools   17.0.31211.2001\nTypeScript Tools for Microsoft Visual Studio\n\nVisual Basic Tools   4.13.0-3.25105.4+400efa2d94b217101a0ca61e84a3812fdc2fec52\nVisual Basic components used in the IDE. Depending on your project type and settings, a different version of the compiler may be used.\n\nVisual F# Tools   17.13.0-beta.25056.5+63a09289745da5c256e7baf5f4194a750b1ec878\nMicrosoft Visual F# Tools\n\nVisual Studio IntelliCode   2.2\nAI-assisted development for Visual Studio.\n\nWorkflow Manager Tools 1.0   1.0\nThis package contains the necessary Visual Studio integration components for Workflow Manager.\n```",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOnvBJCA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6ebX1C",
+                                           "createdAt":  "2025-02-14T00:16:51Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "danmoseley",
+                                           "body":  "@marcpopMSFT sounds like some VS caching thing?",
+                                           "updatedAt":  "2025-02-14T00:16:51Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6ej9LT",
+                                           "createdAt":  "2025-02-14T20:42:07Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "marcpopMSFT",
+                                           "body":  "@jeffkl owns the nuget sdk resolver. Any ideas?",
+                                           "updatedAt":  "2025-02-14T20:42:07Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6e8EkI",
+                                           "createdAt":  "2025-02-18T18:26:47Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jeffkl",
+                                           "body":  "All MSBuild project SDK resolution is cached during a build episode so we had to decide how to handle the situation where two projects specify two versions of the same SDK.  That scenario isn\u0027t supported so MSBuild logs a warning that a different version of a particular SDK will be used to evaluate a project, where I think the first one wins.\n\nI suspect you have a `global.json` specifying one version of an SDK and then an individual project is specifying a different version:\n```json\n{\n  \"msbuild-sdks\" {\n    \"SomeSdk\": \"1.2.3\"\n  }\n}\n```\nSome projects:\n```xml\n\u003cProject Sdk=\"SomeSdk\" /\u003e\n```\n\nOther projects:\n```xml\n\u003cProject Sdk=\"SomeSdk/4.5.6\" /\u003e\n```",
+                                           "updatedAt":  "2025-02-18T18:26:47Z"
+                                       }
+                                   ],
+                         "totalCount":  3
+                     },
+        "title":  "Visual Studio Warning after upgrading SDK to 9.1",
+        "labels":  [
+                       "area-acquisition"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspire/issues/8242",
+        "createdAt":  "2025-03-21T23:40:47Z",
+        "number":  8242,
+        "author":  "IoBes",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-04-15T17:17:59Z",
+        "body":  "### Is there an existing issue for this?\n\n- [x] I have searched the existing issues\n\n### Describe the bug\n\nIf I pin the Aspire NuGet version I get following error on compilation of my project:\n\nSeverity\tCode\tDescription\tProject\tFile\tLine\tSuppression State\nError (active)\tMSB4184\tThe expression \"[MSBuild]::VersionLessThan([8.2.2,9.0), 8.2.0)\" cannot be evaluated. Version string was not in a correct format.\tTest.AppHost\tC:\\Program Files\\dotnet\\packs\\Aspire.Hosting.Sdk\\8.2.2\\Sdk\\Sdk.targets\t80\n\nSdk.targets contains a rule, which block the attempt to pin the package version:\n   \u003cPropertyGroup Condition=\"\u0027$(_AppHostVersion)\u0027 != \u0027\u0027 and $([MSBuild]::VersionLessThan(\u0027$(_AppHostVersion)\u0027, \u00278.2.0\u0027))\"\u003e\n     \u003c!-- If we find the version to Aspire.Hosting.AppHost package but it is lower than 8.2.0, then we fall back\n     to use the Dashboard and DCP packages that match the version of the installed workload for backwards compatibility.\n     This results in the same behavior that we had before moving Dashboard and DCP out of the workload, since the version\n     is again just matching to the one the workload has. --\u003e\n     \u003c_AppHostVersion\u003e8.2.2\u003c/_AppHostVersion\u003e\n   \u003c/PropertyGroup\u003e\n\n\n\n### Expected Behavior\n\nIt is possible to pin aspire NuGet packages\n\n### Steps To Reproduce\n\n1. Create a solution to be used with Aspire target version net core 8. or use my example in https://github.com/IoBes/Aspire_Sdk.targets_Bug\n2. Create Directory.Packages.props and enable `\u003cManagePackageVersionsCentrally\u003etrue\u003c/ManagePackageVersionsCentrally\u003e`\n3. try to pin version for example: `\u003cPackageVersion Include=\"Aspire.Hosting.AppHost\" Version=\"[8.2.2,9.0)\" /\u003e`\n4. try to compile the project\n5. Note a bug: Severity\tCode\tDescription\tProject\tFile\tLine\tSuppression State\nError (active)\tMSB4184\tThe expression \"[MSBuild]::VersionLessThan([8.2.2,9.0), 8.2.0)\" cannot be evaluated. Version string was not in a correct format.\tTest.AppHost\tC:\\Program Files\\dotnet\\packs\\Aspire.Hosting.Sdk\\8.2.2\\Sdk\\Sdk.targets\t80\n\nThere is a rule, which block the attempt to pin the package version:\n   ```\n\u003cPropertyGroup Condition=\"\u0027$(_AppHostVersion)\u0027 != \u0027\u0027 and $([MSBuild]::VersionLessThan(\u0027$(_AppHostVersion)\u0027, \u00278.2.0\u0027))\"\u003e\n     \u003c!-- If we find the version to Aspire.Hosting.AppHost package but it is lower than 8.2.0, then we fall back\n     to use the Dashboard and DCP packages that match the version of the installed workload for backwards compatibility.\n     This results in the same behavior that we had before moving Dashboard and DCP out of the workload, since the version\n     is again just matching to the one the workload has. --\u003e\n     \u003c_AppHostVersion\u003e8.2.2\u003c/_AppHostVersion\u003e\n   \u003c/PropertyGroup\u003e\n```\n\n\n### Exceptions (if any)\n\nError (active)\tMSB4184\tThe expression \"[MSBuild]::VersionLessThan([8.2.2,9.0), 8.2.0)\" cannot be evaluated. Version string was not in a correct format.\tTest.AppHost\tC:\\Program Files\\dotnet\\packs\\Aspire.Hosting.Sdk\\8.2.2\\Sdk\\Sdk.targets\n\n### .NET Version info\n\ndotnet 8.\n\n### Anything else?\n\nASP.NET Core version: 8.0\n.NET Aspire version: 8.2.2\nThe IDE: VS 2022, Version 17.13.4\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  null,
+                         "nodes":  [
+
+                                   ],
+                         "totalCount":  0
+                     },
+        "title":  "Aspire.Hosting.Sdk, Sdk.targets does not accept version pinning",
+        "labels":  [
+                       "area-acquisition"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspire/issues/9350",
+        "createdAt":  "2025-05-16T04:50:36Z",
+        "number":  9350,
+        "author":  "mitchdenny",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-06-03T23:10:08Z",
+        "body":  "The CLI breaks when you are using authenticated feeds. This problem has layers. The Aspire CLI shells out to `dotnet new`. But it doesn\u0027t support interactive auth flows (the auth flow only comes into play with `dotnet restore`. But even if we did that we would need to figure out how we want to present that in the CLI.\n\nWhat we really need is some kind of preauth mechanism.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOq_8wZw==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6r_zBn",
+                                           "createdAt":  "2025-05-16T04:50:52Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "mitchdenny",
+                                           "body":  "/cc @baronfel interested in your thoughts here.",
+                                           "updatedAt":  "2025-05-16T04:50:52Z"
+                                       }
+                                   ],
+                         "totalCount":  1
+                     },
+        "title":  "`aspire` CLI and NuGet authentication scenarios",
+        "labels":  [
+                       "area-acquisition",
+                       "area-cli"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspire/issues/9611",
+        "createdAt":  "2025-05-31T21:30:13Z",
+        "number":  9611,
+        "author":  "Meir017",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-06-16T23:45:04Z",
+        "body":  "### Is there an existing issue for this?\n\n- [x] I have searched the existing issues\n\n### Is your feature request related to a problem? Please describe the problem.\n\ninstead of writing\n```xml\n\u003cProject Sdk=\"Microsoft.NET.Sdk\"\u003e\n\n  \u003cSdk Name=\"Aspire.AppHost.Sdk\" Version=\"9.3.0\" /\u003e\n\n  \u003cPropertyGroup\u003e\n    \u003cOutputType\u003eExe\u003c/OutputType\u003e\n    \u003cTargetFramework\u003enet9.0\u003c/TargetFramework\u003e\n  \u003c/PropertyGroup\u003e\n\n  \u003cItemGroup\u003e\n    \u003cPackageReference Include=\"Aspire.Hosting.AppHost\" Version=\"9.3.0\" /\u003e\n  \u003c/ItemGroup\u003e\n\u003c/Project\u003e\n```\n\nwould be nice to just be able to use an aspire msbuild sdk\n\n```xml\n\u003cProject Sdk=\"Aspire.AppHost.Sdk/9.3.0\"\u003e\n\n  \u003cPropertyGroup\u003e\n    \u003cOutputType\u003eExe\u003c/OutputType\u003e\n    \u003cTargetFramework\u003enet9.0\u003c/TargetFramework\u003e\n  \u003c/PropertyGroup\u003e\n\n  \u003cItemGroup\u003e\n  \u003c/ItemGroup\u003e\n\u003c/Project\u003e\n```\n\n### Describe the solution you\u0027d like\n\nbuild on top of msbuild\u0027s sdk, similar to MSTest\u0027s SDK https://learn.microsoft.com/en-us/dotnet/core/testing/unit-testing-mstest-sdk\n\n### Additional context\n\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOsYggKA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6xh5fP",
+                                           "createdAt":  "2025-06-16T23:19:21Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "maddymontaquila",
+                                           "body":  "@joperezr thoughts on this??? seems nice but not sure if there are technical implications that make it not worth the cost",
+                                           "updatedAt":  "2025-06-16T23:19:21Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDOKYQzfc6xiCAo",
+                                           "createdAt":  "2025-06-16T23:45:04Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOEW0q0w==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "DamianEdwards",
+                                                                               "createdAt":  "2025-06-17T00:13:25Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "joperezr",
+                                           "body":  "We have talked about this in the past. Some thoughts:\n\nFor the SDK - we decided at the beginning to not have the aspire sdk to be composable (as in, have it import the Microsoft.NET.SDK internally) for several reasons, but one of which was that we saw it as a temporal thing as the vision is still that in a future SDK (hopefully .NET 10) all of the special targets we have in our SDK would move there and now we won\u0027t need to have that line at all.\n\nFor the explicit package reference to Aspire.Hosting.AppHost package,  we still very much want it to be there and the main reason is that if it is brought in by the SDK, then you\u0027d miss updates to it given there is no current mechanism for detecting and/or upgrading the msbuild sdks that you reference, so we still want you to have to explicitly have it there so you can catch when there are new versions of Aspire.\n\ncc: @DamianEdwards ",
+                                           "updatedAt":  "2025-06-16T23:45:04Z"
+                                       }
+                                   ],
+                         "totalCount":  2
+                     },
+        "title":  "Simplify apphost csproj by using an msbuild sdk",
+        "labels":  [
+                       "area-acquisition"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspire/issues/10617",
+        "createdAt":  "2025-07-23T03:00:36Z",
+        "number":  10617,
+        "author":  "mitchdenny",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-09-15T19:22:36Z",
+        "body":  "Currently, users must manually install the appropriate .NET SDK to use the Aspire CLI effectively. This can cause onboarding friction, especially for new users or those who are unaware of the required SDK version.\n\n# Proposal:\nEnhance the Aspire CLI to detect when the required .NET SDK is missing and either:\n\nPrompt the user to install it automatically, or\nOffer to download and install the correct SDK version directly through the CLI.\nThis would streamline the setup process and improve the overall developer experience.\n\n# Benefits:\n\n- Faster onboarding for new users\n- Reduces errors caused by SDK version mismatches\n- Makes Aspire CLI more user-friendly and accessible\n\n# Additional Context:\nAre there technical or security considerations for downloading and installing SDKs programmatically from the CLI? Feedback and suggestions welcome.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  null,
+                         "nodes":  [
+
+                                   ],
+                         "totalCount":  0
+                     },
+        "title":  "Automatically install .NET SDK when using Aspire CLI",
+        "labels":  [
+                       "area-acquisition",
+                       "area-cli"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/aspire/issues/11514",
+        "createdAt":  "2025-09-19T10:17:35Z",
+        "number":  11514,
+        "author":  "zhiyuanliang-ms",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-09-19T14:33:35Z",
+        "body":  "Hey, \n\nThis might be a silly question. But...\n\nIs there any suggestion on how to get rid of this build error:\n\"Unable to resolve the .NET SDK version as specified in the global.json located at C:\\Users\\zhiyuanliang\\Desktop\\Dev\\aspire\\global.json.\"\n\nThe Aspire repository frequently updates its required .NET SDK version. Is there a simple way to ensure that the .NET SDK on my PC always stays up to date? I’m just curious to know what best practices the Aspire team follows for handling this. I don\u0027t want to download and install the specific version of .NET SDK manually each time.\n\nAny help is appreciated.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOxW_67g==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDOKYQzfc7Fb_ru",
+                                           "createdAt":  "2025-09-19T14:33:26Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOEjC24w==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "baronfel",
+                                                                               "createdAt":  "2025-09-19T14:52:07Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "davidfowl",
+                                           "body":  "If you work in the aspire repository, it will restore the version of dotnet required to work it it when you build or restore (build.cmd/restore.cmd). Once you do that, dotnet will be installed into a repo local folder, to make the tools use it, you can launch with:\n- startvs.cmd - Sets up the right version of dotnet on the PATH and launches VS\n- start-code.cmd/sh - Sets up the right version of dotnet on the PATH and launches VS code\n- dotnet.cmd/sh - Launch the right dotnet on the command line.\n\nThe last one is going to be deprecated with .NET 10 because the dotnet CLI it will use [this new feature](https://github.com/dotnet/aspire/blob/f43772f872f1bcb386854544a901370700963759/global.json#L6-L10) to resolve the correct .NET. VS code and VS (and rider?) are actively being updated to also support this feature (resolving the right dotnet version when you launch those tools) *and* to support this and further down the line, auto acquisition as well.\n\ncc @baronfel \n",
+                                           "updatedAt":  "2025-09-19T14:33:35Z"
+                                       }
+                                   ],
+                         "totalCount":  1
+                     },
+        "title":  "What is the best practice to always have the latest .NET SDK?",
+        "labels":  [
+                       "area-acquisition"
+                   ]
+    }
+]
