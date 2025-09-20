@@ -1,0 +1,415 @@
+﻿[
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/21284",
+        "createdAt":  "2017-04-23T18:03:32Z",
+        "number":  21284,
+        "author":  "jbe2277",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHOAwZt0g==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "jp2masa",
+                                            "createdAt":  "2018-06-07T18:36:44Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "minhuibing",
+                                            "createdAt":  "2019-04-29T06:29:49Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "zrajnai",
+                                            "createdAt":  "2019-06-13T08:06:01Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "vanrobi",
+                                            "createdAt":  "2019-06-13T08:07:46Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "bearczy",
+                                            "createdAt":  "2019-06-13T08:13:26Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "blurt",
+                                            "createdAt":  "2019-07-23T13:36:21Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "davidmilligan",
+                                            "createdAt":  "2019-09-11T19:44:35Z"
+                                        }
+                                    ],
+                          "totalCount":  7
+                      },
+        "updatedAt":  "2025-01-09T17:21:42Z",
+        "body":  "The following code sample shows two types MyController and MyViewModel which have a cyclic dependency to each other (decoupled via the IBaz interface). Both types are Shared. The test code at the bottom gets MyController via IFoo and IBaz export.\r\n \r\nI expect that foo and baz reference the same MyController instance because it is shared. Unfortunately, MEF2 creates two instances of MyController. That\u0027s a bug. \r\n\r\nMEF1 behaves correct - see second code snippet.\r\n\r\n``` CSharp\r\n// MEF2 Issue:\r\n// C# Console (.NET Framework) and NuGet package \"System.Composition\" 1.0.31\r\n\r\nusing System;\r\nusing System.Composition;\r\nusing System.Composition.Hosting;\r\nusing System.Reflection;\r\n\r\npublic interface IFoo { }\r\npublic interface IBaz { }\r\n\r\n[Export(typeof(IFoo)), Export(typeof(IBaz)), Shared]\r\npublic class MyController : IFoo, IBaz\r\n{\r\n    [ImportingConstructor]\r\n    public MyController(Lazy\u003cMyViewModel\u003e myViewModel)\r\n    {\r\n    }\r\n}\r\n\r\n[Export, Shared]\r\npublic class MyViewModel\r\n{\r\n    [ImportingConstructor]\r\n    public MyViewModel(IBaz baz)\r\n    {\r\n    }\r\n}\r\n\r\ninternal static class Program\r\n{\r\n    internal static void Main()\r\n    {\r\n        var container = new ContainerConfiguration()\r\n                .WithAssembly(typeof(MyController).GetTypeInfo().Assembly).CreateContainer();\r\n        var foo = container.GetExport\u003cIFoo\u003e();\r\n        var baz = container.GetExport\u003cIBaz\u003e();\r\n        bool areSame = ReferenceEquals(foo, baz);\r\n        Console.WriteLine(areSame);                         // Output: false\r\n    }\r\n}\r\n```\r\n\r\nThe second code sample shows the same scenario with MEF1. The behavior here is correct.\r\n\r\n``` CSharp\r\n// MEF1 behaves correct\r\n// C# Console (.NET Framework) and reference \"System.ComponentModel.Composition\"\r\n\r\nusing System;\r\nusing System.ComponentModel.Composition;\r\nusing System.ComponentModel.Composition.Hosting;\r\n\r\npublic interface IFoo { }\r\npublic interface IBaz { }\r\n\r\n[Export(typeof(IFoo)), Export(typeof(IBaz)), PartCreationPolicy(CreationPolicy.Shared)]\r\npublic class MyController : IFoo, IBaz\r\n{\r\n    [ImportingConstructor]\r\n    public MyController(Lazy\u003cMyViewModel\u003e myViewModel)\r\n    {\r\n    }\r\n}\r\n\r\n[Export, PartCreationPolicy(CreationPolicy.Shared)]\r\npublic class MyViewModel\r\n{\r\n    [ImportingConstructor]\r\n    public MyViewModel(IBaz baz)\r\n    {\r\n    }\r\n}\r\n\r\ninternal static class Program\r\n{\r\n    internal static void Main()\r\n    {\r\n        var container = new CompositionContainer(\r\n                new AssemblyCatalog(typeof(MyController).Assembly),\r\n                CompositionOptions.DisableSilentRejection);\r\n        var foo = container.GetExportedValue\u003cIFoo\u003e();\r\n        var baz = container.GetExportedValue\u003cIBaz\u003e();\r\n        bool areSame = ReferenceEquals(foo, baz);\r\n        Console.WriteLine(areSame);                         // Output: true\r\n    }\r\n}\r\n```",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOmdTZkQ==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDUwMTU5Nzg2NA==",
+                                           "createdAt":  "2019-06-13T08:09:42Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOAtAz-w==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "bearczy",
+                                                                               "createdAt":  "2019-06-13T08:14:24Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "blurt",
+                                                                               "createdAt":  "2019-07-23T13:36:14Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  2
+                                                         },
+                                           "author":  "zrajnai",
+                                           "body":  "We are also running into this problem. This seems to be an easily reproducible issue (base on the code above).\r\nIs there a plan to fix this in the foreseeable future (perhaps as a new System.Composition nuget, even before the next Core release)?",
+                                           "updatedAt":  "2019-06-13T08:09:42Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDUwMjQ0MTMxMg==",
+                                           "createdAt":  "2019-06-16T10:49:48Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "zrajnai",
+                                           "body":  "Perhaps @nblumhardt could also take a look into this? ",
+                                           "updatedAt":  "2019-06-16T10:49:48Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDUzMDU0MDI2OQ==",
+                                           "createdAt":  "2019-09-11T19:55:27Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "davidmilligan",
+                                           "body":  "Currently porting some MEF1 to MEF2 and I ran into this issue. [vs-mef](https://github.com/microsoft/vs-mef) doesn\u0027t actually have this issue, so we\u0027re going to use that as a workaround.",
+                                           "updatedAt":  "2019-09-11T19:55:27Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6Z1NmR",
+                                           "createdAt":  "2025-01-09T17:21:30Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jbe2277",
+                                           "body":  "I believe this issue was never fixed.",
+                                           "updatedAt":  "2025-01-09T17:21:30Z"
+                                       }
+                                   ],
+                         "totalCount":  4
+                     },
+        "title":  "System.Composition (MEF2) resolves a Shared part with cyclic dependencies wrong",
+        "labels":  [
+                       "bug",
+                       "area-System.Composition"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/31010",
+        "createdAt":  "2019-09-28T23:33:53Z",
+        "number":  31010,
+        "author":  "davidmilligan",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2021-10-08T17:08:49Z",
+        "body":  "The `CompositionContext.TryGetExport` method can throw a `CompositionFailedException`. This violates the common convention/expectation that `TryXXX` methods don\u0027t throw, instead they just return false. \r\n\r\nI would expect that calling `GetExport` would throw an exception in this situation but I would expect that `TryGetExport` would simply return `false`.\r\n\r\nStack Trace:\r\n```\r\nAn exception of type \u0027System.Composition.Hosting.CompositionFailedException\u0027 occurred in System.Composition.Hosting.dll but was not handled in user code: \u0027The component (unknown) cannot be created outside the Scoped sharing boundary.\u0027\r\n   at System.Composition.Hosting.Core.LifetimeContext.FindContextWithin(String sharingBoundary)\r\n   at System.Composition.TypedParts.ActivationFeatures.LifetimeFeature.\u003c\u003ec__DisplayClass1_0.\u003cRewriteActivator\u003eb__0(LifetimeContext c, CompositionOperation o)\r\n   at System.Composition.Hosting.Core.CompositionOperation.Run(LifetimeContext outermostLifetimeContext, CompositeActivator compositionRootActivator)\r\n   at System.Composition.Hosting.Core.LifetimeContext.TryGetExport(CompositionContract contract, Object\u0026 export)\r\n   at System.Composition.CompositionContext.TryGetExport(Type exportType, String contractName, Object\u0026 export)\r\n   at System.Composition.CompositionContext.TryGetExport(Type exportType, Object\u0026 export)\r\n```\r\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOJxrrow==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDUzNjM5NzEwNg==",
+                                           "createdAt":  "2019-09-30T04:34:52Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "danmoseley",
+                                           "body":  "I assume the same thing happens on.NET Framework?\r\n\r\nYou may well be right that this should not throw, but note that the Try pattern does not imply that all exceptions are caught. Just the type(s) that are potentially on the normal, recoverable path (I don\u0027t have the book in front of me to quote  the actual language).\r\n\r\n I don’t know this API so I can\u0027t say whether that would include this type.",
+                                           "updatedAt":  "2019-09-30T04:35:43Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDUzNjQwMzAyOQ==",
+                                           "createdAt":  "2019-09-30T05:08:02Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "am11",
+                                           "body":  "\u003e Just the type(s) that are potentially on the normal, recoverable path\r\n\r\nIf it is deterministic, can these rules be objectified in terms of a static analyzer?",
+                                           "updatedAt":  "2019-09-30T05:08:02Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDUzNzI3ODAyNQ==",
+                                           "createdAt":  "2019-10-01T23:54:09Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "davidmilligan",
+                                           "body":  "Well this is the sort of error I would expect to be caught and return false. Yes I agree that TryXXX doesn’t imply that every single type of exception be caught (e.g. OutOfMemoryException), but in this particular situation I simply passed a Type to the TryGetExport that I’m not allowed to get an instance of due to sharing boundary constraints. It’s not really an “exceptional” situation. I just passed some invalid input. Exactly the sort of situation I would expect to just return false. What if I’m simply probing the container to see if I’m allowed to get an export of various types based on sharing boundary? I have to put a try/catch around a call to TryGetExport and take the perf hit? That’s far from ideal.",
+                                           "updatedAt":  "2019-10-01T23:54:09Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDUzNzI4MjExMw==",
+                                           "createdAt":  "2019-10-02T00:13:34Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "davidmilligan",
+                                           "body":  "I came across this issue while I was writing an adapter to use System.Composition with Asp.Net Core\u0027s DI framework. The repo is here: https://github.com/davidmilligan/System.Composition.Extensions.DependencyInjection\r\n\r\nIn particular see [DependencyInjectionProvider](https://github.com/davidmilligan/System.Composition.Extensions.DependencyInjection/blob/master/src/System.Composition.Extensions.DependencyInjection/DependencyInjectionProvider.cs) line 30.\r\n\r\nI\u0027m currently using a workaround that checks the sharing boundary by calling `ToString` on the container and comparing it with the string `\"Root Lifetime Context\"`, but this just feels wrong. I should just be able to just write this instead (but the following results in the exception):\r\n```\r\nobject export;\r\nif ((c.TryGetExport(typeof(MefServiceScopeFallback), out export)\r\n    || c.TryGetExport(typeof(MefServiceRootFallback), out export))\r\n    \u0026\u0026 export is IMefServiceFallback serviceProvider)\r\n{\r\n```\r\nWhat this code is trying to do is: if the context is not the root context, getting the scoped service should fail, so then I\u0027ll try to get the root service instead. That way, if this code is given a scoped context it will retrieve the scoped service, otherwise it was given the root context so it will try to get a root (globally shared) service.",
+                                           "updatedAt":  "2019-10-02T00:13:34Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY1NTkzMTQ2Mg==",
+                                           "createdAt":  "2020-07-09T06:36:11Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ericstj",
+                                           "body":  "Even Try Methods can throw.  The distinction is usually if the exception is caused by a design time error or a runtime error.  Typically these methods still throw for design time errors (eg: you called the method wrong, provided incorrect parameters that aren\u0027t runtime data, or setup the method wrong).  It\u0027s important to still throw in these cases so you don\u0027t hide a deisgn-time error.\r\n\r\nWould you classify this case as a design time error?  I couldn\u0027t tell from the OP since it omitted repro steps.",
+                                           "updatedAt":  "2020-07-09T06:36:11Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY1NjA3NTY4Mw==",
+                                           "createdAt":  "2020-07-09T11:35:37Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "davidmilligan",
+                                           "body":  "No, this is not a design time error. I’ve already provided plenty of justification as to why in my comments above, as this question was already asked in this thread. There’s also repro steps in an above comment.",
+                                           "updatedAt":  "2020-07-09T11:35:37Z"
+                                       }
+                                   ],
+                         "totalCount":  6
+                     },
+        "title":  "System.Composition: CompositionContext.TryGetExport throws CompositionFailedException",
+        "labels":  [
+                       "area-System.Composition",
+                       "needs-further-triage"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/75236",
+        "createdAt":  "2022-09-08T03:01:14Z",
+        "number":  75236,
+        "author":  "Wenveo",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2022-09-08T20:36:37Z",
+        "body":  "Nuget Package: System.Composition v6.0.0\r\n\r\n***Code:***\r\n```\r\n// See https://aka.ms/new-console-template for more information\r\n\r\nusing System.Composition;\r\nusing System.Composition.Hosting;\r\nusing System.Reflection;\r\n\r\n\r\nvar container = new ContainerConfiguration()\r\n    .WithAssembly(Assembly.GetExecutingAssembly())\r\n    .CreateContainer();\r\n\r\nvar mainApp = container.GetExport\u003cMainApp\u003e();\r\nmainApp.Invoke();\r\n\r\n[Shared]\r\n[Export]\r\nclass MainApp\r\n{\r\n    readonly ITestServiceImpl testService;\r\n\r\n    [ImportingConstructor]\r\n    public MainApp(ITestServiceImpl testService)\r\n    {\r\n        this.testService = testService;\r\n    }\r\n\r\n    public void Invoke()\r\n    {\r\n        this.testService.Value = 4;\r\n        this.testService.Initialize();\r\n    }\r\n}\r\n\r\ninterface ITestItem\r\n{\r\n\r\n}\r\n\r\ninterface ITestService\r\n{\r\n    void PrintValue();\r\n}\r\n\r\ninterface ITestServiceImpl : ITestService\r\n{\r\n    int Value { get; set; }\r\n\r\n    void Initialize();\r\n}\r\n\r\n[Shared]\r\n[Export(typeof(ITestServiceImpl)), Export(typeof(ITestService))]\r\nclass TestService : ITestServiceImpl\r\n{\r\n    readonly IEnumerable\u003cLazy\u003cITestItem\u003e\u003e mefItems;\r\n\r\n    public int Value { get; set; }\r\n\r\n    [ImportingConstructor]\r\n    public TestService([ImportMany] IEnumerable\u003cLazy\u003cITestItem\u003e\u003e mefItems)\r\n    {\r\n        this.mefItems = mefItems;\r\n    }\r\n\r\n\r\n    public void PrintValue()\r\n    {\r\n        Console.WriteLine(Value);\r\n    }\r\n\r\n\r\n    public void Initialize()\r\n    {\r\n        foreach (var item in this.mefItems)\r\n        {\r\n            var value = item.Value;\r\n        }\r\n    }\r\n}\r\n\r\n[Shared]\r\n[Export(typeof(ITestItem))]\r\nclass TestItemA : ITestItem\r\n{\r\n    [ImportingConstructor]\r\n    public TestItemA(ITestService testService)\r\n    {\r\n        testService.PrintValue();\r\n    }\r\n}\r\n\r\n\r\n[Shared]\r\n[Export(typeof(ITestItem))]\r\nclass TestItemB : ITestItem\r\n{\r\n    [ImportingConstructor]\r\n    public TestItemB(ITestService testService)\r\n    {\r\n        testService.PrintValue();\r\n    }\r\n}\r\n```\r\n***Description:***\r\nIn ```MainApp.Invoke```, The Value has been changed.\r\nBut ```PrintValue``` always print 0.\r\n![image](https://user-images.githubusercontent.com/62750690/189017829-41179e78-0a73-403d-9be5-2444fdce5fc4.png)\r\n\r\n\r\nDuring debugging, the ```TestService``` constructor is called twice (Two instances were created).\r\nThe first call is from ```MainApp```, but the second call is from ```TestItemA```? \r\n(```MainApp``` and ```TestItemA``` each have two different instances (```TestService```))\r\n![gif](https://user-images.githubusercontent.com/62750690/189021911-419d9737-65a3-491f-8a33-935052e4c41b.gif)",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOSe2P3g==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5J61Lc",
+                                           "createdAt":  "2022-09-08T03:01:18Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "I couldn\u0027t figure out the best area label to add to this issue. If you have write-permissions please help me learn by adding exactly one [area label](https://github.com/dotnet/runtime/blob/master/docs/area-owners.md).",
+                                           "updatedAt":  "2022-09-08T03:01:18Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5J62LN",
+                                           "createdAt":  "2022-09-08T03:09:08Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Wenveo",
+                                           "body":  "If I ```GetExport``` the ```ITestService```, that\u0027s only going to have one instance and ```PrintValue``` is going to print the correct value.\r\n![gif](https://user-images.githubusercontent.com/62750690/189025251-c9dab9fa-9467-4f9a-a035-9084dd377c61.gif)\r\n",
+                                           "updatedAt":  "2022-09-08T03:09:08Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5J7Y_e",
+                                           "createdAt":  "2022-09-08T06:58:13Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-system-composition\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\nNuget Package: System.Composition v6.0.0\r\n\r\n***Code:***\r\n```\r\n// See https://aka.ms/new-console-template for more information\r\n\r\nusing System.Composition;\r\nusing System.Composition.Hosting;\r\nusing System.Reflection;\r\n\r\n\r\nvar container = new ContainerConfiguration()\r\n    .WithAssembly(Assembly.GetExecutingAssembly())\r\n    .CreateContainer();\r\n\r\nvar mainApp = container.GetExport\u003cMainApp\u003e();\r\nmainApp.Invoke();\r\n\r\n[Shared]\r\n[Export]\r\nclass MainApp\r\n{\r\n    readonly ITestServiceImpl testService;\r\n\r\n    [ImportingConstructor]\r\n    public MainApp(ITestServiceImpl testService)\r\n    {\r\n        this.testService = testService;\r\n    }\r\n\r\n    public void Invoke()\r\n    {\r\n        this.testService.Value = 4;\r\n        this.testService.Initialize();\r\n    }\r\n}\r\n\r\ninterface ITestItem\r\n{\r\n\r\n}\r\n\r\ninterface ITestService\r\n{\r\n    void PrintValue();\r\n}\r\n\r\ninterface ITestServiceImpl : ITestService\r\n{\r\n    int Value { get; set; }\r\n\r\n    void Initialize();\r\n}\r\n\r\n[Shared]\r\n[Export(typeof(ITestServiceImpl)), Export(typeof(ITestService))]\r\nclass TestService : ITestServiceImpl\r\n{\r\n    readonly IEnumerable\u003cLazy\u003cITestItem\u003e\u003e mefItems;\r\n\r\n    public int Value { get; set; }\r\n\r\n    [ImportingConstructor]\r\n    public TestService([ImportMany] IEnumerable\u003cLazy\u003cITestItem\u003e\u003e mefItems)\r\n    {\r\n        this.mefItems = mefItems;\r\n    }\r\n\r\n\r\n    public void PrintValue()\r\n    {\r\n        Console.WriteLine(Value);\r\n    }\r\n\r\n\r\n    public void Initialize()\r\n    {\r\n        foreach (var item in this.mefItems)\r\n        {\r\n            var value = item.Value;\r\n        }\r\n    }\r\n}\r\n\r\n[Shared]\r\n[Export(typeof(ITestItem))]\r\nclass TestItemA : ITestItem\r\n{\r\n    [ImportingConstructor]\r\n    public TestItemA(ITestService testService)\r\n    {\r\n        testService.PrintValue();\r\n    }\r\n}\r\n\r\n\r\n[Shared]\r\n[Export(typeof(ITestItem))]\r\nclass TestItemB : ITestItem\r\n{\r\n    [ImportingConstructor]\r\n    public TestItemB(ITestService testService)\r\n    {\r\n        testService.PrintValue();\r\n    }\r\n}\r\n```\r\n***Description:***\r\nIn ```MainApp.Invoke```, The Value has been changed.\r\nBut ```PrintValue``` always print 0.\r\n![image](https://user-images.githubusercontent.com/62750690/189017829-41179e78-0a73-403d-9be5-2444fdce5fc4.png)\r\n\r\n\r\nDuring debugging, the ```TestService``` constructor is called twice (Two instances were created).\r\nThe first call is from ```MainApp```, but the second call is from ```TestItemA```? \r\n(```MainApp``` and ```TestItemA``` each have two different instances (```TestService```))\r\n![gif](https://user-images.githubusercontent.com/62750690/189021911-419d9737-65a3-491f-8a33-935052e4c41b.gif)\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003eNoisrev\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-System.Composition`, `untriaged`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2022-09-08T06:58:13Z"
+                                       }
+                                   ],
+                         "totalCount":  3
+                     },
+        "title":  "MEF2:  Cannot get the same instance with ```SharedAttribute```.",
+        "labels":  [
+                       "area-System.Composition"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/113686",
+        "createdAt":  "2025-03-19T12:38:32Z",
+        "number":  113686,
+        "author":  "antonfirsov",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-09-20T22:03:10Z",
+        "body":  "## Build Information\nBuild: https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_build/results?buildId=984942\nBuild error leg or test failing: System.Composition.Tests.WorkItemExecution\nPull request: https://github.com/dotnet/runtime/pull/112417\n\n## Error Message\n\nFill the error message using [step by step known issues guidance](https://github.com/dotnet/arcade/blob/main/Documentation/Projects/Build%20Analysis/KnownIssueJsonStepByStep.md).\n\n\u003c!-- Use ErrorMessage for String.Contains matches. Use ErrorPattern for regex matches (single line/no backtracking). Set BuildRetry to `true` to retry builds with this error. Set ExcludeConsoleLog to `true` to skip helix logs analysis. --\u003e\n\n```json\n{\n  \"ErrorMessage\": \"[Long Running Test] \u0027System.Composition.UnitTests.ConcurrencyTests.SharedInstancesAreNotVisibleUntilActivationCompletes\u0027\",\n  \"BuildRetry\": false,\n  \"ExcludeConsoleLog\": false\n}\n```\n\n\r\n\u003c!-- Known issue validation start --\u003e\r\n ### Known issue validation\r\n**Build: :mag_right:** https://dev.azure.com/dnceng-public/public/_build/results?buildId=984942\r\n**Error message validated:** `[[Long Running Test] \u0027System.Composition.UnitTests.ConcurrencyTests.SharedInstancesAreNotVisibleUntilActivationCompletes\u0027`]\r\n**Result validation:** :white_check_mark: Known issue matched with the provided build.\r\n**Validation performed at:** 3/19/2025 12:38:53 PM UTC\r\n\u003c!-- Known issue validation end --\u003e\r\n\u003c!--Known issue error report start --\u003e\r\n\r\n### Report\r\n\r\n|Build|Definition|Test|Pull Request|\r\n|---|---|---|---|\r\n|[1153633](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1153633)|dotnet/runtime|[System.Composition.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1153633\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=31866922\u0026resultId=218614)|dotnet/runtime#119197|\r\n|[1150593](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1150593)|dotnet/runtime|[System.Composition.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1150593\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=31785300\u0026resultId=228133)|dotnet/runtime#119804|\r\n|[1147419](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1147419)|dotnet/runtime|[System.Composition.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1147419\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=31671408\u0026resultId=230329)|dotnet/runtime#119683|\r\n|[1145990](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1145990)|dotnet/runtime|[System.Composition.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1145990\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=31622152\u0026resultId=231021)|dotnet/runtime#119599|\r\n|[1145433](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1145433)|dotnet/runtime|[System.Composition.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1145433\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=31600282\u0026resultId=219874)|dotnet/runtime#119459|\r\n|[1142159](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1142159)|dotnet/runtime|[System.Composition.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1142159\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=31480782\u0026resultId=219734)||\r\n|[1140724](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1140724)|dotnet/runtime|[System.Composition.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1140724\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=31431794\u0026resultId=228124)|dotnet/runtime#119409|\r\n|[1140349](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1140349)|dotnet/runtime|[System.Composition.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1140349\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=31420824\u0026resultId=231016)|dotnet/runtime#119385|\r\n|[1138359](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1138359)|dotnet/runtime|[System.Composition.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1138359\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=31356624\u0026resultId=230321)|dotnet/runtime#119322|\r\n|[1138102](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1138102)|dotnet/runtime|[System.Composition.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1138102\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=31346718\u0026resultId=231013)|dotnet/runtime#119302|\r\n|[1136606](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1136606)|dotnet/runtime|[System.Composition.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1136606\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=31293800\u0026resultId=231033)|dotnet/runtime#100729|\r\n|[1132704](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1132704)|dotnet/runtime|[System.Composition.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1132704\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=31171228\u0026resultId=227705)|dotnet/runtime#119132|\r\n|[1128712](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1128712)|dotnet/runtime|[System.Composition.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1128712\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=31155812\u0026resultId=227592)|dotnet/runtime#118890|\r\n|[1130853](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1130853)|dotnet/runtime|[System.Composition.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1130853\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=31110962\u0026resultId=230991)|dotnet/runtime#119050|\r\n#### Summary\r\n|24-Hour Hit Count|7-Day Hit Count|1-Month Count|\r\n|---|---|---|\r\n|1|2|14|\r\n\u003c!--Known issue error report end --\u003e",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOo9K2ig==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc6jG4ZY",
+                                           "createdAt":  "2025-03-19T12:39:03Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-infrastructure-libraries\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2025-03-19T12:39:03Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6jG4zl",
+                                           "createdAt":  "2025-03-19T12:39:38Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-system-composition\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2025-03-19T12:39:38Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6j0nua",
+                                           "createdAt":  "2025-03-24T15:12:08Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "steveharter",
+                                           "body":  "Sample log:\n```\nConsole log: \u0027System.Composition.Tests\u0027 from job 32757c85-c398-45a6-9f4b-356b5f0b3229 workitem 69dc8642-cfc4-4b8b-836c-aa84d2a9a897 (ubuntu.2204.amd64.open.rt) executed on machine a0059D1 running Linux-6.8.0-1021-azure-x86_64-with-glibc2.35\n+ export __TestArchitecture=x64\n+ ./RunTests.sh --runtime-path /datadisks/disk1/work/9F3D08C6/p\n========================= Begin custom configuration settings ==============================\nexport XUNIT_HIDE_PASSING_OUTPUT_DIAGNOSTICS=1\n========================== End custom configuration settings ===============================\n----- start Thu Mar 20 10:26:18 PM UTC 2025 =============== To repro directly: =====================================================\npushd .\n/datadisks/disk1/work/9F3D08C6/p/dotnet exec --runtimeconfig System.Composition.Tests.runtimeconfig.json --depsfile System.Composition.Tests.deps.json xunit.console.dll System.Composition.Tests.dll -xml testResults.xml -nologo -nocolor -notrait category=IgnoreForCI -notrait category=OuterLoop -notrait category=failing \npopd\n===========================================================================================================\n/datadisks/disk1/work/9F3D08C6/w/B3B509BA/e /datadisks/disk1/work/9F3D08C6/w/B3B509BA/e\n  Discovering: System.Composition.Tests (method display = ClassAndMethod, method display options = None)\n  Discovered:  System.Composition.Tests (found 138 of 139 test cases)\n  Starting:    System.Composition.Tests (parallel test collections = on [2 threads], stop on fail = off)\n   System.Composition.Tests: [Long Running Test] \u0027System.Composition.UnitTests.ConcurrencyTests.SharedInstancesAreNotVisibleUntilActivationCompletes\u0027, Elapsed: 00:02:11\n   System.Composition.Tests: [Long Running Test] \u0027System.Composition.UnitTests.ConcurrencyTests.SharedInstancesAreNotVisibleUntilActivationCompletes\u0027, Elapsed: 00:04:11\n   System.Composition.Tests: [Long Running Test] \u0027System.Composition.UnitTests.ConcurrencyTests.SharedInstancesAreNotVisibleUntilActivationCompletes\u0027, Elapsed: 00:06:11\n   System.Composition.Tests: [Long Running Test] \u0027System.Composition.UnitTests.ConcurrencyTests.SharedInstancesAreNotVisibleUntilActivationCompletes\u0027, Elapsed: 00:08:11\n   System.Composition.Tests: [Long Running Test] \u0027System.Composition.UnitTests.ConcurrencyTests.SharedInstancesAreNotVisibleUntilActivationCompletes\u0027, Elapsed: 00:10:11\n   System.Composition.Tests: [Long Running Test] \u0027System.Composition.UnitTests.ConcurrencyTests.SharedInstancesAreNotVisibleUntilActivationCompletes\u0027, Elapsed: 00:12:11\n   System.Composition.Tests: [Long Running Test] \u0027System.Composition.UnitTests.ConcurrencyTests.SharedInstancesAreNotVisibleUntilActivationCompletes\u0027, Elapsed: 00:14:11\n[\u0027System.Composition.Tests\u0027 END OF WORK ITEM LOG: Command timed out, and was killed]\n```",
+                                           "updatedAt":  "2025-03-24T15:12:08Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6j0raK",
+                                           "createdAt":  "2025-03-24T15:17:05Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "steveharter",
+                                           "body":  "The [test](https://github.com/dotnet/runtime/blob/e0f1b2188f0f33b0708eff9d32597c50fb2f06d1/src/libraries/System.Composition/tests/ConcurrencyTests.cs) has not been modified.\n\nThe code in System.Composition has not changed except for https://github.com/dotnet/runtime/pull/113667 which \"updates the target .NET Framework version from net48 to net481 in pipelines, tests, and documentation to meet the requirements for consuming xUnit v3.\" and that appears to be been added 1 day after the first reported test failure.",
+                                           "updatedAt":  "2025-03-24T15:24:31Z"
+                                       }
+                                   ],
+                         "totalCount":  4
+                     },
+        "title":  "[Long Running Test] \u0027System.Composition.UnitTests.ConcurrencyTests.SharedInstancesAreNotVisibleUntilActivationCompletes\u0027",
+        "labels":  [
+                       "investigate",
+                       "area-System.Composition",
+                       "test-bug",
+                       "blocking-clean-ci",
+                       "runtime-mono",
+                       "Known Build Error"
+                   ]
+    }
+]

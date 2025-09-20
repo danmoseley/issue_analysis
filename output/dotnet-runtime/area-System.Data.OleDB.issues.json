@@ -1,0 +1,825 @@
+﻿[
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/46187",
+        "createdAt":  "2020-12-17T07:23:12Z",
+        "number":  46187,
+        "author":  "lauxjpn",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHOBafwUQ==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "ajcvickers",
+                                            "createdAt":  "2020-12-18T23:36:11Z"
+                                        }
+                                    ],
+                          "totalCount":  1
+                      },
+        "updatedAt":  "2025-03-04T09:12:25Z",
+        "body":  "@roji As discussed yesterday in our call with @ajcvickers and the others, here the information about the `AccessViolationException` issue I was talking about.\r\n\r\nThe `AccessViolationException` issue has been previously discussed in detail in https://github.com/bubibubi/EntityFrameworkCore.Jet/issues/43#issuecomment-602592245 (and I also referenced it before in https://github.com/dotnet/runtime/pull/33899#issuecomment-605464192).\r\n\r\nIt contains the specific conditions under which the issue appears and also contains the original reproduction code.\r\n\r\nI [updated the code](https://github.com/lauxjpn/EFCore.Jet.AccessViolationExceptionJet) (simplified it further) and also added projects for ODBC using ADO.NET and for directly using OLE DB via C++.\r\n\r\nBoth of those added projects work as expected, so this issue is either a `System.Data.OleDb` issue after all, or it is an OLE DB layer issue, but depends on specific operations that are being performed by ADO.NET, but not by my `Working_Jet_OleDb_x64_Native` C++ project.\r\n\r\n---\r\n\r\nThe original post from https://github.com/bubibubi/EntityFrameworkCore.Jet/issues/43#issuecomment-602592245:\r\n\r\n\u003e I created the smallest possible sample to reproduce the `AccessViolationException`.\r\n\u003e \r\n\u003e * The exception will only be thrown when run as an `x64` process.\r\n\u003e * The exception should be thrown at least once in every 5 app executions.\r\n\u003e * I tested with `Microsoft.ACE.OLEDB.16.0` and `Microsoft.ACE.OLEDB.12.0`. Both will throw the exception (v16 usually very early, when still below 10 iterations; v12 usually after around 50 iterations).\r\n\u003e * The exception will only be thrown, when a `UNION` query as been executed and later a `SELECT` query over the same table as the `UNION` query is executed.\r\n\u003e * This second `SELECT` query must return only scalar values (no column reference).\r\n\u003e * It doesn\u0027t matter, what the scalar values are (e.g. `0`, `1`, `NULL`).\r\n\u003e * The count of scalar values of the second `SELECT` query must be at least as high as the count of returned fields in the previous `UNION` query.\r\n\u003e * It does not matter, if another query is executed in between.\r\n\u003e * In case there has been no `AccessViolationException` within the first 100 interations, it is very unlikely that they will ever appear within the lifetime of the process. (Though sometimes one is thrown near the 50K mark.)\r\n\u003e \r\n\u003e A couple of examples that will throw:\r\n\u003e \r\n\u003e ```sql\r\n\u003e SELECT [c].[Address]\r\n\u003e FROM [Customers] AS [c]\r\n\u003e WHERE [c].[City] = \u0027Berlin\u0027\r\n\u003e UNION\r\n\u003e SELECT [c0].[Address]\r\n\u003e FROM [Customers] AS [c0]\r\n\u003e WHERE [c0].[City] = \u0027London\u0027;\r\n\u003e \r\n\u003e SELECT 1\r\n\u003e FROM [Customers] AS [c];\r\n\u003e ```\r\n\u003e \r\n\u003e ```sql\r\n\u003e SELECT [c].[Address], [c].[Address]\r\n\u003e FROM [Customers] AS [c]\r\n\u003e WHERE [c].[City] = \u0027Berlin\u0027\r\n\u003e UNION\r\n\u003e SELECT [c0].[Address], [c0].[Address]\r\n\u003e FROM [Customers] AS [c0]\r\n\u003e WHERE [c0].[City] = \u0027London\u0027;\r\n\u003e \r\n\u003e SELECT 1, NULL\r\n\u003e FROM [Customers] AS [c];\r\n\u003e ```\r\n\u003e \r\n\u003e ```sql\r\n\u003e SELECT [c].[Address], [c].[Address]\r\n\u003e FROM [Customers] AS [c]\r\n\u003e WHERE [c].[City] = \u0027Berlin\u0027\r\n\u003e UNION\r\n\u003e SELECT [c0].[Address], [c0].[Address]\r\n\u003e FROM [Customers] AS [c0]\r\n\u003e WHERE [c0].[City] = \u0027London\u0027;\r\n\u003e \r\n\u003e SELECT 1, NULL\r\n\u003e FROM [Customers] AS [c];\r\n\u003e ```\r\n\u003e \r\n\u003e A couple of examples that will _not_ throw:\r\n\u003e \r\n\u003e ```sql\r\n\u003e SELECT [c].[Address]\r\n\u003e FROM [Customers] AS [c]\r\n\u003e WHERE [c].[City] = \u0027Berlin\u0027\r\n\u003e UNION\r\n\u003e SELECT [c0].[Address]\r\n\u003e FROM [Customers] AS [c0]\r\n\u003e WHERE [c0].[City] = \u0027London\u0027;\r\n\u003e \r\n\u003e SELECT [c].[CustomerID] /* \u003c-- not a scalar value */\r\n\u003e FROM [Customers] AS [c];\r\n\u003e ```\r\n\u003e \r\n\u003e ```sql\r\n\u003e SELECT [c].[Address]\r\n\u003e FROM [Customers] AS [c]\r\n\u003e WHERE [c].[City] = \u0027Berlin\u0027; /* \u003c-- not a UNION */\r\n\u003e \r\n\u003e SELECT 1\r\n\u003e FROM [Customers] AS [c];\r\n\u003e ```\r\n\u003e \r\n\u003e ```sql\r\n\u003e SELECT [c].[Address], [c].[Address]\r\n\u003e FROM [Customers] AS [c]\r\n\u003e WHERE [c].[City] = \u0027Berlin\u0027\r\n\u003e UNION\r\n\u003e SELECT [c0].[Address], [c0].[Address]\r\n\u003e FROM [Customers] AS [c0]\r\n\u003e WHERE [c0].[City] = \u0027London\u0027;\r\n\u003e \r\n\u003e SELECT 1 /* \u003c-- fewer scalar values than fields in UNION */\r\n\u003e FROM [Customers] AS [c];\r\n\u003e ```\r\n\u003e \r\n\u003e ```sql\r\n\u003e SELECT [c].[Address], [c].[Address]\r\n\u003e FROM [Customers] AS [c]\r\n\u003e WHERE [c].[City] = \u0027Berlin\u0027\r\n\u003e UNION\r\n\u003e SELECT [c0].[Address], [c0].[Address]\r\n\u003e FROM [Customers] AS [c0]\r\n\u003e WHERE [c0].[City] = \u0027London\u0027;\r\n\u003e \r\n\u003e SELECT 1, [c].[CustomerID] /* \u003c-- not just scalar values */\r\n\u003e FROM [Customers] AS [c];\r\n\u003e ```\r\n\u003e \r\n\u003e ```sql\r\n\u003e SELECT [c].[Address]\r\n\u003e FROM [Customers] AS [c]\r\n\u003e WHERE [c].[City] = \u0027Berlin\u0027\r\n\u003e UNION\r\n\u003e SELECT [c0].[Address]\r\n\u003e FROM [Customers] AS [c0]\r\n\u003e WHERE [c0].[City] = \u0027London\u0027;\r\n\u003e \r\n\u003e SELECT *\r\n\u003e FROM [Orders] AS [o];  /* \u003c-- table differs from the one used in the UNION */\r\n\u003e ```\r\n\u003e \r\n\u003e The following code can be used to reproduce the issue. The code should be run with the latest nightly-build of `System.Data.OleDb`:\r\n\u003e \r\n\u003e ```cs\r\n\u003e using System;\r\n\u003e using System.Data.OleDb;\r\n\u003e \r\n\u003e namespace JetProviderExceptionTests\r\n\u003e {\r\n\u003e     internal static class Program\r\n\u003e     {\r\n\u003e         private static void Main()\r\n\u003e         {\r\n\u003e             Console.WriteLine($\"Running as {(Environment.Is64BitProcess ? \"x64\" : \"x86\")} process.\");\r\n\u003e             \r\n\u003e             var tagDBPARAMBINDINFOName = \"tagDBPARAMBINDINFO\" + (Environment.Is64BitProcess\r\n\u003e                 ? string.Empty\r\n\u003e                 : \"_x86\");\r\n\u003e             \r\n\u003e             // Is 2 on x86 and 8 on x64.\r\n\u003e             Console.WriteLine($\"{tagDBPARAMBINDINFOName} field alignment is {Type.GetType($\"System.Data.OleDb.{tagDBPARAMBINDINFOName}, System.Data.OleDb\").StructLayoutAttribute.Pack}.\");\r\n\u003e             \r\n\u003e             // Is 8 on both x86 and x64.\r\n\u003e             Console.WriteLine($\"tagDBPARAMS field alignment is {Type.GetType(\"System.Data.OleDb.tagDBPARAMS, System.Data.OleDb\").StructLayoutAttribute.Pack}.\");\r\n\u003e \r\n\u003e             Console.WriteLine();\r\n\u003e             Console.WriteLine(\"Press any key to start...\");\r\n\u003e             Console.ReadKey();\r\n\u003e \r\n\u003e             RunNorthwindTest();\r\n\u003e         }\r\n\u003e \r\n\u003e         private static void RunNorthwindTest()\r\n\u003e         {\r\n\u003e             try\r\n\u003e             {\r\n\u003e                 using var connection = new OleDbConnection(\"Provider=Microsoft.ACE.OLEDB.16.0;Data Source=Northwind.accdb\");\r\n\u003e                 connection.Open();\r\n\u003e \r\n\u003e                 for (var i = 0; i \u003c 1000; i++)\r\n\u003e                 {\r\n\u003e                     Console.WriteLine($\"{i:000}\");\r\n\u003e \r\n\u003e                     //\r\n\u003e                     // Select_Union:\r\n\u003e                     //\r\n\u003e \r\n\u003e                     using (var command1 = connection.CreateCommand())\r\n\u003e                     {\r\n\u003e                         command1.CommandText = @\"SELECT [c].[Address]\r\n\u003e FROM [Customers] AS [c]\r\n\u003e WHERE [c].[City] = \u0027Berlin\u0027\r\n\u003e UNION\r\n\u003e SELECT [c0].[Address]\r\n\u003e FROM [Customers] AS [c0]\r\n\u003e WHERE [c0].[City] = \u0027London\u0027\";\r\n\u003e \r\n\u003e                         using (var dataReader1 = command1.ExecuteReader())\r\n\u003e                         {\r\n\u003e                             while (dataReader1.Read())\r\n\u003e                             {\r\n\u003e                             }\r\n\u003e                         }\r\n\u003e                     }\r\n\u003e \r\n\u003e                     /*\r\n\u003e                     using (var command15 = connection.CreateCommand())\r\n\u003e                     {\r\n\u003e                         command15.CommandText = @\"SELECT [c].[Address]\r\n\u003e FROM [Customers] AS [c]\r\n\u003e WHERE [c].[City] = \u0027Madrid\u0027\";\r\n\u003e \r\n\u003e                         using (var dataReader15 = command15.ExecuteReader())\r\n\u003e                         {\r\n\u003e                             while (dataReader15.Read())\r\n\u003e                             {\r\n\u003e                             }\r\n\u003e                         }\r\n\u003e                     }\r\n\u003e                     */\r\n\u003e                     \r\n\u003e                     //\r\n\u003e                     // Select_bool_closure:\r\n\u003e                     //\r\n\u003e \r\n\u003e                     using (var command2 = connection.CreateCommand())\r\n\u003e                     {\r\n\u003e                         command2.CommandText = @\"SELECT 1\r\n\u003e FROM [Customers] AS [c]\";\r\n\u003e \r\n\u003e                         using (var dataReader2 = command2.ExecuteReader())\r\n\u003e                         {\r\n\u003e                             while (dataReader2.Read())\r\n\u003e                             {\r\n\u003e                             }\r\n\u003e                         }\r\n\u003e                     }\r\n\u003e                 }\r\n\u003e             }\r\n\u003e             catch (AccessViolationException e)\r\n\u003e             {\r\n\u003e                 Console.WriteLine(e);\r\n\u003e             }\r\n\u003e         }\r\n\u003e     }\r\n\u003e }\r\n\u003e ```\r\n\u003e \r\n\u003e The code uses the version of the Northwind database we are also now using in our functional tests:\r\n\u003e [Northwind.zip](https://github.com/bubibubi/EntityFrameworkCore.Jet/files/4369687/Northwind.zip)\r\n\u003e \r\n\u003e There are no transactions and no multi-threading involved to trigger the exception.\r\n\u003e \r\n\u003e [...]",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOoL03hg==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDc0NzI2MzIxMQ==",
+                                           "createdAt":  "2020-12-17T07:23:15Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Dotnet-GitSync-Bot",
+                                           "body":  "I couldn\u0027t figure out the best area label to add to this issue. If you have write-permissions please help me learn by adding exactly one [area label](https://github.com/dotnet/runtime/blob/master/docs/area-owners.md).",
+                                           "updatedAt":  "2020-12-17T07:23:15Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDc0NzQ1NjY3OQ==",
+                                           "createdAt":  "2020-12-17T14:02:24Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @roji, @ajcvickers\nSee info in area-owners.md if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n@roji As discussed yesterday in our call with @ajcvickers and the others, here the information about the `AccessViolationException` issue I was talking about.\r\n\r\nThe `AccessViolationException` issue has been previously discussed in detail in https://github.com/bubibubi/EntityFrameworkCore.Jet/issues/43#issuecomment-602592245 (and I also referenced it before in https://github.com/dotnet/runtime/pull/33899#issuecomment-605464192).\r\n\r\nIt contains the specific conditions under which the issue appears and also contains the original reproduction code.\r\n\r\nI [updated the code](https://github.com/lauxjpn/EFCore.Jet.AccessViolationExceptionJet) (simplified it further) and also added projects for ODBC using ADO.NET and for directly using OLE DB via C++.\r\n\r\nBoth of those added projects work as expected, so this issue is either a `System.Data.OleDb` issue after all, or it is an OLE DB layer issue, but depends on specific operations that are being performed by ADO.NET, but not by my `Working_Jet_OleDb_x64_Native` C++ project.\r\n\r\n---\r\n\r\nThe original post from https://github.com/bubibubi/EntityFrameworkCore.Jet/issues/43#issuecomment-602592245:\r\n\r\n\u003e I created the smallest possible sample to reproduce the `AccessViolationException`.\r\n\u003e \r\n\u003e * The exception will only be thrown when run as an `x64` process.\r\n\u003e * The exception should be thrown at least once in every 5 app executions.\r\n\u003e * I tested with `Microsoft.ACE.OLEDB.16.0` and `Microsoft.ACE.OLEDB.12.0`. Both will throw the exception (v16 usually very early, when still below 10 iterations; v12 usually after around 50 iterations).\r\n\u003e * The exception will only be thrown, when a `UNION` query as been executed and later a `SELECT` query over the same table as the `UNION` query is executed.\r\n\u003e * This second `SELECT` query must return only scalar values (no column reference).\r\n\u003e * It doesn\u0027t matter, what the scalar values are (e.g. `0`, `1`, `NULL`).\r\n\u003e * The count of scalar values of the second `SELECT` query must be at least as high as the count of returned fields in the previous `UNION` query.\r\n\u003e * It does not matter, if another query is executed in between.\r\n\u003e * In case there has been no `AccessViolationException` within the first 100 interations, it is very unlikely that they will ever appear within the lifetime of the process. (Though sometimes one is thrown near the 50K mark.)\r\n\u003e \r\n\u003e A couple of examples that will throw:\r\n\u003e \r\n\u003e ```sql\r\n\u003e SELECT [c].[Address]\r\n\u003e FROM [Customers] AS [c]\r\n\u003e WHERE [c].[City] = \u0027Berlin\u0027\r\n\u003e UNION\r\n\u003e SELECT [c0].[Address]\r\n\u003e FROM [Customers] AS [c0]\r\n\u003e WHERE [c0].[City] = \u0027London\u0027;\r\n\u003e \r\n\u003e SELECT 1\r\n\u003e FROM [Customers] AS [c];\r\n\u003e ```\r\n\u003e \r\n\u003e ```sql\r\n\u003e SELECT [c].[Address], [c].[Address]\r\n\u003e FROM [Customers] AS [c]\r\n\u003e WHERE [c].[City] = \u0027Berlin\u0027\r\n\u003e UNION\r\n\u003e SELECT [c0].[Address], [c0].[Address]\r\n\u003e FROM [Customers] AS [c0]\r\n\u003e WHERE [c0].[City] = \u0027London\u0027;\r\n\u003e \r\n\u003e SELECT 1, NULL\r\n\u003e FROM [Customers] AS [c];\r\n\u003e ```\r\n\u003e \r\n\u003e ```sql\r\n\u003e SELECT [c].[Address], [c].[Address]\r\n\u003e FROM [Customers] AS [c]\r\n\u003e WHERE [c].[City] = \u0027Berlin\u0027\r\n\u003e UNION\r\n\u003e SELECT [c0].[Address], [c0].[Address]\r\n\u003e FROM [Customers] AS [c0]\r\n\u003e WHERE [c0].[City] = \u0027London\u0027;\r\n\u003e \r\n\u003e SELECT 1, NULL\r\n\u003e FROM [Customers] AS [c];\r\n\u003e ```\r\n\u003e \r\n\u003e A couple of examples that will _not_ throw:\r\n\u003e \r\n\u003e ```sql\r\n\u003e SELECT [c].[Address]\r\n\u003e FROM [Customers] AS [c]\r\n\u003e WHERE [c].[City] = \u0027Berlin\u0027\r\n\u003e UNION\r\n\u003e SELECT [c0].[Address]\r\n\u003e FROM [Customers] AS [c0]\r\n\u003e WHERE [c0].[City] = \u0027London\u0027;\r\n\u003e \r\n\u003e SELECT [c].[CustomerID] /* \u003c-- not a scalar value */\r\n\u003e FROM [Customers] AS [c];\r\n\u003e ```\r\n\u003e \r\n\u003e ```sql\r\n\u003e SELECT [c].[Address]\r\n\u003e FROM [Customers] AS [c]\r\n\u003e WHERE [c].[City] = \u0027Berlin\u0027; /* \u003c-- not a UNION */\r\n\u003e \r\n\u003e SELECT 1\r\n\u003e FROM [Customers] AS [c];\r\n\u003e ```\r\n\u003e \r\n\u003e ```sql\r\n\u003e SELECT [c].[Address], [c].[Address]\r\n\u003e FROM [Customers] AS [c]\r\n\u003e WHERE [c].[City] = \u0027Berlin\u0027\r\n\u003e UNION\r\n\u003e SELECT [c0].[Address], [c0].[Address]\r\n\u003e FROM [Customers] AS [c0]\r\n\u003e WHERE [c0].[City] = \u0027London\u0027;\r\n\u003e \r\n\u003e SELECT 1 /* \u003c-- fewer scalar values than fields in UNION */\r\n\u003e FROM [Customers] AS [c];\r\n\u003e ```\r\n\u003e \r\n\u003e ```sql\r\n\u003e SELECT [c].[Address], [c].[Address]\r\n\u003e FROM [Customers] AS [c]\r\n\u003e WHERE [c].[City] = \u0027Berlin\u0027\r\n\u003e UNION\r\n\u003e SELECT [c0].[Address], [c0].[Address]\r\n\u003e FROM [Customers] AS [c0]\r\n\u003e WHERE [c0].[City] = \u0027London\u0027;\r\n\u003e \r\n\u003e SELECT 1, [c].[CustomerID] /* \u003c-- not just scalar values */\r\n\u003e FROM [Customers] AS [c];\r\n\u003e ```\r\n\u003e \r\n\u003e ```sql\r\n\u003e SELECT [c].[Address]\r\n\u003e FROM [Customers] AS [c]\r\n\u003e WHERE [c].[City] = \u0027Berlin\u0027\r\n\u003e UNION\r\n\u003e SELECT [c0].[Address]\r\n\u003e FROM [Customers] AS [c0]\r\n\u003e WHERE [c0].[City] = \u0027London\u0027;\r\n\u003e \r\n\u003e SELECT *\r\n\u003e FROM [Orders] AS [o];  /* \u003c-- table differs from the one used in the UNION */\r\n\u003e ```\r\n\u003e \r\n\u003e The following code can be used to reproduce the issue. The code should be run with the latest nightly-build of `System.Data.OleDb`:\r\n\u003e \r\n\u003e ```cs\r\n\u003e using System;\r\n\u003e using System.Data.OleDb;\r\n\u003e \r\n\u003e namespace JetProviderExceptionTests\r\n\u003e {\r\n\u003e     internal static class Program\r\n\u003e     {\r\n\u003e         private static void Main()\r\n\u003e         {\r\n\u003e             Console.WriteLine($\"Running as {(Environment.Is64BitProcess ? \"x64\" : \"x86\")} process.\");\r\n\u003e             \r\n\u003e             var tagDBPARAMBINDINFOName = \"tagDBPARAMBINDINFO\" + (Environment.Is64BitProcess\r\n\u003e                 ? string.Empty\r\n\u003e                 : \"_x86\");\r\n\u003e             \r\n\u003e             // Is 2 on x86 and 8 on x64.\r\n\u003e             Console.WriteLine($\"{tagDBPARAMBINDINFOName} field alignment is {Type.GetType($\"System.Data.OleDb.{tagDBPARAMBINDINFOName}, System.Data.OleDb\").StructLayoutAttribute.Pack}.\");\r\n\u003e             \r\n\u003e             // Is 8 on both x86 and x64.\r\n\u003e             Console.WriteLine($\"tagDBPARAMS field alignment is {Type.GetType(\"System.Data.OleDb.tagDBPARAMS, System.Data.OleDb\").StructLayoutAttribute.Pack}.\");\r\n\u003e \r\n\u003e             Console.WriteLine();\r\n\u003e             Console.WriteLine(\"Press any key to start...\");\r\n\u003e             Console.ReadKey();\r\n\u003e \r\n\u003e             RunNorthwindTest();\r\n\u003e         }\r\n\u003e \r\n\u003e         private static void RunNorthwindTest()\r\n\u003e         {\r\n\u003e             try\r\n\u003e             {\r\n\u003e                 using var connection = new OleDbConnection(\"Provider=Microsoft.ACE.OLEDB.16.0;Data Source=Northwind.accdb\");\r\n\u003e                 connection.Open();\r\n\u003e \r\n\u003e                 for (var i = 0; i \u003c 1000; i++)\r\n\u003e                 {\r\n\u003e                     Console.WriteLine($\"{i:000}\");\r\n\u003e \r\n\u003e                     //\r\n\u003e                     // Select_Union:\r\n\u003e                     //\r\n\u003e \r\n\u003e                     using (var command1 = connection.CreateCommand())\r\n\u003e                     {\r\n\u003e                         command1.CommandText = @\"SELECT [c].[Address]\r\n\u003e FROM [Customers] AS [c]\r\n\u003e WHERE [c].[City] = \u0027Berlin\u0027\r\n\u003e UNION\r\n\u003e SELECT [c0].[Address]\r\n\u003e FROM [Customers] AS [c0]\r\n\u003e WHERE [c0].[City] = \u0027London\u0027\";\r\n\u003e \r\n\u003e                         using (var dataReader1 = command1.ExecuteReader())\r\n\u003e                         {\r\n\u003e                             while (dataReader1.Read())\r\n\u003e                             {\r\n\u003e                             }\r\n\u003e                         }\r\n\u003e                     }\r\n\u003e \r\n\u003e                     /*\r\n\u003e                     using (var command15 = connection.CreateCommand())\r\n\u003e                     {\r\n\u003e                         command15.CommandText = @\"SELECT [c].[Address]\r\n\u003e FROM [Customers] AS [c]\r\n\u003e WHERE [c].[City] = \u0027Madrid\u0027\";\r\n\u003e \r\n\u003e                         using (var dataReader15 = command15.ExecuteReader())\r\n\u003e                         {\r\n\u003e                             while (dataReader15.Read())\r\n\u003e                             {\r\n\u003e                             }\r\n\u003e                         }\r\n\u003e                     }\r\n\u003e                     */\r\n\u003e                     \r\n\u003e                     //\r\n\u003e                     // Select_bool_closure:\r\n\u003e                     //\r\n\u003e \r\n\u003e                     using (var command2 = connection.CreateCommand())\r\n\u003e                     {\r\n\u003e                         command2.CommandText = @\"SELECT 1\r\n\u003e FROM [Customers] AS [c]\";\r\n\u003e \r\n\u003e                         using (var dataReader2 = command2.ExecuteReader())\r\n\u003e                         {\r\n\u003e                             while (dataReader2.Read())\r\n\u003e                             {\r\n\u003e                             }\r\n\u003e                         }\r\n\u003e                     }\r\n\u003e                 }\r\n\u003e             }\r\n\u003e             catch (AccessViolationException e)\r\n\u003e             {\r\n\u003e                 Console.WriteLine(e);\r\n\u003e             }\r\n\u003e         }\r\n\u003e     }\r\n\u003e }\r\n\u003e ```\r\n\u003e \r\n\u003e The code uses the version of the Northwind database we are also now using in our functional tests:\r\n\u003e [Northwind.zip](https://github.com/bubibubi/EntityFrameworkCore.Jet/files/4369687/Northwind.zip)\r\n\u003e \r\n\u003e There are no transactions and no multi-threading involved to trigger the exception.\r\n\u003e \r\n\u003e [...]\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003elauxjpn\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-System.Data.OleDB`, `untriaged`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2020-12-17T14:02:24Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDc0ODM3MzQ3OA==",
+                                           "createdAt":  "2020-12-18T23:36:37Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ajcvickers",
+                                           "body":  "Thanks @lauxjpn. We\u0027ll get back to this when people come back for the new year.",
+                                           "updatedAt":  "2020-12-18T23:36:37Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDc1MTUwMTE0MQ==",
+                                           "createdAt":  "2020-12-27T18:30:32Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "lauxjpn",
+                                           "body":  "I\u0027ll get the same exception, when I perform the same steps I do in the (working) C++ project, but in .NET. So when I manually manage all the COM interfaces of OLE DB in C#, I\u0027ll get an `AccessViolationException` around iteration 50. No `System.Data.OleDb` reference involved.\r\n\r\nI\u0027ll update the reproduction project with the new project.",
+                                           "updatedAt":  "2021-06-12T13:03:05Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDg3OTMwNTM0Ng==",
+                                           "createdAt":  "2021-07-13T18:25:19Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOBzn3DA==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "lauxjpn",
+                                                                               "createdAt":  "2021-07-23T09:09:21Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "ajcvickers",
+                                           "body":  "Moving this to Future for now to follow up with the Access team, as per offline discussion with @lauxjpn. ",
+                                           "updatedAt":  "2021-07-13T18:25:19Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5pARwD",
+                                           "createdAt":  "2023-10-13T15:11:04Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "lauxjpn",
+                                           "body":  "We are still getting lots of crashes in different Access Runtime versions and processor architectures.\r\nSo this is still an issue and it would still be great to get in contact with whoever is currently maintaining Microsoft Access, so that those memory access violations get fixed.\r\n\r\n(Recent discussion in https://github.com/bubibubi/EntityFrameworkCore.Jet/pull/152.)",
+                                           "updatedAt":  "2023-10-13T15:13:12Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6aMPI9",
+                                           "createdAt":  "2025-01-13T11:51:37Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "kekal",
+                                           "body":  "Reproduced on the System.Data.OleDb:9.0.0 with EntityFrameworkCore.Jet:9.0.0-beta.1\n(version 8.0.1 also affected)\nThere are silent crashes in the COM objects mostly during the scalar command disposing. \nSwitching to ODBC hides the issue.\n",
+                                           "updatedAt":  "2025-01-13T11:51:51Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6gR151",
+                                           "createdAt":  "2025-02-27T20:21:56Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "lauxjpn",
+                                           "body":  "@ajcvickers Maybe you (or @roji) can poke the MS Access team (or sole) again to take a look at this issue. There are .NET and native C++ code samples linked. _The .NET ones_ ~~Both~~ are able to reproduce the issue in at least 1 out of 5 runs. The bug could be in the OLE DB layer, but is probably inside Jet.",
+                                           "updatedAt":  "2025-03-02T20:03:25Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6gdR8m",
+                                           "createdAt":  "2025-03-01T07:13:24Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "roji",
+                                           "body":  "@David-Engel maybe you can help out here... The above reports what is likely an issue inside the Jet engine (Access), or in its OLE provider - a native C++ repro is attached, so this is not a .NET issue. Do you know where this should get routed to?",
+                                           "updatedAt":  "2025-03-01T07:13:24Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6ggiTZ",
+                                           "createdAt":  "2025-03-02T20:05:38Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "lauxjpn",
+                                           "body":  "I have to correct my previous statement of:\n\n\u003e There are .NET and native C++ code samples linked. Both are able to reproduce the issue in at least 1 out of 5 runs. The bug could be in the OLE DB layer, but is probably inside Jet.\n\nLooks like I remembered this wrong, because I wrote in an earlier post:\n\n\u003e I [updated the code](https://github.com/lauxjpn/EFCore.Jet.AccessViolationExceptionJet) (simplified it further) and also added projects for ODBC using ADO.NET and for directly using OLE DB via C++.\n\u003e \n\u003e Both of those added projects work as expected, so this issue is either a `System.Data.OleDb` issue after all, or it is an OLE DB layer issue, but depends on specific operations that are being performed by ADO.NET, but not by my `Working_Jet_OleDb_x64_Native` C++ project.\n\nAnd then later:\n\n\u003e I\u0027ll get the same exception, when I perform the same steps I do in the (working) C++ project, but in .NET. So when I manually manage all the COM interfaces of OLE DB in C#, I\u0027ll get an `AccessViolationException` around iteration 50. No `System.Data.OleDb` reference involved.\n\u003e \n\u003e I\u0027ll update the reproduction project with the new project.\n\nSo according to that, this should still be a an issue deeper within the native OLE DB or Jet layer, but was not reproducible by my C++ project, but _was_ reproducible by my C# project when it did the same thing the C++ project did.\n\nAnyway, should be relatively simple to track down for anyone who has access to the actual OLE DB and Jet source code and maybe a _checked_ build.",
+                                           "updatedAt":  "2025-03-02T20:06:11Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6gkaGa",
+                                           "createdAt":  "2025-03-03T10:21:23Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "roji",
+                                           "body":  "@lauxjpn sure thing. Though it would be quite helpful if there were a C++-only repro; as always with these things, a C# repro leaves the possibility that there\u0027s an issue in System.Data.OleDb and thus makes it ambiguous where the problem really is.",
+                                           "updatedAt":  "2025-03-03T10:21:23Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6gos6W",
+                                           "createdAt":  "2025-03-03T17:02:02Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOEIZRjQ==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "roji",
+                                                                               "createdAt":  "2025-03-03T17:47:26Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "lauxjpn",
+                                                                               "createdAt":  "2025-03-04T09:02:12Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  2
+                                                         },
+                                           "author":  "David-Engel",
+                                           "body":  "\u003e David-Engel maybe you can help out here... The above reports what is likely an issue inside the Jet engine (Access), or in its OLE provider - a native C++ repro is attached, so this is not a .NET issue. Do you know where this should get routed to?\n\nI don\u0027t know for sure who the active owner is, but I replied privately with a potential contact from the Office team.",
+                                           "updatedAt":  "2025-03-03T17:02:02Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6gvTeG",
+                                           "createdAt":  "2025-03-04T09:11:25Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "lauxjpn",
+                                           "body":  "@roji We can rule-out an issue in `System.Data.OleDb`, because one of my C# sample projects is able to reproduce the bug without using (or referencing) `System.Data.OleDb` at all. It manually runs the same operations (executes the same  methods on the same native OLE DB COM interfaces) as the (working) native C++ project:\n\n\u003e I\u0027ll get the same exception, when I perform the same steps I do in the (working) C++ project, but in .NET. So when I manually manage all the COM interfaces of OLE DB in C#, I\u0027ll get an `AccessViolationException` around iteration 50. No `System.Data.OleDb` reference involved.\n\u003e \n\u003e I\u0027ll update the reproduction project with the new project.\n\nSo this is probably the candidate project to use to track down the cause of the bug.",
+                                           "updatedAt":  "2025-03-04T09:12:25Z"
+                                       }
+                                   ],
+                         "totalCount":  13
+                     },
+        "title":  "Non-deterministic \u0027AccessViolationException\u0027 under specific conditions when using \u0027System.Data.OleDb\u0027 in an x64 process",
+        "labels":  [
+                       "area-System.Data.OleDB"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/76054",
+        "createdAt":  "2022-09-23T02:19:12Z",
+        "number":  76054,
+        "author":  "ajos6183",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2022-10-18T04:22:59Z",
+        "body":  "### Description\n\nCPU intensive process left running after closing a WinForms .Net6 app that uses OleDB. I am not the first person to experience this. Please see following StackOverflow questions [C# WinForm - EXE not terminating when closing main form](https://stackoverflow.com/questions/73544867/c-sharp-winform-exe-not-terminating-when-closing-main-form) \u0026 [Reading access database, background process still running on close](https://stackoverflow.com/questions/73219849/reading-access-database-background-process-still-running-on-close).\n\n### Reproduction Steps\n\nSample code attached [WinFormsApp.zip](https://github.com/dotnet/runtime/files/9630381/WinFormsApp.zip). For the bug to be replicated, the exe must be opened outside of the visual studio environment.\r\n\n\n### Expected behavior\n\nAll processes would close on application exit.\n\n### Actual behavior\n\nProcess left running.\n\n### Regression?\n\nThis issue didn\u0027t happen in .Net framework as far I can tell but I didn\u0027t specifically test for it.\n\n### Known Workarounds\n\n_No response_\n\n### Configuration\n\n_No response_\n\n### Other information\n\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOTGaqPA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5K2Pv-",
+                                           "createdAt":  "2022-09-23T02:19:21Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-system-diagnostics-process\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Description\n\nCPU intensive process left running after closing a WinForms .Net6 app that uses OleDB. I am not the first person to experience this. Please see following StackOverflow questions [C# WinForm - EXE not terminating when closing main form](https://stackoverflow.com/questions/73544867/c-sharp-winform-exe-not-terminating-when-closing-main-form) \u0026 [Reading access database, background process still running on close](https://stackoverflow.com/questions/73219849/reading-access-database-background-process-still-running-on-close).\n\n### Reproduction Steps\n\nSample code attached [WinFormsApp.zip](https://github.com/dotnet/runtime/files/9630381/WinFormsApp.zip). For the bug to be replicated, the exe must be opened outside of the visual studio environment.\r\n\n\n### Expected behavior\n\nAll processes would close on application exit.\n\n### Actual behavior\n\nProcess left running.\n\n### Regression?\n\nThis issue didn\u0027t happen in .Net framework as far I can tell but I didn\u0027t specifically test for it.\n\n### Known Workarounds\n\n_No response_\n\n### Configuration\n\n_No response_\n\n### Other information\n\n_No response_\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003eajos6183\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-System.Diagnostics.Process`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2022-09-23T02:19:21Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5K2V3Q",
+                                           "createdAt":  "2022-09-23T03:15:14Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @roji, @ajcvickers\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Description\n\nCPU intensive process left running after closing a WinForms .Net6 app that uses OleDB. I am not the first person to experience this. Please see following StackOverflow questions [C# WinForm - EXE not terminating when closing main form](https://stackoverflow.com/questions/73544867/c-sharp-winform-exe-not-terminating-when-closing-main-form) \u0026 [Reading access database, background process still running on close](https://stackoverflow.com/questions/73219849/reading-access-database-background-process-still-running-on-close).\n\n### Reproduction Steps\n\nSample code attached [WinFormsApp.zip](https://github.com/dotnet/runtime/files/9630381/WinFormsApp.zip). For the bug to be replicated, the exe must be opened outside of the visual studio environment.\r\n\n\n### Expected behavior\n\nAll processes would close on application exit.\n\n### Actual behavior\n\nProcess left running.\n\n### Regression?\n\nThis issue didn\u0027t happen in .Net framework as far I can tell but I didn\u0027t specifically test for it.\n\n### Known Workarounds\n\n_No response_\n\n### Configuration\n\n_No response_\n\n### Other information\n\n_No response_\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003eajos6183\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-System.Diagnostics.Process`, `untriaged`, `area-System.Data.OleDB`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2022-09-23T03:15:14Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5K7Qf1",
+                                           "createdAt":  "2022-09-24T19:14:29Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "roji",
+                                           "body":  "I can confirm this indeed repros; however, changing the OleDB provider from ACE to SQL Server makes the problem go away - the process exits properly once the window is closed. In other words, this is most probably a problem with the ACE provider rather than System.Data.OleDB, and should be reproducible outside of .NET.\r\n\r\n\u003cdetails\u003e\r\n\u003csummary\u003eSQL Server repro details\u003c/summary\u003e\r\n\r\n```sql\r\nCREATE TABLE MaterialTable (\r\n    ID int PRIMARY KEY,\r\n    material nvarchar(max)\r\n);\r\nINSERT INTO MaterialTable (ID, material) VALUES (1, \u0027Copper\u0027);\r\n```\r\n\r\nIn the application, replace the connection string with the following:\r\n\r\n```vb\r\nDim connect_string As String = \"Provider=sqloledb;Data Source=localhost;Initial Catalog=test;User Id=SA;Password=Abcd5678;\"\r\n```\r\n\r\n\u003c/details\u003e",
+                                           "updatedAt":  "2022-10-01T07:31:46Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5K_pKk",
+                                           "createdAt":  "2022-09-26T15:15:37Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ajcvickers",
+                                           "body":  "@roji Did you intend to do something here for 7.0?",
+                                           "updatedAt":  "2022-09-26T15:15:37Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5K_p3x",
+                                           "createdAt":  "2022-09-26T15:17:19Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOCs0YNg==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "ajcvickers",
+                                                                               "createdAt":  "2022-09-26T15:22:10Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "roji",
+                                           "body":  "No, as far as I can tell at this point, this isn\u0027t an issue in System.Data.Odbc and there\u0027s nothing actionable on our side - though I can\u0027t be 100% sure. We can keep this open and move to Future, trying to bring this to the attention of the ACE OleDb driver maintainers.",
+                                           "updatedAt":  "2022-09-26T15:17:19Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5LeomZ",
+                                           "createdAt":  "2022-10-04T02:42:22Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ajos6183",
+                                           "body":  "@roji Thank you for your response. I will investigate your suggestion of changing the OleDB provider from ACE to SQL.",
+                                           "updatedAt":  "2022-10-04T02:42:22Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5LfhOH",
+                                           "createdAt":  "2022-10-04T08:02:03Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "roji",
+                                           "body":  "@ajos6183 rather than switching from ACE to SQL Server (which is quite a big type of change), I would recommend switching from OleDB to ADO.NET, which is the modern way to access databases in .NET. At that point you can use SQLite, which should be more similar to ACE than SQL Server (both being embeddable, single-file databases).",
+                                           "updatedAt":  "2022-10-04T08:02:03Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5Lucnc",
+                                           "createdAt":  "2022-10-06T17:49:41Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "rutledget",
+                                           "body":  "\u003e @ajos6183 rather than switching from ACE to SQL Server (which is quite a big type of change), I would recommend switching from OleDB to ADO.NET, which is the modern way to access databases in .NET. At that point you can use SQLite, which should be more similar to ACE than SQL Server (both being embeddable, single-file databases).\r\n\r\nIn regards to #76712 , we are using ADO.NET with System.Data.OleDb provider. We can\u0027t exactly tell a client to \u0027use SQLite\u0027 when the issue arises from client importing data from Access databases into the application. The problem is not consistent across all machines that have the same .NET and same Office version; I agree it is likely an ACE or general office issue. The problem is consistent with .NET 5 and .NET 6; Framework 4.8 does not exhibit this behavior. Of course, 4.8 cannot see O365 dll\u0027s and require the Access runtime be separately installed. However, the problem also does occur in NET 5/6 when Access runtime is separately installed. \r\n\r\nThe problem may arise in the ACE driver, but the NET application is stuck in endless loop of exception handling.",
+                                           "updatedAt":  "2022-10-06T17:49:41Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5Lue8U",
+                                           "createdAt":  "2022-10-06T17:58:49Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOCtbqlQ==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "rutledget",
+                                                                               "createdAt":  "2022-10-06T18:00:28Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "roji",
+                                           "body":  "I\u0027ll try to take another look at this soon; the information that this works on .NET Framework 4.8 may indicate an issue in .NET 6, since I\u0027m assuming the same native ACE DLL OleDb driver is being used.",
+                                           "updatedAt":  "2022-10-06T17:58:49Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5LvY7M",
+                                           "createdAt":  "2022-10-06T21:24:00Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ajos6183",
+                                           "body":  "Thanks guys, just an update that the issue seems to be resolved. A windows update may have taken care of the ACE issue. I suspect it is [KB5002243](https://support.microsoft.com/en-us/topic/october-4-2022-update-for-office-2016-kb5002243-ccb50da3-cdb8-4d7e-8509-17022be9b0ee) but i can\u0027t be sure. However, as @rutledget pointed out, the issue with the .NET5/6 exception handling may still exist and require attention.",
+                                           "updatedAt":  "2022-10-06T21:24:00Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5Lvim2",
+                                           "createdAt":  "2022-10-06T22:13:45Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "roji",
+                                           "body":  "@ajos6183 thanks for the info! To be sure I understand, are you saying that after [KB5002243](https://support.microsoft.com/en-us/topic/october-4-2022-update-for-office-2016-kb5002243-ccb50da3-cdb8-4d7e-8509-17022be9b0ee), everything works well for you and there\u0027s no issue using ACE from .NET\u0027s System.Data.OleDb? In other words, do you suspect that there\u0027s a bug in .NET\u0027s System.Data.OleDb that only manifests when using a pre-KB5002243 ACE driver?",
+                                           "updatedAt":  "2022-10-06T22:13:45Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5Lvl3g",
+                                           "createdAt":  "2022-10-06T22:30:20Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOCteH9w==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "roji",
+                                                                               "createdAt":  "2022-10-07T09:40:03Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "ajos6183",
+                                           "body":  "@roji yes, I believe so. My testing from yesterday and today shows that all processes exit when I close the application. Whereas before, a process was left which used 100% of a CPU core. No changes were made to the application.",
+                                           "updatedAt":  "2022-10-06T22:30:20Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5Lx3PY",
+                                           "createdAt":  "2022-10-07T09:41:17Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "roji",
+                                           "body":  "Thank you! I\u0027ll try to take a look, though it may take a while before I\u0027m able to do so. In the meantime it\u0027s good to know that installing KB5002243 can be a good workaround.",
+                                           "updatedAt":  "2022-10-07T09:43:43Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5MZqo8",
+                                           "createdAt":  "2022-10-18T04:22:43Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ajos6183",
+                                           "body":  "Hi @roji , unfortunately, this is happening again. I can\u0027t explain why. There were a few security updates for Office 2016 and the .NET 6.0.10 update.",
+                                           "updatedAt":  "2022-10-18T04:22:59Z"
+                                       }
+                                   ],
+                         "totalCount":  14
+                     },
+        "title":  "CPU intensive process left running after closing a winforms .Net6 app that uses OleDB",
+        "labels":  [
+                       "area-System.Data.OleDB"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/76712",
+        "createdAt":  "2022-10-06T12:51:49Z",
+        "number":  76712,
+        "author":  "carlintj",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2022-10-07T09:42:17Z",
+        "body":  "### Description\r\n\r\nWe\u0027re having an issue where our .Net 6 WinForms application will not exit after we open a connection to an Access database due to an exception being thrown outside of our code. I\u0027ve been able to recreate the same fault with the code below. No exception is thrown during running, only when the application is exiting. Even more strangely is that we run into this even if the Access database specified in the connection string doesn\u0027t exist.  What seems to be happening is that an access violation exception is thrown on exit, the application tries to exit, and then another exception is thrown which is causing an endless loop.\r\n\r\n\r\n\r\n\r\n\r\n\r\n![accessexception1](https://user-images.githubusercontent.com/3381715/194316983-bed93f18-44c6-45e3-a938-49a7be9bf419.png)\r\n\r\n\r\n### Reproduction Steps\r\n\r\nCreate a .Net 6 console application and use the following for the main body\r\n\r\n            var connStr = \"Provider=Microsoft.ACE.OLEDB.16.0;Data Source=c:\\tfs\\testdb.accdb;Persist Security Info=False\";\r\n            using (var testConn = new System.Data.OleDb.OleDbConnection(connStr))\r\n            {\r\n                try\r\n                {\r\n                    testConn.Open();\r\n                    testConn.Close();\r\n                }\r\n                catch (Exception ex)\r\n                {\r\n                    Console.WriteLine(ex.Message);\r\n                }\r\n            }\r\n\r\n### Expected behavior\r\n\r\nApplication exits without error\r\n\r\n### Actual behavior\r\n\r\nApplication hangs on exit using 100% of a CPU core.\r\n\r\n### Regression?\r\n\r\nThis works without error in .Net Framework 4.8\r\n\r\n### Known Workarounds\r\n\r\n_No response_\r\n\r\n### Configuration\r\n\r\n.Net 6, Windows 10 Business 21H2. Office version installed is Microsoft 365 MSO (Version 2209 Build 16.0.15629.20152) 64-bit\r\n\r\n### Other information\r\n\r\nWe have seen this behavior across multiple different machines and have tried many different versions of the access runtimes without any change in behavior.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOS8d3xQ==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5LsnmS",
+                                           "createdAt":  "2022-10-06T12:51:54Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "I couldn\u0027t figure out the best area label to add to this issue. If you have write-permissions please help me learn by adding exactly one [area label](https://github.com/dotnet/runtime/blob/master/docs/area-owners.md).",
+                                           "updatedAt":  "2022-10-06T12:51:54Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5Ls9r_",
+                                           "createdAt":  "2022-10-06T13:44:45Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @roji, @ajcvickers\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Description\n\nWe\u0027re having an issue where our .Net 6 WinForms application will not exit after we open a connection to an Access database due to an exception being thrown outside of our code. I\u0027ve been able to recreate the same fault with the code below. No exception is thrown during running, only when the application is exiting. Even more strangely is that we run into this even if the Access database specified in the connection string doesn\u0027t exist.  What seems to be happening is that an access violation exception is thrown on exit, the application tries to exit, and then another exception is thrown which is causing an endless loop.\r\n\r\n\r\n\r\n\r\n\r\n\r\n![accessexception1](https://user-images.githubusercontent.com/3381715/194316983-bed93f18-44c6-45e3-a938-49a7be9bf419.png)\r\n\n\n### Reproduction Steps\n\nCreate a .Net 6 console application and use the following for the main body\r\n\r\n            using (var testConn = new System.Data.OleDb.OleDbConnection(connStr))\r\n            var connStr = \"Provider=Microsoft.ACE.OLEDB.16.0;Data Source=c:\\tfs\\testdb.accdb;Persist Security Info=False\";\r\n            {\r\n                try\r\n                {\r\n                    testConn.Open();\r\n                    testConn.Close();\r\n                }\r\n                catch (Exception ex)\r\n                {\r\n                    Console.WriteLine(ex.Message);\r\n                }\r\n            }\n\n### Expected behavior\n\nApplication exits without error\n\n### Actual behavior\n\nApplication hangs on exit using 100% of a CPU core.\n\n### Regression?\n\nThis works without error in .Net Framework 4.8\n\n### Known Workarounds\n\n_No response_\n\n### Configuration\n\n.Net 6, Windows 10 Business 21H2. Office version installed is Microsoft 365 MSO (Version 2209 Build 16.0.15629.20152) 64-bit\n\n### Other information\n\nWe have seen this behavior across multiple different machines and have tried many different versions of the access runtimes without any change in behavior.\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003ecarlintj\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`untriaged`, `area-System.Data.OleDB`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2022-10-06T13:44:45Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5LtAPc",
+                                           "createdAt":  "2022-10-06T13:50:34Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ajcvickers",
+                                           "body":  "Possibly related to https://github.com/dotnet/runtime/issues/76054",
+                                           "updatedAt":  "2022-10-06T13:50:34Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5LuWuw",
+                                           "createdAt":  "2022-10-06T17:27:05Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "roji",
+                                           "body":  "The fact that this doesn\u0027t happen in .NET Framework 4.8 may indeed indicate a bug in .NET Core\u0027s System.Data.OleDb... And agreed that this could be the same bug as in #76054.",
+                                           "updatedAt":  "2022-10-06T17:27:05Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5Lx3fF",
+                                           "createdAt":  "2022-10-07T09:42:16Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "roji",
+                                           "body":  "Note that a recent ACE update may make this go away (or it may hide a bug still present in System.Data.OleDb), see https://github.com/dotnet/runtime/issues/76054#issuecomment-1270753718.",
+                                           "updatedAt":  "2022-10-07T09:42:16Z"
+                                       }
+                                   ],
+                         "totalCount":  5
+                     },
+        "title":  "Access Exception thrown on exit after opening OleDb connection to access database",
+        "labels":  [
+                       "area-System.Data.OleDB"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/82039",
+        "createdAt":  "2023-02-07T02:36:12Z",
+        "number":  82039,
+        "author":  "Techhead33",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-06-21T13:48:35Z",
+        "body":  "I am pulling data from an OSISoft PI Server using using their OLEDB connection. After doing an execute reader to get one Single value and then calling datareader[1].ToString() method i am getting different results in .Net 4.7 vs .Net 6 (.Net Core).\r\nThe value in .Net 4.7 is 198133.8 but in .Net 6 it is 198133.75. I was looking at the Floating-Point Parsing and Formatting improvements in .NET Core 3.0 and was thinking that might be the cause of my issue?  Is there any way to configure the OLEDB connection / OLDEB to use the old formatter for floats / decimals ? I have other examples where the Single that is coming back also has two digits after the decimal and it is not rounding the .Net 4.7 value so I am not sure if there is an underlying value that I cannot see that would be causing the rounding. ",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOVcmfcw==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5VIbze",
+                                           "createdAt":  "2023-02-13T16:47:32Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "I couldn\u0027t figure out the best area label to add to this issue. If you have write-permissions please help me learn by adding exactly one [area label](https://github.com/dotnet/runtime/blob/master/docs/area-owners.md).",
+                                           "updatedAt":  "2023-02-13T16:47:32Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5VOue_",
+                                           "createdAt":  "2023-02-14T15:22:52Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @roji, @ajcvickers\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\nI am pulling data from an OSISoft PI Server using using their OLEDB connection. After doing an execute reader to get one Single value and then calling datareader[1].ToString() method i am getting different results in .Net 4.7 vs .Net 6 (.Net Core).\r\nThe value in .Net 4.7 is 198133.8 but in .Net 6 it is 198133.75. I was looking at the Floating-Point Parsing and Formatting improvements in .NET Core 3.0 and was thinking that might be the cause of my issue?  Is there any way to configure the OLEDB connection / OLDEB to use the old formatter for floats / decimals ? I have other examples where the Single that is coming back also has two digits after the decimal and it is not rounding the .Net 4.7 value so I am not sure if there is an underlying value that I cannot see that would be causing the rounding. \n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003eTechhead33\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-System.Data`, `untriaged`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2023-02-14T15:22:52Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5VyZ9z",
+                                           "createdAt":  "2023-02-22T00:41:03Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @roji, @ajcvickers\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\nI am pulling data from an OSISoft PI Server using using their OLEDB connection. After doing an execute reader to get one Single value and then calling datareader[1].ToString() method i am getting different results in .Net 4.7 vs .Net 6 (.Net Core).\r\nThe value in .Net 4.7 is 198133.8 but in .Net 6 it is 198133.75. I was looking at the Floating-Point Parsing and Formatting improvements in .NET Core 3.0 and was thinking that might be the cause of my issue?  Is there any way to configure the OLEDB connection / OLDEB to use the old formatter for floats / decimals ? I have other examples where the Single that is coming back also has two digits after the decimal and it is not rounding the .Net 4.7 value so I am not sure if there is an underlying value that I cannot see that would be causing the rounding. \n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003eTechhead33\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`untriaged`, `area-System.Data.OleDB`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2023-02-22T00:41:03Z"
+                                       }
+                                   ],
+                         "totalCount":  3
+                     },
+        "title":  "OLEDB  DataReader Single ToSting Value  / Formatting issue",
+        "labels":  [
+                       "area-System.Data.OleDB"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/100501",
+        "createdAt":  "2024-04-01T22:38:23Z",
+        "number":  100501,
+        "author":  "DopefishJustin",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-08-27T07:15:02Z",
+        "body":  "### Description\n\nI am converting a commercial product from .NET Framework 4.7 to .NET 8. Some of our unit tests are failing and the cause seems to be an unexpected behaviour difference in the System.Data.OleDb.OleDbException object. After deliberately executing invalid SQL, the Errors property on the resulting exception is an empty collection instead of containing the expected OleDbError object.\r\n\r\nIn production, we use the OleDbError.NativeError number to handle errors coming from SQL Server differently depending on e.g. whether the error reflects a temporary connection issue as opposed to a syntax error.\n\n### Reproduction Steps\n\nInstall Visual Studio with the .NET desktop and data storage workloads\r\nCreate a VB.NET console project\r\nAdd the System.Data.OleDb 8.0.0 package and import the namespace\r\nAdd the following code to Main():\r\n\r\n```vbnet\r\nUsing objConn As New OleDbConnection()\r\n    objConn.ConnectionString = \"Provider=SQLNCLI11.1;Integrated Security=SSPI;Persist Security Info=False;User ID=\"\"\"\";Data Source=(localdb)\\MSSQLLocalDB;Initial File Name=\"\"\"\";Server SPN=\"\"\"\"\"\r\n    objConn.Open()\r\n    Using dbcComm As New OleDbCommand(\"select * from NonExistentTable\", objConn)\r\n        Try\r\n            dbcComm.ExecuteNonQuery()\r\n        Catch ex As OleDbException\r\n            Console.WriteLine($\"{ex.Errors(0).NativeError}: {ex.Errors(0).Message}\")\r\n        End Try\r\n    End Using\r\nEnd Using\r\n```\r\n\r\nTwo test case solutions (one for .NET 8, one for .NET Framework 4.7.2):\r\n[OleDbErrorTestCase.zip](https://github.com/dotnet/runtime/files/14829049/OleDbErrorTestCase.zip)\n\n### Expected behavior\n\nShould output the following line:\r\n```\r\n208: Invalid object name \u0027NonExistentTable\u0027.\r\n```\n\n### Actual behavior\n\nThrows an exception because `Errors` is an empty collection:\r\n```\r\nSystem.ArgumentOutOfRangeException\r\n  HResult=0x80131502\r\n  Message=Index was out of range. Must be non-negative and less than the size of the collection. (Parameter \u0027index\u0027)\r\n  Source=System.Private.CoreLib\r\n  StackTrace:\r\n   at System.Collections.ArrayList.get_Item(Int32 index)\r\n   at System.Data.OleDb.OleDbErrorCollection.get_Item(Int32 index)\r\n   at OleDbErrorTestCase_NET8.Program.Main(String[] args) in C:\\Users\\jkerk\\source\\repos\\OleDbErrorTestCase_NET8\\OleDbErrorTestCase_NET8\\Program.vb:line 12\r\n```\n\n### Regression?\n\nSame code works as expected in .NET Framework 4.7.2.\n\n### Known Workarounds\n\n_No response_\n\n### Configuration\n\nVisual Studio Enterprise 2022 17.9.5\r\n.NET 8.0\r\nSystem.Data.OleDb 8.0.0\r\nWindows 10 x64\r\n\r\nSame behaviour was observed with a SQL Server 2019 instance so I don\u0027t think the use of MSSQLLocalDB in the test case is relevant.\n\n### Other information\n\nThe observed behaviour is contrary to the [documentation](https://learn.microsoft.com/en-us/dotnet/api/system.data.oledb.oledbexception.errors), which states \"The OleDbErrorCollection class always contains at least one instance of the OleDbError class.\" ",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOicpjXg==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc55CftK",
+                                           "createdAt":  "2024-04-01T22:38:38Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @roji, @ajcvickers\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2024-04-01T22:38:38Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc55Cgjk",
+                                           "createdAt":  "2024-04-01T22:42:00Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "danmoseley",
+                                           "body":  "@DopefishJustin Would it be possible for you to demo a little bit in each case to see where the behavior diverges? VS should resolve all symbols and sources.",
+                                           "updatedAt":  "2024-04-01T22:42:00Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6JymNe",
+                                           "createdAt":  "2024-08-27T07:13:01Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @roji, @ajcvickers\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2024-08-27T07:13:01Z"
+                                       }
+                                   ],
+                         "totalCount":  3
+                     },
+        "title":  "System.Data.OleDb.OleDbException.Errors property not being populated with the OleDbError",
+        "labels":  [
+                       "area-System.Data.OleDB"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/112360",
+        "createdAt":  "2025-02-10T18:48:02Z",
+        "number":  112360,
+        "author":  "jkotas",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-09-20T22:02:54Z",
+        "body":  "## Build Information\nBuild: https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_build/results?buildId=946332\nBuild error leg or test failing: System.Data.OleDb.Tests.WorkItemExecution\nPull request: https://github.com/dotnet/runtime/pull/112342\n\u003c!-- Error message template  --\u003e\n## Error Message\n\nFill the error message using [step by step known issues guidance](https://github.com/dotnet/arcade/blob/main/Documentation/Projects/Build%20Analysis/KnownIssueJsonStepByStep.md).\n\n\u003c!-- Use ErrorMessage for String.Contains matches. Use ErrorPattern for regex matches (single line/no backtracking). Set BuildRetry to `true` to retry builds with this error. Set ExcludeConsoleLog to `true` to skip helix logs analysis. --\u003e\n\n```json\n{\n  \"ErrorMessage\": [\"System.Data.OleDb.Tests\",\"exit code -1073740771\"],\n  \"ErrorPattern\": \"\",\n  \"BuildRetry\": false,\n  \"ExcludeConsoleLog\": false\n}\n```\r\n\u003c!-- Known issue validation start --\u003e\r\n ### Known issue validation\r\n**Build: :mag_right:** https://dev.azure.com/dnceng-public/public/_build/results?buildId=946332\r\n**Error message validated:** `[System.Data.OleDb.Tests exit code -1073740771`]\r\n**Result validation:** :white_check_mark: Known issue matched with the provided build.\r\n**Validation performed at:** 2/10/2025 6:48:29 PM UTC\r\n\u003c!-- Known issue validation end --\u003e\r\n\u003c!--Known issue error report start --\u003e\r\n\r\n### Report\r\n\r\n|Build|Definition|Test|Pull Request|\r\n|---|---|---|---|\r\n|[1152766](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1152766)|dotnet/runtime|[System.Data.OleDb.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1152766\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=31844856\u0026resultId=231339)|dotnet/runtime#98643|\r\n|[1138016](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1138016)|dotnet/runtime|[System.Data.OleDb.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1138016\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=31344088\u0026resultId=231087)||\r\n|[1134928](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1134928)|dotnet/runtime|[System.Data.OleDb.Tests.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1134928\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=31239794\u0026resultId=104917)||\r\n#### Summary\r\n|24-Hour Hit Count|7-Day Hit Count|1-Month Count|\r\n|---|---|---|\r\n|0|1|3|\r\n\u003c!--Known issue error report end --\u003e",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOt0S5sA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc6d45iv",
+                                           "createdAt":  "2025-02-10T18:48:38Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jkotas",
+                                           "body":  "Stack trace of the crash:\n```\n # Child-SP          RetAddr               Call Site\n00 000000f5`4387dce8 00007ff8`c94adc23     ntdll!ZwWaitForMultipleObjects+0x14 [minkernel\\ntdll\\daytona\\objfre\\amd64\\usrstubs.asm @ 964] \n01 000000f5`4387dcf0 00007ff8`c94adaf1     KERNELBASE!WaitForMultipleObjectsEx+0x123 [minkernel\\kernelbase\\synch.c @ 1551] \n02 000000f5`4387dfe0 00007ff8`ca080ee0     KERNELBASE!WaitForMultipleObjects+0x11 [minkernel\\kernelbase\\synch.c @ 1403] \n03 000000f5`4387e020 00007ff8`ca0a8aad     kernel32!WerpReportFaultInternal+0x62c [onecore\\windows\\feedback\\core\\faultrep\\lib\\faultrep.cpp @ 1073] \n04 000000f5`4387e1a0 00007ff8`c957d62c     kernel32!WerpReportFault+0xc5 [onecore\\windows\\feedback\\core\\faultrep\\lib\\faultrep.cpp @ 1384] \n05 000000f5`4387e1f0 00007ff8`cbbbe588     KERNELBASE!UnhandledExceptionFilter+0x34c [minkernel\\kernelbase\\xcpt.c @ 701] \n06 (Inline Function) --------`--------     ntdll!RtlpThreadExceptionFilter+0x31 [minkernel\\ldr\\rtlstrt.c @ 958] \n07 000000f5`4387e2e0 00007ff8`cbbc36b0     ntdll!LdrpLogFatalUserCallbackException+0x68 [minkernel\\ldr\\ldretw.c @ 999] \n08 000000f5`4387e440 00007ff8`cbbc3e5f     ntdll!KiUserCallbackDispatcherHandler+0x20 [minkernel\\ntos\\rtl\\amd64\\trampoln.asm @ 460] \n09 000000f5`4387e480 00007ff8`cba7f358     ntdll!RtlpExecuteHandlerForException+0xf [minkernel\\ntos\\rtl\\amd64\\xcptmisc.asm @ 132] \n0a 000000f5`4387e4b0 00007ff8`cbbc379e     ntdll!RtlDispatchException+0x2c8 [minkernel\\ntos\\rtl\\amd64\\exdsptch.c @ 680] \n0b 000000f5`4387ec00 00007ff8`9d9e2020     ntdll!KiUserExceptionDispatch+0x2e [minkernel\\ntos\\rtl\\amd64\\trampoln.asm @ 771] \n0c 000000f5`4387f320 00007ff8`9d864c96     mso99Lwin32client!MsoNuiLiblet::Init+0x15 [n:\\src\\mso\\sharedui\\netui\\nuicore.cpp @ 862] \n0d (Inline Function) --------`--------     mso99Lwin32client!Mso::LibletAPI::RegisterLiblet::InitLiblet+0x12 [n:\\src\\liblet\\libletapi\\libletapi.cpp @ 69] \n0e 000000f5`4387f350 00007ff8`9d8f6a79     mso99Lwin32client!Mso::LibletAPI::InitLiblets+0xd9 [n:\\src\\liblet\\libletapi\\libletapi.cpp @ 238] \n0f 000000f5`4387f3a0 00007ff8`9c56fe59     mso99Lwin32client!Mso::Dll99Lite::InitLiblets+0x25 [n:\\src\\msodll\\99\\lite\\init\\mso99linit.cpp @ 28] \n10 000000f5`4387f3d0 00007ff8`9c312db8     MSO!MsoFInitOfficeEx2+0xb1 [n:\\src\\mso\\inituninit\\office_win.cpp @ 155] \n11 000000f5`4387f460 00007ff8`9c312c32     ACECORE!FACEInitMsoDll+0xd4 [n:\\src\\ace\\common\\src\\acemsouser.cpp @ 606] \n12 000000f5`4387f4f0 00007ff8`a58590f6     ACECORE!JetInit+0x52 [n:\\src\\ace\\jet4\\src\\initterm.c @ 492] \n13 000000f5`4387f520 00007ff8`c9e75801     ACEOLEDB!InitializeJetInstance+0x17 [n:\\src\\ace\\jolt\\src\\classfac.cpp @ 140] \n14 000000f5`4387f550 00007ff8`c9e7509c     user32!UserCallWinProcCheckWow+0x341 [clientcore\\windows\\core\\ntuser\\client\\clmsg.cxx @ 289] \n15 000000f5`4387f6b0 00007ff8`c9ea4eb3     user32!DispatchClientMessage+0x9c [clientcore\\windows\\core\\ntuser\\client\\daytona\\objfre\\amd64\\client.cxx @ 3189] \n16 000000f5`4387f710 00007ff8`cbbc3744     user32!__fnDWORD+0x33 [onecoreuap\\restricted\\windows\\inc\\ntuser\\inc\\ntcb.h @ 1115] \n17 000000f5`4387f770 00007ff8`c9101314     ntdll!KiUserCallbackDispatcherContinue [minkernel\\ntos\\rtl\\amd64\\trampoln.asm @ 618] \n18 000000f5`4387f7f8 00007ff8`c9e69be8     win32u!ZwUserGetMessage+0x14 [onecoreuap\\windows\\core\\umode\\moderncore\\objfre\\amd64\\usrstubs.asm @ 189] \n19 000000f5`4387f800 00007ff8`a5859238     user32!GetMessageA+0x48 [onecoreuap\\restricted\\windows\\inc\\private\\core\\ntuser\\client\\ntcftxt.h @ 538] \n1a 000000f5`4387f860 00007ff8`a58591e4     ACEOLEDB!PumpMessages+0x44 [n:\\src\\ace\\jolt\\src\\classfac.cpp @ 281] \n1b 000000f5`4387f8c0 00007ff8`ca05e8d7     ACEOLEDB!MsoThreadStartRoutine+0x4c [n:\\src\\ace\\jolt\\src\\classfac.cpp @ 459] \n1c 000000f5`4387f8f0 00007ff8`cbb3fbcc     kernel32!BaseThreadInitThunk+0x17 [clientcore\\base\\win32\\client\\thread.c @ 77] \n1d 000000f5`4387f920 00000000`00000000     ntdll!RtlUserThreadStart+0x2c [minkernel\\ldr\\rtlstrt.c @ 1184] \n```",
+                                           "updatedAt":  "2025-02-10T18:48:38Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6d45i5",
+                                           "createdAt":  "2025-02-10T18:48:39Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-infrastructure-libraries\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2025-02-10T18:48:39Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6d453S",
+                                           "createdAt":  "2025-02-10T18:49:14Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @roji, @ajcvickers\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2025-02-10T18:49:14Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc63RLmw",
+                                           "createdAt":  "2025-07-15T18:01:01Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "SamMonoRT",
+                                           "body":  "@jkotas - we\u0027ll not get to investigating/fixing this for 10.0 - moving to 11.0",
+                                           "updatedAt":  "2025-07-15T18:01:01Z"
+                                       }
+                                   ],
+                         "totalCount":  4
+                     },
+        "title":  "System.Data.OleDb.Tests crash with exit code -1073740771",
+        "labels":  [
+                       "blocking-clean-ci",
+                       "area-System.Data.OleDB",
+                       "Known Build Error"
+                   ]
+    }
+]

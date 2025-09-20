@@ -1,0 +1,1697 @@
+﻿[
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/19838",
+        "createdAt":  "2017-01-06T23:55:00Z",
+        "number":  19838,
+        "author":  "JeremyKuhne",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHOCPfTOg==",
+                          "nodes":  [
+                                        {
+                                            "content":  "EYES",
+                                            "user":  "bothyculture",
+                                            "createdAt":  "2022-02-19T16:09:39Z"
+                                        }
+                                    ],
+                          "totalCount":  1
+                      },
+        "updatedAt":  "2021-10-25T18:51:22Z",
+        "body":  "See dotnet/runtime#14343 and dotnet/runtime#15603.\r\n\r\nRsaProtectedConfigurationProvider is the default protected provider and the only one that has a hope of being cross platform. I\u0027ve ported the code pending the completion of the Xml library- at that point it will just need to be enabled (and tested). For now a stub is in it\u0027s place.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHON7VgBA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDI3MzI4NjY3MQ==",
+                                           "createdAt":  "2017-01-17T20:16:59Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "morganbr",
+                                           "body":  "We should consider reviewing the security of RsaProtectedConfigurationProvider and whether it needs to be compatible with files protected by the .NET Framework version as part of this port. That version uses some less-preferred algorithms and may not work cross-platform.",
+                                           "updatedAt":  "2017-01-17T20:16:59Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDI3MzMwOTUyNg==",
+                                           "createdAt":  "2017-01-17T21:43:38Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "JeremyKuhne",
+                                           "body":  "@morganbr The only other protected provider in-box (`DpapiProtectedConfigurationProvider`) only works on Windows. This is more about compat- and I don\u0027t see anything existing discouraging use of `RsaProtectedConfigurationProvider`.  Should we be opening an issue (or issues) specifically about discouraging it overall / providing an alternative (on Desktop as well)?",
+                                           "updatedAt":  "2017-01-17T21:43:38Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDI3MzM0OTIwNA==",
+                                           "createdAt":  "2017-01-18T00:51:32Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "morganbr",
+                                           "body":  "It\u0027s not broken per se, but if we believe desktop config files aren\u0027t compatible with .NET Core, it would be good to look into things like using AES by default instead of 3DES. ",
+                                           "updatedAt":  "2017-01-18T00:51:32Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDI5NDU2MjI1OA==",
+                                           "createdAt":  "2017-04-17T19:07:51Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "danmoseley",
+                                           "body":  "https://apisof.net/catalog/System.Configuration.RsaProtectedConfigurationProvider has negligible usage in our corpuses.\r\nhttps://apisof.net/catalog/System.Configuration.RsaProtectedConfigurationProvider\r\n\r\n@JeremyKuhne is it reasonable to move this to Future? cc @krwq ",
+                                           "updatedAt":  "2017-04-17T19:07:51Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDI5NDU3MzQ2OQ==",
+                                           "createdAt":  "2017-04-17T19:56:47Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "krwq",
+                                           "body":  "@JeremyKuhne crypto-xml is currently ported - is there anything left for 2.0 here?",
+                                           "updatedAt":  "2017-04-17T19:56:47Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDI5NTQyOTk4Nw==",
+                                           "createdAt":  "2017-04-19T20:36:34Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "danmoseley",
+                                           "body":  "Crypto XML is not in a net standard configuration right now so this dep is not legal. The usage is so low (zero in our data)  that this can be done if and when we get feedback.",
+                                           "updatedAt":  "2017-04-19T20:36:34Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQyNDA2ODEzMw==",
+                                           "createdAt":  "2018-09-24T18:00:47Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "redshiftz",
+                                           "body":  "I work for a government agency and we have been using RsaProtectedConfigurationProvider due to policy requirements by our agency for quite some time. As we\u0027re looking at our migration path to .Net Core, this not being implemented is blocking our adoption. Is there a way we can grab what we need and build our own or get this into the roadmap?\r\n\r\nThank you,\r\n\r\nJeff Young",
+                                           "updatedAt":  "2018-09-24T18:00:47Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQyNDEzMTY5OA==",
+                                           "createdAt":  "2018-09-24T21:28:43Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "krwq",
+                                           "body":  "@redshiftz - one way to get unblocked would be to use EnvelopedCms for encrypting data or EncryptedXml for encrypting relevant config file fragment (EnvelopedCms is better from security point of view as it operates directly on bytes and does not perform any further processing. EncryptedXml should be easier to migrate).\r\n\r\nHere is what RsaProtectedCofnigurationProvider is doing under the hood:\r\nhttps://referencesource.microsoft.com/#System.Configuration/System/Configuration/RSAProtectedConfigurationProvider.cs,43\r\n\r\nAs for this thread RsaProtectedConfigurationProvider should not be blocked anymore since EncryptedXml is already here.\r\n\r\nI do not know about specific plans for System.Configuration though cc: @AlexGhiondea",
+                                           "updatedAt":  "2018-09-24T21:28:43Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQyNDEzOTA1Ng==",
+                                           "createdAt":  "2018-09-24T21:56:41Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "JeremyKuhne",
+                                           "body":  "\u003e As for this thread RsaProtectedConfigurationProvider should not be blocked anymore since EncryptedXml is already here.\r\n\r\nAs @danmosemsft pointed out, EncryptedXml isn\u0027t part of .NET Standard so some hoops would have to be jumped through. Not sure if that means adding a CoreApp build for this, another assembly, etc.",
+                                           "updatedAt":  "2018-09-24T21:56:41Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQyNDQzNjI2Mw==",
+                                           "createdAt":  "2018-09-25T17:42:28Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "redshiftz",
+                                           "body":  "So, to unblock, would it be reasonable to grab the source of RsaProtectedConfigurationProvider rename to RsaProtectedConfigurationProviderTemp, and build using EncryptedXml? Then change that name in the config file where referenced? Then I can change the config files back if RsaProtectedConfigurationProvider is ever finished?",
+                                           "updatedAt":  "2018-09-25T17:42:28Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQyNDYyODk1NA==",
+                                           "createdAt":  "2018-09-26T08:22:31Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "krwq",
+                                           "body":  "Since this is legal question I\u0027d prefer @richlander or @immol to answer.\r\n\r\nHere is what I know:\r\n- https://referencesource.microsoft.com says \"all right reserved\".\r\n- I think using samples from documentation is always ok (@mairaw, @rpetrusha could you confirm?)\r\n- almost identical version is here on MIT license: https://github.com/dotnet/corefx/blob/master/src/System.Security.Cryptography.Xml/tests/Samples/EncryptingDecryptingAsymmetric.cs\r\n",
+                                           "updatedAt":  "2018-09-26T08:22:31Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQyNDcyNDQ1OQ==",
+                                           "createdAt":  "2018-09-26T13:55:26Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOAiFOxw==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "HEART",
+                                                                               "user":  "timothy-b",
+                                                                               "createdAt":  "2019-01-23T23:16:59Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "redshiftz",
+                                           "body":  "I\u0027m referring to https://github.com/dotnet/corefx/blob/master/src/System.Configuration.ConfigurationManager/src/System/Configuration/RsaProtectedConfigurationProvider.cs\r\n\r\nWhich says it\u0027s under MIT license. \r\n\r\nAnd the code is already written. It\u0027s just IFDEFed out.",
+                                           "updatedAt":  "2018-09-26T13:55:26Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQyNDgzNDg5NA==",
+                                           "createdAt":  "2018-09-26T19:09:13Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOAiFOyA==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "HEART",
+                                                                               "user":  "timothy-b",
+                                                                               "createdAt":  "2019-01-23T23:17:01Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "redshiftz",
+                                           "body":  "@JeremyKuhne I grabbed your port, uncommented and tried to build. There is another class missing from core that needs to be added to enable this. FipsAwareEncryptedXml (https://referencesource.microsoft.com/#System.Configuration/System/Configuration/FipsAwareEncryptedXml.cs). Once i ported it locally, your port of RsaProtectedConfigurationProvider works. \r\n\r\nAs @krwq mentioned, there are legal issues to consider since it\u0027s MS code. At least for me. What is the path forward do you think? ",
+                                           "updatedAt":  "2018-09-26T19:09:13Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQyNTIxNTY0MQ==",
+                                           "createdAt":  "2018-09-27T19:31:54Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "krwq",
+                                           "body":  "@redshiftz - I think using EncryptedXml directly should work but not sure if there will be FIPS certification issue there. @bartonjs do you perhaps know if corefx\u0027s AesManaged implementation is FIPS certified? If not is it possible to force CryptoConfig to create AesCryptoServiceProvider? (perhaps some magic setting in CryptoConfig)",
+                                           "updatedAt":  "2018-09-27T19:31:54Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQyNjM1NDI4Ng==",
+                                           "createdAt":  "2018-10-02T17:09:19Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "bartonjs",
+                                           "body":  "Nothing in .NET Core throws a FIPS exception.  All of the types which would have instead are wrappers over FIPSy types.",
+                                           "updatedAt":  "2018-10-02T17:09:19Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDgxODYxMTg3NQ==",
+                                           "createdAt":  "2021-04-13T09:58:19Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOB83ySQ==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "hikarunoryoma",
+                                                                               "createdAt":  "2021-10-04T16:45:36Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "spanevin",
+                                           "body":  "Any hope to get it working in netcore?",
+                                           "updatedAt":  "2021-04-13T09:58:19Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc43tWAE",
+                                           "createdAt":  "2021-10-05T17:53:12Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "hikarunoryoma",
+                                           "body":  "\u003e @redshiftz - I think using EncryptedXml directly should work but not sure if there will be FIPS certification issue there. @bartonjs do you perhaps know if corefx\u0027s AesManaged implementation is FIPS certified? If not is it possible to force CryptoConfig to create AesCryptoServiceProvider? (perhaps some magic setting in CryptoConfig)\r\n\r\nAfter replacing the usage of FipsAwareEncryptedXml  with EncryptedXml, I actually wasn\u0027t able to get this to work.  I\u0027m getting the error: `Failed to decrypt using provider \u0027ProviderName\u0027. Error message from the provider: Keyset does not exist (Path\\to\\config line 158)`.   Curious if others were able to get this to work.  \r\n\r\nEdit: nevermind I figured this out.  My issue here was that the credentials I was using to access the secret was different the credentials used to make it.  Changing permissions verified that this work around works! Would still have preferred for this to work out of the box, although understand that general industry trend is to move away from RSA Containers.",
+                                           "updatedAt":  "2021-10-05T20:27:29Z"
+                                       }
+                                   ],
+                         "totalCount":  17
+                     },
+        "title":  "System.Configuration.RsaProtectedConfigurationProvider depends on System.Security.Cryptography.Xml",
+        "labels":  [
+                       "area-System.Configuration"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/19876",
+        "createdAt":  "2017-01-11T06:28:55Z",
+        "number":  19876,
+        "author":  null,
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2022-09-26T06:49:35Z",
+        "body":  "Opened on behalf of @Jiayili1\n\nThe test `MonoTests.System.Configuration.ConfigurationManagerTest/exePath_UserLevelPerRoamingAndLocal` has failed.\n\nAssert.Equal() Failure\n              ? (pos 0)\n    Expected: user.config\n    Actual:   \n              ? (pos 0)\n\n        Stack Trace:\n\n           at MonoTests.System.Configuration.ConfigurationManagerTest.exePath_UserLevelPerRoamingAndLocal()\nBuild : Master - 20170111.01 (Core Tests)\nFailing configurations:\n- Debian.82.Amd64\n  - AnyCPU-Release\n  - AnyCPU-Debug\n- Ubuntu.1604.Amd64\n  - AnyCPU-Release\n  - AnyCPU-Debug\n- Centos.71.Amd64\n  - AnyCPU-Release\n  - AnyCPU-Debug\n- Fedora.23.Amd64\n  - AnyCPU-Release\n  - AnyCPU-Debug\n- Ubuntu.1610.Amd64\n  - AnyCPU-Release\n  - AnyCPU-Debug\n- Ubuntu.1404.Amd64\n  - AnyCPU-Release\n  - AnyCPU-Debug\n- Redhat.72.Amd64\n  - AnyCPU-Release\n  - AnyCPU-Debug\n- OSX.1011.Amd64\n  - AnyCPU-Debug\n\nDetail: https://mc.dot.net/#/product/netcore/master/source/official~2Fcorefx~2Fmaster~2F/type/test~2Ffunctional~2Fcli~2F/build/20170111.01/workItem/System.Configuration.Tests/analysis/xunit/MonoTests.System.Configuration.ConfigurationManagerTest~2FexePath_UserLevelPerRoamingAndLocal",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOImug7A==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDI3MTkyODI0MA==",
+                                           "createdAt":  "2017-01-11T17:07:37Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "danmoseley",
+                                           "body":  "@JeremyKuhne ",
+                                           "updatedAt":  "2017-01-11T17:07:37Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDI3NTI5MzgwOQ==",
+                                           "createdAt":  "2017-01-26T02:30:53Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "KristinXie1",
+                                           "body":  "This issue is repro on build 20170203.02, detail: https://mc.dot.net/#/product/netcore/master/source/official~2Fcorefx~2Fmaster~2F/type/test~2Ffunctional~2Fcli~2F/build/20170203.02/workItem/System.Configuration.ConfigurationManager.Tests/analysis/xunit/MonoTests.System.Configuration.ConfigurationManagerTest~2FexePath_UserLevelPerRoamingAndLocal\r\n\r\nMessage:\r\n~~~\r\nAssert.Equal() Failure\\n          ? (pos 0)\\nExpected: user.config\\nActual:   \\n          ? (pos 0)\r\n~~~\r\n\r\nStack Trace:\r\n~~~\r\nat MonoTests.System.Configuration.ConfigurationManagerTest.exePath_UserLevelPerRoamingAndLocal() in /root/corefx/src/System.Configuration.ConfigurationManager/tests/Mono/ConfigurationManagerTest.cs:line 165\r\n~~~",
+                                           "updatedAt":  "2017-02-04T01:36:25Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDI4MjkyMDMzNw==",
+                                           "createdAt":  "2017-02-28T02:12:03Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "KristinXie1",
+                                           "body":  "This issue is repro on build 20170227.01, detail: https://mc.dot.net/#/product/netcore/master/source/official~2Fcorefx~2Fmaster~2F/type/test~2Ffunctional~2Fcli~2F/build/20170227.01/workItem/System.Configuration.ConfigurationManager.Tests/analysis/xunit/MonoTests.System.Configuration.ConfigurationManagerTest~2FexePath_UserLevelPerRoamingAndLocal",
+                                           "updatedAt":  "2017-02-28T02:12:03Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDI4MzUyNzY0OA==",
+                                           "createdAt":  "2017-03-02T01:30:05Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "KristinXie1",
+                                           "body":  "This issue is repro on build 20170301.02, detail: https://mc.dot.net/#/product/netcore/master/source/official~2Fcorefx~2Fmaster~2F/type/test~2Ffunctional~2Fcli~2F/build/20170301.02/workItem/System.Configuration.ConfigurationManager.Tests/analysis/xunit/MonoTests.System.Configuration.ConfigurationManagerTest~2FexePath_UserLevelPerRoamingAndLocal",
+                                           "updatedAt":  "2017-03-02T01:30:05Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDI4MzgzNzA5NQ==",
+                                           "createdAt":  "2017-03-03T01:24:31Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "KristinXie1",
+                                           "body":  "Failed again on build [20170302.02](https://mc.dot.net/#/product/netcore/master/source/official~2Fcorefx~2Fmaster~2F/type/test~2Ffunctional~2Fcli~2F/build/20170302.02/workItem/System.Configuration.ConfigurationManager.Tests/analysis/xunit/MonoTests.System.Configuration.ConfigurationManagerTest~2FexePath_UserLevelPerRoamingAndLocal)",
+                                           "updatedAt":  "2017-03-03T01:24:31Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDI4NTIyNDgwOA==",
+                                           "createdAt":  "2017-03-09T01:22:42Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "KristinXie1",
+                                           "body":  "Failed again here: https://mc.dot.net/#/product/netcore/master/source/official~2Fcorefx~2Fmaster~2F/type/test~2Ffunctional~2Fcli~2F/build/20170308.04/workItem/System.Configuration.ConfigurationManager.Tests/analysis/xunit/MonoTests.System.Configuration.ConfigurationManagerTest~2FexePath_UserLevelPerRoamingAndLocal",
+                                           "updatedAt":  "2017-03-09T01:22:42Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDI4NzY4NDYxOQ==",
+                                           "createdAt":  "2017-03-20T06:14:45Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "KristinXie1",
+                                           "body":  "This issue is repro on [20170318.01](https://mc.dot.net/#/product/netcore/master/source/official~2Fcorefx~2Fmaster~2F/type/test~2Ffunctional~2Fcli~2F/build/20170318.01/workItem/System.Configuration.ConfigurationManager.Tests/analysis/xunit/MonoTests.System.Configuration.ConfigurationManagerTest~2FexePath_UserLevelPerRoamingAndLocal)",
+                                           "updatedAt":  "2017-03-20T06:14:45Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDI5MTcyNjQ3MA==",
+                                           "createdAt":  "2017-04-05T02:42:35Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "KristinXie1",
+                                           "body":  "Failed again on build [20170405.01](https://mc.dot.net/#/product/netcore/master/source/official~2Fcorefx~2Fmaster~2F/type/test~2Ffunctional~2Fcli~2F/build/20170405.01/workItem/System.Configuration.ConfigurationManager.Tests/analysis/xunit/MonoTests.System.Configuration.ConfigurationManagerTest~2FexePath_UserLevelPerRoamingAndLocal)",
+                                           "updatedAt":  "2017-04-05T02:42:35Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDI5MjQ2MDk0NA==",
+                                           "createdAt":  "2017-04-07T07:18:00Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "KristinXie1",
+                                           "body":  "This issue is repro on portable core tests: https://mc.dot.net/#/product/netcore/master/source/official~2Fcorefx~2Fmaster~2F/type/test~2Ffunctional~2Fportable~2Fcli~2F/build/20170407.01/workItem/System.Configuration.ConfigurationManager.Tests/analysis/xunit/MonoTests.System.Configuration.ConfigurationManagerTest~2FexePath_UserLevelPerRoamingAndLocal",
+                                           "updatedAt":  "2017-04-07T07:18:00Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDI5Mzc4NjAyMQ==",
+                                           "createdAt":  "2017-04-13T05:31:51Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "danmoseley",
+                                           "body":  "@JeremyKuhne does this seem important for 2.0? if not we can ask @Jiayili1 to disable the test meantime.",
+                                           "updatedAt":  "2017-04-13T05:31:51Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDI5OTU1MTkyNg==",
+                                           "createdAt":  "2017-05-05T19:14:13Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "danmoseley",
+                                           "body":  "We don\u0027t believe this is concerning compat issue for 2.0",
+                                           "updatedAt":  "2017-05-05T19:14:13Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDMwMTM2MjIyNQ==",
+                                           "createdAt":  "2017-05-15T02:34:36Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "KristinXie1",
+                                           "body":  "This issue doesn\u0027t occur on Core Tests in recent builds, so remove the label \"test-run-core\" first.",
+                                           "updatedAt":  "2017-05-15T02:34:36Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDM5Njg0NDc3Mw==",
+                                           "createdAt":  "2018-06-13T07:40:51Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Sunny-pu",
+                                           "body":  "This issue is repro on build 20180611.01, detail: \r\nhttps://mc.dot.net/#/product/netcore/200/source/official~2Fcorefx~2Frelease~2F2.0.0~2F/type/test~2Ffunctional~2Fcli~2F/build/20180611.01/workItem/System.Configuration.ConfigurationManager.Tests/analysis/xunit/MonoTests.System.Configuration.ConfigurationManagerTest~2FexePath_UserLevelPerRoamingAndLocal",
+                                           "updatedAt":  "2018-06-13T07:40:51Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQwODc2NjQzMg==",
+                                           "createdAt":  "2018-07-30T07:02:14Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Sunny-pu",
+                                           "body":  "Failed again in 2.0 Branch: https://mc.dot.net/#/product/netcore/200/source/official~2Fcorefx~2Frelease~2F2.0.0~2F/type/test~2Ffunctional~2Fcli~2F/build/20180727.02/workItem/System.Configuration.ConfigurationManager.Tests/analysis/xunit/MonoTests.System.Configuration.ConfigurationManagerTest~2FexePath_UserLevelPerRoamingAndLocal",
+                                           "updatedAt":  "2018-07-30T07:02:14Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQ5MTAzMTI4MQ==",
+                                           "createdAt":  "2019-05-09T19:16:24Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ericstj",
+                                           "body":  "Failed again https://dev.azure.com/dnceng/public/_build/results?buildId=184626\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=4447370\u0026resultId=111207\u0026paneView=debug\r\n\r\n```\r\nSystem.Configuration.ConfigurationErrorsException : An error occurred loading a configuration file: The process cannot access the file \u0027C:\\\\Users\\\\runner\\\\AppData\\\\Local\\\\Microsoft_Corporation\\\\xunit.console_StrongName_vmuqnj1rm2vzmtjlxpznjgrpuvgx0hav\\\\2.5.1.0\\\\user.config\u0027 because it is being used by another process. (C:\\\\Users\\\\runner\\\\AppData\\\\Local\\\\Microsoft_Corporation\\\\xunit.console_StrongName_vmuqnj1rm2vzmtjlxpznjgrpuvgx0hav\\\\2.5.1.0\\\\user.config)\\r\\n---- System.IO.IOException : The process cannot access the file \u0027C:\\\\Users\\\\runner\\\\AppData\\\\Local\\\\Microsoft_Corporation\\\\xunit.console_StrongName_vmuqnj1rm2vzmtjlxpznjgrpuvgx0hav\\\\2.5.1.0\\\\user.config\u0027 because it is being used by another process.\r\n\r\nStack trace\r\n   at System.Configuration.ConfigurationSchemaErrors.ThrowIfErrors(Boolean ignoreLocal) in D:\\a\\1\\s\\src\\System.Configuration.ConfigurationManager\\src\\System\\Configuration\\ConfigurationSchemaErrors.cs:line 72\r\n   at System.Configuration.BaseConfigurationRecord.ThrowIfParseErrors(ConfigurationSchemaErrors schemaErrors) in D:\\a\\1\\s\\src\\System.Configuration.ConfigurationManager\\src\\System\\Configuration\\BaseConfigurationRecord.cs:line 3659\r\n   at System.Configuration.Configuration..ctor(String locationSubPath, Type typeConfigHost, Object[] hostInitConfigurationParams) in D:\\a\\1\\s\\src\\System.Configuration.ConfigurationManager\\src\\System\\Configuration\\Configuration.cs:line 76\r\n   at System.Configuration.ClientConfigurationHost.OpenExeConfiguration(ConfigurationFileMap fileMap, Boolean isMachine, ConfigurationUserLevel userLevel, String exePath) in D:\\a\\1\\s\\src\\System.Configuration.ConfigurationManager\\src\\System\\Configuration\\ClientConfigurationHost.cs:line 487\r\n   at System.Configuration.ConfigurationManager.OpenExeConfigurationImpl(ConfigurationFileMap fileMap, Boolean isMachine, ConfigurationUserLevel userLevel, String exePath, Boolean preLoad) in D:\\a\\1\\s\\src\\System.Configuration.ConfigurationManager\\src\\System\\Configuration\\ConfigurationManager.cs:line 221\r\n   at MonoTests.System.Configuration.ConfigurationManagerTest.exePath_UserLevelPerRoamingAndLocal() in D:\\a\\1\\s\\src\\System.Configuration.ConfigurationManager\\tests\\Mono\\ConfigurationManagerTest.cs:line 164\r\n----- Inner Stack Trace -----\r\n   at System.IO.FileStream.ValidateFileHandle(SafeFileHandle fileHandle) in F:\\workspace\\_work\\1\\s\\src\\System.Private.CoreLib\\shared\\System\\IO\\FileStream.Windows.cs:line 1643\r\n   at System.IO.FileStream.CreateFileOpenHandle(FileMode mode, FileShare share, FileOptions options) in F:\\workspace\\_work\\1\\s\\src\\System.Private.CoreLib\\shared\\System\\IO\\FileStream.Win32.cs:line 45\r\n   at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options) in F:\\workspace\\_work\\1\\s\\src\\System.Private.CoreLib\\shared\\System\\IO\\FileStream.cs:line 236\r\n   at System.Configuration.Internal.InternalConfigHost.StaticOpenStreamForRead(String streamName) in D:\\a\\1\\s\\src\\System.Configuration.ConfigurationManager\\src\\System\\Configuration\\Internal\\InternalConfigHost.cs:line 228\r\n   at System.Configuration.Internal.InternalConfigHost.System.Configuration.Internal.IInternalConfigHost.OpenStreamForRead(String streamName) in D:\\a\\1\\s\\src\\System.Configuration.ConfigurationManager\\src\\System\\Configuration\\Internal\\InternalConfigHost.cs:line 60\r\n   at System.Configuration.ClientConfigurationHost.OpenStreamForRead(String streamName) in D:\\a\\1\\s\\src\\System.Configuration.ConfigurationManager\\src\\System\\Configuration\\ClientConfigurationHost.cs:line 282\r\n   at System.Configuration.UpdateConfigHost.OpenStreamForRead(String streamName) in D:\\a\\1\\s\\src\\System.Configuration.ConfigurationManager\\src\\System\\Configuration\\UpdateConfigHost.cs:line 80\r\n   at System.Configuration.ImplicitMachineConfigHost.OpenStreamForRead(String streamName) in D:\\a\\1\\s\\src\\System.Configuration.ConfigurationManager\\src\\System\\Configuration\\ImplicitMachineConfigHost.cs:line 64\r\n   at System.Configuration.BaseConfigurationRecord.InitConfigFromFile() in D:\\a\\1\\s\\src\\System.Configuration.ConfigurationManager\\src\\System\\Configuration\\BaseConfigurationRecord.cs:line 552\r\n```",
+                                           "updatedAt":  "2019-05-09T19:16:24Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQ5MTAzMjExMw==",
+                                           "createdAt":  "2019-05-09T19:19:16Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ericstj",
+                                           "body":  "@ViktorHofer here\u0027s another test that needs an activeissue tag.",
+                                           "updatedAt":  "2019-05-09T19:19:16Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQ5MTAzNTQ5NQ==",
+                                           "createdAt":  "2019-05-09T19:30:20Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "danmoseley",
+                                           "body":  "Looking at the test, it\u0027s not obvious to me that this issue won\u0027t just pop up in another test. As an alternative, consider just making the configuration manager tests run serially. If that makes them slow on the dev box, I think it would be fine for the slow ones to be outer loop.",
+                                           "updatedAt":  "2019-05-09T19:30:20Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQ5MTAzNjk3Mg==",
+                                           "createdAt":  "2019-05-09T19:35:14Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ericstj",
+                                           "body":  "Well: double check that the config System is using legitimate file sharing value first.  If these tests are only reading then I’d expect this to work.  Making test serial could hide real bug.",
+                                           "updatedAt":  "2019-05-09T19:35:14Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQ5MTAzNzM5MA==",
+                                           "createdAt":  "2019-05-09T19:36:38Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "stephentoub",
+                                           "body":  "\u003e it\u0027s not obvious to me that this issue won\u0027t just pop up in another test\r\n\r\nThey did:\r\nhttps://github.com/dotnet/corefx/issues/37364\r\nhttps://github.com/dotnet/corefx/pull/37420",
+                                           "updatedAt":  "2019-05-09T19:36:38Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQ5MjgwNDgzNQ==",
+                                           "createdAt":  "2019-05-15T20:09:08Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "danmoseley",
+                                           "body":  "@Anipik can you please try making the tests in System.Configuration.ConfigurationManager.Tests. serialized? Let\u0027s see whether this helps, as this keeps hapepning.\r\n\r\nThen check how long it takes to run - if it\u0027s more than a few seconds please make the slowest tests `[OuterLoop]`. This is not code that is likely to get broken often.",
+                                           "updatedAt":  "2019-05-15T20:09:08Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQ5MjgwODk3MQ==",
+                                           "createdAt":  "2019-05-15T20:21:25Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Anipik",
+                                           "body":  "sure I will try that",
+                                           "updatedAt":  "2019-05-15T20:21:25Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQ5MjgxMTU5OA==",
+                                           "createdAt":  "2019-05-15T20:29:21Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "danmoseley",
+                                           "body":  "\u003e Well: double check that the config System is using legitimate file sharing value first. If these tests are only reading then I’d expect this to work. Making test serial could hide real bug.\r\n\r\nI completely agree with this - but our interest level in this deprecated library is low. I did briefly look at the places it opens file streams and nothing jumped out. If we were to investigate further, I would run in parallel after adding logging around all the file stream open/closes logging their sharing values. Possibly even record the callstack for every open/close and dump all those in flight on failure somehow.",
+                                           "updatedAt":  "2019-05-15T20:29:21Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQ5Mjg4MDE1NA==",
+                                           "createdAt":  "2019-05-16T01:20:57Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "wfurt",
+                                           "body":  "We should also capture system state. This almost smells like something still runs from previous test runs. For quests not using containers, we do not know what state the system in.",
+                                           "updatedAt":  "2019-05-16T01:20:57Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQ5MzIzMDY2Mg==",
+                                           "createdAt":  "2019-05-16T21:01:40Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "danmoseley",
+                                           "body":  "We don\u0027t plan to investigate further unless this happens again.",
+                                           "updatedAt":  "2019-05-16T21:01:40Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDU3NzQ3ODg5Mg==",
+                                           "createdAt":  "2020-01-23T02:39:30Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOA5t9Zw==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "LAUGH",
+                                                                               "user":  "danmoseley",
+                                                                               "createdAt":  "2020-01-23T03:48:54Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "stephentoub",
+                                           "body":  "\u003e We don\u0027t plan to investigate further unless this happens again.\r\n\r\n@danmosemsft, the test is disabled:\r\nhttps://github.com/dotnet/runtime/blob/ccf6aedb63c37ea8e10e4f5b5d9d23a69bdd9489/src/libraries/System.Configuration.ConfigurationManager/tests/Mono/ConfigurationManagerTest.cs#L159-L160\r\nso it won\u0027t happen again ;)  I\u0027m going to re-open this.  If the fix is to just make the test [PlatformSpecific] for Windows, ok.",
+                                           "updatedAt":  "2020-01-23T02:39:30Z"
+                                       }
+                                   ],
+                         "totalCount":  25
+                     },
+        "title":  "Test failure: MonoTests.System.Configuration.ConfigurationManagerTest/exePath_UserLevelPerRoamingAndLocal",
+        "labels":  [
+                       "area-System.Configuration",
+                       "disabled-test"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/26195",
+        "createdAt":  "2018-05-17T00:59:12Z",
+        "number":  26195,
+        "author":  "stephentoub",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2021-07-22T16:18:07Z",
+        "body":  "@MattGal updated the Nano containers used in CI to v1709, and now tests are failing, e.g.\r\nhttps://mc.dot.net/#/user/stephentoub/pr~2Fjenkins~2Fdotnet~2Fcorefx~2Fmaster~2F/test~2Ffunctional~2Fcli~2F/8b94440c48148e20822d2cafebad29fed0f30f76/workItem/System.Configuration.ConfigurationManager.Tests/wilogs\r\n```\r\n2018-05-17 00:10:30,671: INFO: proc(54): run_and_log_output: Output:    MonoTests.System.Configuration.ConfigurationManagerTest.exePath_UserLevelPerRoamingAndLocal [FAIL]\r\n2018-05-17 00:10:30,674: INFO: proc(54): run_and_log_output: Output:       Assert.Equal() Failure\r\n2018-05-17 00:10:30,674: INFO: proc(54): run_and_log_output: Output:                 ↓ (pos 0)\r\n2018-05-17 00:10:30,674: INFO: proc(54): run_and_log_output: Output:       Expected: user.config\r\n2018-05-17 00:10:30,674: INFO: proc(54): run_and_log_output: Output:       Actual:   \r\n2018-05-17 00:10:30,674: INFO: proc(54): run_and_log_output: Output:                 ↑ (pos 0)\r\n2018-05-17 00:10:30,680: INFO: proc(54): run_and_log_output: Output:       Stack Trace:\r\n2018-05-17 00:10:30,716: INFO: proc(54): run_and_log_output: Output:          D:\\j\\workspace\\windows-TGrou---74aa877a\\src\\System.Configuration.ConfigurationManager\\tests\\Mono\\ConfigurationManagerTest.cs(166,0): at MonoTests.System.Configuration.ConfigurationManagerTest.exePath_UserLevelPerRoamingAndLocal()\r\n2018-05-17 00:10:30,717: INFO: proc(54): run_and_log_output: Output:    MonoTests.System.Configuration.ConfigurationManagerTest.OpenExeConfiguration1_UserLevel_PerUserRoamingAndLocal [FAIL]\r\n2018-05-17 00:10:30,717: INFO: proc(54): run_and_log_output: Output:       System.ArgumentException : The path is empty.\r\n2018-05-17 00:10:30,717: INFO: proc(54): run_and_log_output: Output:       Parameter name: path\r\n2018-05-17 00:10:30,719: INFO: proc(54): run_and_log_output: Output:       Stack Trace:\r\n2018-05-17 00:10:30,719: INFO: proc(54): run_and_log_output: Output:          E:\\A\\_work\\104\\s\\src\\System.Private.CoreLib\\shared\\System\\IO\\Path.Windows.cs(44,0): at System.IO.Path.GetFullPath(String path)\r\n2018-05-17 00:10:30,719: INFO: proc(54): run_and_log_output: Output:          D:\\j\\workspace\\windows-TGrou---74aa877a\\src\\System.IO.FileSystem\\src\\System\\IO\\FileInfo.cs(29,0): at System.IO.FileInfo..ctor(String originalPath, String fullPath, String fileName, Boolean isNormalized)\r\n2018-05-17 00:10:30,720: INFO: proc(54): run_and_log_output: Output:          D:\\j\\workspace\\windows-TGrou---74aa877a\\src\\System.IO.FileSystem\\src\\System\\IO\\FileInfo.cs(17,0): at System.IO.FileInfo..ctor(String fileName)\r\n2018-05-17 00:10:30,720: INFO: proc(54): run_and_log_output: Output:          D:\\j\\workspace\\windows-TGrou---74aa877a\\src\\System.Configuration.ConfigurationManager\\tests\\Mono\\ConfigurationManagerTest.cs(74,0): at MonoTests.System.Configuration.ConfigurationManagerTest.OpenExeConfiguration1_UserLevel_PerUserRoamingAndLocal()\r\n```",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOKLe1Hg==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY4MzEyODA5NA==",
+                                           "createdAt":  "2020-08-28T20:15:20Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ericstj",
+                                           "body":  "Moving this out of 5.0.0 since its not critical.",
+                                           "updatedAt":  "2020-08-28T20:15:20Z"
+                                       }
+                                   ],
+                         "totalCount":  1
+                     },
+        "title":  "System.Configuration.ConfigurationManager tests failing CI",
+        "labels":  [
+                       "area-System.Configuration",
+                       "disabled-test",
+                       "os-windows-nano",
+                       "test-bug"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/28833",
+        "createdAt":  "2019-02-28T22:20:25Z",
+        "number":  28833,
+        "author":  "maryamariyan",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2022-09-26T06:48:22Z",
+        "body":  "This issue tracks the Linux failures on `Save_SimpleSettings_Ok`, a test that is added in PR https://github.com/dotnet/corefx/pull/28894.\r\nThe Linux issue may be something weird about how our machines are configured on our CI machines.\r\n\r\nFailing on Linux with:\r\n```\r\n2018-06-12 18:36:32,792: INFO: proc(54): run_and_log_output: Output:    System.ConfigurationTests.ApplicationSettingsBaseTests.Save_SimpleSettings_Ok(isSynchronized: True) [FAIL]\r\n2018-06-12 18:36:32,794: INFO: proc(54): run_and_log_output: Output:       System.Configuration.ConfigurationErrorsException : Failed to save settings: An error occurred loading a configuration file: An unexpected error occurred in \u0027ClientConfigurationHost::OpenStreamForWrite \u0027\u0027 \u0027\u0027\u0027.\r\n2018-06-12 18:36:32,795: INFO: proc(54): run_and_log_output: Output:       ---- System.Configuration.ConfigurationErrorsException : An error occurred loading a configuration file: An unexpected error occurred in \u0027ClientConfigurationHost::OpenStreamForWrite \u0027\u0027 \u0027\u0027\u0027.\r\n2018-06-12 18:36:32,795: INFO: proc(54): run_and_log_output: Output:       -------- System.InvalidOperationException : An unexpected error occurred in \u0027ClientConfigurationHost::OpenStreamForWrite \u0027\u0027 \u0027\u0027\u0027.\r\n2018-06-12 18:36:32,803: INFO: proc(54): run_and_log_output: Output:       Stack Trace:\r\n2018-06-12 18:36:32,836: INFO: proc(54): run_and_log_output: Output:          /mnt/j/workspace/dotnet_corefx/master/linux-TGroup_netcoreapp+CGroup_Release+AGroup_x64+TestOuter_false_prtest/src/System.Configuration.ConfigurationManager/src/System/Configuration/ClientSettingsStore.cs(209,0): at System.Configuration.ClientSettingsStore.WriteSettings(String sectionName, Boolean isRoaming, IDictionary newSettings)\r\n2018-06-12 18:36:32,837: INFO: proc(54): run_and_log_output: Output:          /mnt/j/workspace/dotnet_corefx/master/linux-TGroup_netcoreapp+CGroup_Release+AGroup_x64+TestOuter_false_prtest/src/System.Configuration.ConfigurationManager/src/System/Configuration/LocalFileSettingsProvider.cs(220,0): at System.Configuration.LocalFileSettingsProvider.SetPropertyValues(SettingsContext context, SettingsPropertyValueCollection values)\r\n2018-06-12 18:36:32,837: INFO: proc(54): run_and_log_output: Output:          /mnt/j/workspace/dotnet_corefx/master/linux-TGroup_netcoreapp+CGroup_Release+AGroup_x64+TestOuter_false_prtest/src/System.Configuration.ConfigurationManager/src/System/Configuration/SettingsBase.cs(129,0): at System.Configuration.SettingsBase.SaveCore()\r\n2018-06-12 18:36:32,838: INFO: proc(54): run_and_log_output: Output:          /mnt/j/workspace/dotnet_corefx/master/linux-TGroup_netcoreapp+CGroup_Release+AGroup_x64+TestOuter_false_prtest/src/System.Configuration.ConfigurationManager/src/System/Configuration/SettingsBase.cs(115,0): at System.Configuration.SettingsBase.Save()\r\n2018-06-12 18:36:32,838: INFO: proc(54): run_and_log_output: Output:          /mnt/j/workspace/dotnet_corefx/master/linux-TGroup_netcoreapp+CGroup_Release+AGroup_x64+TestOuter_false_prtest/src/System.Configuration.ConfigurationManager/tests/System/Configuration/ApplicationSettingsBaseTests.cs(135,0): at System.ConfigurationTests.ApplicationSettingsBaseTests.Save_SimpleSettings_Ok(Boolean isSynchronized)\r\n2018-06-12 18:36:32,838: INFO: proc(54): run_and_log_output: Output:          ----- Inner Stack Trace -----\r\n2018-06-12 18:36:32,840: INFO: proc(54): run_and_log_output: Output:          /mnt/j/workspace/dotnet_corefx/master/linux-TGroup_netcoreapp+CGroup_Release+AGroup_x64+TestOuter_false_prtest/src/System.Configuration.ConfigurationManager/src/System/Configuration/MgmtConfigurationRecord.cs(1098,0): at System.Configuration.MgmtConfigurationRecord.SaveAs(String filename, ConfigurationSaveMode saveMode, Boolean forceUpdateAll)\r\n2018-06-12 18:36:32,840: INFO: proc(54): run_and_log_output: Output:          /mnt/j/workspace/dotnet_corefx/master/linux-TGroup_netcoreapp+CGroup_Release+AGroup_x64+TestOuter_false_prtest/src/System.Configuration.ConfigurationManager/src/System/Configuration/ClientSettingsStore.cs(204,0): at System.Configuration.ClientSettingsStore.WriteSettings(String sectionName, Boolean isRoaming, IDictionary newSettings)\r\n2018-06-12 18:36:32,840: INFO: proc(54): run_and_log_output: Output:          ----- Inner Stack Trace -----\r\n2018-06-12 18:36:32,840: INFO: proc(54): run_and_log_output: Output:          /mnt/j/workspace/dotnet_corefx/master/linux-TGroup_netcoreapp+CGroup_Release+AGroup_x64+TestOuter_false_prtest/src/System.Configuration.ConfigurationManager/src/System/Configuration/ClientConfigurationHost.cs(312,0): at System.Configuration.ClientConfigurationHost.OpenStreamForWrite(String streamName, String templateStreamName, Object\u0026 writeContext)\r\n2018-06-12 18:36:32,841: INFO: proc(54): run_and_log_output: Output:          /mnt/j/workspace/dotnet_corefx/master/linux-TGroup_netcoreapp+CGroup_Release+AGroup_x64+TestOuter_false_prtest/src/System.Configuration.ConfigurationManager/src/System/Configuration/MgmtConfigurationRecord.cs(1062,0): at System.Configuration.MgmtConfigurationRecord.SaveAs(String filename, ConfigurationSaveMode saveMode, Boolean forceUpdateAll)\r\n2018-06-12 18:36:32,843: INFO: proc(54): run_and_log_output: Output:    System.ConfigurationTests.ApplicationSettingsBaseTests.Save_SimpleSettings_Ok(isSynchronized: False) [FAIL]\r\n2018-06-12 18:36:32,843: INFO: proc(54): run_and_log_output: Output:       System.Configuration.ConfigurationErrorsException : Failed to save settings: An error occurred loading a configuration file: An unexpected error occurred in \u0027ClientConfigurationHost::OpenStreamForWrite \u0027\u0027 \u0027\u0027\u0027.\r\n2018-06-12 18:36:32,843: INFO: proc(54): run_and_log_output: Output:       ---- System.Configuration.ConfigurationErrorsException : An error occurred loading a configuration file: An unexpected error occurred in \u0027ClientConfigurationHost::OpenStreamForWrite \u0027\u0027 \u0027\u0027\u0027.\r\n2018-06-12 18:36:32,843: INFO: proc(54): run_and_log_output: Output:       -------- System.InvalidOperationException : An unexpected error occurred in \u0027ClientConfigurationHost::OpenStreamForWrite \u0027\u0027 \u0027\u0027\u0027.\r\n2018-06-12 18:36:32,844: INFO: proc(54): run_and_log_output: Output:       Stack Trace:\r\n2018-06-12 18:36:32,844: INFO: proc(54): run_and_log_output: Output:          /mnt/j/workspace/dotnet_corefx/master/linux-TGroup_netcoreapp+CGroup_Release+AGroup_x64+TestOuter_false_prtest/src/System.Configuration.ConfigurationManager/src/System/Configuration/ClientSettingsStore.cs(209,0): at System.Configuration.ClientSettingsStore.WriteSettings(String sectionName, Boolean isRoaming, IDictionary newSettings)\r\n2018-06-12 18:36:32,844: INFO: proc(54): run_and_log_output: Output:          /mnt/j/workspace/dotnet_corefx/master/linux-TGroup_netcoreapp+CGroup_Release+AGroup_x64+TestOuter_false_prtest/src/System.Configuration.ConfigurationManager/src/System/Configuration/LocalFileSettingsProvider.cs(220,0): at System.Configuration.LocalFileSettingsProvider.SetPropertyValues(SettingsContext context, SettingsPropertyValueCollection values)\r\n2018-06-12 18:36:32,844: INFO: proc(54): run_and_log_output: Output:          /mnt/j/workspace/dotnet_corefx/master/linux-TGroup_netcoreapp+CGroup_Release+AGroup_x64+TestOuter_false_prtest/src/System.Configuration.ConfigurationManager/src/System/Configuration/SettingsBase.cs(129,0): at System.Configuration.SettingsBase.SaveCore()\r\n2018-06-12 18:36:32,849: INFO: proc(54): run_and_log_output: Output:          /mnt/j/workspace/dotnet_corefx/master/linux-TGroup_netcoreapp+CGroup_Release+AGroup_x64+TestOuter_false_prtest/src/System.Configuration.ConfigurationManager/src/System/Configuration/SettingsBase.cs(122,0): at System.Configuration.SettingsBase.Save()\r\n2018-06-12 18:36:32,849: INFO: proc(54): run_and_log_output: Output:          /mnt/j/workspace/dotnet_corefx/master/linux-TGroup_netcoreapp+CGroup_Release+AGroup_x64+TestOuter_false_prtest/src/System.Configuration.ConfigurationManager/tests/System/Configuration/ApplicationSettingsBaseTests.cs(135,0): at System.ConfigurationTests.ApplicationSettingsBaseTests.Save_SimpleSettings_Ok(Boolean isSynchronized)\r\n2018-06-12 18:36:32,849: INFO: proc(54): run_and_log_output: Output:          ----- Inner Stack Trace -----\r\n2018-06-12 18:36:32,850: INFO: proc(54): run_and_log_output: Output:          /mnt/j/workspace/dotnet_corefx/master/linux-TGroup_netcoreapp+CGroup_Release+AGroup_x64+TestOuter_false_prtest/src/System.Configuration.ConfigurationManager/src/System/Configuration/MgmtConfigurationRecord.cs(1098,0): at System.Configuration.MgmtConfigurationRecord.SaveAs(String filename, ConfigurationSaveMode saveMode, Boolean forceUpdateAll)\r\n2018-06-12 18:36:32,850: INFO: proc(54): run_and_log_output: Output:          /mnt/j/workspace/dotnet_corefx/master/linux-TGroup_netcoreapp+CGroup_Release+AGroup_x64+TestOuter_false_prtest/src/System.Configuration.ConfigurationManager/src/System/Configuration/ClientSettingsStore.cs(204,0): at System.Configuration.ClientSettingsStore.WriteSettings(String sectionName, Boolean isRoaming, IDictionary newSettings)\r\n2018-06-12 18:36:32,850: INFO: proc(54): run_and_log_output: Output:          ----- Inner Stack Trace -----\r\n2018-06-12 18:36:32,851: INFO: proc(54): run_and_log_output: Output:          /mnt/j/workspace/dotnet_corefx/master/linux-TGroup_netcoreapp+CGroup_Release+AGroup_x64+TestOuter_false_prtest/src/System.Configuration.ConfigurationManager/src/System/Configuration/ClientConfigurationHost.cs(312,0): at System.Configuration.ClientConfigurationHost.OpenStreamForWrite(String streamName, String templateStreamName, Object\u0026 writeContext)\r\n2018-06-12 18:36:32,851: INFO: proc(54): run_and_log_output: Output:          /mnt/j/workspace/dotnet_corefx/master/linux-TGroup_netcoreapp+CGroup_Release+AGroup_x64+TestOuter_false_prtest/src/System.Configuration.ConfigurationManager/src/System/Configuration/MgmtConfigurationRecord.cs(1062,0): at System.Configuration.MgmtConfigurationRecord.SaveAs(String filename, ConfigurationSaveMode saveMode, Boolean forceUpdateAll)\r\n```\r\n\r\n(Taken from comment https://github.com/dotnet/corefx/pull/28894#issuecomment-396789297)",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOMPzFqg==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDUzMjY2NjcyNg==",
+                                           "createdAt":  "2019-09-18T12:43:09Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ViktorHofer",
+                                           "body":  "Failed again, this time on Windows 7: https://dev.azure.com/dnceng/public/_build/results?buildId=358032\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=10839480\u0026resultId=105888\u0026paneView=debug\r\n\r\nConfiguration: `netcoreapp-Windows_NT-Release-x86-Windows.7.Amd64.Open`\r\n\r\n```\r\nSystem.ConfigurationTests.ApplicationSettingsBaseTests.Save_SimpleSettings_Ok(isSynchronized: False)\r\n\r\nSystem.Configuration.ConfigurationErrorsException : An error occurred creating the configuration section handler for userSettings/System.ConfigurationTests.ApplicationSettingsBaseTests_x002B_PersistedSimpleSettings: Could not load file or assembly \u0027System.Configuration.ConfigurationManager, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51\u0027. The system cannot find the file specified. (C:\\\\Users\\\\runner\\\\AppData\\\\Local\\\\Microsoft_Corporation\\\\xunit.console_StrongName_vmuqnj1rm2vzmtjlxpznjgrpuvgx0hav\\\\2.5.1.0\\\\user.config line 5)\\r\\n---- System.IO.FileNotFoundException : Could not load file or assembly \u0027System.Configuration.ConfigurationManager, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51\u0027. The system cannot find the file specified.\r\n\r\n   at System.Configuration.BaseConfigurationRecord.FindAndEnsureFactoryRecord(String configKey, Boolean\u0026 isRootDeclaredHere) in /_/src/System.Configuration.ConfigurationManager/src/System/Configuration/BaseConfigurationRecord.cs:line 1740\r\n   at System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object\u0026 result, Object\u0026 resultRuntimeObject) in /_/src/System.Configuration.ConfigurationManager/src/System/Configuration/BaseConfigurationRecord.cs:line 875\r\n   at System.Configuration.BaseConfigurationRecord.GetSection(String configKey, Boolean getLkg, Boolean checkPermission) in /_/src/System.Configuration.ConfigurationManager/src/System/Configuration/BaseConfigurationRecord.cs:line 757\r\n   at System.Configuration.BaseConfigurationRecord.GetSection(String configKey) in /_/src/System.Configuration.ConfigurationManager/src/System/Configuration/BaseConfigurationRecord.cs:line 258\r\n   at System.Configuration.Configuration.GetSection(String sectionName) in /_/src/System.Configuration.ConfigurationManager/src/System/Configuration/Configuration.cs:line 168\r\n   at System.Configuration.ClientSettingsStore.GetConfigSection(Configuration config, String sectionName, Boolean declare) in /_/src/System.Configuration.ConfigurationManager/src/System/Configuration/ClientSettingsStore.cs:line 43\r\n   at System.Configuration.ClientSettingsStore.RevertToParent(String sectionName, Boolean isRoaming) in /_/src/System.Configuration.ConfigurationManager/src/System/Configuration/ClientSettingsStore.cs:line 163\r\n   at System.Configuration.LocalFileSettingsProvider.Reset(SettingsContext context) in /_/src/System.Configuration.ConfigurationManager/src/System/Configuration/LocalFileSettingsProvider.cs:line 232\r\n   at System.Configuration.ApplicationSettingsBase.Reset() in /_/src/System.Configuration.ConfigurationManager/src/System/Configuration/ApplicationSettingsBase.cs:line 371\r\n   at System.ConfigurationTests.ApplicationSettingsBaseTests.Save_SimpleSettings_Ok(Boolean isSynchronized) in /_/src/System.Configuration.ConfigurationManager/tests/System/Configuration/ApplicationSettingsBaseTests.cs:line 113\r\n----- Inner Stack Trace -----\r\n   at System.Configuration.TypeUtil.GetType(IInternalConfigHost host, String typeString, Boolean throwOnError) in /_/src/System.Configuration.ConfigurationManager/src/System/Configuration/TypeUtil.cs:line 132\r\n   at System.Configuration.MgmtConfigurationRecord.CreateSectionFactory(FactoryRecord factoryRecord) in /_/src/System.Configuration.ConfigurationManager/src/System/Configuration/MgmtConfigurationRecord.cs:line 128\r\n   at System.Configuration.BaseConfigurationRecord.FindAndEnsureFactoryRecord(String configKey, Boolean\u0026 isRootDeclaredHere) in /_/src/System.Configuration.ConfigurationManager/src/System/Configuration/BaseConfigurationRecord.cs:line 1735\r\n```",
+                                           "updatedAt":  "2019-09-18T12:43:09Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDUzMjczMDE0Mw==",
+                                           "createdAt":  "2019-09-18T15:11:37Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ViktorHofer",
+                                           "body":  "@maryamariyan, @safern",
+                                           "updatedAt":  "2019-09-18T15:11:37Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDUzNjEzNDA3OQ==",
+                                           "createdAt":  "2019-09-28T00:28:13Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "bartonjs",
+                                           "body":  "Failed on Windows7 and Windows8.1 with perhaps a new kind of error.\r\n\r\nhttps://dev.azure.com/dnceng/public/_build/results?buildId=368747\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=11204916\u0026resultId=100515\u0026paneView=debug\r\n\r\n```\r\nSystem.ConfigurationTests.ApplicationSettingsBaseTests.Save_SimpleSettings_Ok(isSynchronized: True) [FAIL]\r\n      System.Configuration.ConfigurationErrorsException : An error occurred creating the configuration section handler for userSettings/System.ConfigurationTests.ApplicationSettingsBaseTests_x002B_PersistedSimpleSettings: Could not load file or assembly \u0027System.Configuration.ConfigurationManager, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51\u0027. The system cannot find the file specified. (C:\\Users\\runner\\AppData\\Local\\Microsoft_Corporation\\xunit.console_StrongName_vmuqnj1rm2vzmtjlxpznjgrpuvgx0hav\\2.5.1.0\\user.config line 5)\r\n      ---- System.IO.FileNotFoundException : Could not load file or assembly \u0027System.Configuration.ConfigurationManager, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51\u0027. The system cannot find the file specified.\r\n      Stack Trace:\r\n        /_/src/System.Configuration.ConfigurationManager/src/System/Configuration/BaseConfigurationRecord.cs(1740,0): at System.Configuration.BaseConfigurationRecord.FindAndEnsureFactoryRecord(String configKey, Boolean\u0026 isRootDeclaredHere)\r\n        /_/src/System.Configuration.ConfigurationManager/src/System/Configuration/BaseConfigurationRecord.cs(875,0): at System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object\u0026 result, Object\u0026 resultRuntimeObject)\r\n        /_/src/System.Configuration.ConfigurationManager/src/System/Configuration/BaseConfigurationRecord.cs(757,0): at System.Configuration.BaseConfigurationRecord.GetSection(String configKey, Boolean getLkg, Boolean checkPermission)\r\n        /_/src/System.Configuration.ConfigurationManager/src/System/Configuration/BaseConfigurationRecord.cs(258,0): at System.Configuration.BaseConfigurationRecord.GetSection(String configKey)\r\n        /_/src/System.Configuration.ConfigurationManager/src/System/Configuration/Configuration.cs(168,0): at System.Configuration.Configuration.GetSection(String sectionName)\r\n        /_/src/System.Configuration.ConfigurationManager/src/System/Configuration/ClientSettingsStore.cs(43,0): at System.Configuration.ClientSettingsStore.GetConfigSection(Configuration config, String sectionName, Boolean declare)\r\n        /_/src/System.Configuration.ConfigurationManager/src/System/Configuration/ClientSettingsStore.cs(163,0): at System.Configuration.ClientSettingsStore.RevertToParent(String sectionName, Boolean isRoaming)\r\n        /_/src/System.Configuration.ConfigurationManager/src/System/Configuration/LocalFileSettingsProvider.cs(232,0): at System.Configuration.LocalFileSettingsProvider.Reset(SettingsContext context)\r\n        /_/src/System.Configuration.ConfigurationManager/src/System/Configuration/ApplicationSettingsBase.cs(371,0): at System.Configuration.ApplicationSettingsBase.Reset()\r\n        /_/src/System.Configuration.ConfigurationManager/tests/System/Configuration/ApplicationSettingsBaseTests.cs(113,0): at System.ConfigurationTests.ApplicationSettingsBaseTests.Save_SimpleSettings_Ok(Boolean isSynchronized)\r\n        ----- Inner Stack Trace -----\r\n        /_/src/System.Configuration.ConfigurationManager/src/System/Configuration/TypeUtil.cs(133,0): at System.Configuration.TypeUtil.GetType(IInternalConfigHost host, String typeString, Boolean throwOnError)\r\n        /_/src/System.Configuration.ConfigurationManager/src/System/Configuration/MgmtConfigurationRecord.cs(128,0): at System.Configuration.MgmtConfigurationRecord.CreateSectionFactory(FactoryRecord factoryRecord)\r\n        /_/src/System.Configuration.ConfigurationManager/src/System/Configuration/BaseConfigurationRecord.cs(1735,0): at System.Configuration.BaseConfigurationRecord.FindAndEnsureFactoryRecord(String configKey, Boolean\u0026 isRootDeclaredHere)\r\n    System.ConfigurationTests.ApplicationSettingsBaseTests.Save_SimpleSettings_Ok(isSynchronized: False) [FAIL]\r\n      System.Configuration.ConfigurationErrorsException : An error occurred creating the configuration section handler for userSettings/System.ConfigurationTests.ApplicationSettingsBaseTests_x002B_PersistedSimpleSettings: Could not load file or assembly \u0027System.Configuration.ConfigurationManager, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51\u0027. The system cannot find the file specified. (C:\\Users\\runner\\AppData\\Local\\Microsoft_Corporation\\xunit.console_StrongName_vmuqnj1rm2vzmtjlxpznjgrpuvgx0hav\\2.5.1.0\\user.config line 5)\r\n      ---- System.IO.FileNotFoundException : Could not load file or assembly \u0027System.Configuration.ConfigurationManager, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51\u0027. The system cannot find the file specified.\r\n      Stack Trace:\r\n        /_/src/System.Configuration.ConfigurationManager/src/System/Configuration/BaseConfigurationRecord.cs(1740,0): at System.Configuration.BaseConfigurationRecord.FindAndEnsureFactoryRecord(String configKey, Boolean\u0026 isRootDeclaredHere)\r\n        /_/src/System.Configuration.ConfigurationManager/src/System/Configuration/BaseConfigurationRecord.cs(875,0): at System.Configuration.BaseConfigurationRecord.GetSectionRecursive(String configKey, Boolean getLkg, Boolean checkPermission, Boolean getRuntimeObject, Boolean requestIsHere, Object\u0026 result, Object\u0026 resultRuntimeObject)\r\n        /_/src/System.Configuration.ConfigurationManager/src/System/Configuration/BaseConfigurationRecord.cs(757,0): at System.Configuration.BaseConfigurationRecord.GetSection(String configKey, Boolean getLkg, Boolean checkPermission)\r\n        /_/src/System.Configuration.ConfigurationManager/src/System/Configuration/BaseConfigurationRecord.cs(258,0): at System.Configuration.BaseConfigurationRecord.GetSection(String configKey)\r\n        /_/src/System.Configuration.ConfigurationManager/src/System/Configuration/Configuration.cs(168,0): at System.Configuration.Configuration.GetSection(String sectionName)\r\n        /_/src/System.Configuration.ConfigurationManager/src/System/Configuration/ClientSettingsStore.cs(43,0): at System.Configuration.ClientSettingsStore.GetConfigSection(Configuration config, String sectionName, Boolean declare)\r\n        /_/src/System.Configuration.ConfigurationManager/src/System/Configuration/ClientSettingsStore.cs(163,0): at System.Configuration.ClientSettingsStore.RevertToParent(String sectionName, Boolean isRoaming)\r\n        /_/src/System.Configuration.ConfigurationManager/src/System/Configuration/LocalFileSettingsProvider.cs(232,0): at System.Configuration.LocalFileSettingsProvider.Reset(SettingsContext context)\r\n        /_/src/System.Configuration.ConfigurationManager/src/System/Configuration/ApplicationSettingsBase.cs(371,0): at System.Configuration.ApplicationSettingsBase.Reset()\r\n        /_/src/System.Configuration.ConfigurationManager/tests/System/Configuration/ApplicationSettingsBaseTests.cs(113,0): at System.ConfigurationTests.ApplicationSettingsBaseTests.Save_SimpleSettings_Ok(Boolean isSynchronized)\r\n        ----- Inner Stack Trace -----\r\n        /_/src/System.Configuration.ConfigurationManager/src/System/Configuration/TypeUtil.cs(133,0): at System.Configuration.TypeUtil.GetType(IInternalConfigHost host, String typeString, Boolean throwOnError)\r\n        /_/src/System.Configuration.ConfigurationManager/src/System/Configuration/MgmtConfigurationRecord.cs(128,0): at System.Configuration.MgmtConfigurationRecord.CreateSectionFactory(FactoryRecord factoryRecord)\r\n        /_/src/System.Configuration.ConfigurationManager/src/System/Configuration/BaseConfigurationRecord.cs(1735,0): at System.Configuration.BaseConfigurationRecord.FindAndEnsureFactoryRecord(String configKey, Boolean\u0026 isRootDeclaredHere)\r\n```",
+                                           "updatedAt":  "2019-09-28T00:28:13Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDU4MTY4ODAwNA==",
+                                           "createdAt":  "2020-02-04T00:39:35Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "JeremyKuhne",
+                                           "body":  "This is always failing trying to find `System.Configuration.ConfigurationManager, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51`. The failure happens in `Type.GetType` It is a bit bizarre that we can\u0027t find our own assembly.  Might be a version stamping issue.\r\n\r\nI\u0027m working on adding more logging here and changing the re-throw to retain context.",
+                                           "updatedAt":  "2020-02-04T00:39:35Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDU4MzU0NzM1MQ==",
+                                           "createdAt":  "2020-02-07T18:39:51Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "JeremyKuhne",
+                                           "body":  "The assembly qualified name gets serialized in the user settings, which is placed in a location that is based off of the executing assembly name and the location of the assembly. This file is persisted in the app data directory and thus will persist across test runs. What likely happened is that a run with [4.0.3.0](https://apisof.net/catalog/System.Configuration.ConfigurationManager) was followed by a run with a lower version number (the one that failed). The type requests will normally roll forward to newer versions, but never backwards to older ones.\r\n\r\n_If_ we find rolling _forward_ to be a customer problem we could consider redirecting our type requests for `System.Configuration` types forward in [`TypeUtil.GetImplicitType`](https://github.com/dotnet/runtime/blob/master/src/libraries/System.Configuration.ConfigurationManager/src/System/Configuration/TypeUtil.cs#L41). I don\u0027t think this will ultimately be necessary, but that would be the place to make the change.\r\n\r\nIn the immediate we need to re-enable the test. I\u0027m going to try and:\r\n\r\n1. Improve the throw so we don\u0027t lose the stack.\r\n2. Change the test to wipe the existing user settings.\r\n3. Write a specific test that checks rolling forward/backward behavior.\r\n\r\nI\u0027ll also look to see what other user settings gaps we currently have. I\u0027ve done some manual testing (in the context of a Windows Forms app) and things seem to be in good shape.\r\n\r\ncc: @maryamariyan; @ericstj ",
+                                           "updatedAt":  "2020-02-07T18:39:51Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDU4MzU0ODIzNg==",
+                                           "createdAt":  "2020-02-07T18:41:57Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ericstj",
+                                           "body":  "Do we need to support cross-targeting betweek desktop and core here?  Would it make sense to write the desktop identity?  We\u0027ve done this elsewhere, either explicitly, or by reading the TypeForwardedFrom attribute.",
+                                           "updatedAt":  "2020-02-07T18:41:57Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDU4MzU1NjIwNw==",
+                                           "createdAt":  "2020-02-07T19:01:51Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOA7DEvw==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "ericstj",
+                                                                               "createdAt":  "2020-02-07T19:11:51Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "JeremyKuhne",
+                                           "body":  "\u003e Do we need to support cross-targeting betweek desktop and core here? Would it make sense to write the desktop identity? We\u0027ve done this elsewhere, either explicitly, or by reading the TypeForwardedFrom attribute.\r\n\r\nI don\u0027t think so as user settings are app location specific. I don\u0027t see a scenario where you would swap .NET Core and .NET Framework apps in the same physical location.",
+                                           "updatedAt":  "2020-02-07T19:01:51Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDU4MzY5NjE5Ng==",
+                                           "createdAt":  "2020-02-08T03:05:17Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "JeremyKuhne",
+                                           "body":  "There are actually two issues here. It fails consistently on Unix. Here is the current stack:\r\n\r\n```\r\nSystem.Configuration.ConfigurationErrorsException : Failed to save settings: An error occurred loading a configuration file: An unexpected error occurred in \u0027ClientConfigurationHost::OpenStreamForWrite \u0027\u0027 \u0027\u0027\u0027.\\n---- System.Configuration.ConfigurationErrorsException : An error occurred loading a configuration file: An unexpected error occurred in \u0027ClientConfigurationHost::OpenStreamForWrite \u0027\u0027 \u0027\u0027\u0027.\\n-------- System.InvalidOperationException : An unexpected error occurred in \u0027ClientConfigurationHost::OpenStreamForWrite \u0027\u0027 \u0027\u0027\u0027.\r\n\r\n   at System.Configuration.ClientSettingsStore.WriteSettings(String sectionName, Boolean isRoaming, IDictionary newSettings) in /_/src/libraries/System.Configuration.ConfigurationManager/src/System/Configuration/ClientSettingsStore.cs:line 209\r\n   at System.Configuration.LocalFileSettingsProvider.SetPropertyValues(SettingsContext context, SettingsPropertyValueCollection values) in /_/src/libraries/System.Configuration.ConfigurationManager/src/System/Configuration/LocalFileSettingsProvider.cs:line 218\r\n   at System.Configuration.SettingsBase.SaveCore() in /_/src/libraries/System.Configuration.ConfigurationManager/src/System/Configuration/SettingsBase.cs:line 141\r\n   at System.Configuration.SettingsBase.Save() in /_/src/libraries/System.Configuration.ConfigurationManager/src/System/Configuration/SettingsBase.cs:line 120\r\n   at System.Configuration.ApplicationSettingsBase.Save() in /_/src/libraries/System.Configuration.ConfigurationManager/src/System/Configuration/ApplicationSettingsBase.cs:line 389\r\n   at System.ConfigurationTests.ApplicationSettingsBaseTests.Save_SimpleSettings_Ok(Boolean isSynchronized) in /_/src/libraries/System.Configuration.ConfigurationManager/tests/System/Configuration/ApplicationSettingsBaseTests.cs:line 122\r\n----- Inner Stack Trace -----\r\n   at System.Configuration.MgmtConfigurationRecord.SaveAs(String filename, ConfigurationSaveMode saveMode, Boolean forceUpdateAll) in /_/src/libraries/System.Configuration.ConfigurationManager/src/System/Configuration/MgmtConfigurationRecord.cs:line 1098\r\n   at System.Configuration.Configuration.SaveAsImpl(String filename, ConfigurationSaveMode saveMode, Boolean forceSaveAll) in /_/src/libraries/System.Configuration.ConfigurationManager/src/System/Configuration/Configuration.cs:line 217\r\n   at System.Configuration.Configuration.Save() in /_/src/libraries/System.Configuration.ConfigurationManager/src/System/Configuration/Configuration.cs:line 182\r\n   at System.Configuration.ClientSettingsStore.WriteSettings(String sectionName, Boolean isRoaming, IDictionary newSettings) in /_/src/libraries/System.Configuration.ConfigurationManager/src/System/Configuration/ClientSettingsStore.cs:line 204\r\n----- Inner Stack Trace -----\r\n   at System.Configuration.ClientConfigurationHost.OpenStreamForWrite(String streamName, String templateStreamName, Object\u0026 writeContext) in /_/src/libraries/System.Configuration.ConfigurationManager/src/System/Configuration/ClientConfigurationHost.cs:line 312\r\n   at System.Configuration.ClientSettingsStore.ClientSettingsConfigurationHost.OpenStreamForWrite(String streamName, String templateStreamName, Object\u0026 writeContext) in /_/src/libraries/System.Configuration.ConfigurationManager/src/System/Configuration/ClientSettingsStore.cs:line 315\r\n   at System.Configuration.UpdateConfigHost.OpenStreamForWrite(String streamName, String templateStreamName, Object\u0026 writeContext) in /_/src/libraries/System.Configuration.ConfigurationManager/src/System/Configuration/UpdateConfigHost.cs:line 94\r\n   at System.Configuration.Internal.DelegatingConfigHost.OpenStreamForWrite(String streamName, String templateStreamName, Object\u0026 writeContext) in /_/src/libraries/System.Configuration.ConfigurationManager/src/System/Configuration/Internal/DelegatingConfigHost.cs:line 96\r\n   at System.Configuration.MgmtConfigurationRecord.SaveAs(String filename, ConfigurationSaveMode saveMode, Boolean forceUpdateAll) in /_/src/libraries/System.Configuration.ConfigurationManager/src/System/Configuration/MgmtConfigurationRecord.cs:line 1062\r\n```\r\n\r\nThe first thing I would look at is if the app data folder exists and there are appropriate rights.",
+                                           "updatedAt":  "2020-02-08T03:05:17Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY3MzczODgyNQ==",
+                                           "createdAt":  "2020-08-13T22:20:35Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "danmoseley",
+                                           "body":  "Was going to move this out but I don\u0027t have enough context.",
+                                           "updatedAt":  "2020-08-13T22:20:35Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY4Mjc1NzIwNQ==",
+                                           "createdAt":  "2020-08-28T15:52:16Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ericstj",
+                                           "body":  "Not seeing a regression here.  It\u0027d be nice to fix this but I don\u0027t see that meeting the bar for 5.0 and this existed in 3.x as well.",
+                                           "updatedAt":  "2020-08-28T15:52:16Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDc0NDQ2ODU5NQ==",
+                                           "createdAt":  "2020-12-14T14:15:33Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOB3HTeg==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "safern",
+                                                                               "createdAt":  "2020-12-14T19:13:25Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "goedse",
+                                                                               "createdAt":  "2021-02-06T11:43:14Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "ARMoir",
+                                                                               "createdAt":  "2021-04-17T19:05:59Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "chm-tm",
+                                                                               "createdAt":  "2021-08-20T06:00:28Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  4
+                                                         },
+                                           "author":  "trysil",
+                                           "body":  "If that helps, I get the same exception on Linux when trying to save/upgrade settings and the \"/home/USERNAME/.local/share\" directory does not exist. This is the location where configuration file should be stored.\r\n\r\nConfiguration file path is empty, when the parent directory does not exist. It\u0027s easy to check its value with this code:\r\n\r\n`ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal).FilePath`\r\n\r\nThis behavior is confirmed in documentation for Environment.GetFolderPath(): \r\n\u003e The path to the specified system special folder, if that folder physically exists on your computer; otherwise, an empty string (\"\").\r\n\r\n(https://docs.microsoft.com/en-us/dotnet/api/system.environment.getfolderpath?view=net-5.0)\r\n\r\nI found two possible solutions:\r\n1. Manually create the directory tree.\r\n2. Ensure in code that the LocalApplicationData folder exists by using SpecialFolderOption.Create parameter:\r\n```c#\r\nstring localAppData = Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData, System.Environment.SpecialFolderOption.Create);\r\n```\r\n\r\nIn my opinion, the stacktrace from saving application settings gives no clue, that the problem is with non-existing folder. This could be definetely improved. It took couple of days to figure this out and I suppose this is the reason for errors in your unit tests.\r\n\r\n**Stacktrace:**\r\n\r\n```\r\nUnhandled exception. System.Configuration.ConfigurationErrorsException: Failed to save settings: An error occurred loading a configuration file: An unexpected error occurred in \u0027ClientConfigurationHost::OpenStreamForWrite \u0027\u0027 \u0027\u0027\u0027.\r\n ---\u003e System.Configuration.ConfigurationErrorsException: An error occurred loading a configuration file: An unexpected error occurred in \u0027ClientConfigurationHost::OpenStreamForWrite \u0027\u0027 \u0027\u0027\u0027.\r\n ---\u003e System.InvalidOperationException: An unexpected error occurred in \u0027ClientConfigurationHost::OpenStreamForWrite \u0027\u0027 \u0027\u0027\u0027.\r\n   at System.Configuration.ClientConfigurationHost.OpenStreamForWrite(String streamName, String templateStreamName, Object\u0026 writeContext)\r\n   at System.Configuration.ClientSettingsStore.ClientSettingsConfigurationHost.OpenStreamForWrite(String streamName, String templateStreamName, Object\u0026 writeContext)\r\n   at System.Configuration.UpdateConfigHost.OpenStreamForWrite(String streamName, String templateStreamName, Object\u0026 writeContext)\r\n   at System.Configuration.Internal.DelegatingConfigHost.OpenStreamForWrite(String streamName, String templateStreamName, Object\u0026 writeContext)\r\n   at System.Configuration.MgmtConfigurationRecord.SaveAs(String filename, ConfigurationSaveMode saveMode, Boolean forceUpdateAll)\r\n   --- End of inner exception stack trace ---\r\n   at System.Configuration.MgmtConfigurationRecord.SaveAs(String filename, ConfigurationSaveMode saveMode, Boolean forceUpdateAll)\r\n   at System.Configuration.Configuration.SaveAsImpl(String filename, ConfigurationSaveMode saveMode, Boolean forceSaveAll)\r\n   at System.Configuration.ClientSettingsStore.WriteSettings(String sectionName, Boolean isRoaming, IDictionary newSettings)\r\n   --- End of inner exception stack trace ---\r\n   at System.Configuration.ClientSettingsStore.WriteSettings(String sectionName, Boolean isRoaming, IDictionary newSettings)\r\n   at System.Configuration.LocalFileSettingsProvider.SetPropertyValues(SettingsContext context, SettingsPropertyValueCollection values)\r\n   at System.Configuration.SettingsBase.SaveCore()\r\n   at System.Configuration.SettingsBase.Save()\r\n   at System.Configuration.ApplicationSettingsBase.Save()\r\n   at ConfigFileApp.Program.Main(String[] args)\r\n```",
+                                           "updatedAt":  "2020-12-16T16:13:12Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDc0NDUzMTIwMA==",
+                                           "createdAt":  "2020-12-14T15:51:50Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "danmoseley",
+                                           "body":  "Thank you @trysil  for the investigation. Do you have any interest in offering a proposed PR?",
+                                           "updatedAt":  "2020-12-14T15:51:50Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDgyMTg3MjA0Mg==",
+                                           "createdAt":  "2021-04-17T19:05:44Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ARMoir",
+                                           "body":  "Windows 10\r\nI had to add the following to save Settings on Linux\r\n\r\n`Directory.CreateDirectory(Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData, System.Environment.SpecialFolderOption.Create));`\r\n                ",
+                                           "updatedAt":  "2021-04-17T19:05:44Z"
+                                       }
+                                   ],
+                         "totalCount":  13
+                     },
+        "title":  "Test Save_SimpleSettings_Ok failing",
+        "labels":  [
+                       "area-System.Configuration",
+                       "disabled-test"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/32307",
+        "createdAt":  "2020-02-14T18:01:49Z",
+        "number":  32307,
+        "author":  "eerhardt",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHOC0M70Q==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "safern",
+                                            "createdAt":  "2020-02-14T18:07:52Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "poke",
+                                            "createdAt":  "2020-02-14T22:57:11Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "jkotas",
+                                            "createdAt":  "2020-02-15T05:57:56Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "AaronRobinsonMSFT",
+                                            "createdAt":  "2020-02-15T06:34:02Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "ericstj",
+                                            "createdAt":  "2020-02-18T20:40:08Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "mnichols-dl",
+                                            "createdAt":  "2020-06-08T21:47:05Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "DillonN",
+                                            "createdAt":  "2020-12-03T03:08:10Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "avsorokin",
+                                            "createdAt":  "2023-11-24T06:44:37Z"
+                                        }
+                                    ],
+                          "totalCount":  8
+                      },
+        "updatedAt":  "2024-07-23T17:04:00Z",
+        "body":  "In the .NET Framework, `System.Configuration` allowed a `machine.config` file that would apply globally to every .NET process on the machine.\r\n\r\nhttps://docs.microsoft.com/en-us/dotnet/framework/configure-apps/#machine-configuration-files\r\n\r\nThis made sense, because you could configure the framework using this file, and it would apply for all processes.\r\n\r\nIn .NET Core this concept makes much less sense.\r\n1. Nothing in the framework is configured using `System.Configuration`. Instead, we use `runtimeconfig.json`.\r\n2. With the advent of self-contained applications and multiple \"hive\" installations, the concept of a config file that applies to the whole machine doesn\u0027t make sense. A self-contained application should run the same no matter if some global \"machine.config\" file exists or not.\r\n\r\nToday in .NET Core, when you use the `System.Configuration.ConfigurationManager` package, it will still try to load a `machine.config` file, however the location it probes for this file is relative to the current application (using `AppDomain.CurrentDomain.BaseDirectory`):\r\n\r\nhttps://github.com/dotnet/runtime/blob/571f972a5b1c7821870b1111bcc64726740957df/src/libraries/System.Configuration.ConfigurationManager/src/System/Configuration/ClientConfigurationHost.cs#L43-L56\r\n\r\n(NOTE: For .NET Core 2.0, the code still used the old .NET Framework implementation of calling [`RuntimeEnvironment.GetRuntimeDirectory()`](https://github.com/dotnet/corefx/blob/release/2.0.0/src/System.Configuration.ConfigurationManager/src/System/Configuration/ClientConfigurationHost.cs#L49) to get the directory. This was changed in 2.1 to use `BaseDirectory` with https://github.com/dotnet/corefx/pull/20488.)\r\n\r\nTypically that file never exists. When if it doesn\u0027t `ConfigurationManager` will load a default/hard-coded machine.config:\r\n\r\nhttps://github.com/dotnet/runtime/blob/4107a4cf5dda28c815f78dc962e0d1e7286676cc/src/libraries/System.Configuration.ConfigurationManager/src/System/Configuration/ImplicitMachineConfigHost.cs#L75-L95\r\n\r\nThe problem with the current behavior comes when `AppDomain.CurrentDomain.BaseDirectory` doesn\u0027t return a path. For example, when using a custom native host - see #25027 - `BaseDirectory` returns `null`.\r\nIn this situation, `ConfigurationManager` tries to load a `Config/machine.config` stream. And since this [path isn\u0027t rooted](https://github.com/dotnet/runtime/blob/9ac0abb554363136c332f3f3afa1fd8f61060234/src/libraries/System.Configuration.ConfigurationManager/src/System/Configuration/Internal/InternalConfigHost.cs#L297-L300), it tries to issue a `WebRequest` for this stream:\r\n\r\nhttps://github.com/dotnet/runtime/blob/4107a4cf5dda28c815f78dc962e0d1e7286676cc/src/libraries/System.Configuration.ConfigurationManager/src/System/Configuration/ClientConfigurationHost.cs#L281-L299\r\n\r\n`WebClient` is smart enough to realize this is a request for a file, tries to load the file - relative to the current working directory, which is probably not good from a security perspective. When the file doesn\u0027t exist it throws a few 1st chance exceptions, which are caught and then `null` is returned.\r\n\r\n## Proposal\r\n\r\nWe should just cut support for reading a `machine.config` file completely from ConfigurationManager on .NET Core and always return the default/hard-coded machine.config contents. No need to probe for files that don\u0027t exist. No need to issue a WebRequest and catch exceptions either.\r\n\r\nAll settings can be overridden by the App.config. And since we are only probing the app\u0027s directory (or the current working directory if using a native host) it doesn\u0027t make sense to split the configuration across multiple files in the app\u0027s directory.\r\n\r\n/cc @ericstj @JeremyKuhne @maryamariyan @safern ",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOZamXng==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDU4NzkyNDQxNQ==",
+                                           "createdAt":  "2020-02-18T22:00:29Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "JeremyKuhne",
+                                           "body":  "I spaced on the change away from ` RuntimeEnvironment.GetRuntimeDirectory()`. :( `machine.config` is really `runtime.config`, but there was only ever one instance of the runtime until Core.\r\n\r\nThe idea here was that you could still set for whichever runtime instance that you were using. You could trump the settings completely, which isn\u0027t possible if we load the implicit one. I don\u0027t recall if you can override the config sections from the higher-level config, but I think the answer is no. If so, this can potentially be problematic when you take user config files into account.",
+                                           "updatedAt":  "2020-02-18T22:00:29Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDU5MDYwNDkzOQ==",
+                                           "createdAt":  "2020-02-24T23:40:56Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "eerhardt",
+                                           "body":  "@JeremyKuhne - I\u0027m not sure I follow your response. Do you agree with the proposal to remove trying to probe for a `machine.config` file on .NET Core?\r\n\r\nIf we shouldn\u0027t remove it, what do you propose we do instead? I don\u0027t think we should probe the `RuntimeEnvironment.GetRuntimeDirectory()` directory because we will never find that file there. Probing the `AppDomain.BaseDirectory` for `Config\\machine.config`, like we are doing now, doesn\u0027t really make sense to me either. Are you saying this is how someone would override our implicit `machine.config` file, if they need to?",
+                                           "updatedAt":  "2020-02-24T23:40:56Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDU5MDYyMTY0NQ==",
+                                           "createdAt":  "2020-02-25T00:40:38Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "JeremyKuhne",
+                                           "body":  "\u003e Are you saying this is how someone would override our implicit machine.config file, if they need to?\r\n\r\nYes, the need to trump it so you can inject in front of the user.config is important. I\u0027m ok with making the probe app-specific, but I think we still need it.",
+                                           "updatedAt":  "2020-02-25T00:40:38Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDU5MDYzNDEwOQ==",
+                                           "createdAt":  "2020-02-25T01:26:46Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jkotas",
+                                           "body":  "\u003e Yes, the need to trump it so you can inject in front of the user.config is important.\r\n\r\nDo we know about anybody who is using this override for real app?",
+                                           "updatedAt":  "2020-02-25T01:26:46Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY1NTE1NTE0Nw==",
+                                           "createdAt":  "2020-07-07T21:51:58Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOBJpqOA==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "jkotas",
+                                                                               "createdAt":  "2020-07-07T21:59:31Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "ericstj",
+                                           "body":  "I don\u0027t believe anyone is using this if we can absorb this breaking change in 5.0.0 that seems best to do now (rather than do it in 6.0.0 which we expect to move to LTS).  If it breaks anyone they can revert to an earlier package and let us know they need it and we can bring it back.",
+                                           "updatedAt":  "2020-07-07T21:51:58Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY4Mjc1MDg0Mw==",
+                                           "createdAt":  "2020-08-28T15:49:36Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOBOzw4g==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "safern",
+                                                                               "createdAt":  "2020-08-28T17:55:35Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "ericstj",
+                                           "body":  "@safern I don\u0027t think this meets the bar at this point in 5.0.0.  Moving out.",
+                                           "updatedAt":  "2020-08-28T15:49:36Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDgxNTIxNTIyMw==",
+                                           "createdAt":  "2021-04-07T20:08:41Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "habibcs",
+                                           "body":  "We have a system with lot of services/APIs with .NET 461 .NET472 and have a huge dependency on the machine level config files.\r\nWe now gradually adding newer APIs with .NET Core 31 and .NET5.\r\n\r\nI do not find any consistent solution, especially every new version update, changes the path to the runtime/sdk.\r\n\r\nTherefore I resort to defining the global config location for our middleware (hundreds of) services/APIs.\r\nAnd in those NetCore31/Net5 services we manually load from that global location (via environment variable).\r\nAnd then feed the path to load config via something like ConfigurationManager.OpenMappedMachineConfiguration()\r\n\r\nThis is our approach. If this is more or less the standard or the right way, then skipping .NET dependency completely away from Machine config should be taken and highlighted clearly in the documentation.\r\n\r\nThanks, Habib",
+                                           "updatedAt":  "2021-04-07T20:08:41Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc40wLRp",
+                                           "createdAt":  "2021-07-22T16:22:10Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "krwq",
+                                           "body":  "[Triage] Seems it\u0027s non essential for 6.0.",
+                                           "updatedAt":  "2021-07-22T16:22:10Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5loCUQ",
+                                           "createdAt":  "2023-09-04T10:13:37Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "khurshid-alam",
+                                           "body":  "Can anyone answer Where is the machine.config for linux ? \r\n\r\nI wanted to set \r\n\r\n```xml\r\n\u003csystem.web\u003e\r\n    \u003cprocessModel maxWorkerThreads=\"100\" maxIoThreads=\"100\" minWorkerThreads=\"50\"/\u003e\r\n    \u003chttpRuntime minFreeThreads=\"704\" minLocalRequestFreeThreads=\"608\"/\u003e\r\n\u003c/system.web\u003e\r\n```\r\n\r\nputting machine.config in the root directory doesn\u0027t seem to have worked. We only have web.config in root directory. \r\n\r\nWe run it as dotnet app.dll --urls=http://0.0.0.0:5000",
+                                           "updatedAt":  "2023-09-04T10:14:07Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5lqZee",
+                                           "createdAt":  "2023-09-04T18:43:05Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jkotas",
+                                           "body":  "I assume that you are using ASP.NET Core. machine.config and web.config is not used by ASP.NET Core. ASP.NET Core uses different configuration system, documented at https://learn.microsoft.com/en-us/aspnet/core/fundamentals/configuration",
+                                           "updatedAt":  "2023-09-04T18:43:05Z"
+                                       }
+                                   ],
+                         "totalCount":  10
+                     },
+        "title":  "machine.config for .NET Core",
+        "labels":  [
+                       "bug",
+                       "area-System.Configuration"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/43964",
+        "createdAt":  "2020-10-28T19:01:17Z",
+        "number":  43964,
+        "author":  "thedigitaljedi86",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2021-04-12T08:49:50Z",
+        "body":  "### Description\r\nWhen trying to use SerializeSection on a custom configuration section all collections are returned with exactly 1 empty node of the respective object type.\r\n\r\nA symptom seems to be that an exception is thrown saying \"The key \u0027\u0027 has already been added\".\r\n\r\nTo reproduce create a .net core 3.1 or above. Include the System.Configuration.ConfigurationManager nuget package and create a custom configuration section, then try to call SerializeSection with ConfigurationSaveMode.Full.\r\n\r\n### Configuration\r\nWhich version of .NET is the code running on: .net core 3.1 and 5.0 preview 7\r\nWhat OS and version, and what distro if applicable: Windows 10 latest update\r\nWhat is the architecture (x64, x86, ARM, ARM64): X64\r\nDo you know whether it is specific to that configuration: It is unreleated to Windows and the architecture.\r\n\r\n### Regression?\r\n\r\nThe exact same code and custom configration section works on .Net Framework 4.7.2 and 4.8\r\n\r\n### Other information\r\nI have tried to override the BaseAdd method to make sure that was called - and it was. For all nodes inside a collection as well",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOMLvg3g==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDcxODE0NDI2MQ==",
+                                           "createdAt":  "2020-10-28T19:01:22Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @eiriktsarpalis, @jeffhandley\nSee info in area-owners.md if you want to be subscribed.",
+                                           "updatedAt":  "2020-10-28T19:01:22Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDcxODgxNDIxOQ==",
+                                           "createdAt":  "2020-10-29T15:04:59Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @safern\nSee info in area-owners.md if you want to be subscribed.",
+                                           "updatedAt":  "2020-10-29T15:04:59Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDgxNzYxOTE2Ng==",
+                                           "createdAt":  "2021-04-12T08:49:34Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "krwq",
+                                           "body":  "@thedigitaljedi86 sorry for late reply. We haven\u0027t heard many people needing this so the priority is relatively low. For higher chance of this issue being fixed I\u0027d encourage to create a code snippet or even better a full test case showing the issue. After that we could mark this issue up-for-grabs so people could pick it up.",
+                                           "updatedAt":  "2021-04-12T08:49:34Z"
+                                       }
+                                   ],
+                         "totalCount":  3
+                     },
+        "title":  "ConfigurationSection.SerializeSection() does not populate collections ",
+        "labels":  [
+                       "area-System.Configuration"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/45890",
+        "createdAt":  "2020-12-10T12:16:25Z",
+        "number":  45890,
+        "author":  "mvegaca",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2021-07-12T17:34:07Z",
+        "body":  "Hi,\r\n\r\nWe are getting a warning in UWP Blank App after updating System.Configuration.ConfigurationManager to version 5.0.0\r\n\r\n```\r\nFound conflicts between different versions of \"System.Security.AccessControl\" that could not be resolved. \r\nThese reference conflicts are listed in the build log when log verbosity is set to detailed.\r\n```\r\n\r\nIs this version supported for UWP Apps?",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHONFxIVQ==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDc0MjQ4NTQyMQ==",
+                                           "createdAt":  "2020-12-10T12:16:28Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @safern\nSee info in area-owners.md if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\nHi,\r\n\r\nWe are getting a warning in UWP Blank App after updating System.Configuration.ConfigurationManager to version 5.0.0\r\n\r\n```\r\nFound conflicts between different versions of \"System.Security.AccessControl\" that could not be resolved. \r\nThese reference conflicts are listed in the build log when log verbosity is set to detailed.\r\n```\r\n\r\nIs this version supported for UWP Apps?\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003emvegaca\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-System.Configuration`, `untriaged`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2020-12-10T12:16:28Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDg3ODQ2MzA2MQ==",
+                                           "createdAt":  "2021-07-12T17:33:40Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "krwq",
+                                           "body":  "@mvegaca can you see if you still see errors with 6.0-preview package?",
+                                           "updatedAt":  "2021-07-12T17:33:40Z"
+                                       }
+                                   ],
+                         "totalCount":  2
+                     },
+        "title":  "Warning in UWP App after updating System.Configuration.ConfigurationManager to version 5.0.0",
+        "labels":  [
+                       "area-System.Configuration",
+                       "needs-further-triage"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/56075",
+        "createdAt":  "2021-07-21T08:05:09Z",
+        "number":  56075,
+        "author":  "dorny",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHOCrc-Uw==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "andrii-litvinov",
+                                            "createdAt":  "2021-07-21T08:06:50Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "skatanski",
+                                            "createdAt":  "2021-07-21T11:50:26Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "mtttcgcg",
+                                            "createdAt":  "2022-11-15T00:12:32Z"
+                                        }
+                                    ],
+                          "totalCount":  3
+                      },
+        "updatedAt":  "2025-07-26T10:39:09Z",
+        "body":  "### Description\r\n\r\n`ConfigurationManager.AppSettings` getter should return a single, cached instance.\r\nThe official [documentation](https://docs.microsoft.com/en-us/dotnet/api/system.configuration.configurationmanager?view=net-5.0#remarks):\r\n\r\n\u003e The ConfigurationManager class includes members that enable you to perform the following tasks:\r\n\u003e - Read a section from a configuration file. To access configuration information, call the GetSection method. For some sections such as appSettings and connectionStrings, use the AppSettings and ConnectionStrings classes. These members perform read-only operations, use a single cached instance of the configuration, and are multithread aware.\r\nThe actual behavior is different. If the `AppSettings` cached instance is not yet initialized and property is accessed concurrently, it can return multiple different instances. \r\n\r\nCode to reproduce the issue:\r\n```C#\r\nvar tasks = Enumerable.Range(1, 100)\r\n    .Select(_ =\u003e Task.Run(() =\u003e ConfigurationManager.AppSettings))\r\n    .ToList();\r\n\r\nvar settings = await Task.WhenAll(tasks);\r\nvar instances = settings.Distinct().ToList();\r\nConsole.WriteLine($\"{instances.Count} AppSettings were created!\");\r\n\r\nif (instances.Count \u003e 1)\r\n{\r\n    instances[0][\"key\"] = \"value\";\r\n    if (instances.Any(appSettings =\u003e appSettings[\"key\"] != \"value\"))\r\n    {\r\n        Console.WriteLine(\"A key set on one instance doesn\u0027t affect other created instances\");\r\n    }\r\n}\r\n```\r\nOutput on my workstation with 4 core CPU:\r\n```\r\n4 AppSettings were created!\r\nKey set on one instance doesn\u0027t affect other created instances\r\n```\r\n\r\n### Configuration\r\n\r\n- runtime: 5.0.302\r\n- nuget: `System.Configuration.ConfigurationManager 5.0.0`\r\n- OS: Windows / Linux\r\n- arch: x64\r\n\r\n### Regression?\r\n\r\nNo - the same issue can be reproduced on .NET 4.8 referencing the `System.Configuration` assembly\r\n\r\n### Other information\r\n\r\nThe code in the `ConfigurationManager` class is probably correct. I suspect the `ClientConfigurationSystem` class or some internals deeper.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOhgqtmw==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc40sHoY",
+                                           "createdAt":  "2021-07-21T08:05:14Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @safern\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Description\r\n\r\n`ConfigurationManager.AppSettings` getter should return a single, cached instance.\r\nThe official [documentation](https://docs.microsoft.com/en-us/dotnet/api/system.configuration.configurationmanager?view=net-5.0#remarks):\r\n\r\n\u003e The ConfigurationManager class includes members that enable you to perform the following tasks:\r\n\u003e - Read a section from a configuration file. To access configuration information, call the GetSection method. For some sections such as appSettings and connectionStrings, use the AppSettings and ConnectionStrings classes. These members perform read-only operations, use a single cached instance of the configuration, and are multithread aware.\r\nThe actual behavior is different. If the `AppSettings` cached instance is not yet initialized and property is accessed concurrently, it can return multiple different instances. \r\n\r\nCode to reproduce the issue:\r\n```C#\r\nvar tasks = Enumerable.Range(1, 100)\r\n    .Select(_ =\u003e Task.Run(() =\u003e ConfigurationManager.AppSettings))\r\n    .ToList();\r\n\r\nvar settings = await Task.WhenAll(tasks);\r\nvar instances = settings.Distinct().ToList();\r\nConsole.WriteLine($\"{instances.Count} AppSettings were created!\");\r\n\r\nif (instances.Count \u003e 1)\r\n{\r\n    instances[0][\"key\"] = \"value\";\r\n    if (instances.Any(appSettings =\u003e appSettings[\"key\"] != \"value\"))\r\n    {\r\n        Console.WriteLine(\"A key set on one instance doesn\u0027t affect other created instances\");\r\n    }\r\n}\r\n```\r\nOutput on my workstation with 4 core CPU:\r\n```\r\n4 AppSettings were created!\r\nKey set on one instance doesn\u0027t affect other created instances\r\n```\r\n\r\n### Configuration\r\n\r\n- runtime: 5.0.302\r\n- nuget: `System.Configuration.ConfigurationManager 5.0.0`\r\n- OS: Windows / Linux\r\n- arch: x64\r\n\r\n### Regression?\r\n\r\nNo - the same issue can be reproduced on .NET 4.8 referencing the `System.Configuration` assembly\r\n\r\n### Other information\r\n\r\nThe code in the `ConfigurationManager` class is probably correct. I suspect the `ClientConfigurationSystem` class or some internals deeper.\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003edorny\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-System.Configuration`, `untriaged`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2021-07-21T08:05:14Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5Gizrh",
+                                           "createdAt":  "2022-07-13T18:11:09Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "buyaa-n",
+                                           "body":  "It is not planned for 7.0, moving to 8.0",
+                                           "updatedAt":  "2022-07-13T18:11:09Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6GCq2b",
+                                           "createdAt":  "2024-07-24T20:30:43Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "steveharter",
+                                           "body":  "Moving to v10; this is either a doc issue (\"use a single cached instance of the configuration\") or a bug in the implementation.",
+                                           "updatedAt":  "2024-07-24T20:30:43Z"
+                                       }
+                                   ],
+                         "totalCount":  3
+                     },
+        "title":  "ConfigurationManager.AppSettings getter is not thread safe and multiple instances are created",
+        "labels":  [
+                       "area-System.Configuration",
+                       "help wanted"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/98715",
+        "createdAt":  "2024-02-20T19:14:36Z",
+        "number":  98715,
+        "author":  "snechaev",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-08-01T18:16:01Z",
+        "body":  "### Description\n\nIn my console application I use the old-style `Properties.Settings` concept. For now this implemented with help of the `System.Configuration.ConfigurationManager` nuget package.\r\n\r\nWhen I call `Properties.Settings.Default.Upgrade();` on the newly  created macOS user, I get the `ArgumentNullException` with the following stacktrace\r\n```\r\nUnhandled exception. System.ArgumentNullException: Value cannot be null. (Parameter \u0027path\u0027)\r\n   at System.ArgumentNullException.Throw(String paramName)\r\n   at System.ArgumentNullException.ThrowIfNull(Object argument, String paramName)\r\n   at System.ArgumentException.ThrowNullOrEmptyException(String argument, String paramName)\r\n   at System.IO.Directory.GetParent(String path)\r\n   at System.Configuration.LocalFileSettingsProvider.GetPreviousConfigFileName(Boolean isRoaming)\r\n   at System.Configuration.LocalFileSettingsProvider.Upgrade(SettingsContext context, SettingsPropertyCollection properties, Boolean isRoaming)\r\n   at System.Configuration.LocalFileSettingsProvider.Upgrade(SettingsContext context, SettingsPropertyCollection properties)\r\n   at System.Configuration.ApplicationSettingsBase.Upgrade()\r\n   at Program.\u003cMain\u003e$(String[] args) in /Users/user/testUpgrade/Program.cs:line 15\r\nzsh: abort       \r\n```\r\n\n\n### Reproduction Steps\n\n* Download the test project [test.zip](https://github.com/dotnet/runtime/files/14349938/test.zip)\r\n* Publish with `dotnet publish`\r\n* (!) Important: make sure that the following folders do **NOT** exist (they are really do not exist for the fresh newly created user)\r\n  *  `~/.config/`\r\n  * `~/.local/`\r\n* Run the published application directly ((!) do not use `dotnet run`, as it internally create settings folder before actually running the app)\r\n* Observe exception as described above (or, if the mentioned folder still exists, then you will see corresponding note and no crash) \n\n### Expected behavior\n\nApplication finished without exceptions.\n\n### Actual behavior\n\nUnhandled `ArgumentNullException` inside `LocalFileSettingsProvider`\r\n\r\n```\r\nUnhandled exception. System.ArgumentNullException: Value cannot be null. (Parameter \u0027path\u0027)\r\n   at System.ArgumentNullException.Throw(String paramName)\r\n   at System.ArgumentNullException.ThrowIfNull(Object argument, String paramName)\r\n   at System.ArgumentException.ThrowNullOrEmptyException(String argument, String paramName)\r\n   at System.IO.Directory.GetParent(String path)\r\n   at System.Configuration.LocalFileSettingsProvider.GetPreviousConfigFileName(Boolean isRoaming)\r\n   at System.Configuration.LocalFileSettingsProvider.Upgrade(SettingsContext context, SettingsPropertyCollection properties, Boolean isRoaming)\r\n   at System.Configuration.LocalFileSettingsProvider.Upgrade(SettingsContext context, SettingsPropertyCollection properties)\r\n   at System.Configuration.ApplicationSettingsBase.Upgrade()\r\n   at Program.\u003cMain\u003e$(String[] args) in /Users/user/testUpgrade/Program.cs:line 15\r\n```\n\n### Regression?\n\nThe problem can be reproduced in net6/7.\n\n### Known Workarounds\n\n_No response_\n\n### Configuration\n\n* net versions I have tried: 6.0.408, 7.0.310, 8.0.101`\r\n* `System.Configuration.ConfigurationManager` package versions: 6.0.1 and 8.0.0\r\n* macOS: 13.6.4 Ventura (x86) and 14.3.1 Sonoma (ARM64/Apple M2)\r\n* Important: tested on newly created macos used, so no one has created settings folders yet. \n\n### Other information\n\nWhen the `~/.local/` and `~/.config` folder are missing, the system can\u0027t build a path to the settings file, so \r\n`ConfigurationManager.OpenExeConfiguration(level).FilePath` gives null (or empty string) for the `level = ConfigurationUserLevel.PerUserRoamingAndLocal` and `level = ConfigurationUserLevel. PerUserRoaming`. \r\n\r\nWhen executing `Upgrade()` the `ConfigurationManagerInternalFactory.Instance.ExeRoamingConfigDirectory` and `ConfigurationManagerInternalFactory.Instance.ExeLocalConfigDirectory` are null here\r\nhttps://github.com/dotnet/runtime/blob/46870a030cffab0276165af9fddbc0c30f357161/src/libraries/System.Configuration.ConfigurationManager/src/System/Configuration/LocalFileSettingsProvider.cs#L288-L290\r\n\r\nAnd  then we got exception in `Directory.GetParent(null)` here\r\nhttps://github.com/dotnet/runtime/blob/46870a030cffab0276165af9fddbc0c30f357161/src/libraries/System.Configuration.ConfigurationManager/src/System/Configuration/LocalFileSettingsProvider.cs#L302",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOdXeihg==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc50hVQm",
+                                           "createdAt":  "2024-02-20T19:14:45Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-system-configuration\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Description\n\nIn my console application I use the old-style `Properties.Settings` concept. For now this implemented with help of the `System.Configuration.ConfigurationManager` nuget package.\r\n\r\nWhen I call `Properties.Settings.Default.Upgrade();` on the newly  created macOS user, I get the `ArgumentNullException` with the following stacktrace\r\n```\r\nUnhandled exception. System.ArgumentNullException: Value cannot be null. (Parameter \u0027path\u0027)\r\n   at System.ArgumentNullException.Throw(String paramName)\r\n   at System.ArgumentNullException.ThrowIfNull(Object argument, String paramName)\r\n   at System.ArgumentException.ThrowNullOrEmptyException(String argument, String paramName)\r\n   at System.IO.Directory.GetParent(String path)\r\n   at System.Configuration.LocalFileSettingsProvider.GetPreviousConfigFileName(Boolean isRoaming)\r\n   at System.Configuration.LocalFileSettingsProvider.Upgrade(SettingsContext context, SettingsPropertyCollection properties, Boolean isRoaming)\r\n   at System.Configuration.LocalFileSettingsProvider.Upgrade(SettingsContext context, SettingsPropertyCollection properties)\r\n   at System.Configuration.ApplicationSettingsBase.Upgrade()\r\n   at Program.\u003cMain\u003e$(String[] args) in /Users/user/testUpgrade/Program.cs:line 15\r\nzsh: abort       \r\n```\r\n\n\n### Reproduction Steps\n\n* Download the test project [test.zip](https://github.com/dotnet/runtime/files/14349938/test.zip)\r\n* Publish with `dotnet publish`\r\n* (!) Important: make sure that the following folders do **NOT** exist (they are really do not exist for the fresh newly created user)\r\n  *  `~/.config/`\r\n  * `~/.local/`\r\n* Run the published application directly ((!) do not use `dotnet run`, as it internally create settings folder before actually running the app)\r\n* Observe exception as described above (or, if the mentioned folder still exists, then you will see corresponding note and no crash) \n\n### Expected behavior\n\nApplication finished without exceptions.\n\n### Actual behavior\n\nUnhandled `ArgumentNullException` inside `LocalFileSettingsProvider`\r\n\r\n```\r\nUnhandled exception. System.ArgumentNullException: Value cannot be null. (Parameter \u0027path\u0027)\r\n   at System.ArgumentNullException.Throw(String paramName)\r\n   at System.ArgumentNullException.ThrowIfNull(Object argument, String paramName)\r\n   at System.ArgumentException.ThrowNullOrEmptyException(String argument, String paramName)\r\n   at System.IO.Directory.GetParent(String path)\r\n   at System.Configuration.LocalFileSettingsProvider.GetPreviousConfigFileName(Boolean isRoaming)\r\n   at System.Configuration.LocalFileSettingsProvider.Upgrade(SettingsContext context, SettingsPropertyCollection properties, Boolean isRoaming)\r\n   at System.Configuration.LocalFileSettingsProvider.Upgrade(SettingsContext context, SettingsPropertyCollection properties)\r\n   at System.Configuration.ApplicationSettingsBase.Upgrade()\r\n   at Program.\u003cMain\u003e$(String[] args) in /Users/user/testUpgrade/Program.cs:line 15\r\n```\n\n### Regression?\n\nThe problem can be reproduced in net6/7.\n\n### Known Workarounds\n\n_No response_\n\n### Configuration\n\n* net versions I have tried: 6.0.408, 7.0.310, 8.0.101`\r\n* `System.Configuration.ConfigurationManager` package versions: 6.0.1 and 8.0.0\r\n* macOS: 13.6.4 Ventura (x86) and 14.3.1 Sonoma (ARM64/Apple M2)\r\n* Important: tested on newly created macos used, so no one has created settings folders yet. \n\n### Other information\n\nWhen the `~/.local/` and `~/.config` folder are missing, the system can\u0027t build a path to the settings file, so \r\n`ConfigurationManager.OpenExeConfiguration(level).FilePath` gives null (or empty string) for the `level = ConfigurationUserLevel.PerUserRoamingAndLocal` and `level = ConfigurationUserLevel. PerUserRoaming`. \r\n\r\nWhen executing `Upgrade()` the `ConfigurationManagerInternalFactory.Instance.ExeRoamingConfigDirectory` and `ConfigurationManagerInternalFactory.Instance.ExeLocalConfigDirectory` are null here\r\nhttps://github.com/dotnet/runtime/blob/46870a030cffab0276165af9fddbc0c30f357161/src/libraries/System.Configuration.ConfigurationManager/src/System/Configuration/LocalFileSettingsProvider.cs#L288-L290\r\n\r\nAnd  then we got exception in `Directory.GetParent(null)` here\r\nhttps://github.com/dotnet/runtime/blob/46870a030cffab0276165af9fddbc0c30f357161/src/libraries/System.Configuration.ConfigurationManager/src/System/Configuration/LocalFileSettingsProvider.cs#L302\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003esnechaev\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-System.Configuration`, `untriaged`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2024-02-20T19:14:45Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc51TS8U",
+                                           "createdAt":  "2024-02-28T00:58:45Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "buyaa-n",
+                                           "body":  "\u003e ### Expected behavior\r\n\u003e \r\n\u003e Application finished without exceptions.\r\n\u003e \r\n\u003e ### Other information\r\n\u003e \r\n\u003e When the `~/.local/` and `~/.config` folder are missing, the system can\u0027t build a path to the settings file, so \r\n\u003e `ConfigurationManager.OpenExeConfiguration(level).FilePath` gives null (or empty string) for the `level = ConfigurationUserLevel.PerUserRoamingAndLocal` and `level = ConfigurationUserLevel. PerUserRoaming`. \r\n\r\nI am not sure if this is expected to work, at least I don\u0027t think this is configuration issue. If the settings file were expected to be generated on Mac that is most likely issue in VS Mac issue, then it should be reported there. \r\n\r\n@ericstj @steveharter what you think?",
+                                           "updatedAt":  "2024-02-28T00:58:45Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc51TmMw",
+                                           "createdAt":  "2024-02-28T02:24:03Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "snechaev",
+                                           "body":  "@buyaa-n, just a note: VS Mac is completely unrelated here, it\u0027s not even used anywhere in the scenario. The initial code was written on Windows, compiled with `dotnet` cli (on macOS) and launched from the Finder. The problem is not with the dev-environment, it\u0027s with application work after deployment to the client machine, where neither dotnet nor VS was installed. ",
+                                           "updatedAt":  "2024-02-28T02:24:03Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc51aSsR",
+                                           "createdAt":  "2024-02-28T20:15:48Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODYwPWA==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "snechaev",
+                                                                               "createdAt":  "2024-02-29T11:11:57Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "ericstj",
+                                           "body":  "Probably something unrelated during the build process creates `.local` and `.config` directories when you do `dotnet run`.\r\n\r\nIt sounds like this issue has a workaround - your application can explicitly create those directories.\r\n\r\nI do think this is a bug though - we shouldn\u0027t be throwing an `ArgumentNullException` from framework code when the user has no control of the argument.  This code path tries to deal with a non-existent folder, but it doesn\u0027t deal with null.\r\nhttps://github.com/dotnet/runtime/blob/9d906a2f922c57605ce4c886b8dc675e97d41a40/src/libraries/System.Configuration.ConfigurationManager/src/System/Configuration/LocalFileSettingsProvider.cs#L302-L304\r\n\r\nSeems to me like something went wrong when constructing the paths to leave them with a null value.  I think this location is the place they should be set, and looking at \r\nhttps://github.com/dotnet/runtime/blob/7608b3aa906439134e50c32c57b6448d8ffe7893/src/libraries/System.Configuration.ConfigurationManager/src/System/Configuration/ClientConfigPaths.cs#L162-L165\r\n\r\nIt uses `GetFolderPath` to obtain the root, which gets called with `SpecialFolderOption.None` https://github.com/dotnet/runtime/blob/e2acec9dfc2df4a067f2d029c65b830a4022ebd7/src/libraries/System.Private.CoreLib/src/System/Environment.cs#L124\r\n\r\nWhich means, that at this point, it\u0027s going to try to try to access and check for read.\r\nhttps://github.com/dotnet/runtime/blob/e2acec9dfc2df4a067f2d029c65b830a4022ebd7/src/libraries/System.Private.CoreLib/src/System/Environment.GetFolderPathCore.Unix.cs#L28-L46\r\n\r\nThis will fail because the folder doesn\u0027t exist.  That is intentional [per the docs](https://learn.microsoft.com/en-us/dotnet/api/system.environment.specialfolderoption?view=net-8.0):\r\nNone | 0 | The path to the folder is verified. If the folder exists, the path is returned. If the folder does not exist, an empty string is returned. This is the default behavior.\r\n-- | -- | --\r\n\r\nSo I think we either need to change our call to GetFolderPath to not validate -- could be risky as it might change legit error paths, or cause side effects -- or just examine the places that might access these paths and make sure they can handle a null value.\r\n\r\n\r\n",
+                                           "updatedAt":  "2024-02-28T20:20:01Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc51d6KG",
+                                           "createdAt":  "2024-02-29T09:49:28Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "snechaev",
+                                           "body":  "\u003e It sounds like this issue has a workaround - your application can explicitly create those directories.\r\n\r\nYes, my current workaround is as follows.\r\n\r\n```\r\n//should be called before any interactions with the settings\r\n//(should work before the static members initialisers inside ConfigurationManager-related stuff.\r\nprivate static void FixMacSettigns()\r\n{\r\n    var homePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);\r\n    var foldersToCheck = new[] { \".config/\", \".local/share/\" }.Select(x =\u003e Path.Combine(homePath, x));\r\n    foreach (var path in foldersToCheck)\r\n    {\r\n        Directory.CreateDirectory(path);\r\n    }\r\n}\r\n```\r\n\r\nThe drawbacks are\r\n* you can only hardcode paths. If you will try to get the path from the `ConfigurationManger`, then (in case if paths do not not exist on disk)\r\n   * you will get null\r\n   * the static members of the `ConfigurationManger` will be initialised and even though the workaround will create the missing folders, the `ConfigurationManger` will still fail because the static members are already in the state that reflects the fact that folders are missing.\r\n* I haven\u0027t checked the internal logic of how the path of the settings file is built, so if such paths can be different depending on the environment (OS version, permissions, and so on), then such a fix with hardcoded paths will fail.\r\n",
+                                           "updatedAt":  "2024-02-29T09:51:16Z"
+                                       }
+                                   ],
+                         "totalCount":  5
+                     },
+        "title":  "ApplicationSettingsBase.Upgrade() throws ArgumentNullException when run under fresh new user in macOS",
+        "labels":  [
+                       "area-System.Configuration"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/102341",
+        "createdAt":  "2024-05-16T21:51:59Z",
+        "number":  102341,
+        "author":  "eerhardt",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-07-22T22:22:33Z",
+        "body":  "Using the following project:\r\n\r\n```xml\r\n\u003cProject Sdk=\"Microsoft.NET.Sdk\"\u003e\r\n\r\n  \u003cPropertyGroup\u003e\r\n    \u003cOutputType\u003eExe\u003c/OutputType\u003e\r\n    \u003cTargetFramework\u003enet8.0\u003c/TargetFramework\u003e\r\n    \u003cImplicitUsings\u003eenable\u003c/ImplicitUsings\u003e\r\n    \u003cNullable\u003eenable\u003c/Nullable\u003e\r\n    \u003cPublishAot\u003etrue\u003c/PublishAot\u003e\r\n    \u003cInvariantGlobalization\u003etrue\u003c/InvariantGlobalization\u003e\r\n  \u003c/PropertyGroup\u003e\r\n\r\n  \u003cItemGroup\u003e\r\n    \u003cPackageReference Include=\"System.Runtime.Caching\" Version=\"8.0.0\" /\u003e\r\n  \u003c/ItemGroup\u003e\r\n\u003c/Project\u003e\r\n```\r\n\r\n```C#\r\nusing System.Runtime.Caching;\r\n\r\nMemoryCache memoryCache = new MemoryCache(\"MyCache\");\r\n\r\nmemoryCache.Add(\"key\", \"value\", DateTime.UtcNow.AddMinutes(1440.0));\r\n\r\nConsole.WriteLine(memoryCache.Get(\"key\"));\r\n```\r\n\r\nWhen you `dotnet build` you don\u0027t get any warnings that `MemoryCache` isn\u0027t going to work in a trimmed or AOT\u0027d application.\r\n\r\nHowever, when you `dotnet publish` the project, you do get a warning:\r\n\r\n```\r\n.nuget\\packages\\system.configuration.configurationmanager\\8.0.0\\lib\\net8.0\\System.Configuration.ConfigurationManager.dll : warning IL2104: Assembly \u0027System.Configuration.ConfigurationManager\u0027 produced trim warnings. For more information see https://aka.ms/dotnet-illink/libraries [C:\\Users\\eerhardt\\source\\repos\\ConsoleApp123\\ConsoleApp123\\ConsoleApp123.csproj]\r\n```\r\n\r\nThen when you run the resulting `.exe` it fails with:\r\n\r\n```\r\nUnhandled Exception: System.Configuration.ConfigurationErrorsException: Configuration system failed to initialize\r\n ---\u003e System.MissingMethodException: No parameterless constructor defined for type \u0027System.Configuration.ClientConfigurationHost\u0027.\r\n   at System.ActivatorImplementation.CreateInstance(Type, Boolean) + 0x119\r\n   at System.Configuration.Internal.ConfigSystem.System.Configuration.Internal.IConfigSystem.Init(Type, Object[]) + 0x43\r\n   at System.Configuration.ClientConfigurationSystem..ctor() + 0x47\r\n   at System.Configuration.ConfigurationManager.EnsureConfigurationSystem() + 0x56\r\n   --- End of inner exception stack trace ---\r\n   at System.Configuration.ConfigurationManager.EnsureConfigurationSystem() + 0xea\r\n   at System.Configuration.ConfigurationManager.PrepareConfigSystem() + 0x12\r\n   at System.Configuration.ConfigurationManager.GetSection(String) + 0x18\r\n   at System.Runtime.Caching.MemoryCacheStatistics.InitializeConfiguration(NameValueCollection) + 0x2c\r\n   at System.Runtime.Caching.MemoryCacheStatistics..ctor(MemoryCache, NameValueCollection) + 0x4a\r\n   at System.Runtime.Caching.MemoryCache.InitDisposableMembers(NameValueCollection) + 0xf1\r\n   at Program.\u003cMain\u003e$(String[] args) + 0x26\r\n   at ConsoleApp123!\u003cBaseAddress\u003e+0x3dc723\r\n```\r\n\r\nWe should either make System.Runtime.Caching work with trimming/native AOT, or annotate it as incompatible with trimming.\r\n\r\nThis is related to https://github.com/dotnet/runtime/issues/75480, but I didn\u0027t see `System.Runtime.Caching` in the list on that issue.\r\n\r\ncc @agocke @LakshanF @MichalStrehovsky ",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOhgAxAA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5-I8BV",
+                                           "createdAt":  "2024-05-16T21:57:29Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "MichalStrehovsky",
+                                           "body":  "This looks like a trimming issue, not AOT issue.\r\n\r\nThe exception is in ConfigurationManager. Looks like we didn\u0027t annotate it as such, and closed the underlying issue as by design :(.\r\n\r\nhttps://github.com/dotnet/runtime/blob/efde0061d4fadce140d9c9bd78bfc2aa7df7d9eb/src/libraries/System.Configuration.ConfigurationManager/src/System.Configuration.ConfigurationManager.csproj#L6-L8\r\n\r\n",
+                                           "updatedAt":  "2024-05-16T21:57:29Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6FuKDM",
+                                           "createdAt":  "2024-07-22T17:32:18Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "stephentoub",
+                                           "body":  "@eerhardt, is this something that needs to be addressed in .NET 9?",
+                                           "updatedAt":  "2024-07-22T17:32:18Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6FuLjj",
+                                           "createdAt":  "2024-07-22T17:36:13Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODrIW9g==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "stephentoub",
+                                                                               "createdAt":  "2024-07-23T03:43:22Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "eerhardt",
+                                           "body":  "\u003e @eerhardt, is this something that needs to be addressed in .NET 9?\r\n\r\nNo, it doesn\u0027t \"need\" to be addressed in .NET 9. The benefit of doing this work is that consumers using System.Runtime.Caching in trimmed/AOT apps/libraries would get warnings sooner in their development process - i.e. during \"build\", instead of at the end when they publish the app.",
+                                           "updatedAt":  "2024-07-22T17:36:13Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6F5FKe",
+                                           "createdAt":  "2024-07-23T21:16:27Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "stephentoub",
+                                           "body":  "Thanks. As https://github.com/dotnet/runtime/issues/75480 is now in the 10.0 milestone, I\u0027m moving this to the 10.0 milestone as well. If this is in the same camp as the other items in that issue, should this instead be closed and a line item added to that one?",
+                                           "updatedAt":  "2024-07-23T21:16:27Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6F_rUm",
+                                           "createdAt":  "2024-07-24T14:05:52Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "MichalStrehovsky",
+                                           "body":  "\u003e Thanks. As #75480 is now in the 10.0 milestone, I\u0027m moving this to the 10.0 milestone as well. If this is in the same camp as the other items in that issue, should this instead be closed and a line item added to that one?\r\n\r\nThis one was presumably actually hit by someone. #75480 is tracking leftover work that nobody ran into yet and we\u0027re likely going to kick from one milestone to another for years to come, unless the work gets funded. This one feels higher priority than that.",
+                                           "updatedAt":  "2024-07-24T14:05:52Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6F__vK",
+                                           "createdAt":  "2024-07-24T14:28:21Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "eerhardt",
+                                           "body":  "\u003e This one was presumably actually hit by someone.\r\n\r\nCorrect. This was hit by a team in Microsoft using native AOT.",
+                                           "updatedAt":  "2024-07-24T14:28:21Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6GACYM",
+                                           "createdAt":  "2024-07-24T14:30:31Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "stephentoub",
+                                           "body":  "@steveharter ",
+                                           "updatedAt":  "2024-07-24T14:30:31Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6GADEA",
+                                           "createdAt":  "2024-07-24T14:31:10Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-system-configuration\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2024-07-24T14:31:10Z"
+                                       }
+                                   ],
+                         "totalCount":  8
+                     },
+        "title":  "System.Runtime.Caching is not AOT compatible and isn\u0027t annotated",
+        "labels":  [
+                       "area-System.Configuration"
+                   ]
+    }
+]

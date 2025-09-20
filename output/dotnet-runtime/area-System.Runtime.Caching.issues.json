@@ -1,0 +1,112 @@
+﻿[
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/1422",
+        "createdAt":  "2019-05-03T08:13:45Z",
+        "number":  1422,
+        "author":  "sergethedev17",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHOBwlmFg==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "samunro",
+                                            "createdAt":  "2021-06-29T15:42:24Z"
+                                        }
+                                    ],
+                          "totalCount":  1
+                      },
+        "updatedAt":  "2025-07-21T18:41:21Z",
+        "body":  "Documentation for [MemoryCache.GetValues(IEnumerable\u003cString\u003e, String) Method](https://docs.microsoft.com/en-us/dotnet/api/system.runtime.caching.memorycache.getvalues?view=netframework-4.8#remarks) specifies that:\r\n\r\n\u003e **Returns**\r\n\u003e IDictionary\u003cString,Object\u003e\r\n\u003e A set of cache entries that correspond to the specified keys.\r\n\u003e\r\n\u003e **Remarks**\r\n\u003e If a cache entry that is represented by the keys does not exist, the corresponding value for the returned object in the dictionary is set to null. Therefore, the returned dictionary always has the same number of items as the number of elements in keys.\r\n\r\n[GetValues](https://github.com/dotnet/corefx/blob/master/src/System.Runtime.Caching/src/System/Runtime/Caching/MemoryCache.cs#L835) implementation is different.\r\n\r\n1. First, `null` entries corresponding to `keys` that do not exist are **not** added.\r\n\r\n2. Second, if none of the `keys` are found, then method returns `null` instead of `IDictionary\u003cString,Object\u003e`.\r\n\r\nWe need to either update documentation or patch the implementation.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOVjPkOg==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQ4OTczNzUyMQ==",
+                                           "createdAt":  "2019-05-06T19:05:18Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOApRdjw==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "sergethedev17",
+                                                                               "createdAt":  "2019-05-24T10:22:10Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "KKhurin",
+                                           "body":  "Thank you @sergethedev17 for reporting this. My instinctive reaction would be to update the documentation since this is the same behavior on Core and Desktop. ",
+                                           "updatedAt":  "2019-05-06T19:05:18Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDc5NDM3MDk3MA==",
+                                           "createdAt":  "2021-03-09T19:51:34Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "corneliusmunz",
+                                           "body":  "@StephenBonikowsky , @HongGit Any news on that? Either the documentation or the implementation should be changed. ",
+                                           "updatedAt":  "2021-03-09T19:51:34Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5WM-Q6",
+                                           "createdAt":  "2023-02-27T12:26:16Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "darraghjones",
+                                           "body":  "maybe this issue should be moved to https://github.com/dotnet/docs if it\u0027s just a documentation error",
+                                           "updatedAt":  "2023-02-27T12:26:16Z"
+                                       }
+                                   ],
+                         "totalCount":  3
+                     },
+        "title":  "MemoryCache.GetValues method implementation incorrect",
+        "labels":  [
+                       "documentation",
+                       "area-System.Runtime.Caching"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/52033",
+        "createdAt":  "2021-04-29T03:11:19Z",
+        "number":  52033,
+        "author":  "StephenMolloy",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-07-22T22:24:21Z",
+        "body":  "### Description\r\n\r\nFound by @mconnew during a PR for another MemoryCache bug. (#51761) We are mishandling CacheItemPolicy.ChangeMonitors in the MemoryCache. The docs for that property says:\r\n\r\n\u003e If you change the set of change monitors on a CacheItemPolicy object after the CacheItemPolicy object has been passed to an ObjectCache implementation, the changes have no effect.\r\n\r\nThis implies that the dependencies are expected to be copied when passed in. If a caller passes a CacheItemPolicy to MemoryCache.Set, and then modifies the CacheItemPolicy.ChangeMonitors collection afterwards, that change will be reflected in the collection stored here. It\u0027s also not thread safe. For example, CallNotifyOnChanged gets an iterator which will throw if the collection is modified while iterating.\r\n\r\nThis has been present in MemoryCache since its inception in NetFx. I have not seen any reports of failures while iterating over a monitor collection while it changes though, which indicates that very few if any people are actually doing this. While fixing this bug would be a behavior change - and MemoryCache here is meant to be a bridge package to allow moving to .Net Core piece by piece, and thus compat is a _huge_ consideration - I think it is acceptable risk to consider doing this correctly and taking a shallow copy of this monitor collection instead of a reference.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  null,
+                         "nodes":  [
+
+                                   ],
+                         "totalCount":  0
+                     },
+        "title":  "MemoryCache mishandles CacheItemPolicy.ChangeMonitors for new items",
+        "labels":  [
+                       "bug",
+                       "area-System.Runtime.Caching"
+                   ]
+    }
+]

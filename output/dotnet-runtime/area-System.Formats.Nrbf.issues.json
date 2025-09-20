@@ -1,0 +1,366 @@
+﻿{
+    "url":  "https://github.com/dotnet/runtime/issues/104142",
+    "createdAt":  "2024-06-28T08:30:38Z",
+    "number":  104142,
+    "author":  "adamsitnik",
+    "reactions":  {
+                      "hasNextPage":  false,
+                      "endCursor":  null,
+                      "nodes":  [
+
+                                ],
+                      "totalCount":  0
+                  },
+    "updatedAt":  "2024-08-13T08:40:39Z",
+    "body":  "In #104104 I\u0027ve tried to re-enable all BF tests and got following error for WASM/Mobile builds:\r\n\r\n```log\r\n[00:49:29] info: [FAIL] System.Formats.Nrbf.Tests.ArraySinglePrimitiveRecordTests.CanReadArrayOfAnySize_Bool(size: 127, canSeek: False)\r\n[00:49:29] info: System.TypeInitializationException : The type initializer for \u0027System.Runtime.Serialization.Formatters.Binary.Converter\u0027 threw an exception.\r\n[00:49:29] info: ---- System.IO.FileNotFoundException :\r\n[00:49:29] info:    at System.Runtime.Serialization.Formatters.Binary.ObjectWriter.GetAssemblyId(WriteObjectInfo )\r\n[00:49:29] info:    at System.Runtime.Serialization.Formatters.Binary.ObjectWriter.Serialize(Object , BinaryFormatterWriter )\r\n[00:49:29] info:    at System.Runtime.Serialization.Formatters.Binary.BinaryFormatter.Serialize(Stream , Object )\r\n[00:49:29] info:    at System.Formats.Nrbf.Tests.ReadTests.Serialize[Boolean[]](Boolean[] instance)\r\n[00:49:29] info:    at System.Formats.Nrbf.Tests.ArraySinglePrimitiveRecordTests.Test[Boolean](Int32 size, Boolean canSeek)\r\n[00:49:29] info:    at System.Object.InvokeStub_ArraySinglePrimitiveRecordTests.CanReadArrayOfAnySize_Bool(Object , Span`1 )\r\n```\r\n\r\nMost likely it\u0027s trying to load \"mscorlib\" which is not available for these platforms:\r\n\r\nhttps://github.com/dotnet/runtime/blob/d6f4beeb26812b82bea4f6300471998a6b92718b/src/libraries/System.Runtime.Serialization.Formatters/src/System/Runtime/Serialization/Formatters/Binary/Converter.cs#L38\r\n\r\nPrior to #103255 BF would simply throw `PNSE` for them:\r\n\r\nhttps://github.com/dotnet/runtime/blob/a82225ee6e7c2f1cc8e064b6320756b547faa358/src/libraries/System.Runtime.Serialization.Formatters/src/System.Runtime.Serialization.Formatters.csproj#L3\r\n\r\nhttps://github.com/dotnet/runtime/blob/a82225ee6e7c2f1cc8e064b6320756b547faa358/src/libraries/System.Runtime.Serialization.Formatters/src/System.Runtime.Serialization.Formatters.csproj#L77-L79\r\n\r\n@bartonjs should we change the OOB package to keep throwing PNSE for WASM/Mobile?",
+    "comments":  {
+                     "hasNextPage":  false,
+                     "endCursor":  "Y3Vyc29yOnYyOpHOiDzSLg==",
+                     "nodes":  [
+                                   {
+                                       "id":  "IC_kwDODI9FZc6C6n15",
+                                       "createdAt":  "2024-06-28T08:30:54Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  "dotnet-policy-service",
+                                       "body":  "Tagging subscribers to this area: @dotnet/area-system-runtime\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                       "updatedAt":  "2024-06-28T08:30:54Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDODI9FZc6C9VUY",
+                                       "createdAt":  "2024-06-28T14:51:47Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  "Y3Vyc29yOnYyOpHODnr6qA==",
+                                                         "nodes":  [
+                                                                       {
+                                                                           "content":  "THUMBS_UP",
+                                                                           "user":  "adamsitnik",
+                                                                           "createdAt":  "2024-06-28T15:24:10Z"
+                                                                       }
+                                                                   ],
+                                                         "totalCount":  1
+                                                     },
+                                       "author":  "jkotas",
+                                       "body":  "\u003e Most likely it\u0027s trying to load \"mscorlib\" which is not available for these platforms\r\n\r\nmscorlib is available for these platforms. \r\n\r\nI think that the problem that you are seeing is that these tests have trimming enabled when running on mobile/WASM, but binary serialization is incompatible with trimming. The trimming strips mscorlib since it does not see it used anywhere. I expect that you would see similar problems if you enabled these tests e.g. on native AOT on any platforms.",
+                                       "updatedAt":  "2024-06-28T14:53:13Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDODI9FZc6HwjyB",
+                                       "createdAt":  "2024-08-09T10:34:52Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  "eiriktsarpalis",
+                                       "body":  "@adamsitnik @bartonjs If I\u0027m understanding the failing stack trace correctly, it is not product code from `NrbfReader` that is failing in these platforms but [BinaryFormatter which is being used to generate test inputs](https://github.com/dotnet/runtime/blob/0f2ce100fb386fec5eb784cf501ee95881a14e47/src/libraries/System.Formats.Nrbf/tests/ReadTests.cs#L11-L19). I see that the test class is already [conditioned on BinaryFormatter being supported](https://github.com/dotnet/runtime/blob/0f2ce100fb386fec5eb784cf501ee95881a14e47/src/libraries/System.Formats.Nrbf/tests/ReadTests.cs#L8), so presumably some platforms are being missed out in the [relevant platform detection logic](https://github.com/dotnet/runtime/blob/0f2ce100fb386fec5eb784cf501ee95881a14e47/src/libraries/Common/tests/TestUtilities/System/PlatformDetection.cs#L728-L755)?\r\n\r\nAssuming `NrbfReader` is supported in trimmed/AOT applications perhaps a better solution longer term is to precompute the blobs and store them as files in the test project.",
+                                       "updatedAt":  "2024-08-09T10:34:52Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDODI9FZc6IIKxe",
+                                       "createdAt":  "2024-08-12T12:29:57Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  "Y3Vyc29yOnYyOpHODtrAsw==",
+                                                         "nodes":  [
+                                                                       {
+                                                                           "content":  "THUMBS_UP",
+                                                                           "user":  "eiriktsarpalis",
+                                                                           "createdAt":  "2024-08-12T12:32:30Z"
+                                                                       }
+                                                                   ],
+                                                         "totalCount":  1
+                                                     },
+                                       "author":  "adamsitnik",
+                                       "body":  "\u003e If I\u0027m understanding the failing stack trace correctly, it is not product code from `NrbfReader` that is failing in these platforms but [BinaryFormatter which is being used to generate test inputs](https://github.com/dotnet/runtime/blob/0f2ce100fb386fec5eb784cf501ee95881a14e47/src/libraries/System.Formats.Nrbf/tests/ReadTests.cs#L11-L19). I see that the test class is already [conditioned on BinaryFormatter being supported](https://github.com/dotnet/runtime/blob/0f2ce100fb386fec5eb784cf501ee95881a14e47/src/libraries/System.Formats.Nrbf/tests/ReadTests.cs#L8), so presumably some platforms are being missed out in the [relevant platform detection logic](https://github.com/dotnet/runtime/blob/0f2ce100fb386fec5eb784cf501ee95881a14e47/src/libraries/Common/tests/TestUtilities/System/PlatformDetection.cs#L728-L755)?\r\n\r\nThat is correct. IMO we should make sure that these tests are disabled on WASM/Mobile but also change the new OOB package to throw `PNS` rather than `FileNotFound`.",
+                                       "updatedAt":  "2024-08-12T12:29:57Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDODI9FZc6IIM4Q",
+                                       "createdAt":  "2024-08-12T12:33:38Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  "Y3Vyc29yOnYyOpHODtrENA==",
+                                                         "nodes":  [
+                                                                       {
+                                                                           "content":  "THUMBS_UP",
+                                                                           "user":  "adamsitnik",
+                                                                           "createdAt":  "2024-08-12T12:40:24Z"
+                                                                       }
+                                                                   ],
+                                                         "totalCount":  1
+                                                     },
+                                       "author":  "eiriktsarpalis",
+                                       "body":  "Unless I\u0027m missing something the detection logic already excludes these platforms:\r\n\r\nhttps://github.com/dotnet/runtime/blob/0f2ce100fb386fec5eb784cf501ee95881a14e47/src/libraries/Common/tests/TestUtilities/System/PlatformDetection.cs#L734-L737\r\n\r\ncc @dotnet/dotnet-webassembly-admin ",
+                                       "updatedAt":  "2024-08-12T12:36:07Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDODI9FZc6IJPXc",
+                                       "createdAt":  "2024-08-12T14:22:13Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  "adamsitnik",
+                                       "body":  "\u003e Unless I\u0027m missing something the detection logic already excludes these platforms:\r\n\r\nIt does. But I am not sure if the line that follows this `if` block won\u0027t try to load the referenced type anyway (and run the static ctor and produce the `FileNotFound` exception wrapped by `TypeInitializationException`).\r\n\r\nhttps://github.com/dotnet/runtime/blob/0f2ce100fb386fec5eb784cf501ee95881a14e47/src/libraries/Common/tests/TestUtilities/System/PlatformDetection.cs#L739\r\n\r\n@eiriktsarpalis I may be paranoid here and it may be working as expected, just sharing my thoughts here.",
+                                       "updatedAt":  "2024-08-12T14:22:13Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDODI9FZc6IJb4I",
+                                       "createdAt":  "2024-08-12T14:42:20Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  "adamsitnik",
+                                       "body":  "`System.Formats.Nrbf.Tests` is not listed here, so the condition most likely works as expected:\r\n\r\nhttps://github.com/dotnet/runtime/blob/c4624d0a3c91fb1496b0910b22c9d9fc197247e8/src/libraries/tests.proj#L437-L440",
+                                       "updatedAt":  "2024-08-12T14:42:20Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDODI9FZc6IJd5c",
+                                       "createdAt":  "2024-08-12T14:45:38Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  "eiriktsarpalis",
+                                       "body":  "I think I misunderstood the issue. It\u0027s not that it\u0027s failing in CI but rather it was failing when you were working on the tests and you then got disabled in ec45dad5e223f18701cb14f5caca03723f648b26. I don\u0027t think there is much that we can do for .NET 9. In the future can try to enable the tests in those platforms by precomputing the BF blobs ahead of time.",
+                                       "updatedAt":  "2024-08-12T14:45:38Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDODI9FZc6IJfIh",
+                                       "createdAt":  "2024-08-12T14:47:23Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  "adamsitnik",
+                                       "body":  "\u003e  I don\u0027t think there is much that we can do for .NET 9. \r\n\r\n`BinaryFormatter` used to throw `PNSE` on WASM before our most recent changes, now it\u0027s throwing `FileNotFound` exception (when the new OOB package is installed). Should we unify that to always throw `PNSE` (no matter if the package is installed or not?)?",
+                                       "updatedAt":  "2024-08-12T14:49:09Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDODI9FZc6IJjnU",
+                                       "createdAt":  "2024-08-12T14:55:10Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  "eiriktsarpalis",
+                                       "body":  "Ok, so you\u0027re saying that issue is with the `BinaryFormatter` product and not with the impacted test or the product that the test is testing.",
+                                       "updatedAt":  "2024-08-12T14:55:10Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDODI9FZc6IJj9w",
+                                       "createdAt":  "2024-08-12T14:55:47Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  "dotnet-policy-service",
+                                       "body":  "Tagging subscribers to \u0027binaryformatter-migration\u0027: @adamsitnik, @bartonjs, @jeffhandley, @terrajobst\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                       "updatedAt":  "2024-08-12T14:55:47Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDODI9FZc6IJmMP",
+                                       "createdAt":  "2024-08-12T14:59:38Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  "Y3Vyc29yOnYyOpHODtsZ0g==",
+                                                         "nodes":  [
+                                                                       {
+                                                                           "content":  "THUMBS_UP",
+                                                                           "user":  "eiriktsarpalis",
+                                                                           "createdAt":  "2024-08-12T15:01:05Z"
+                                                                       }
+                                                                   ],
+                                                         "totalCount":  1
+                                                     },
+                                       "author":  "jkotas",
+                                       "body":  "\u003e now it\u0027s throwing FileNotFound exception\r\n\r\nYou will get this behavior anywhere trimming is enabled. It is not specific to WASM. You will see it even with e.g. regular CoreCLR when you enable trimming.\r\n\r\n\u003e BinaryFormatter used to throw PNSE on WASM before our most recent changes\r\n\r\nThese is nothing fundamental preventing the binary formatter OOB package from working on WASM (if you disable trimming). The app will be big, but it should work.\r\n\r\n\u003e BinaryFormatter used to throw PNSE on WASM before our most recent changes\r\n\r\nThis behavior was introduced when we were chipping on the binary formatter without understanding the desired state. I do not think it makes sense to keep it.",
+                                       "updatedAt":  "2024-08-12T14:59:49Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDODI9FZc6IJoHp",
+                                       "createdAt":  "2024-08-12T15:02:56Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  "eiriktsarpalis",
+                                       "body":  "I see the BF APIs are already annotated RUC/RDC as well so I think this type of error is par for the course. We could try improving the error message for that particular failure but then other runtime errors related to trimming would pop up elsewhere. STJ has similar behaviour in this context.\r\n\r\ncc @bartonjs for a third opinion",
+                                       "updatedAt":  "2024-08-12T15:24:36Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDODI9FZc6IKM35",
+                                       "createdAt":  "2024-08-12T16:08:16Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  "bartonjs",
+                                       "body":  "\u003e should we change the OOB package to keep throwing PNSE for WASM/Mobile?\r\n\r\nNot by going back to dual-compile.  That was an easy pill to swallow for inbox, but it\u0027s a pretty big cost to increase the package size to make one \"doesn\u0027t work\" turn into another.\r\n\r\nThat said, changing PNSE into TypeInitializationException is a breaking change... so we should make a best-effort at fixing it (and if we can\u0027t, then doc it as a breaking change)",
+                                       "updatedAt":  "2024-08-12T16:08:16Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDODI9FZc6IK074",
+                                       "createdAt":  "2024-08-12T17:17:11Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  "jkotas",
+                                       "body":  "\u003e PNSE into TypeInitializationException is a breaking change\r\n\r\nIt is not a breaking change in this case. We make no guarantees about behavior of trim-incompatible APIs in trimmed apps. The trim-incompatible APIs can do anything. The API behavior can even change due to unrelated changes in the app. It is by design.",
+                                       "updatedAt":  "2024-08-12T17:18:08Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDODI9FZc6ILBE-",
+                                       "createdAt":  "2024-08-12T17:46:25Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  "terrajobst",
+                                       "body":  "From what I understand this situation is as follows:\r\n\r\n* If trimming is not enabled, `BinaryFormatter` will throw `PlatformNotSupportedException`\r\n* If trimming is enabled, using `BinaryFormatter` can result in `FileNotFoundException`\r\n* WASM happens to have trimming enabled by default\r\n\r\nIf that\u0027s correct then I agree with @jkotas and @eiriktsarpalis: since `BinaryFormatter` is already attributed as `[RequiresDynamicCode, RequiresUnreferencedCode]` it\u0027s essentially marked as not trimming safe, so it feels like the observed behavior is by-design.",
+                                       "updatedAt":  "2024-08-12T17:46:25Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDODI9FZc6ILGxA",
+                                       "createdAt":  "2024-08-12T18:00:35Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  "Y3Vyc29yOnYyOpHODt6EVQ==",
+                                                         "nodes":  [
+                                                                       {
+                                                                           "content":  "THUMBS_UP",
+                                                                           "user":  "terrajobst",
+                                                                           "createdAt":  "2024-08-12T18:03:36Z"
+                                                                       },
+                                                                       {
+                                                                           "content":  "THUMBS_UP",
+                                                                           "user":  "JeremyKuhne",
+                                                                           "createdAt":  "2024-08-12T18:11:03Z"
+                                                                       },
+                                                                       {
+                                                                           "content":  "THUMBS_UP",
+                                                                           "user":  "eiriktsarpalis",
+                                                                           "createdAt":  "2024-08-13T08:38:00Z"
+                                                                       },
+                                                                       {
+                                                                           "content":  "THUMBS_UP",
+                                                                           "user":  "bartonjs",
+                                                                           "createdAt":  "2024-08-13T22:41:42Z"
+                                                                       }
+                                                                   ],
+                                                         "totalCount":  4
+                                                     },
+                                       "author":  "jkotas",
+                                       "body":  "Nit - I think that the situation is as follows:\r\n\r\n- If the BF OOB package is not referenced, BinaryFormatter will throw PlatformNotSupportedException\r\n- If the BF OOB package is referenced and trimming is not enabled, BinaryFormatter should work fine.\r\n- If the BF OOB package is referenced and trimming is enabled, using BinaryFormatter can result in FileNotFoundException\r\n- WASM happens to have trimming enabled by default",
+                                       "updatedAt":  "2024-08-12T18:00:35Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDODI9FZc6ILISl",
+                                       "createdAt":  "2024-08-12T18:04:26Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  "Y3Vyc29yOnYyOpHODtzC2g==",
+                                                         "nodes":  [
+                                                                       {
+                                                                           "content":  "THUMBS_UP",
+                                                                           "user":  "jkotas",
+                                                                           "createdAt":  "2024-08-12T18:22:47Z"
+                                                                       },
+                                                                       {
+                                                                           "content":  "THUMBS_UP",
+                                                                           "user":  "eiriktsarpalis",
+                                                                           "createdAt":  "2024-08-13T08:38:04Z"
+                                                                       }
+                                                                   ],
+                                                         "totalCount":  2
+                                                     },
+                                       "author":  "terrajobst",
+                                       "body":  "Fair enough. I think it doesn\u0027t change my conclusion -- still feels fine to me.",
+                                       "updatedAt":  "2024-08-12T18:04:26Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDODI9FZc6IPNIu",
+                                       "createdAt":  "2024-08-13T08:39:04Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  "Y3Vyc29yOnYyOpHODt2AcQ==",
+                                                         "nodes":  [
+                                                                       {
+                                                                           "content":  "THUMBS_UP",
+                                                                           "user":  "adamsitnik",
+                                                                           "createdAt":  "2024-08-13T10:07:43Z"
+                                                                       },
+                                                                       {
+                                                                           "content":  "THUMBS_UP",
+                                                                           "user":  "terrajobst",
+                                                                           "createdAt":  "2024-08-13T14:42:55Z"
+                                                                       }
+                                                                   ],
+                                                         "totalCount":  2
+                                                     },
+                                       "author":  "eiriktsarpalis",
+                                       "body":  "Sounds good. I\u0027ll leave this issue open to track potentially making the NrbfReader tests work in these platforms using precomputed blobs.",
+                                       "updatedAt":  "2024-08-13T08:39:04Z"
+                                   }
+                               ],
+                     "totalCount":  19
+                 },
+    "title":  "NrbfReader tests not working in WASM/mobile",
+    "labels":  [
+                   "test-enhancement",
+                   "area-System.Formats.Nrbf"
+               ]
+}

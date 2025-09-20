@@ -1,0 +1,1504 @@
+﻿[
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/29252",
+        "createdAt":  "2019-04-13T15:31:23Z",
+        "number":  29252,
+        "author":  "davidfowl",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHOB3G1Hg==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "Wraith2",
+                                            "createdAt":  "2019-04-14T12:59:51Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "gfoidl",
+                                            "createdAt":  "2019-06-06T16:33:49Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "george-chakhidze",
+                                            "createdAt":  "2019-12-11T13:11:17Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "augustoproiete",
+                                            "createdAt":  "2021-08-20T04:08:26Z"
+                                        }
+                                    ],
+                          "totalCount":  4
+                      },
+        "updatedAt":  "2021-08-17T19:26:21Z",
+        "body":  "We recently added an API to detect if a .NET process was being lauched as a windows service (https://github.com/aspnet/Extensions/pull/1369). I believe this belongs in SeviceBase as it would be useful to have this feature outside of our hosting wrapper.\r\n\r\n```C#\r\npublic class ServiceBase\r\n{\r\n    public static bool IsRunningInWindowsService { get; }\r\n}\r\n```\r\n\r\nI\u0027m open to other names.\r\n- IsRunningUnderWindowsService\r\n\r\ncc @danmosemsft \r\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHONa2eWA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQ4MjgyNzY0OQ==",
+                                           "createdAt":  "2019-04-13T16:02:50Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "analogrelay",
+                                           "body":  "Example implementation: https://github.com/aspnet/Extensions/pull/1369/files",
+                                           "updatedAt":  "2019-04-13T16:02:50Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQ4Mjg1NDE0MQ==",
+                                           "createdAt":  "2019-04-13T18:04:19Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "danmoseley",
+                                           "body":  "@anipik owns this area. Why is the API useful?",
+                                           "updatedAt":  "2019-04-13T18:04:19Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQ4Mjg1NjA0NQ==",
+                                           "createdAt":  "2019-04-13T18:13:14Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "davidfowl",
+                                           "body":  "We use it in our hosting layer to make the windows service specific logic noop. The benefit being that we can light up specific behavior when running in that context (like hooking into the lifetime events). This means my application runs in both modes (service or self hosted) seamlessly.\r\n\r\nWe’ve also had a customer ask us for this logic because they wanted a change to write some service specific logic in their startup.",
+                                           "updatedAt":  "2019-04-13T18:13:14Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQ4Mjg3NDc5MA==",
+                                           "createdAt":  "2019-04-13T19:58:19Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "danmoseley",
+                                           "body":  "@anurse is that method documented, eg there is some reason to believe the service host process name won\u0027t change in future Windows versions?\r\n\r\nI don\u0027t feel strongly but Im inclined to think we would want more evidence of need. If it was wrapping something like `::IsAService()` it would be a lower bar in my mind.",
+                                           "updatedAt":  "2019-04-13T19:58:19Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQ4Mjg4NTA2Mg==",
+                                           "createdAt":  "2019-04-13T20:54:25Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "davidfowl",
+                                           "body":  "I just described how we use it. What evidence are you looking for? Are you not convinced that there are scenarios where knowing that you are running in a windows service is useful?\r\n\r\nIf windows changes it in the future we’ll update the code. If you know of a better way to detect that scenario there’ll be no pushback ",
+                                           "updatedAt":  "2019-04-13T20:54:25Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQ4Mjk3MDQyNQ==",
+                                           "createdAt":  "2019-04-14T12:59:46Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Wraith2",
+                                           "body":  "I believe this would be useful. In the past I\u0027ve hooked up a log reader if running outside a service so I can direct the output to a user interface.",
+                                           "updatedAt":  "2019-04-14T12:59:46Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQ4Mjk5NTQ4Nw==",
+                                           "createdAt":  "2019-04-14T15:10:11Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "danmoseley",
+                                           "body":  "if this was on ServiceBase the app would require a reference to the compat pack which it might not otherwise need. On the flip side, it is very Windows specific...",
+                                           "updatedAt":  "2019-04-14T15:10:11Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQ4MzU1MzYwMg==",
+                                           "createdAt":  "2019-04-16T07:58:51Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "davidfowl",
+                                           "body":  "@danmosemsft do yo have a proposal? Where would it live?",
+                                           "updatedAt":  "2019-04-16T07:58:51Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQ4MzY5MjM2OQ==",
+                                           "createdAt":  "2019-04-16T14:45:01Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "analogrelay",
+                                           "body":  "There is [Environment.UserInteractive](https://docs.microsoft.com/en-us/dotnet/api/system.environment.userinteractive?redirectedfrom=MSDN\u0026view=netframework-4.7.2#System_Environment_UserInteractive) which checks if the application is running in an \"Interactive Session\".\r\n\r\nFrom the docs: \r\n\r\n\u003e The UserInteractive property reports false for a Windows process or a service like IIS that runs without a user interface. If this property is false, do not display modal dialogs or message boxes because there is no graphical user interface for the user to interact with.\r\n\r\nIn my initial cursory testing, a console app reports `Environment.UserInteractive` as **`true`**.\r\n\r\nWe might need further testing here, but it *may* serve our purpose. It\u0027s not guaranteed to indicate that you\u0027re in a Windows Service though since there may be other non-Windows Service non-Interactive scenarios.",
+                                           "updatedAt":  "2019-04-16T14:45:01Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQ4MzY5Mzc4Mg==",
+                                           "createdAt":  "2019-04-16T14:48:16Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Tratcher",
+                                           "body":  "That would also include scheduled tasks.",
+                                           "updatedAt":  "2019-04-16T14:48:16Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQ4MzY5NDQ4OQ==",
+                                           "createdAt":  "2019-04-16T14:50:01Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "analogrelay",
+                                           "body":  "That\u0027s what I was looking for :). I figured there might be a counter-example here.",
+                                           "updatedAt":  "2019-04-16T14:50:01Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQ4MzczMjIxOQ==",
+                                           "createdAt":  "2019-04-16T16:21:39Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "davidfowl",
+                                           "body":  "Doesn\u0027t that also report true when running in IIS?",
+                                           "updatedAt":  "2019-04-16T16:21:39Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQ4Mzc4OTQ5Mw==",
+                                           "createdAt":  "2019-04-16T18:24:54Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "danmoseley",
+                                           "body":  "As an aside, I had a quick look at the service related Win32 API and I didn\u0027t see an alternative way to check the current process is a service. The API\u0027s all deal with handles or service names (from which you get the handle). I don\u0027t see a way eg to enumerate services from a process handle.\r\n\r\nIdeally we could get hold of the services parent process by a more robust method than using its name, but I don\u0027t know how.",
+                                           "updatedAt":  "2019-04-16T18:26:43Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQ4Mzc5NzYzOA==",
+                                           "createdAt":  "2019-04-16T18:47:30Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "MarcoRossignoli",
+                                           "body":  "Name+path(`%SystemRoot%\\System32\\services.exe`)+`Environment.UserInteractive` ?",
+                                           "updatedAt":  "2019-04-16T18:47:30Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQ4MzgzMDY1Mw==",
+                                           "createdAt":  "2019-04-16T20:28:10Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "MarcoRossignoli",
+                                           "body":  "Another idea could be check associated windows station name, from `Windows Internals 6`:\r\n```\r\nUnless other directed, the Windows subsystem associates services running in the local system account with a nonvisible windows station named Service-0x0-3e7$ that all noninteractive services share.\r\n...\r\nHowever only processes owned by the system and Windows services run in session 0; all other logon sessions, including those of console users, run in different session. Any windows displayed by process in session 0 is therefore not visible to the user.\r\n```\r\nCheck for `Service-0x` + login session identified + `$`\r\nI did some check and it works also under IIS\r\n\r\n![image](https://user-images.githubusercontent.com/7894084/56240922-e54d8580-6094-11e9-949f-06fb7cd6ccfc.png)\r\n\r\nThe only issue is in case of `SERVICE_INTERACTIVE_PROCESS` flag for LocalSystem account...process will be associated with WinSta0, this is however not recommended for security reason and supported for backward compatibility.",
+                                           "updatedAt":  "2019-04-16T20:37:09Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQ5NzQ0NDc2MQ==",
+                                           "createdAt":  "2019-05-30T18:56:59Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOAppK3A==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "Anipik",
+                                                                               "createdAt":  "2019-05-30T18:58:18Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "danmoseley",
+                                           "body":  "@Anipik @maryamariyan please limit 3.0 milestone to issues that must be fixed to ship 3.0.",
+                                           "updatedAt":  "2019-05-30T18:56:59Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDUwOTc1MTk4Mw==",
+                                           "createdAt":  "2019-07-09T18:21:11Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOAsHIxA==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "danmoseley",
+                                                                               "createdAt":  "2019-07-09T18:31:25Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "terrajobst",
+                                           "body":  "Conclusion\r\n\r\n* ~~The location makes sense because if the API returns true, consumers are likely ending up using APIs on `ServiceBase`~~\r\n    - It seems there might be other scenarios where pulling in `ServiceBase` is not desirable.\r\n* ~~We should consider shortening the name to `IsRunningAsService` as Windows is implied (the entire type is Windows-specific)~~\r\n* ~~We can still expose a platform-agnostic API (that detects, say, Windows services and Linux daemons) but that\u0027s out of scope for this scenario~~\r\n\r\nThere are more questions. It seems someone needs to sit down and go through the Windows SCM APIs to see how this can be made reliable. There is also the question whether we need an API to return this for other processes, and not just the current one. Windows also allows hosting multiple services in a single process.\r\n\r\nWe also need to decide what, if any, the cross-platform angle is. For example, Windows might support multiple services by a single process. Daemons might not. It seems safer to scope this API to be Windows-only. However, it means we shouldn\u0027t burn a name like `Process.IsRunningAsService`, for instance.",
+                                           "updatedAt":  "2019-07-09T18:48:08Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDUxNzY3MDkzNQ==",
+                                           "createdAt":  "2019-08-02T11:46:51Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "george-chakhidze",
+                                           "body":  "`Environment.UserInteractive` always returns `true` in .NET Core. Maybe, while at it, you could properly implement this API as well?",
+                                           "updatedAt":  "2019-08-02T11:46:51Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDU3MTgxOTEzMw==",
+                                           "createdAt":  "2020-01-07T23:20:18Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "danmoseley",
+                                           "body":  "@george-chakhidze yep, this was done for 5.0. And as was pointed out above, it is not the same as this proposed API, although for some use cases it may be enough.",
+                                           "updatedAt":  "2020-01-07T23:20:18Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc41rZ5Y",
+                                           "createdAt":  "2021-08-17T19:26:21Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOB2tAUg==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "Wraith2",
+                                                                               "createdAt":  "2021-08-17T19:33:56Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "KalleOlaviNiemitalo",
+                                           "body":  "In C++, I just call StartServiceCtrlDispatcher, and if that fails with ERROR_FAILED_SERVICE_CONTROLLER_CONNECT, then I know I\u0027m not running as a service.\r\n\r\nThe equivalent thing was not feasible to implement on .NET Framework because ServiceBase.Run would handle the error by popping up a Windows Forms message box. That was removed in the .NET Core port but the method still logs the error to the console and to event logs.",
+                                           "updatedAt":  "2021-08-17T19:26:21Z"
+                                       }
+                                   ],
+                         "totalCount":  20
+                     },
+        "title":  "API Proposal: ServiceBase.IsRunningInWindowsService",
+        "labels":  [
+                       "api-needs-work",
+                       "area-System.ServiceProcess"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/30386",
+        "createdAt":  "2019-07-26T09:06:20Z",
+        "number":  30386,
+        "author":  "Misiu",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-03-06T19:08:09Z",
+        "body":  "[This blog post](https://devblogs.microsoft.com/aspnet/net-core-workers-as-windows-services/) describes how we can create Windows Service using .NET Core Workers.\r\nCurrently, I have several Windows Services that are responsible for converting documents.\r\nBecause the process can take a long time to complete I added a \"hacky\" way to change `SERVICE_PRESHUTDOWN_INFO` using `ChangeServiceConfig2` from `advapi32.dll` and I accept `SERVICE_ACCEPT_PRESHUTDOWN` command.\r\n\r\nFor more info take a look at[ this Stack Overflow answer](https://stackoverflow.com/a/25753087/965722).\r\n\r\nNow creating windows services is possible using .NET Core so I\u0027d like to ask to expose a way to configure preshutdown time without using such hacky ways.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOoTau-A==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY2NTY0MjkxMA==",
+                                           "createdAt":  "2020-07-29T12:47:09Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "nxtn",
+                                           "body":  "## Proposed API\r\n\r\n```cs\r\nnamespace System.ServiceProcess\r\n{\r\n    public class ServiceBase\r\n    {\r\n        public bool CanHandlePreshutdownEvent { get; set; }\r\n\r\n        protected virtual void OnPreshutdown();\r\n    }\r\n}\r\n```\r\n\r\n(Similar to `CanHandleSessionChangeEvent` and `OnSessionChange`.)\r\n\r\nThe timeout value should be configured during installation thus it\u0027s not included here.",
+                                           "updatedAt":  "2020-07-29T12:47:09Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY2NTY1NTQ0Nw==",
+                                           "createdAt":  "2020-07-29T13:12:41Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Misiu",
+                                           "body":  "@NextTurn and how will we be able to set the timeout? Currently, there is no such property in [ServiceInstaller](https://docs.microsoft.com/en-us/dotnet/api/system.serviceprocess.serviceinstaller?view=netframework-4.8\u0026viewFallbackFrom=net-5.0).\r\nLinked StackOverflow answer showed a hacky way of doing that.\r\n\r\nMy intention is to be able to delay shutdown until the current document is converted, so there should be an easy way to tell the service can handle pre-shutdown and set that timeout value.\r\n\r\nShould I add another issue for ServiceInstaller? Or can it be added here?",
+                                           "updatedAt":  "2020-07-29T13:12:41Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY2NTY3MzE2Mg==",
+                                           "createdAt":  "2020-07-29T13:44:30Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "nxtn",
+                                           "body":  "Installer-related classes are tracked by #29643. For now you\u0027ll have to make your own `ServiceInstaller` or copy from [some existing codes](https://github.com/winsw/winsw/blob/v3/src/WinSW.Core/Native/Service.cs).",
+                                           "updatedAt":  "2020-07-29T13:44:30Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY2NTY3ODMyOA==",
+                                           "createdAt":  "2020-07-29T13:53:43Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Misiu",
+                                           "body":  "@NextTurn Ideally, this should be done together.\r\nAny chance this might get added in 5.0?",
+                                           "updatedAt":  "2020-07-29T13:53:43Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY2NTcyNjQyMg==",
+                                           "createdAt":  "2020-07-29T15:16:00Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "danmoseley",
+                                           "body":  "Is delaying shutdown something we want to make easier to do? We would not want to offer API top do something \"unnatural\".\r\n\r\nAs noted in pinned issue, 5.0 release branches soon : I do not think anything here would make it.",
+                                           "updatedAt":  "2020-07-29T15:16:00Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY2NjE4MzIxNA==",
+                                           "createdAt":  "2020-07-30T07:20:16Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOBPIrdg==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "kjkrum",
+                                                                               "createdAt":  "2020-09-01T23:49:27Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "Misiu",
+                                           "body":  "@danmosemsft I disagree on that.\r\ndelaying shutdown isn\u0027t something \"unnatural\". I think that calling pinvokes, creating flags, structs and checking for system compatibility is \"unnatural\". See linked Stack Overflow answer.\r\nThe use case is very simple: allow service to finish its work. I\u0027ve created multiple services that use this. All of them are working till today but without .NET Core support of preshutdown I\u0027m not even thinking about moving them to .NET Core.\r\nI don\u0027t expect first-class support for preshutdown, or a project template with additional step asking to enable this, but at least an API we can use and that doesn\u0027t require DllImports.\r\n`ServiceInstaller` is tracked in https://github.com/dotnet/runtime/issues/29643, it\u0027s just a matter of adding a single property and checking is the service has `CanHandlePreshutdownEvent` set to true and setting the timeout during installation.\r\n\r\nPlease reconsider supporting this.",
+                                           "updatedAt":  "2020-07-30T07:20:16Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY2NjE4NzIxMQ==",
+                                           "createdAt":  "2020-07-30T07:27:15Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "nxtn",
+                                           "body":  "This will work even without a `ServiceInstaller`. The default preshutdown timeout is 3 minutes which should be sufficient for a number of apps.",
+                                           "updatedAt":  "2020-07-30T07:27:15Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY2NjE5MTEwMg==",
+                                           "createdAt":  "2020-07-30T07:33:57Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOBPIrbw==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "kjkrum",
+                                                                               "createdAt":  "2020-09-01T23:49:20Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "Misiu",
+                                           "body":  "@NextTurn ok, but we need the API you proposed to tell the system that our service supports that, right?\r\nIn the past, I\u0027ve set all the services preshutdown timeout to 10 minutes. This was a safe value for me because sometimes 3 minutes wasn\u0027t enough, but if the service will support enabling preshutdown I can rewrite the service to .NET Core and hopefully, the default timeout will be ok.",
+                                           "updatedAt":  "2020-07-30T07:33:57Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY4NTE5MjgyOA==",
+                                           "createdAt":  "2020-09-01T23:51:40Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOEI4gVQ==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "Misiu",
+                                                                               "createdAt":  "2021-09-06T10:07:37Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "bash",
+                                                                               "createdAt":  "2025-03-07T06:33:16Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  2
+                                                         },
+                                           "author":  "kjkrum",
+                                           "body":  "This is essential. Delaying shutdown when appropriate isn\u0027t just normal, it\u0027s [semi-officially recommended](https://devblogs.microsoft.com/premier-developer/recommended-patterns-for-cancellationtoken/).",
+                                           "updatedAt":  "2020-09-01T23:51:40Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6hNq74",
+                                           "createdAt":  "2025-03-06T19:07:52Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "kjkrum",
+                                           "body":  "Do not \"clean up\" your backlog. This is how Google drove good developers away from Android. The community has provided all the necessary information. The \"inactivity\" is on Microsoft\u0027s part.",
+                                           "updatedAt":  "2025-03-06T19:07:52Z"
+                                       }
+                                   ],
+                         "totalCount":  10
+                     },
+        "title":  "Allow setting long preshutdown time in Windows Services",
+        "labels":  [
+                       "api-needs-work",
+                       "area-System.ServiceProcess"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/1724",
+        "createdAt":  "2020-01-14T19:51:23Z",
+        "number":  1724,
+        "author":  "trylek",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-03-05T18:02:52Z",
+        "body":  "Platform: Windows_NT x64/x86 Release\r\nPipeline: runtime-libraries outerloop\r\nExample builds: \r\n- https://dev.azure.com/dnceng/public/_build/results?buildId=482386\r\n- https://dev.azure.com/dnceng/public/_build/results?buildId=481223\r\n- https://dev.azure.com/dnceng/public/_build/results?buildId=483118\r\n\r\nProximate diagnostic info:\r\n\r\n\u003cpre\u003e\r\n  Starting:    System.ServiceProcess.ServiceController.Tests (parallel test collections = on, max threads = 2)\r\n    System.ServiceProcess.Tests.ServiceBaseTests.TestOnExecuteCustomCommand [FAIL]\r\n      Assert.Equal() Failure\r\n      Expected: 128\r\n      Actual:   129\r\n      Stack Trace:\r\n        /_/src/libraries/System.ServiceProcess.ServiceController/tests/ServiceBaseTests.cs(156,0): at System.ServiceProcess.Tests.ServiceBaseTests.TestOnExecuteCustomCommand()\r\n  Finished:    System.ServiceProcess.ServiceController.Tests\r\n=== TEST EXECUTION SUMMARY ===\r\n   System.ServiceProcess.ServiceController.Tests  Total: 22, Errors: 0, Failed: 1, Skipped: 0, Time: 23.417s\r\n\u003c/pre\u003e\r\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOLbK2Yg==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDU3NDQ2ODc2MA==",
+                                           "createdAt":  "2020-01-15T02:38:43Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "danmoseley",
+                                           "body":  "Usually those pass, most skip unless you’re elevated , and those are all failing: https://github.com/dotnet/runtime/issues/1262",
+                                           "updatedAt":  "2020-01-15T02:38:43Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDU3NDQ2OTMxNQ==",
+                                           "createdAt":  "2020-01-15T02:41:22Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jaredpar",
+                                           "body":  "@danmosemsft it\u0027s failing on the last three outerloop builds. Updated the issue to link to the builds. Seems 100% at this moment.",
+                                           "updatedAt":  "2020-01-15T02:41:22Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDU3NDQ5MzIyMA==",
+                                           "createdAt":  "2020-01-15T04:42:06Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "danmoseley",
+                                           "body":  "@Anipik  owns this test",
+                                           "updatedAt":  "2020-01-15T04:42:06Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDU3NDUxNjg4MQ==",
+                                           "createdAt":  "2020-01-15T06:31:25Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Anipik",
+                                           "body":  "I will try to take look at this by the end of this week ",
+                                           "updatedAt":  "2020-01-15T06:31:25Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDU3NDcyODk0MQ==",
+                                           "createdAt":  "2020-01-15T16:05:38Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ericstj",
+                                           "body":  "@danmosemsft it looks like you regressed it with https://github.com/dotnet/runtime/pull/1234.\r\n\r\nhttps://github.com/dotnet/runtime/blob/e92e2e6d6ab25a4f5745670e4d08b431c0b4876a/src/libraries/System.ServiceProcess.ServiceController/tests/ServiceBaseTests.cs#L146-L155",
+                                           "updatedAt":  "2020-01-15T16:05:38Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDU3NDg1NTY3Nw==",
+                                           "createdAt":  "2020-01-15T21:05:14Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "danmoseley",
+                                           "body":  "\u003e Assert.Equal() Failure\\r\\nExpected: 128\\r\\nActual: 129\r\n\r\nThis means that `PlatformDetection.HasWindowsShell` is true in the test process (ie., `IsWindows \u0026\u0026 IsNotWindowsServerCore \u0026\u0026 IsNotWindowsNanoServer \u0026\u0026 IsNotWindowsIoTCore;`) which is expected...\r\n\r\nbut `Environment.UserInteractive` is true in the test service, which is not\r\n```c#\r\n        protected override void OnCustomCommand(int command)\r\n        {\r\n            base.OnCustomCommand(command);\r\n\r\n            if (Environment.UserInteractive) // see ServiceBaseTests.TestOnExecuteCustomCommand()\r\n                command++;\r\n```\r\nThe failure is across Windows 7, Server, and Windows 8.1 - so it\u0027s not some special Windows SKU that needs special treatment like Nano.\r\n\r\nThis would be the case if corelib did not have my change, but the tests did -- could easily happen in the old two-repo system, but hopefully not possible any more.\r\n\r\nWell, it\u0027s disabled for now. I\u0027ll have a look later, if @Anipik doesn\u0027t see the problem as part of https://github.com/dotnet/runtime/issues/1262",
+                                           "updatedAt":  "2020-01-15T21:05:14Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDU3NDg1NjE1Nw==",
+                                           "createdAt":  "2020-01-15T21:06:30Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "danmoseley",
+                                           "body":  "I did run the tests locally of course -- although it\u0027s possible somehow in all the failures caused by #1262 I missed this one was not passing.\r\n\r\nI also did test that Envirohment.UserInteractive returned false in a test service I made by hand and ran on Windows 10, and true on a Nano container.",
+                                           "updatedAt":  "2020-01-15T21:06:30Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDU5MjE3MDQ2MA==",
+                                           "createdAt":  "2020-02-27T20:50:36Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "vatsan-madhavan",
+                                           "body":  "Please take a look at https://github.com/dotnet/wpf/issues/2663. WPF\u0027s OpenFileDialog is broken because `Environment.UserInteractive` is returning `False` all the time. \r\n\r\nI don\u0027t think WinForms is broken though. I tried it and it seems to work fine. ",
+                                           "updatedAt":  "2020-02-27T20:50:36Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDU5MjE4Mjg5MQ==",
+                                           "createdAt":  "2020-02-27T21:22:01Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ericstj",
+                                           "body":  "Looking at the intial commit that added this fuctionality I think the logic is inverted. https://github.com/dotnet/runtime/pull/1234#discussion_r385372174\r\n\r\nI\u0027ll submit a fix.",
+                                           "updatedAt":  "2020-02-27T21:48:40Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDc2NjY4NjgxOA==",
+                                           "createdAt":  "2021-01-25T09:40:03Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "antonfirsov",
+                                           "body":  "Happened again in #47230, seems to fail multiple times a day according to kusto.\r\nhttps://dev.azure.com/dnceng/public/_build/results?buildId=961825\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=30306908\u0026resultId=104397\u0026paneView=debug",
+                                           "updatedAt":  "2021-01-25T09:56:51Z"
+                                       }
+                                   ],
+                         "totalCount":  10
+                     },
+        "title":  "TestOnExecuteCustomCommand fails with Assert.Equal",
+        "labels":  [
+                       "area-System.ServiceProcess"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/45049",
+        "createdAt":  "2020-11-21T12:04:56Z",
+        "number":  45049,
+        "author":  "Fs00",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHOC_yhxQ==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "Anipik",
+                                            "createdAt":  "2020-11-24T16:31:12Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "A9G-Data-Droid",
+                                            "createdAt":  "2025-03-06T19:23:32Z"
+                                        }
+                                    ],
+                          "totalCount":  2
+                      },
+        "updatedAt":  "2022-04-10T21:27:29Z",
+        "body":  "Currently, ServiceController [WaitForStatus](https://github.com/dotnet/runtime/blob/master/src/libraries/System.ServiceProcess.ServiceController/src/System/ServiceProcess/ServiceController.cs#L954) method polls every 250ms to check if the service has reached the desired status.\r\nThis is not optimal and also not very performant, particularly if the service takes less than 250ms to reach that status.\r\nApparently lost in the mists of time, [there was a plan](https://github.com/dotnet/corefx/pull/627/files#r24206059) to use the WinAPI function [NotifyServiceStatusChange](https://docs.microsoft.com/it-it/windows/win32/api/winsvc/nf-winsvc-notifyservicestatuschangea) to avoid polling and get instantly notified when the service reaches a specific status.\r\n\r\nI\u0027m opening this issue to prevent this potential improvement from getting lost again.\r\n\r\nProps to @KalleOlaviNiemitalo for finding this.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  null,
+                         "nodes":  [
+
+                                   ],
+                         "totalCount":  0
+                     },
+        "title":  "ServiceController.WaitForStatus could use NotifyServiceStatusChange WinAPI to avoid polling",
+        "labels":  [
+                       "area-System.ServiceProcess",
+                       "help wanted"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/53167",
+        "createdAt":  "2021-05-24T10:15:37Z",
+        "number":  53167,
+        "author":  "dongzhaosheng73",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2021-07-19T21:12:08Z",
+        "body":  "sc start myservice value1 value2  value3\r\n\r\nI found that when I started the service, I followed the parameters. These parameters could not be passed to the args of my service\r\n\r\nConfiguration\r\n.NET: 5.0\r\nOS : win 10",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  null,
+                         "nodes":  [
+
+                                   ],
+                         "totalCount":  0
+                     },
+        "title":  "worker service unable to pass startup parameters",
+        "labels":  [
+                       "area-System.ServiceProcess"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/53963",
+        "createdAt":  "2021-06-10T00:42:06Z",
+        "number":  53963,
+        "author":  "hexawyz",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2022-07-20T16:47:27Z",
+        "body":  "## Background and Motivation\r\n\r\nWindows services can be used to react to device notifications, such as arrival or removal of a device.\r\nIn order to write a Windows Service that would properly interact with devices, one needs to register the service for device notifications using [RegisterDeviceNotification](https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-registerdevicenotificationw), then listen to notifications in the service handler function.\r\n\r\nUse cases of a service listening to device notifications would typically be to implement user-mode support for a specific device or set of devices, some of them being removable. e.g. a relatively lightweight background service for automating the control of RGB devices such as mouses, keyboards.\r\n\r\nIf one wanted to do this in .NET with the `ServiceBase` class, the `ServiceHandle` is already accessible and can be used to register for notifications. However there is no proper way to handle the device notifications themselves: [`OnCustomCommand`](https://docs.microsoft.com/en-us/dotnet/api/system.serviceprocess.servicebase.oncustomcommand) is not enough because it lacks all the metadata associated with device notifications, and because it is executed ansychronously. (Event metadata needs to be processed synchronously in all cases, or the data could be deallocated before we access it)\r\n\r\n(See the documentation for [LPHANDLER_FUNCTION_EX](https://docs.microsoft.com/en-us/windows/win32/api/winsvc/nc-winsvc-lphandler_function_ex)\u0027s `dwEventType` argument.)\r\n(See also [`DBT_DEVICEQUERYREMOVE`](https://docs.microsoft.com/en-us/windows/win32/devio/dbt-devicequeryremove) which needs to run synchronously)\r\n\r\nThis lead to people resorting to [various tricks](https://stackoverflow.com/questions/14514147/servicecontrolhandler-used-for-usb-device-notifications-onstop-not-implementa) to get something to work. But in essence, the best solution would be to get limited, but direct support for device notifications from `System.ServiceProcess`.\r\n\r\nI\u0027m stuck on this part in one of my side projects, and I realise this is quite a niche requirement, but this has useful real world uses. \r\n\r\nI already started implementing something here as a proof of concept to identify problems and see how feasible things would be: https://github.com/GoldenCrystal/runtime/commit/22494ffd12ea1fd91c3480eefc535a59b442172f\r\n\r\nThis proposal is based on the above (WIP) commit.\r\n\r\n## Proposed API\r\n\r\nA few methods would be introduced to register for device notifications on:\r\n\r\n- Opened device files (`SafeFileHandle`)\r\n- Device Interface classes (e.g. [GUID_DEVINTERFACE_HID](https://docs.microsoft.com/en-us/windows-hardware/drivers/install/guid-devinterface-hid))\r\n\r\nTogether with this, a few virtual methods to handle notifications:\r\n\r\n- Device removal queries, that must be executed synchronously\r\n- Other device notifications, that could be executed asynchronously\r\n\r\n````csharp\r\nnamespace System.ServiceProcess\r\n{\r\n    public class ServiceBase : Component\r\n    {\r\n        // …\r\n\r\n        // Register for device-specific notifications (uses a handle obtained from CreateFile)\r\n        [EditorBrowsable(EditorBrowsableState.Advanced)]\r\n        public unsafe IDisposable RegisterDeviceNotifications(SafeFileHandle handle, object? userToken);\r\n\r\n        // Register for notifications on a device interface class (e.g. GUID_DEVINTERFACE_HID)\r\n        [EditorBrowsable(EditorBrowsableState.Advanced)]\r\n        public IDisposable RegisterDeviceNotifications(Guid interfaceClassGuid);\r\n\r\n        // Register for notifications on all device interface classes\r\n        [EditorBrowsable(EditorBrowsableState.Advanced)]\r\n        public IDisposable RegisterDeviceNotifications();\r\n\r\n        // Process most device-specific notifications\r\n        [EditorBrowsable(EditorBrowsableState.Advanced)]\r\n        protected virtual void OnDeviceNotification(DeviceBroadcastType eventType, SafeFileHandle handle, object? userToken);\r\n\r\n        // Process most device interface class notifications\r\n        [EditorBrowsable(EditorBrowsableState.Advanced)]\r\n        protected virtual void OnDeviceNotification(DeviceBroadcastType eventType, Guid interfaceClassGuid, string? deviceName);\r\n\r\n        // Decide if a specific device can be removed\r\n        [EditorBrowsable(EditorBrowsableState.Advanced)]\r\n        protected virtual bool OnDeviceQueryRemove(SafeFileHandle handle, object? userToken);\r\n\r\n        // Decide if a specific device can be removed\r\n        [EditorBrowsable(EditorBrowsableState.Advanced)]\r\n        protected virtual bool OnDeviceQueryRemove(Guid interfaceClassGuid, string? deviceName);\r\n\r\n        // …\r\n    }\r\n\r\n    public enum DeviceBroadcastType\r\n    {\r\n        Arrival = Interop.User32.DBT_DEVICEARRIVAL,\r\n        //QueryRemove = Interop.User32.DBT_DEVICEQUERYREMOVE,\r\n        QueryRemoveFailed = Interop.User32.DBT_DEVICEQUERYREMOVEFAILED,\r\n        RemovePending = Interop.User32.DBT_DEVICEREMOVEPENDING,\r\n        RemoveComplete = Interop.User32.DBT_DEVICEREMOVECOMPLETE,\r\n        //CustomEvent = Interop.User32.DBT_CUSTOMEVENT,\r\n    }\r\n}\r\n````\r\n\r\nNB: A device name is the name of a device file that can be opened with [`CreateFile`](https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilew), such as: `\\\\?\\HID#VID_05AC\u0026PID_0221\u0026MI_00#a\u0026974a620\u00260\u00260000#{884b96c3-56ef-11d1-bc8c-00a0c91405dd}`\r\n\r\nThe goal of this proposal is not to cover extensively the device-related APIs, which would be far too wide, but to enable those who wish to work with such APIs within services to be able to do so.\r\nAs such, the APIs above would have limited use without interop calls to `CreateFile` and other Win32 functions to interact with devices.\r\n\r\n## Usage Examples\r\n\r\nThis how a typical usage could look like:\r\n\u003cdetails\u003e\r\n  \u003csummary\u003eClick to expand!\u003c/summary\u003e\r\n\r\n````csharp\r\npublic class MyService : ServiceBase\r\n{\r\n    private static readonly Guid Hid = new Guid(0x4D1E55B2, 0xF16F, 0x11CF, 0x88, 0xCB, 0x00, 0x11, 0x11, 0x00, 0x00, 0x30);\r\n\r\n    private sealed class DeviceInfo : IDisposable\r\n    {\r\n        public SafeFileHandle DeviceHandle { get; }\r\n        public IDisposable Registration { get; set; }\r\n\r\n        public DeviceInfo(SafeFileHandle deviceHandle) =\u003e DeviceHandle = deviceHandle;\r\n\r\n        public void Dispose()\r\n        {\r\n            DeviceHandle.Dispose();\r\n            Registration?.Dispose();\r\n        }\r\n    }\r\n\r\n    private readonly object newDeviceLock = new();\r\n    private readonly ConcurrentDictionary\u003cstring, DeviceInfo\u003e _deviceNotificationRegistrations = new();\r\n    private IDisposable _deviceInterfaceClassNotificationRegistration;\r\n\r\n    protected override OnStart(string[] args)\r\n    {\r\n        RegisterNewDevices();\r\n        _deviceInterfaceClassNotificationRegistration = RegisterDeviceNotifications(Hid);\r\n    }\r\n\r\n    private void RegisterNewDevices()\r\n    {\r\n        lock (newDeviceLock)\r\n        {\r\n            foreach (var deviceName in FindDevices())\r\n            {\r\n                RegisterNewDeviceCore(deviceName);\r\n            }\r\n        }\r\n    }\r\n\r\n    private DeviceInfo RegisterNewDevice(string deviceName)\r\n    {\r\n        lock (newDeviceLock)\r\n        {\r\n            return RegisterNewDeviceCore(deviceName);\r\n        }\r\n    }\r\n\r\n    private DeviceInfo RegisterNewDeviceCore(string deviceName)\r\n    {\r\n        if (_deviceNotificationRegistrations.ContainsKey(deviceName)) return;\r\n\r\n        var deviceInfo = new DeviceInfo(OpenDeviceFile(deviceName, DeviceAccess.ReadWrite));\r\n        try\r\n        {\r\n            deviceInfo.Add(deviceName, deviceInfo);\r\n            // See the Risks section at the bottom\r\n            deviceInfo.Registration(RegisterDeviceNotifications(fileHandle, deviceName));\r\n            return deviceInfo;\r\n        }\r\n        catch\r\n        {\r\n            deviceInfo.DeviceHandle.Dispose();\r\n            throw;\r\n        }\r\n    }\r\n\r\n    protected override void OnDeviceNotification(DeviceBroadcastType eventType, SafeFileHandle handle, object? userToken)\r\n    {\r\n        switch (eventType)\r\n        {\r\n            case DeviceBroadcastType.QueryRemoveFailed:\r\n                // OnDeviceQueryRemove was likely called previously to this call, the device needs to be initialized again.\r\n                InitializeDevice(handle);\r\n                break;\r\n            case DeviceBroadcastType.RemoveComplete:\r\n                if (_deviceNotificationRegistrations.Remove((string)userToken, out var info))\r\n                {\r\n                    info.Dispose();\r\n                }\r\n                break;\r\n        }\r\n    }\r\n\r\n    protected override void OnDeviceNotification(DeviceBroadcastType eventType, Guid interfaceClassGuid, string? deviceName)\r\n    {\r\n        switch (eventType)\r\n        {\r\n            case DeviceBroadcastType.Arrival:\r\n                var info = RegisterNewDevice(deviceName);\r\n\r\n                InitializeDevice(info.DeviceHandle);\r\n\r\n                break;\r\n        }\r\n    }\r\n\r\n    protected override bool OnDeviceQueryRemove(SafeFileHandle handle, object? userToken)\r\n    {\r\n        // This notification is a good place to unitilialize the device before it is actually removed.\r\n        UninitializeDevice(handle);\r\n        return true;\r\n    }\r\n    \r\n    protected override bool OnDeviceQueryRemove(Guid interfaceClassGuid, string? deviceName)\r\n    {\r\n        return true;\r\n    }\r\n\r\n    // Call Win32 Interop to enumerate devices\r\n    private static string[] FindDevices()\r\n    {\r\n        // …\r\n    }\r\n\r\n    // Call Win32 Interop to do something with the device, e.g. send a HID report\r\n    private static void InitializeDevice(SafeFileHandle deviceHandle)\r\n    {\r\n        // …\r\n    }\r\n\r\n    // Call Win32 Interop to do something with the device, e.g. send a HID report\r\n    private static void UninitializeDevice(SafeFileHandle deviceHandle)\r\n    {\r\n        // …\r\n    }\r\n\r\n    public static SafeFileHandle OpenDeviceFile(string deviceName, DeviceAccess access)\r\n    {\r\n        var handle = NativeMethods.CreateFile\r\n        (\r\n            deviceName,\r\n            access switch\r\n            {\r\n                DeviceAccess.None =\u003e 0,\r\n                DeviceAccess.Read =\u003e NativeMethods.FileAccessMask.GenericRead,\r\n                DeviceAccess.Write =\u003e NativeMethods.FileAccessMask.GenericWrite,\r\n                DeviceAccess.ReadWrite =\u003e NativeMethods.FileAccessMask.GenericRead | NativeMethods.FileAccessMask.GenericWrite,\r\n                _ =\u003e throw new ArgumentOutOfRangeException(nameof(access))\r\n            },\r\n            FileShare.ReadWrite,\r\n            IntPtr.Zero,\r\n            FileMode.Open,\r\n            0,\r\n            IntPtr.Zero\r\n        );\r\n\r\n        if (handle.IsInvalid)\r\n        {\r\n            throw new Win32Exception(Marshal.GetLastWin32Error());\r\n        }\r\n\r\n        return handle;\r\n    }\r\n\r\n    public enum DeviceAccess\r\n    {\r\n        None = 0,\r\n        Read = 1,\r\n        Write = 2,\r\n        ReadWrite = 3,\r\n    }\r\n}\r\n````\r\n\r\n\u003c/details\u003e\r\n\r\n## Alternative Designs\r\n\r\nAn alternate, admittedly simpler design, would be to allow more extensibility on the `ServiceBase` class, such as allowing to override the `ServiceCommandCallbackEx` method.\r\nThis would probably be done by exposing a new synchronous and parameterized version of `OnCustomCommand`.\r\n\r\n## Risks\r\n\r\n1. This feature seems difficult to test. It would likely require running the test service within a VM and plugging / unplugging virtual devices to validate the various behaviors. I don\u0027t know how/if this can be realistically done.\r\n2. The documentaiton on device notifications can be a bit lacking at times, and because of this, I mostly left out specific handling custom device events for now, as I am unsure how the custom extra data should be marshalled to users. This should not be difficult to tackle later on, though. If we\u0027re okay with it, we could just ignore device custom events in `ServiceBase`. (I\u0027ve already commented this in the API proposal)\r\n3. There is kind of a chicken-egg problem with the `HDEVNOTIFY` handle allocation. While not explicitly documented, we should probably expect device notifications to be triggered before we actually get our hands on the `HDEVNOTIFY` in some rare cases. I tried to address this in my WIP commit, but a similar problem can still occur on the API consumer side. (As you can see in the example I provided, with the introduction of a mutable `DeviceInfo` class.)\r\n4. If possible, I would appreciate if I could get the opinion of a windows (kernel?) expert here, to ensure I\u0027m not missing something too obvious from their point of view. (I wrote most of this from my understanding of the documentation. Although I made sure to not include the things that were not \"obvious\" to me, I may still have overlooked some details)",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOMycCuQ==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDg1ODE5NDYxNw==",
+                                           "createdAt":  "2021-06-10T00:42:09Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "I couldn\u0027t figure out the best area label to add to this issue. If you have write-permissions please help me learn by adding exactly one [area label](https://github.com/dotnet/runtime/blob/master/docs/area-owners.md).",
+                                           "updatedAt":  "2021-06-10T00:42:09Z"
+                                       }
+                                   ],
+                         "totalCount":  1
+                     },
+        "title":  "Proposal: Device notifications in System.ServiceProcess.ServiceBase",
+        "labels":  [
+                       "api-suggestion",
+                       "area-System.ServiceProcess"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/63400",
+        "createdAt":  "2022-01-05T17:04:07Z",
+        "number":  63400,
+        "author":  "erikmf12",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2023-07-07T13:36:49Z",
+        "body":  "Currently when running a worker service as a windows service there is no way to configure the service to restart on failure. Setting `Environment.ExitCode = -1` doesn\u0027t work. Even if it did, there\u0027s no built-in way to tell if a `BackgroundService` failed expectedly or not unless you try/catch and set the exit code manually (since an exception is thrown away and the host exits with code 0).\r\n\r\nIs there a way we can tap into the `ServiceBase` somehow and set the service to restart on failure? Or at least signal to windows that the exit is not a graceful one? \r\n\r\nI need my windows service to be up 24/7 and currently when something fails there\u0027s no way to restart it automatically using SCM. Restarting would be fine, but having it fail and requiring a manual start after a period of downtime is unacceptable. ",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOYOIRWw==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc479Ou2",
+                                           "createdAt":  "2022-01-05T17:04:10Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "I couldn\u0027t figure out the best area label to add to this issue. If you have write-permissions please help me learn by adding exactly one [area label](https://github.com/dotnet/runtime/blob/master/docs/area-owners.md).",
+                                           "updatedAt":  "2022-01-05T17:04:10Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc4796yu",
+                                           "createdAt":  "2022-01-05T21:22:18Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-system-serviceprocess\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\nCurrently when running a worker service as a windows service there is no way to configure the service to restart on failure. Setting `Environment.ExitCode = -1` doesn\u0027t work. Even if it did, there\u0027s no built-in way to tell if a `BackgroundService` failed expectedly or not unless you try/catch and set the exit code manually (since an exception is thrown away and the host exits with code 0).\r\n\r\nIs there a way we can tap into the `ServiceBase` somehow and set the service to restart on failure? Or at least signal to windows that the exit is not a graceful one? \r\n\r\nI need my windows service to be up 24/7 and currently when something fails there\u0027s no way to restart it automatically using SCM. Restarting would be fine, but having it fail and requiring a manual start after a period of downtime is unacceptable. \n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003eerikmf12\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-System.ServiceProcess`, `untriaged`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2022-01-05T21:22:18Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc4796-m",
+                                           "createdAt":  "2022-01-05T21:23:19Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "eerhardt",
+                                           "body":  "@dotnet/area-system-serviceprocess - is there a way for a Windows Service to automatically restart on failure?",
+                                           "updatedAt":  "2022-01-05T21:23:19Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5g4hFb",
+                                           "createdAt":  "2023-07-07T13:36:49Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "maikschott",
+                                           "body":  "Stephen Cleary wrote a blog post how the `WindowsServiceLifetime` can be altered (or in this case subclassed) to trigger the SCM recovery actions: https://blog.stephencleary.com/2020/06/servicebase-gotcha-recovery-actions.html",
+                                           "updatedAt":  "2023-07-07T13:36:49Z"
+                                       }
+                                   ],
+                         "totalCount":  4
+                     },
+        "title":  "No way to auto-restart Worker Service running as Windows Service on failure",
+        "labels":  [
+                       "area-System.ServiceProcess"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/65846",
+        "createdAt":  "2022-02-24T14:20:54Z",
+        "number":  65846,
+        "author":  "levicki",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2022-03-19T01:16:37Z",
+        "body":  "### Background and motivation\n\nCurrently, there is [OnCustomCommand()](https://github.com/dotnet/runtime/blob/9212310d20689b3ac7213569719b0f50a2274f5a/src/libraries/System.ServiceProcess.ServiceController/src/System/ServiceProcess/ServiceBase.cs#L577) method in `ServiceBase` class which can be overriden and appears to be wired to receive other service control codes sent to underlying native [LPHANDLER_FUNCTION_EX callback](https://docs.microsoft.com/en-us/windows/win32/api/winsvc/nc-winsvc-lphandler_function_ex) by the operating system.\r\n\r\nHowever, this method only receives the service control code -- it doesn\u0027t receive any other parameters (namely `dwEventType` and `lpEventData`) which makes it impossible to actually handle any service control codes that require those such as device notifications, power notifications, etc.\r\n\r\nGiven that it is possible to call [RegisterDeviceNotification()](https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-registerdevicenotificationw) using P/Invoke and pass the native service handle from `ServiceBase`, it should also be possible to actually receive data that is sent by the OS along with the control code.\r\n\r\nI believe this method was misnamed -- it is not receiving commands but service control codes, so I am not sure whether creating an overload with additional parameters is the way to go or if differently named method should be created. I would personally prefer sticking to underlying OS naming, hence the API proposal below.\r\n\r\nIf it is ever implemented, it would be nice if it was also backported to .Net Framework.\n\n### API Proposal\n\n```C#\r\nnamespace System.ServiceProcess\r\n{\r\n\tpublic class ServiceBase : Component\r\n\t{\r\n\t\tprotected virtual void HandlerFunctionEx(UInt32 dwControl, UInt32 dwEventType, IntPtr lpEventData, IntPtr lpContext)\r\n\t\t{\r\n\t\t}\r\n\t}\r\n}\r\n```\n\n### API Usage\n\n```C#\r\nnamespace Demo\r\n{\r\n\tpublic static class Win32\r\n\t{\r\n\t\t// marshaling omitted for brevity\r\n\t}\r\n\r\n\tpartial class DemoService : ServiceBase\r\n\t{\r\n\t\tprotected override void HandlerFunctionEx(UInt32 dwControl, UInt32 dwEventType, IntPtr lpEventData, IntPtr lpContext)\r\n\t\t{\r\n\t\t\tWin32.DEV_BROADCAST_HDR dbh = null;\r\n\r\n\t\t\tswitch (dwControl) {\r\n\t\t\tcase Win32.SERVICE_CONTROL_DEVICEEVENT: // handle device events\r\n\t\t\t\tswitch (dwEventType) {\r\n\t\t\t\tcase Win32.DBT_DEVICEARRIVAL:\r\n\t\t\t\t\t// do something when device is added\r\n\t\t\t\t\tdbh = Marshal.PtrToStructure\u003cWin32.DEV_BROADCAST_HDR\u003e(lpEventData);\r\n\t\t\t\t\tbreak;\r\n\t\t\t\tcase Win32.DBT_DEVICEREMOVECOMPLETE:\r\n\t\t\t\t\t// do something when device is removed\r\n\t\t\t\t\tbreak;\r\n\t\t\t\t}\r\n\t\t\t\tbreak;\r\n\t\t\t}\r\n\t\t\t// Call base implementation for the rest (i.e. `OnStart()`, `OnStop()`, etc)\r\n\t\t\tbase.HandlerFunctionEx(dwControl, dwEventType, lpEventData, lpContext);\r\n\t\t}\r\n\t}\r\n}\r\n```\n\n### Alternative Designs\n\nAlternative would be creating `virtual OnDeviceEvent()` API and marshaling everything involved in the framework itself, but that would take considerably more effort and I am pretty certain just exposing low level access to all parameters would be enough for users like me who need this kind of functionality in a .Net service.\n\n### Risks\n\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOP_NQmA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc4-lFRz",
+                                           "createdAt":  "2022-02-24T14:21:01Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-system-serviceprocess\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Background and motivation\n\nCurrently, there is [OnCustomCommand()](https://github.com/dotnet/runtime/blob/9212310d20689b3ac7213569719b0f50a2274f5a/src/libraries/System.ServiceProcess.ServiceController/src/System/ServiceProcess/ServiceBase.cs#L577) method in `ServiceBase` class which can be overriden and appears to be wired to receive other service control codes sent to underlying native [LPHANDLER_FUNCTION_EX callback](https://docs.microsoft.com/en-us/windows/win32/api/winsvc/nc-winsvc-lphandler_function_ex) by the operating system.\r\n\r\nHowever, this method only receives the service control code -- it doesn\u0027t receive any other parameters (namely `dwEventType` and `lpEventData`) which makes it impossible to actually handle any service control codes that require those such as device notifications, power notifications, etc.\r\n\r\nGiven that it is possible to call [RegisterDeviceNotification()](https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-registerdevicenotificationw) using P/Invoke and pass the native service handle from `ServiceBase`, it should also be possible to actually receive data that is sent by the OS along with the control code.\r\n\r\nI believe this method was misnamed -- it is not receiving commands but service control codes, so I am not sure whether creating an overload with additional parameters is the way to go or if differently named method should be created. I would personally prefer sticking to underlying OS naming, hence the API proposal below.\r\n\r\nIf it is ever implemented, it would be nice if it was also backported to .Net Framework.\n\n### API Proposal\n\n```C#\r\nnamespace System.ServiceProcess\r\n{\r\n\tpublic class ServiceBase : Component\r\n\t{\r\n\t\tprotected virtual void HandlerFunctionEx(UInt32 dwControl, UInt32 dwEventType, IntPtr lpEventData, IntPtr lpContext)\r\n\t\t{\r\n\t\t}\r\n\t}\r\n}\r\n```\n\n### API Usage\n\n```C#\r\nnamespace Demo\r\n{\r\n\tpublic static class Win32\r\n\t{\r\n\t\t// marshaling omitted for brevity\r\n\t}\r\n\r\n\tpartial class DemoService : ServiceBase\r\n\t{\r\n\t\tprotected override void HandlerFunctionEx(UInt32 dwControl, UInt32 dwEventType, IntPtr lpEventData, IntPtr lpContext)\r\n\t\t{\r\n\t\t\tWin32.DEV_BROADCAST_HDR dbh = null;\r\n\r\n\t\t\tswitch (dwControl) {\r\n\t\t\tcase Win32.SERVICE_CONTROL_DEVICEEVENT: // handle device events\r\n\t\t\t\tswitch (dwEventType) {\r\n\t\t\t\tcase Win32.DBT_DEVICEARRIVAL:\r\n\t\t\t\t\t// do something when device is added\r\n\t\t\t\t\tdbh = Marshal.PtrToStructure\u003cWin32.DEV_BROADCAST_HDR\u003e(lpEventData);\r\n\t\t\t\t\tbreak;\r\n\t\t\t\tcase Win32.DBT_DEVICEREMOVECOMPLETE:\r\n\t\t\t\t\t// do something when device is removed\r\n\t\t\t\t\tbreak;\r\n\t\t\t\t}\r\n\t\t\t\tbreak;\r\n\t\t\t}\r\n\t\t\t// Call base implementation for the rest (i.e. `OnStart()`, `OnStop()`, etc)\r\n\t\t\tbase.HandlerFunctionEx(dwControl, dwEventType, lpEventData, lpContext);\r\n\t\t}\r\n\t}\r\n}\r\n```\n\n### Alternative Designs\n\nAlternative would be creating `virtual OnDeviceEvent()` API and marshaling everything involved in the framework itself, but that would take considerably more effort and I am pretty certain just exposing low level access to all parameters would be enough for users like me who need this kind of functionality in a .Net service.\n\n### Risks\n\n_No response_\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003elevicki\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`api-suggestion`, `area-System.ServiceProcess`, `untriaged`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2022-02-24T14:21:01Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc4_wrY_",
+                                           "createdAt":  "2022-03-16T23:03:18Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "bartonjs",
+                                           "body":  "Is this something that requires us changing ServiceProcess, or can it easily be done in a derived type?",
+                                           "updatedAt":  "2022-03-16T23:03:18Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc4_5EH2",
+                                           "createdAt":  "2022-03-18T01:13:51Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "levicki",
+                                           "body":  "\u003e Is this something that requires us changing `ServiceProcess`, or can it easily be done in a derived type?\r\n\r\n@bartonjs\r\n\r\nIf I am not mistaken, `ServiceProcess` is a namespace. Did you perhaps mean `ServiceBase` instead?\r\n\r\nIf you meant deriving from that class, that\u0027s what you already do when you are writing a windows service in .Net, isn\u0027t it?\r\n\r\nI don\u0027t see a way to override / extend [ServiceCommandCallbackEx](https://github.com/dotnet/runtime/blob/9212310d20689b3ac7213569719b0f50a2274f5a/src/libraries/System.ServiceProcess.ServiceController/src/System/ServiceProcess/ServiceBase.cs#L714) which would be necessary to wire up the hypothetical `OnDeviceEvent` method (which I mention in alternative design) like it has been done for [OnPowerEvent](https://github.com/dotnet/runtime/blob/9212310d20689b3ac7213569719b0f50a2274f5a/src/libraries/System.ServiceProcess.ServiceController/src/System/ServiceProcess/ServiceBase.cs#L342) and [OnSessionChange](https://github.com/dotnet/runtime/blob/9212310d20689b3ac7213569719b0f50a2274f5a/src/libraries/System.ServiceProcess.ServiceController/src/System/ServiceProcess/ServiceBase.cs#L351) (those are called from [DeferredPowerEvent](https://github.com/dotnet/runtime/blob/9212310d20689b3ac7213569719b0f50a2274f5a/src/libraries/System.ServiceProcess.ServiceController/src/System/ServiceProcess/ServiceBase.cs#L465) and [DeferredSessionChange](https://github.com/dotnet/runtime/blob/9212310d20689b3ac7213569719b0f50a2274f5a/src/libraries/System.ServiceProcess.ServiceController/src/System/ServiceProcess/ServiceBase.cs#L487) respectively).\r\n\r\nI am not sure if I am explaining what functionality is needed clearly enough -- the form for making an API proposal is asking me to propose an API design where I would rather propose desired functionality so I apologize if I am not making much sense.",
+                                           "updatedAt":  "2022-03-18T01:13:51Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc4_7mAw",
+                                           "createdAt":  "2022-03-18T16:37:18Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "bartonjs",
+                                           "body":  "My bad, I think my eyes were looking at the area label when my fingers started writing ServiceBase, and the eyes apparently rewrote the instructions to the fingers.  Bad eyes.\r\n\r\nOK, I think I\u0027ve remembered enough how NT Services work to understand the problem.  The only way a derived type can get at the `eventType`/`eventData`/`eventContext` values would be to P/Invoke RegisterServiceCtrlHandlerEx to replace the handler entirely, which almost certainly does bad things to `ServiceBase`.\r\n\r\nOne complication in expanding the current functionality is that the class never invokes `OnCustomCommand` from the service control (calling) thread, so the two pointers are probably invalid by the time that fires.  So, implementation-wise, it\u0027d require something like\r\n\r\n```C#\r\nnamespace System.ServiceProcess\r\n{\r\n    public partial class ServiceBase\r\n    {\r\n        // \u003creturns\u003e\r\n        //   \u003csee langword=\"true\"/\u003e if the control was handled, and should not propagate\r\n        //   to deferred processing; otherwise, \u003csee langword=\"false\"/\u003e.\r\n        // \u003c/returns\u003e\r\n\tprotected virtual bool ServiceControlHandler(int command, int eventType, IntPtr eventData, IntPtr eventContext)\r\n\t{\r\n            return false;\r\n\t}\r\n    }\r\n}\r\n```\r\n\r\nAnd the current handler would invoke that in the `default` case before narrowing the funnel.  e.g.\r\n\r\n```diff\r\n                default:\r\n                    {\r\n+                       if (!ServiceControlHandler(command, eventType, eventData, eventContext))\r\n+                       {\r\n-                       ServiceCommandCallback(command);\r\n+                           ServiceCommandCallback(command);\r\n+                       }\r\n+\r\n                        break;\r\n                    }\r\n```\r\n\r\nAnd the name might warrant a `Dangerous` or `Unsafe` or something, since it\u0027s (a) part of the a service control pipeline and thus is supposed to be fast and (b) is playing with pointers.\r\n\r\nHeck, maybe we should just call a spade a spade and present them as `void*` instead of IntPtr.",
+                                           "updatedAt":  "2022-03-18T16:37:18Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc4_7nv_",
+                                           "createdAt":  "2022-03-18T16:46:05Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "bartonjs",
+                                           "body":  "\u003e If it is ever implemented, it would be nice if it was also backported to .Net Framework.\r\n\r\nUnfortunately, that\u0027s not possible.  It\u0027d be future versions of .NET (nee Core)-only, because .NET Framework is no longer receiving new features (https://docs.microsoft.com/en-us/dotnet/framework/migration-guide/versions-and-dependencies).  That was part of the reason behind my question of whether or not it had to be done in `ServiceBase`... if it was something that could easily be provided by a type deriving from ServiceBase then it could be offered via a NuGet package and apply downlevel.\r\n\r\nSince it requires changing (or entirely replacing) ServiceBase that puts .NET Framework out-of-bounds.",
+                                           "updatedAt":  "2022-03-18T16:46:05Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc4_74zv",
+                                           "createdAt":  "2022-03-18T18:06:13Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "levicki",
+                                           "body":  "@bartonjs \r\n\r\nWould perhaps something like this be possible then?\r\n```\r\n        private int ServiceCommandCallbackEx(int command, int eventType, IntPtr eventData, IntPtr eventContext)\r\n        {\r\n            switch (command)\r\n            {\r\n+                case ControlOptions.CONTROL_DEVICEEVENT:\r\n+                    {\r\n+                        DEV_BROADCAST_HDR dbh = new DEV_BROADCAST_HDR();\r\n+                        Marshal.PtrToStructure(eventData, dbh);\r\n+                        switch (dbh.dbch_devicetype)\r\n+                        {\r\n+                            case DBT_DEVTYP_DEVICEINTERFACE:\r\n+                                {\r\n+                                    DEV_BROADCAST_DEVICEINTERFACE dbi = new DEV_BROADCAST_DEVICEINTERFACE();\r\n+                                    Marshal.PtrToStructure(eventData, dbi);\r\n+                                    ThreadPool.QueueUserWorkItem(_ =\u003e DeferredDeviceInterfaceEvent(eventType, dbi));\r\n+                                    break;\r\n+                                }\r\n+                            default:\r\n+                                throw NotImplementedException;\r\n+                        }\r\n+                        break;\r\n+                    }\r\n                case ControlOptions.CONTROL_POWEREVENT:\r\n        ...\r\n+        private void DeferredDeviceInterfaceEvent(int eventType, DEV_BROADCAST_DEVICEINTERFACE dbi)\r\n+        {\r\n+            try {\r\n+                 OnDeviceInterfaceEvent(eventType, dbi);\r\n+             } catch (Exception e) {\r\n+                 // do whatever necessary here\r\n+             }\r\n+        }\r\n        ...\r\n+        protected virtual void OnDeviceInterfaceEvent(int eventType, DEV_BROADCAST_DEVICEINTERFACE dbi)\r\n+        {\r\n+        }\r\n```\r\nThis would explicitly make a copy of the `eventData` before doing a deferred call thus avoiding `IntPtr` validity issue.\r\n\r\nDerived class could then override `OnDeviceInterfaceEvent()` and receive device add / remove notifications in a .Net service.\r\n\r\nSame thing should be done for `DBT_DEVTYP_VOLUME` device type and `DEV_BROADCAST_VOLUME` structure as well by adding another case label and associated deferred methods `private void DeferredVolumeEvent(int eventType, DEV_BROADCAST_VOLUME dbv)` and `protected virtual void OnVolumeEvent(int eventType, DEV_BROADCAST_VOLUME dbv)`.\r\n\r\nOther possible device types are rarely used compared to those two.\r\n\r\nAs for whether this can be backported to .Net Framework or not, it is a shame that you refer to this as a \"new feature\" -- I\u0027d say it would be more fair to call it \"missing feature\" or even \"bugfix\" because `ServiceBase` (like so many other managed wrapper classes around native WinAPI functionality be it in .Net Framerwork or in .Net Core) was incomplete when initially written and it is still in the same sorry state in both frameworks today after so many years and versions under the belt.\r\n\r\nWhat I am trying to say is -- Microsoft developers seem keen on releasing half-baked frameworks and then instead of extending them by adding missing functionality and improving orthogonality with underlying platform API they just stop development, release another half-baked framework, and expect developers to waste time and effort migrating their codebases while still having to implement and maintain hundreds of workarounds for missing or outright wrong functionality (for the latter see [Environment.SetEnvironmentVariable](https://github.com/dotnet/runtime/issues/1442) as an example) regardless of which framework they decide to use.",
+                                           "updatedAt":  "2022-03-18T18:06:13Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc4_8J9d",
+                                           "createdAt":  "2022-03-18T19:23:08Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "bartonjs",
+                                           "body":  "Adding OnDeviceInterfaceEvent and friends is... possible, though copying/interpreting the Win32 data and passing it to a callback that is likely not even be listening seems a bit excessive.  Plus, doing it for just DBT_DEVTYP_DEVICEINTERFACE feels like it\u0027ll just engender a delayed issue suggesting that we half-implemented the feature :wink:.  (And throwing an exception from that callback will almost certainly do bad things, so as-sketched Windows sending a DBT_DEVTYP_HANDLE event will probably crash the service.)\r\n\r\nExposing the raw (or nearly-raw) handler would empower any derived type to get at all of the OS events here.  In fact, it might even be better to run it before the current switch:\r\n\r\n```diff\r\n        private int ServiceCommandCallbackEx(int command, int eventType, IntPtr eventData, IntPtr eventContext)\r\n        {\r\n+           try\r\n+           {\r\n+               if (DangerousOnServiceControl(command, eventType, eventData, eventContext))\r\n+               {\r\n+                   return 0;\r\n+               }\r\n+           }\r\n+           catch (Exception e)\r\n+           {\r\n+              log it\r\n+              return 1064; /* ERROR_EXCEPTION_IN_SERVICE */\r\n+           }\r\n+\r\n            switch (command)\r\n```\r\n\r\nThat way, if someone wants to handle the power notifications differently, they can.  If they want to handle them both differently and the same, handle it, return false, and the existing code will continue to run.  Since it\u0027s the raw Win32 info it would enable a NuGet package-based (community) extension that pretties up the device codes, and/or one that uses service triggers, or whatever.  It\u0027s powerful enough to let anyone write whatever integration features on top of it... but the Dangerous and IntPtr/void* will encourage the average user to stick to overriding things like `OnShutdown`.\r\n\r\n(The protected member could even behave more [LPHANDLER_FUNCTION_EX](like https://docs.microsoft.com/en-us/windows/win32/api/winsvc/nc-winsvc-lphandler_function_ex) directly and return an int with the base member returning 120 (ERROR_CALL_NOT_IMPLEMENTED)... but that\u0027s probably more complicated than it needs to be.)\r\n\r\n\u003e As for whether this can be backported to .Net Framework or not, it is a shame that you refer to this as a \"new feature\"\r\n\r\nWell, no matter what approach is taken here it\u0027d require publishing a new targeting pack for .NET Framework (to let the compiler see whatever new method is added to ServiceBase), and that means it\u0027s beyond the \"security or reliability\" threshold -- we\u0027d have to call that a new version of .NET Framework.  (If it matters to you, I\u0027m not involved in making any of these decisions, I\u0027m just trying to set appropriate expectations.)",
+                                           "updatedAt":  "2022-03-18T19:23:08Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc4_81CY",
+                                           "createdAt":  "2022-03-19T01:12:44Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "levicki",
+                                           "body":  "@bartonjs \r\n\r\n\u003e Adding OnDeviceInterfaceEvent and friends is... possible, though **copying/interpreting the Win32 data and passing it to a callback that is likely not even be listening seems a bit excessive.**\r\n\r\nThose device related events won\u0027t even arrive to the service callback at all unless `RegisterDeviceNotification` is called by the developer wanting to receive them. At most, you are adding another value comparison in a switch statement.\r\n\r\n\u003e Plus, doing it for just `DBT_DEVTYP_DEVICEINTERFACE` feels like it\u0027ll just engender a delayed issue suggesting that we half-implemented the feature 😉.\r\n\r\nI know you are joking, but it was already half-implemented since February 13, 2002, anything more than we already have, even just `DBT_DEVTYP_DEVICEINTERFACE`, would be considered an improvement.\r\n\r\n\u003e And throwing an exception from that callback will almost certainly do bad things...\r\n\r\nI am well aware of that -- sample code wasn\u0027t supposed to be taken literally 😉.\r\n\r\n\u003e Exposing the raw (or nearly-raw) handler would empower any derived type to get at all of the OS events here. In fact, it might even be better to run it before the current switch\r\n\r\nWith that I fully agree -- I don\u0027t mind whether I get already parsed structures or a raw `IntPtr` in the handler as long as I can get the handler to begin with.\r\n\r\nAs I already said, I would have preferred if I could have just suggested functionality instead of an API -- I am certain (hopeful?) that Microsoft software engineers working on this area would come up with the best possible way to implement an API based on that.\r\n\r\n\u003e ...but the Dangerous and IntPtr/void* will encourage the average user to stick to overriding things like `OnShutdown`\r\n\r\nI am not sure what to think about that statement.\r\n\r\nOn one hand, I understand your cautiousness because I have seen examples of Microsoft\u0027s own engineers not knowing Windows internals good enough and making mistakes when writing apps (Windows Terminal and Touch Keyboard and Handwriting Service debacle comes to mind) or framework APIs (already mentioned `Environment.SetEnvironmentVariable` which is unlikely to ever get fixed because \"it\u0027s complicated\").\r\n\r\nOn the other hand, not exposing full underlying OS functionality for services, window controls, etc, makes .Net Framework and .Net Core into frameworks which appear to be geared only toward developers writing either server or client web or database related code. I understand that\u0027s all the rage these days but that doesn\u0027t mean desktop app developers shouldn\u0027t get some love too.\r\n\r\nAs a matter of fact, if Microsoft wants to see less unsafe code in desktop apps and windows services (which are usually written in C/C++), the best way to encourage that would be to make the framework support as much native stuff as possible in a safe, platform orthogonal, well documented, manner without leaving every developer to deal with P/Invoke and marshaling on their own.\r\n\r\n\u003e Well, no matter what approach is taken here it\u0027d require publishing a new targeting pack for .NET Framework (to let the compiler see whatever new method is added to ServiceBase), and that means it\u0027s beyond the \"security or reliability\" threshold -- we\u0027d have to call that a new version of .NET Framework.\r\n\r\nIt\u0027d be nice if Microsoft decided to patch the `SetEnvironmentVariable` and release .Net Framework 4.8.1 where they could also include `ServiceBase` \"upgrade\" I proposed.\r\n\r\n\u003e (If it matters to you, I\u0027m not involved in making any of these decisions, I\u0027m just trying to set appropriate expectations.)\r\n\r\nThanks for being honest, though I am old enough to be unsure whether my expectations can go any lower.",
+                                           "updatedAt":  "2022-03-19T01:16:37Z"
+                                       }
+                                   ],
+                         "totalCount":  8
+                     },
+        "title":  "[API Proposal]: Extend ServiceBase to allow handling all service control codes",
+        "labels":  [
+                       "api-suggestion",
+                       "area-System.ServiceProcess"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/70344",
+        "createdAt":  "2022-06-07T12:47:30Z",
+        "number":  70344,
+        "author":  "vsfeedback",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2022-06-29T16:49:29Z",
+        "body":  "_This issue has been moved from [a ticket on Developer Community](https://developercommunity.visualstudio.com/t/Problème-de-mise-à-niveau-NET-60-appli/1644454)._\n\n---\nThe upgrade with upgrade-assistant worked well. Nothing to say. Compiling and building in .Net 6.0 does not give any errors. On the other hand, this application, which worked perfectly with the Framework 4.8, no longer works with .NET 6.0. \nI detected at least one error on these lines:\n\t\t\t\tIf upnpDev.Services.Count \u003e 0 Then\n\t\t\t\t\tFor Each service As UPnPService In upnpDev.Services\n\t\t\t\t\t\tIf service IsNot Nothing Then\n\t\t\t\t\t\t\tDim nodeServ As New ClTreeNodeUPnPService(service, node)\n\t\t\t\t\t\t\tNode. Nodes.Add(nodeServ)\n\t\t\t\t\t\tEnd If\n\t\t\t\t\tNext\n\t\t\t\tEnd If\nIf upnpDev.Services contains only one UPnPService then the service variable of For Each returns nothing, if upnpDevServices contains more than two services then it works and we get both UPnPService.\nI think there are other errors because the application loops I don\u0027t know where.\nIt is an application that displays UPnP devices and services and actions. \nWell I don\u0027t know what the .NET 6.0 usage domain is. In any case, obviously, it works badly with COM dependencies.\n[MyDisplayUPnP.zip] (https://aka.ms/dc/file?name=B2aec6b7f69314befaf77d19584269755637783939249648813_MyDisplayUPnP.zip\u0026tid=2aec6b7f69314befaf77d19584269755637783939249648813)\n\n---\n### Original Comments\n\n#### Feedback Bot on 1/24/2022, 02:44 AM: \n\n(private comment, text removed)\n#### Sara Liu [MSFT] on 1/24/2022, 06:35 AM: \n\n(private comment, text removed)\n#### behemothe on 1/24/2022, 10:58 AM: \n\n(private comment, text removed)\n#### Feedback Bot on 1/25/2022, 00:17 PM: \n\n(private comment, text removed)\n#### Feedback Bot on 5/7/2022, 11:07 AM: \n\n(private comment, text removed)\n\n---\n### Original Solutions\n\n#### behemothe solved on 1/21/2022, 10:26 PM, 0 votes: \n\n\u003cp\u003eIl s’avère que cet élément trouvé est complètement fantoche et que pour que ça marche il suffit de sortir du For Each pour éviter un bouclage infini:\u003cbr\u003e\nIf upnpDev.Services.Count \u0026gt; 0 Then\u003cbr\u003e\nFor Each service As UPnPService In upnpDev.Services\u003cbr\u003e\nIf service IsNot Nothing Then\u003cbr\u003e\nDim nodeServ As New ClTreeNodeUPnPService(service, node)\u003cbr\u003e\nnode.Nodes.Add(nodeServ)\u003cbr\u003e\nElse\u003cbr\u003e\nExit For\u003cbr\u003e\nEnd If\u003cbr\u003e\nNext\u003cbr\u003e\nEnd If\u003c/p\u003e\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHORHaxrg==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5EdpMS",
+                                           "createdAt":  "2022-06-07T12:47:36Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-system-serviceprocess\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n_This issue has been moved from [a ticket on Developer Community](https://developercommunity.visualstudio.com/t/Problème-de-mise-à-niveau-NET-60-appli/1644454)._\n\n---\nThe upgrade with upgrade-assistant worked well. Nothing to say. Compiling and building in .Net 6.0 does not give any errors. On the other hand, this application, which worked perfectly with the Framework 4.8, no longer works with .NET 6.0. \nI detected at least one error on these lines:\n\t\t\t\tIf upnpDev.Services.Count \u003e 0 Then\n\t\t\t\t\tFor Each service As UPnPService In upnpDev.Services\n\t\t\t\t\t\tIf service IsNot Nothing Then\n\t\t\t\t\t\t\tDim nodeServ As New ClTreeNodeUPnPService(service, node)\n\t\t\t\t\t\t\tNode. Nodes.Add(nodeServ)\n\t\t\t\t\t\tEnd If\n\t\t\t\t\tNext\n\t\t\t\tEnd If\nIf upnpDev.Services contains only one UPnPService then the service variable of For Each returns nothing, if upnpDevServices contains more than two services then it works and we get both UPnPService.\nI think there are other errors because the application loops I don\u0027t know where.\nIt is an application that displays UPnP devices and services and actions. \nWell I don\u0027t know what the .NET 6.0 usage domain is. In any case, obviously, it works badly with COM dependencies.\n[MyDisplayUPnP.zip] (https://aka.ms/dc/file?name=B2aec6b7f69314befaf77d19584269755637783939249648813_MyDisplayUPnP.zip\u0026tid=2aec6b7f69314befaf77d19584269755637783939249648813)\n\n---\n### Original Comments\n\n#### Feedback Bot on 1/24/2022, 02:44 AM: \n\n(private comment, text removed)\n#### Sara Liu [MSFT] on 1/24/2022, 06:35 AM: \n\n(private comment, text removed)\n#### behemothe on 1/24/2022, 10:58 AM: \n\n(private comment, text removed)\n#### Feedback Bot on 1/25/2022, 00:17 PM: \n\n(private comment, text removed)\n#### Feedback Bot on 5/7/2022, 11:07 AM: \n\n(private comment, text removed)\n\n---\n### Original Solutions\n\n#### behemothe solved on 1/21/2022, 10:26 PM, 0 votes: \n\n\u003cp\u003eIl s’avère que cet élément trouvé est complètement fantoche et que pour que ça marche il suffit de sortir du For Each pour éviter un bouclage infini:\u003cbr\u003e\nIf upnpDev.Services.Count \u0026gt; 0 Then\u003cbr\u003e\nFor Each service As UPnPService In upnpDev.Services\u003cbr\u003e\nIf service IsNot Nothing Then\u003cbr\u003e\nDim nodeServ As New ClTreeNodeUPnPService(service, node)\u003cbr\u003e\nnode.Nodes.Add(nodeServ)\u003cbr\u003e\nElse\u003cbr\u003e\nExit For\u003cbr\u003e\nEnd If\u003cbr\u003e\nNext\u003cbr\u003e\nEnd If\u003c/p\u003e\n\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003evsfeedback\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-System.ServiceProcess`, `untriaged`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2022-06-07T12:47:36Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5EdrGu",
+                                           "createdAt":  "2022-06-07T12:54:31Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "CarnaViire",
+                                           "body":  "The user says that the bug still persists in case the element count is 1:\r\n\"Bon ça marche, mais le count ne devrait pas être à 1, puisqu’il n’est pas possible de passer un élément et comme il n’a pa pu passer un élément le count reste à 1 et on boucle indéfiniment. Il y a donc un bug derrière ce fonctionnement.\"\r\n(Auto translation: Well it works, but the count should not be 1, since it is not possible to pass an element and as it could not pass an element the count remains at 1 and we loop indefinitely. There is therefore a bug behind this operation.)",
+                                           "updatedAt":  "2022-06-07T12:54:31Z"
+                                       }
+                                   ],
+                         "totalCount":  2
+                     },
+        "title":  ".NET 6.0 Application Framework .Net 4.8 Upgrade Issue",
+        "labels":  [
+                       "area-System.ServiceProcess"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/77327",
+        "createdAt":  "2022-10-21T09:16:26Z",
+        "number":  77327,
+        "author":  "mingtong",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-04-02T17:13:35Z",
+        "body":  "### Is there an existing issue for this?\n\n- [X] I have searched the existing issues\n\n### Describe the bug\n\nOS: 10.0.19044.0, 10.0.19043.0, 10.0.22000.0\r\n.net: 6.0.4 (self container)\r\nFor short, my App have around 3m live users per day, now about 15k users per day report error log with the folloing.\r\n\r\nSystem.InvalidOperationException: Stopped without starting\r\nat Microsoft.Extensions.Hosting.Internal.Host.StartAsync(CancellationToken cancellationToken)\r\n\r\nMy starting code is like\r\n```\r\n            IHost host = CreateHostBuilder(argsWithoutConsole, hostIP, hostPort).Build();\r\n            await host.StartAsync().ConfigureAwait(false);\r\n```\r\n\r\n```\r\n        private static IHostBuilder CreateHostBuilder(string[] args, string hostIP, int hostPort)\r\n        {\r\n            var ipAddress = hostIP;\r\n            int availablePort = hostPort;\r\n\r\n            var builder = Host.CreateDefaultBuilder(args);\r\n\r\n            if (!ServiceUtil.IsRunningAsAdministrator())\r\n            {\r\n                logger.Debug(\"Is Running As service\");\r\n                builder.UseWindowsService();\r\n            }\r\n            builder.ConfigureHostOptions(config =\u003e\r\n                       {\r\n                           //config.ShutdownTimeout = TimeSpan.FromSeconds(5);\r\n                       })\r\n                       .UseServiceProviderFactory\u003cContainerBuilder\u003e(new AutofacServiceProviderFactory())\r\n                       .ConfigureWebHost(webBuilder =\u003e\r\n                       {\r\n                           webBuilder\r\n                               .UseStartup\u003cServiceConfig\u003e()\r\n                               .UseKestrel((hostingContext, options) =\u003e\r\n                               {\r\n                                   options.Listen(IPAddress.Parse(ipAddress), availablePort);\r\n                               });\r\n                       });\r\n\r\n            return builder;\r\n        }\r\n```\r\n\r\nwhat will be the probable reason for this?\r\nSince the exception is just kind of easy, so I cant find useful information of the \"Stopped without starting\".\r\n\n\n### Expected Behavior\n\n_No response_\n\n### Steps To Reproduce\n\nIt happened to customers only, so there is no clear steps to reproduce, that is also why I am posting here.\n\n### Exceptions (if any)\n\n\r\nSystem.InvalidOperationException: Stopped without starting\r\nat Microsoft.Extensions.Hosting.Internal.Host.StartAsync(CancellationToken cancellationToken)\n\n### .NET Version\n\n6.0.4\n\n### Anything else?\n\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOYgsN2A==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5Mu0Mr",
+                                           "createdAt":  "2022-10-21T19:09:05Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Tratcher",
+                                           "body":  "It sounds like the service host was created but not started. I don\u0027t know why that would happen.\r\nhttps://github.com/dotnet/runtime/blob/bd7e1cb81d763589b95f7bfbaa2a96dd364e9103/src/libraries/Microsoft.Extensions.Hosting.WindowsServices/src/WindowsServiceLifetime.cs#L88-L89\r\nhttps://github.com/dotnet/runtime/blob/bd7e1cb81d763589b95f7bfbaa2a96dd364e9103/src/libraries/Microsoft.Extensions.Hosting.WindowsServices/src/WindowsServiceLifetime.cs#L105-L110\r\n\r\nMoving this issue to Runtime.\r\n\r\n",
+                                           "updatedAt":  "2022-10-21T19:09:05Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5Mu0NC",
+                                           "createdAt":  "2022-10-21T19:09:20Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "I couldn\u0027t figure out the best area label to add to this issue. If you have write-permissions please help me learn by adding exactly one [area label](https://github.com/dotnet/runtime/blob/master/docs/area-owners.md).",
+                                           "updatedAt":  "2022-10-21T19:09:20Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5Mu0Vj",
+                                           "createdAt":  "2022-10-21T19:09:58Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-system-serviceprocess\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Is there an existing issue for this?\n\n- [X] I have searched the existing issues\n\n### Describe the bug\n\nOS: 10.0.19044.0, 10.0.19043.0, 10.0.22000.0\r\n.net: 6.0.4 (self container)\r\nFor short, my App have around 3m live users per day, now about 15k users per day report error log with the folloing.\r\n\r\nSystem.InvalidOperationException: Stopped without starting\r\nat Microsoft.Extensions.Hosting.Internal.Host.StartAsync(CancellationToken cancellationToken)\r\n\r\nMy starting code is like\r\n```\r\n            IHost host = CreateHostBuilder(argsWithoutConsole, hostIP, hostPort).Build();\r\n            await host.StartAsync().ConfigureAwait(false);\r\n```\r\n\r\n```\r\n        private static IHostBuilder CreateHostBuilder(string[] args, string hostIP, int hostPort)\r\n        {\r\n            var ipAddress = hostIP;\r\n            int availablePort = hostPort;\r\n\r\n            var builder = Host.CreateDefaultBuilder(args);\r\n\r\n            if (!ServiceUtil.IsRunningAsAdministrator())\r\n            {\r\n                logger.Debug(\"Is Running As service\");\r\n                builder.UseWindowsService();\r\n            }\r\n            builder.ConfigureHostOptions(config =\u003e\r\n                       {\r\n                           //config.ShutdownTimeout = TimeSpan.FromSeconds(5);\r\n                       })\r\n                       .UseServiceProviderFactory\u003cContainerBuilder\u003e(new AutofacServiceProviderFactory())\r\n                       .ConfigureWebHost(webBuilder =\u003e\r\n                       {\r\n                           webBuilder\r\n                               .UseStartup\u003cServiceConfig\u003e()\r\n                               .UseKestrel((hostingContext, options) =\u003e\r\n                               {\r\n                                   options.Listen(IPAddress.Parse(ipAddress), availablePort);\r\n                               });\r\n                       });\r\n\r\n            return builder;\r\n        }\r\n```\r\n\r\nwhat will be the probable reason for this?\r\nSince the exception is just kind of easy, so I cant find useful information of the \"Stopped without starting\".\r\n\n\n### Expected Behavior\n\n_No response_\n\n### Steps To Reproduce\n\nIt happened to customers only, so there is no clear steps to reproduce, that is also why I am posting here.\n\n### Exceptions (if any)\n\n\r\nSystem.InvalidOperationException: Stopped without starting\r\nat Microsoft.Extensions.Hosting.Internal.Host.StartAsync(CancellationToken cancellationToken)\n\n### .NET Version\n\n6.0.4\n\n### Anything else?\n\n_No response_\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003emingtong\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-System.ServiceProcess`, `untriaged`, `area-Extensions-Hosting`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2022-10-21T19:09:58Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5Mwaz5",
+                                           "createdAt":  "2022-10-22T11:03:14Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "teo-tsirpanis",
+                                           "body":  "(FYI issues get only one area)",
+                                           "updatedAt":  "2022-10-22T11:03:14Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5MxfBu",
+                                           "createdAt":  "2022-10-23T07:38:16Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "hez2010",
+                                           "body":  "Is it possible that the service is blocked by an Antivirus software?",
+                                           "updatedAt":  "2022-10-23T07:38:16Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5My1WZ",
+                                           "createdAt":  "2022-10-24T04:15:23Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "mingtong",
+                                           "body":  "\u003e Is it possible that the service is blocked by an Antivirus software?\r\n\r\nOnly Microsoft can answer this.",
+                                           "updatedAt":  "2022-10-24T04:15:23Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5M1uKM",
+                                           "createdAt":  "2022-10-24T14:45:52Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Clockwork-Muse",
+                                           "body":  "\u003e \u003e Is it possible that the service is blocked by an Antivirus software?\r\n\u003e \r\n\u003e Only Microsoft can answer this.\r\n\r\n... there are multiple other AV vendors.  You\u0027d have to engage with your failing customers to find out their AV vendor, and have them check their logs to see if the application is being blocked.\r\nAlthough I would expect it wouldn\u0027t even be allowed to try to start/be quarantined in such a case, so wouldn\u0027t be getting this far.\r\n\r\nIt\u0027s maybe more likely that the Windows firewall is blocking it - I would imagine Kestrel crashes if it can\u0027t get the port.  If that\u0027s the case, the firewall should have logs for it.  You should be able to get a log message in such a case, though...",
+                                           "updatedAt":  "2022-10-24T14:45:52Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5M4hEF",
+                                           "createdAt":  "2022-10-25T02:14:57Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "mingtong",
+                                           "body":  "\u003e \r\n\r\nI guess it\u0027s not about the port, cause I use 0, means random port.\r\nThe promblem is we have no effective way to contact end users, you know there is a long process though Developer--\u003eUSER.\r\n",
+                                           "updatedAt":  "2022-10-25T02:14:57Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5M4kTo",
+                                           "createdAt":  "2022-10-25T02:36:21Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Clockwork-Muse",
+                                           "body":  "\u003e I guess it\u0027s not about the port, cause I use 0, means random port.\r\n\r\nRandom or specific port isn\u0027t relevant - if the firewall/AV decides you shouldn\u0027t get a port, your process is just not going to get _any_ port.",
+                                           "updatedAt":  "2022-10-25T02:36:21Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5M4o3Q",
+                                           "createdAt":  "2022-10-25T03:07:36Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "mingtong",
+                                           "body":  "\u003e \u003e I guess it\u0027s not about the port, cause I use 0, means random port.\r\n\u003e \r\n\u003e Random or specific port isn\u0027t relevant - if the firewall/AV decides you shouldn\u0027t get a port, your process is just not going to get _any_ port.\r\n\r\nSo you mean firewall is blocking my App, then in what case my requested port will be blocked? \r\n1, App has signtuare.\r\n2, Both service and client are on same PC, means IP = 127.0.0.1",
+                                           "updatedAt":  "2022-10-25T03:07:36Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5M43xh",
+                                           "createdAt":  "2022-10-25T04:51:26Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Clockwork-Muse",
+                                           "body":  "\u003e So you mean firewall is blocking my App, then in what case my requested port will be blocked?\r\n\r\n**IF** the firewall/AV is blocking your app, it just blocks it regardless.  But I don\u0027t know if this is true, since it depends on customer config even you don\u0027t have.\r\n\u003e 1, App has signtuare.\r\n\r\nThere are several different things that can be signatures, but AVs especially sometimes work by checking for behavior, so just might stop your app because it thinks it\u0027s suspicious.\r\n\r\n\u003e 2, Both service and client are on same PC, means IP = 127.0.0.1\r\n\r\nFirewalls can and do block connections to local addresses, and AVs are especially prone to do so.  This is more likely in some corporate scenarios, where firewalls are usually configured by policy.\r\nKeep in mind that it\u0027s pretty common for there to be a firewall-related popup in Windows.",
+                                           "updatedAt":  "2022-10-25T04:51:26Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5M483r",
+                                           "createdAt":  "2022-10-25T05:22:21Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOCuiL5g==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "ViktorHofer",
+                                                                               "createdAt":  "2022-10-26T16:44:39Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "hez2010",
+                                           "body":  "I think you can log more information in the service so that you can get the failure details. ",
+                                           "updatedAt":  "2022-10-25T05:22:21Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5NB00p",
+                                           "createdAt":  "2022-10-26T16:46:07Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "carlossanlop",
+                                           "body":  "We would need a minimal repro or a crash dump to help diagnose this issue. Can you please provide one of those, @mingtong?",
+                                           "updatedAt":  "2022-10-26T16:46:07Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5NDkys",
+                                           "createdAt":  "2022-10-26T23:48:12Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "mingtong",
+                                           "body":  "\u003e We would need a minimal repro or a crash dump to help diagnose this issue. Can you please provide one of those, @mingtong?\n\nIf I can repro then I won\u0027t be here, like i said, 0.5% of my customers, not a high percentage, but in absolute data, it\u0027s 15000, not few.\n\nand i have no way to collect a crash dump unless i can reach the end user, but for privacy, i can\u0027t know who are facing this.\n\nwhat i can do is just upload logs in \"unhandled exceptions\", however, which is the \"more logs\" should i collect? it\u0027s just starting service.",
+                                           "updatedAt":  "2022-10-26T23:48:12Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5NVYJh",
+                                           "createdAt":  "2022-10-31T17:45:24Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ViktorHofer",
+                                           "body":  "Is there anything logged in the Windows Event Viewer that could help? ",
+                                           "updatedAt":  "2022-10-31T17:45:24Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5NYSm-",
+                                           "createdAt":  "2022-11-01T08:34:49Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "mingtong",
+                                           "body":  "\u003e Is there anything logged in the Windows Event Viewer that could help?\r\nCurrently, no.\r\nI collect logs by the time when \"Unhandled_exception\" was happening and then upload to my server, didnt collect event logs in current version, cause not sure the execution duration for the API GetEventLog(), next version can add it into code.",
+                                           "updatedAt":  "2022-11-01T08:34:49Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5h869-",
+                                           "createdAt":  "2023-07-20T06:44:23Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "riverar",
+                                           "body":  "@mingtong Are you by any chance using Entity Framework or SQLite in your startup path? Am hitting this 100% of the time on my machine and am currently trying to get to the bottom of it.",
+                                           "updatedAt":  "2023-07-20T06:44:23Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5h88Bb",
+                                           "createdAt":  "2023-07-20T06:47:39Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "mingtong",
+                                           "body":  "\u003e @mingtong Are you by any chance using Entity Framework or SQLite in your startup path? Am hitting this 100% of the time on my machine and am currently trying to get to the bottom of it.\r\n\r\nI use SQLite, but don\u0027t use EF Core.",
+                                           "updatedAt":  "2023-07-20T06:47:39Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5iAxXv",
+                                           "createdAt":  "2023-07-20T18:06:45Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "carlossanlop",
+                                           "body":  "Would it be possible for one of you to share a minimum repro console app using SQLite? @riverar @mingtong",
+                                           "updatedAt":  "2023-07-20T18:06:45Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5iAxfJ",
+                                           "createdAt":  "2023-07-20T18:07:06Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "This issue has been marked `needs-author-action` and may be missing some important information.",
+                                           "updatedAt":  "2023-07-20T18:07:06Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5iBXV-",
+                                           "createdAt":  "2023-07-20T20:02:51Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODBYsEQ==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "ViktorHofer",
+                                                                               "createdAt":  "2023-07-21T08:39:16Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "riverar",
+                                           "body":  "I root caused my particular issue and will file a separate dotnet bug with repro. Sneak preview: Was not related to SQLite, but rather a result of the `BackgroundService` extension not keeping the Windows SCM happy (e.g., cough, me not using the right _WindowsServiceLifetimeOptions.ServiceName_ for its signals). I think similar errors in the SCM area will surface as `Stopped without starting`, which is a really poor/confusing developer experience.\r\n\r\nFor background: I was also investigating SQLite\u0027s bundler, which attempts to activate WinRT types and do _appmodel things_, all without explicitly checking for package identity. There\u0027s a try/catch to cover the no-identity scenario, but it seems wrong to keep throwing exceptions that confuse developers during debug. I\u0027ll file that bug too.\r\n\r\n@mingtong My suggestion for your issue is to try getting Event logs from the affected customers (Application channel). Or at least a screenshot of the user attempting to start the service via Services. Either method should reveal the actual SCM error, which could aid in debugging further. (Mine was `The executable program that this service is configured to run in does not implement the service.`)\r\n",
+                                           "updatedAt":  "2023-07-20T20:02:51Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5iCw3Y",
+                                           "createdAt":  "2023-07-21T02:13:55Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODBYsDA==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "ViktorHofer",
+                                                                               "createdAt":  "2023-07-21T08:39:13Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "mingtong",
+                                           "body":  "\u003e I root caused my particular issue and will file a separate dotnet bug with repro. Sneak preview: Was not related to SQLite, but rather a result of the `BackgroundService` extension not keeping the Windows SCM happy (e.g., cough, me not using the right _WindowsServiceLifetimeOptions.ServiceName_ for its signals). I think similar errors in the SCM area will surface as `Stopped without starting`, which is a really poor/confusing developer experience.\r\n\u003e \r\n\u003e For background: I was also investigating SQLite\u0027s bundler, which attempts to activate WinRT types and do _appmodel things_, all without explicitly checking for package identity. There\u0027s a try/catch to cover the no-identity scenario, but it seems wrong to keep throwing exceptions that confuse developers during debug. I\u0027ll file that bug too.\r\n\u003e \r\n\u003e @mingtong My suggestion for your issue is to try getting Event logs from the affected customers (Application channel). Or at least a screenshot of the user attempting to start the service via Services. Either method should reveal the actual SCM error, which could aid in debugging further. (Mine was `The executable program that this service is configured to run in does not implement the service.`)\r\n\r\nMany thanks for your information, I will collect more logs in next release, and will update you here.",
+                                           "updatedAt":  "2023-07-21T02:13:55Z"
+                                       }
+                                   ],
+                         "totalCount":  22
+                     },
+        "title":  "0.5% customers will fail to Start my App when run as Windows Service",
+        "labels":  [
+                       "area-System.ServiceProcess",
+                       "tenet-reliability"
+                   ]
+    }
+]

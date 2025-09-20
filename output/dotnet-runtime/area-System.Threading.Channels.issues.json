@@ -1,0 +1,1200 @@
+﻿[
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/24034",
+        "createdAt":  "2017-11-02T20:36:43Z",
+        "number":  24034,
+        "author":  "JanEggers",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-08-26T17:54:19Z",
+        "body":  "right now im using buffered channel and the overhead of locking is currently limiting throughput. i limit the buffer to 10000 items and most of the time the buffer is full so i i guess i could read more than one item at a time to improve. ",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOibtIbA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDM0MTYxOTk5Ng==",
+                                           "createdAt":  "2017-11-03T04:21:43Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOD2ePCQ==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "HEART",
+                                                                               "user":  "Rodrigo-Andrade",
+                                                                               "createdAt":  "2024-10-16T02:03:20Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "stephentoub",
+                                           "body":  "In the past I\u0027ve considered adding base virtuals like:\r\n```C#\r\npublic virtual int TryRead(Span\u003cT\u003e destination)\r\n{\r\n    int i = 0;\r\n    while (i \u003c destination.Length)\r\n    {\r\n        if (!TryRead(out destination[i])) break;\r\n        i++;\r\n    }\r\n    return i;\r\n}\r\n\r\npublic virtual int TryWrite(ReadOnlySpan\u003cT\u003e source)\r\n{\r\n    int i = 0;\r\n    while (i \u003c source.Length)\r\n    {\r\n        if (!TryWrite(source[i])) break;\r\n        i++;\r\n    }\r\n    return i;\r\n}\r\n```\r\nand then overriding them on derived channel reader/writers where the implementation could do something more efficient.\r\n\r\nIs that what you had in mind, or something else?\r\n\r\nWith regards to the locking itself, we should actually be able to get rid of some of that locking and use more lock-free approaches in various situations.  I just haven\u0027t found the time to invest in / investigate doing so.",
+                                           "updatedAt":  "2017-11-03T04:22:25Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDM0MTYzMDU0MA==",
+                                           "createdAt":  "2017-11-03T06:34:06Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "JanEggers",
+                                           "body":  "thx for the info.\r\n\r\nif there will be a lockfree version/option later on ill just wait for that. i copied over the source and  added a read method. it just gave 10% perf boost so i have to optimize the consumer of the channel after all to get better throughput...\r\n\r\nhere is what i did:\r\n\r\n```\r\n            public bool TryReadMany(out IEnumerable\u003cT\u003e items)\r\n            {\r\n                BoundedChannel\u003cT\u003e parent = _parent;\r\n                lock (parent.SyncObj)\r\n                {\r\n                    parent.AssertInvariants();\r\n\r\n                    // Get an item if there is one.\r\n                    if (!parent._items.IsEmpty)\r\n                    {\r\n                        var list = new List\u003cT\u003e();\r\n\r\n                        while (!parent._items.IsEmpty)\r\n                        {\r\n                            list.Add(DequeueItemAndPostProcess());\r\n                        }\r\n                        items = list;\r\n                        return true;\r\n                    }\r\n                }\r\n\r\n                items = Enumerable.Empty\u003cT\u003e();\r\n                return false;\r\n            }\r\n```\r\n\r\nthat could be optimized if Dequeue had a method to get multiple items. \r\n\r\n",
+                                           "updatedAt":  "2017-11-03T06:34:06Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDM0MTkxMDA0OQ==",
+                                           "createdAt":  "2017-11-04T16:26:48Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "AceHack",
+                                           "body":  "lockfree and/or waitfree implementation would be great.  Also bulk/multiple items operation would also be very great.",
+                                           "updatedAt":  "2017-11-04T16:26:48Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDM2MTc5NDU0MQ==",
+                                           "createdAt":  "2018-01-31T01:37:49Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "kouvel",
+                                           "body":  "CC @tarekgh ",
+                                           "updatedAt":  "2018-01-31T01:37:49Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDM3MjE1MTMyNQ==",
+                                           "createdAt":  "2018-03-11T21:34:13Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dmitriyse",
+                                           "body":  "Please also consider (zero-copy)able batch mode reader/writer interface.\r\nFor example:\r\n```CSharp\r\n    using System;\r\n    using System.Threading.Channels;\r\n\r\n    /// \u003csummary\u003e\r\n    /// Provides a base class for reading from a channel in the batch mode possibly with the zero-copy.\r\n    /// \u003c/summary\u003e\r\n    /// \u003ctypeparam name=\"T\"\u003eSpecifies the type of data that may be read from the channel.\u003c/typeparam\u003e\r\n    public abstract class ChannelBatchReader\u003cT\u003e : ChannelReader\u003cT\u003e, IDisposable\r\n    {\r\n        /// \u003csummary\u003e\r\n        /// Finalizes an instance of the \u003csee cref=\"ChannelBatchReader{T}\"/\u003e class.\r\n        /// \u003c/summary\u003e\r\n        ~ChannelBatchReader()\r\n        {\r\n            Dispose(false);\r\n        }\r\n\r\n        /// \u003cinheritdoc/\u003e\r\n        public void Dispose()\r\n        {\r\n            Dispose(true);\r\n            GC.SuppressFinalize(this);\r\n        }\r\n\r\n        /// \u003csummary\u003e\r\n        /// Finalizes read operation.\r\n        /// \u003c/summary\u003e\r\n        /// \u003cparam name=\"processedCount\"\u003eThe number of processed items.\u003c/param\u003e\r\n        /// \u003cparam name=\"slice\"\u003eThe buffer slice.\u003c/param\u003e\r\n        public abstract void CompleteRead(int processedCount, ref ChannelReaderBufferSlice\u003cT\u003e slice);\r\n\r\n        /// \u003csummary\u003e\r\n        /// Releases a part of previously allocated buffer slice.\r\n        /// \u003c/summary\u003e\r\n        /// \u003cparam name=\"newCount\"\u003eThe number of items to remain allocated.\u003c/param\u003e\r\n        /// \u003cparam name=\"slice\"\u003eThe buffer slice.\u003c/param\u003e\r\n        public abstract void PartialFree(int newCount, ref ChannelReaderBufferSlice\u003cT\u003e slice);\r\n\r\n        /// \u003csummary\u003e\r\n        /// Allocates a buffer slice with data.\r\n        /// \u003c/summary\u003e\r\n        /// \u003cremarks\u003e\r\n        /// Resulting slice can has less length than requested.\r\n        /// \u003c/remarks\u003e\r\n        /// \u003cparam name=\"count\"\u003eThe preferred amount of items to read.\u003c/param\u003e\r\n        /// \u003cparam name=\"slice\"\u003eThe buffer slice with the data.\u003c/param\u003e\r\n        /// \u003creturns\u003e\r\n        /// \u003csee langword=\"true\"/\u003e if the buffer slice was allocated; otherwise, \u003csee langword=\"false\"/\u003e if it wasn\u0027t\r\n        /// allocated.\r\n        /// \u003c/returns\u003e\r\n        public abstract bool TryStartRead(int count, out ChannelReaderBufferSlice\u003cT\u003e slice);\r\n\r\n        /// \u003csummary\u003e\r\n        /// Releases the unmanaged resources used by the Component and optionally releases the managed resources.\r\n        /// \u003c/summary\u003e\r\n        /// \u003cparam name=\"disposing\"\u003e\r\n        /// \u003csee langword=\"true\"/\u003e to release both managed and unmanaged resources; \u003csee langword=\"false\"/\u003e\r\n        /// to release only unmanaged resources.\r\n        /// \u003c/param\u003e\r\n        protected virtual void Dispose(bool disposing)\r\n        {\r\n        }\r\n    }\r\n\r\n    public struct ChannelReaderBufferSlice\u003cT\u003e\r\n    {\r\n        private T[] _array;\r\n\r\n        private int _start;\r\n\r\n        private int _length;\r\n\r\n        private int _id;\r\n\r\n        public ChannelReaderBufferSlice(T[] array, int start, int length, int id)\r\n        {\r\n#if DEBUG\r\n\r\n// TODO: checks\r\n#endif\r\n            _array = array;\r\n            _start = start;\r\n            _length = length;\r\n            _id = id;\r\n        }\r\n\r\n        public void DecreaseLength(int newSize)\r\n        {\r\n            _length = newSize;\r\n        }\r\n\r\n        public ReadOnlySpan\u003cT\u003e Span =\u003e new ReadOnlySpan\u003cT\u003e(_array, _start, _length);\r\n\r\n        public int Id =\u003e _id;\r\n    }\r\n\r\n```\r\n\r\nThis zero-copy can give significant speedup in up to half of cases.\r\nOtherwise batch mode will infect code with double-copy (on reader and on writer side).\r\n\r\nImplementation of zero-copy batch mode channel is very complicated, but possible (I have some implementation in alpha stage).",
+                                           "updatedAt":  "2018-03-11T21:36:40Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDM3MjE1MjI4NQ==",
+                                           "createdAt":  "2018-03-11T21:45:43Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dmitriyse",
+                                           "body":  "Batch mode, Queues (Channels), DataFlow-like framework, zero-copy is the \"must have\" tricks to get real-world 100k+ items/sec performance from a single Server Node.",
+                                           "updatedAt":  "2018-03-12T03:41:27Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDM3MjE1MzczOA==",
+                                           "createdAt":  "2018-03-11T22:04:45Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODWhP5Q==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "EYES",
+                                                                               "user":  "MineCake147E",
+                                                                               "createdAt":  "2024-02-13T07:14:03Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "dmitriyse",
+                                           "body":  "Also TPL is too heavy to work with single items, even with all kind of tricks expected in 2.1.   \r\nTPL have limit ~1M items/sec (per one CPU-core).  \r\nC# Async/await state machines have ~60M items/sec max through put on a single CPU-core.\r\nSimple loop over batch of items have 1000M+ items/sec on a single CPU-core (at that speeds every IL instruction play role).\r\nBatch-mode is a simplest way to workaround TPL limits.\r\n\r\n(To get maximal theoretical performance, TPL should be avioded, all processing should be performed cooperatively (one event loops per CPU-Core), item processing workflows should be bound to event-loops to avoid as much synchronizations as possible, and only after that C#/IL will be the bottleneck and C++ can give some benefits)",
+                                           "updatedAt":  "2018-03-11T22:10:11Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDM3MjM1ODQ5Ng==",
+                                           "createdAt":  "2018-03-12T15:49:51Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dmitriyse",
+                                           "body":  "See more general proposal about batch processing: https://github.com/dotnet/corefxlab/issues/2154",
+                                           "updatedAt":  "2018-03-12T15:49:51Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6Ju0hs",
+                                           "createdAt":  "2024-08-26T17:54:10Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "julealgon",
+                                           "body":  "\u003e With regards to the locking itself, we should actually be able to get rid of some of that locking and use more lock-free approaches in various situations. I just haven\u0027t found the time to invest in / investigate doing so.\r\n\r\n@stephentoub is this still the case, or has some of it been done since you\u0027ve posted that that could be linked here?",
+                                           "updatedAt":  "2024-08-26T17:54:10Z"
+                                       }
+                                   ],
+                         "totalCount":  9
+                     },
+        "title":  "[suggestion] add api to read/write multiple values from System.Threading.Channels",
+        "labels":  [
+                       "api-suggestion",
+                       "area-System.Threading.Channels"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/32700",
+        "createdAt":  "2020-02-22T21:13:10Z",
+        "number":  32700,
+        "author":  "zcsizmadia",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHOCuWJ6g==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "strangeman375",
+                                            "createdAt":  "2020-02-25T16:09:34Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "JanEggers",
+                                            "createdAt":  "2021-04-07T10:26:20Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "GeekyEggo",
+                                            "createdAt":  "2021-07-07T10:47:58Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "juho-hanhimaki",
+                                            "createdAt":  "2022-01-25T13:51:17Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "theodorzoulias",
+                                            "createdAt":  "2023-02-11T08:55:30Z"
+                                        }
+                                    ],
+                          "totalCount":  5
+                      },
+        "updatedAt":  "2025-09-16T20:48:08Z",
+        "body":  "### Reason\r\n\r\nCurrently unbounded channels use a ConcurrentQueue to hold the queued items. This concurrent queue is created in the internal UnboundedChannel object and cannot be changed. Since the Channel reader and writer architecture is a producer/consumer pattern, it would be great if the object holding the queued items could be provided to the channel creation, using the IProducerConsumerCollection interface. If no such interface is specified the default ConcurrentQueue is created and used by the channel.\r\n\r\nThis addition would reflect the nature of the Channel architecture.\r\n\r\n### Use case\r\nUse a  priority queue instead of a FIFO.\r\n\r\n### API Proposal\r\n\r\n```csharp\r\nnamespace System.Threading.Channels\r\n{\r\n    public static class Channel\r\n    {\r\n        // existing\r\n        public static Channel\u003cT\u003e CreateUnbounded\u003cT\u003e();\r\n        public static Channel\u003cT\u003e CreateUnbounded\u003cT\u003e(UnboundedChannelOptions options);\r\n\r\n        // new\r\n        public static Channel\u003cT\u003e CreateUnbounded\u003cT\u003e(IProducerConsumerCollection\u003cT\u003e collection);\r\n        public static Channel\u003cT\u003e CreateUnbounded\u003cT\u003e(IProducerConsumerCollection\u003cT\u003e collection, UnboundedChannelOptions options);\r\n}\r\n```\r\n\r\n### Implementation\r\nThe internal UnboundedChannel object is already using a ConcurrentQueue object to hold the queued items, and the used methods are only TryDequeue, Enqueue and Count.\r\nThe _items object must be changed to IProducerConsumerCollection and the Dequeue and Enqueue must be changed to TryTake and TryAdd.\r\n\r\n[Diff/PR](https://github.com/dotnet/runtime/compare/master...zcsizmadia:Add-IProducerConsumerCollection-to-UnboundedChannel)\r\n\r\n```csharp\r\ninternal sealed class UnboundedChannel\u003cT\u003e : Channel\u003cT\u003e, IDebugEnumerable\u003cT\u003e\r\n{\r\n    private readonly IProducerConsumerCollection\u003cT\u003e _items;\r\n        \r\n    internal UnboundedChannel(bool runContinuationsAsynchronously)\r\n            : this(runContinuationsAsynchronously, new ConcurrentQueue\u003cT\u003e())\r\n    {\r\n    }\r\n\r\n    internal UnboundedChannel(bool runContinuationsAsynchronously, IProducerConsumerCollection\u003cT\u003e queue)\r\n    {\r\n        _runContinuationsAsynchronously = runContinuationsAsynchronously;\r\n        _completion = new TaskCompletionSource\u003cVoidResult\u003e(runContinuationsAsynchronously ? TaskCreationOptions.RunContinuationsAsynchronously : TaskCreationOptions.None);\r\n        _items = queue ?? throw new ArgumentNullException(nameof(queue));\r\n        Reader = new UnboundedChannelReader(this);\r\n        Writer = new UnboundedChannelWriter(this);\r\n    }\r\n\r\n    // Example changes:\r\n\r\n    //if (parent._items.TryDequeue(out item)) -\u003e\r\n    //if (parent._items.TryTake(out item))\r\n\r\n    //parent._items.Enqueue(item); -\u003e\r\n    //if (!parent._items.TryAdd(item))\r\n    //{\r\n    //    return false;\r\n    //}\r\n}\r\n```",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOxLat_w==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDU5MDg4NjY5NQ==",
+                                           "createdAt":  "2020-02-25T14:14:39Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "stephentoub",
+                                           "body":  "It\u0027s a reasonable proposal, though it would almost certainly need a different implementation rather than just changing the existing one, as I expect the overhead of going through the interface would be measurable on high-throughput scenarios.  The implementation would also need to correctly handle a collection that came in non-empty, that could potentially change from other users while it was being used by the channel, etc.  It would need to be fully prototyped to validate everything works correctly.",
+                                           "updatedAt":  "2020-02-25T14:17:09Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDU5MDkwNTU1Mw==",
+                                           "createdAt":  "2020-02-25T14:52:46Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "zcsizmadia",
+                                           "body":  "Makes sense. What is the performance implication of the following. When we add the TQueue to the UnboundedChannel. In this case the constructors do not change, we have the existing CreateUnbounded\u003cT\u003e() and an additional new API of CreateUnbounded\u003cT, TQueue\u003e().\r\n\r\n```csharp\r\ninternal sealed class UnboundedChannel\u003cT, TQueue\u003e : Channel\u003cT\u003e, IDebugEnumerable\u003cT\u003e where TQueue : IProducerConsumerCollection\u003cT\u003e, new()\r\n    {\r\n        //...\r\n        private readonly TQueue _items = new TQueue();\r\n        //...\r\n    }\r\n\r\n\r\n    public static class Channel\r\n    {\r\n        // Existing\r\n        public static Channel\u003cT\u003e CreateUnbounded\u003cT\u003e() =\u003e\r\n            new UnboundedChannel\u003cT, ConcurrentQueue\u003cT\u003e\u003e(...);\r\n\r\n        // New\r\n        public static Channel\u003cT\u003e CreateUnbounded\u003cT, TQueue\u003e() where TQueue : IProducerConsumerCollection\u003cT\u003e, new() =\u003e\r\n            new UnboundedChannel\u003cT, TQueue\u003e(...);\r\n    }\r\n```",
+                                           "updatedAt":  "2020-02-25T14:52:46Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDU5MDkwNzc2Mg==",
+                                           "createdAt":  "2020-02-25T14:56:48Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "stephentoub",
+                                           "body":  "\u003e What is the performance implication of the following\r\n\r\nThe runtime does not specialize generics for reference types, which TQueue is almost certainly going to be (as it is with `ConcurrentQueue\u003cT\u003e`).  We\u0027d pay the overheads associated with using generics in this fashion, we wouldn\u0027t be able to use `ConcurrentQueue\u003cT\u003e.IsEmpty` which is much faster than its `IProducerConsumerCollection\u003cT\u003e.Count` implementation, etc.",
+                                           "updatedAt":  "2020-02-25T14:56:48Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDgxNDc5NTIwOA==",
+                                           "createdAt":  "2021-04-07T10:20:02Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "JanEggers",
+                                           "body":  "+1 stacklike behavior would be really great. \r\n\r\nmy usecase is timeouut handling. My workload has a timeout and once I hit it all queued operations will also timeout. If I could process the newest work first it is much more likely that im able to recover at some point. ",
+                                           "updatedAt":  "2021-04-07T10:20:02Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5DLg9b",
+                                           "createdAt":  "2022-05-16T00:03:10Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "GF-Huang",
+                                           "body":  "Sorry for the digression. Since I couldn\u0027t find any docs which about is it `Channel` is `FIFO` or not? This issue seems to be the closest to my question.",
+                                           "updatedAt":  "2022-05-16T00:03:10Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5DLhMP",
+                                           "createdAt":  "2022-05-16T00:07:02Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOCc5JxA==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "HEART",
+                                                                               "user":  "GF-Huang",
+                                                                               "createdAt":  "2022-05-16T00:07:30Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "stephentoub",
+                                           "body":  "The channels created by both CreateUnbounded and CreateBounded are FIFO.",
+                                           "updatedAt":  "2022-05-16T00:07:02Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5DLx0I",
+                                           "createdAt":  "2022-05-16T02:55:51Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "GF-Huang",
+                                           "body":  "\u003e The channels created by both CreateUnbounded and CreateBounded are FIFO.\r\n\r\nBy the way, is it possible to clear all items in `Channel` without `ReadAllAsync`?",
+                                           "updatedAt":  "2022-05-16T02:55:51Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5DNpDy",
+                                           "createdAt":  "2022-05-16T13:06:48Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "stephentoub",
+                                           "body":  "There is no API for that today.",
+                                           "updatedAt":  "2022-05-16T13:06:48Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc527ANT",
+                                           "createdAt":  "2024-03-13T17:53:55Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "TonyValenti",
+                                           "body":  "I just wanted to post here that I could really use this. ",
+                                           "updatedAt":  "2024-03-13T17:53:55Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc527E1n",
+                                           "createdAt":  "2024-03-13T17:59:41Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "stephentoub",
+                                           "body":  "\u003e I just wanted to post here that I could really use this.\r\n\r\nCan you elaborate on your scenario and how you\u0027d use this?",
+                                           "updatedAt":  "2024-03-13T17:59:41Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc529j_j",
+                                           "createdAt":  "2024-03-13T21:15:56Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODafoqg==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "stephentoub",
+                                                                               "createdAt":  "2024-03-14T02:11:37Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "TonyValenti",
+                                           "body":  "I have a dataflow that is essentially doing a series of tree traversal. Because the current process uses a queue, that causes it to do a breadth-first traversal which requires a lot more resources. If I could use a stack, it would essentially be doing a depth-first traversal. ",
+                                           "updatedAt":  "2024-03-13T21:15:56Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc7Etq3_",
+                                           "createdAt":  "2025-09-16T20:48:08Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "TonyValenti",
+                                           "body":  "It has been a few months and just wanted to post here again that I could really use LIFO behavior for channels.  This is because we have tasks that read from a channel and write data back into it.\n\nBecause the current implementation is FIFO, it essentially forces us to process the data in a breadth-first manner.  If it was FIFO, data would be traversed in a depth-first manner which would be much more friendly on memory.\n\nI saw discussions on this about whether we should be able to provide the collection.  Perhaps that might be nice if we had a ```ConcurrentPriorityQueue\u003cT\u003e```, but, absent that, simply having a ```ProcessingOrder.FirstInLastOut``` and ```ProcessingOrder.LastInFirstOut``` would be quite sufficient for me.",
+                                           "updatedAt":  "2025-09-16T20:48:08Z"
+                                       }
+                                   ],
+                         "totalCount":  12
+                     },
+        "title":  "API proposal: Add IProducerConsumerCollection to System.Threading.Channels.CreateUnbounded(...)",
+        "labels":  [
+                       "api-suggestion",
+                       "area-System.Threading.Channels"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/53355",
+        "createdAt":  "2021-05-27T14:45:20Z",
+        "number":  53355,
+        "author":  "Danielku15",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHODIGV9g==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "vslee",
+                                            "createdAt":  "2025-07-23T05:10:30Z"
+                                        }
+                                    ],
+                          "totalCount":  1
+                      },
+        "updatedAt":  "2023-01-18T11:34:47Z",
+        "body":  "### Description\r\nThe `SingleConsumerUnboundedChannel` currently does not allow accessing the item count. This is strange because if you have multiple consumers via ` UnboundedChannel` the access is possible. It feels like a bug to me that you cannot access the count if you have a single consumer but you can if you have multiple ones. \r\n\r\n### Configuration\r\n\r\n.net 5.0.203 \r\nWindows 10 Enterprise 2004 \r\nx64\r\n\r\nAlso seems an issue according to the latest source state. \r\n\r\n### Regression?\r\nFrom a pure code perspective no. This was never implemented and is sort of a missing feature. \r\n\r\n### Other information\r\n\r\nCode wise it should be fairly easy to add the same count implementation to `SingleConsumerUnboundedChannel` like in `UnboundedChannel `. \r\n\r\n**UnboundedChannel overrides the count and cancount in the reader implementation**\r\nhttps://github.com/dotnet/runtime/blob/5dcc340a17e32d81dc12f644449c8b58396b2fd7/src/libraries/System.Threading.Channels/src/System/Threading/Channels/UnboundedChannel.cs#L57-L59\r\n\r\n**SingleConsumerUnboundedChannel does not override the members**\r\nhttps://github.com/dotnet/runtime/blob/5dcc340a17e32d81dc12f644449c8b58396b2fd7/src/libraries/System.Threading.Channels/src/System/Threading/Channels/SingleConsumerUnboundedChannel.cs#L60-L70\r\n\r\nBut I have to admit that I am not fully aware of potential consequences. There were some concerns by @stephentoub because of the queue not being secured by locks or interlocked operations. The UnboundedChannel uses a Deque which holds the current size as member. So accessing the size is safe. But the `SingleConsumerUnboundedChannel` uses a `SingleProducerConsumerQueue` where the count it only internal and requires looping. \r\n\r\nFrom this perspective it might really rather be a feature request than a bug to support the count. \r\n\r\nAccording to the git history the following PR and issue are related to the change adding the count member to UnboundedChannel. \r\nhttps://github.com/dotnet/runtime/pull/312\r\nhttps://github.com/dotnet/runtime/issues/26706\r\n\r\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOUqqUNw==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDg0OTY5NjAwOQ==",
+                                           "createdAt":  "2021-05-27T14:45:24Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @carlossanlop\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Description\r\nThe `SingleConsumerUnboundedChannel` currently does not allow accessing the item count. This is strange because if you have multiple consumers via ` UnboundedChannel` the access is possible. It feels like a bug to me that you cannot access the count if you have a single consumer but you can if you have multiple ones. \r\n\r\n### Configuration\r\n\r\n.net 5.0.203 \r\nWindows 10 Enterprise 2004 \r\nx64\r\n\r\nAlso seems an issue according to the latest source state. \r\n\r\n### Regression?\r\nFrom a pure code perspective no. This was never implemented and is sort of a missing feature. \r\n\r\n### Other information\r\n\r\nCode wise it should be fairly easy to add the same count implementation to `SingleConsumerUnboundedChannel` like in `UnboundedChannel `. \r\n\r\n**UnboundedChannel overrides the count and cancount in the reader implementation**\r\nhttps://github.com/dotnet/runtime/blob/5dcc340a17e32d81dc12f644449c8b58396b2fd7/src/libraries/System.Threading.Channels/src/System/Threading/Channels/UnboundedChannel.cs#L57-L59\r\n\r\n**SingleConsumerUnboundedChannel does not override the members**\r\nhttps://github.com/dotnet/runtime/blob/5dcc340a17e32d81dc12f644449c8b58396b2fd7/src/libraries/System.Threading.Channels/src/System/Threading/Channels/SingleConsumerUnboundedChannel.cs#L60-L70\r\n\r\nBut I have to admit that I am not fully aware of potential consequences. There were some concerns by @stephentoub because of the queue not being secured by locks or interlocked operations. The UnboundedChannel uses a Deque which holds the current size as member. So accessing the size is safe. But the `SingleConsumerUnboundedChannel` uses a `SingleProducerConsumerQueue` where the count it only internal and requires looping. \r\n\r\nFrom this perspective it might really rather be a feature request than a bug to support the count. \r\n\r\nAccording to the git history the following PR and issue are related to the change adding the count member to UnboundedChannel. \r\nhttps://github.com/dotnet/runtime/pull/312\r\nhttps://github.com/dotnet/runtime/issues/26706\r\n\r\n\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003eDanielku15\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-System.Threading.Channels`, `untriaged`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2021-05-27T14:45:24Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5SpggB",
+                                           "createdAt":  "2023-01-18T07:37:19Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "bollhals",
+                                           "body":  "I just hit this when I was trying to log some information and got a NotSupportedException thrown. Is the current implementation correct or is this bug valid? \r\n(I could throw together a PR fixing this if it is confirmed as a bug)",
+                                           "updatedAt":  "2023-01-18T07:37:19Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5Sqf_s",
+                                           "createdAt":  "2023-01-18T11:05:03Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "stephentoub",
+                                           "body":  "\u003e  Is the current implementation correct or is this bug valid?\r\n\r\nIt\u0027s correct, because of this:\r\nhttps://github.com/dotnet/runtime/blob/5dcc340a17e32d81dc12f644449c8b58396b2fd7/src/libraries/Common/src/System/Collections/Concurrent/SingleProducerConsumerQueue.cs#L219",
+                                           "updatedAt":  "2023-01-18T11:05:03Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5Sqmuj",
+                                           "createdAt":  "2023-01-18T11:25:51Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "bollhals",
+                                           "body":  "I checked the code but somehow missed that section. Thanks for linking it!\r\n\r\nSo based on this, should the issue be closed as working as intended? Or should it be rephrased as a request to make it available?",
+                                           "updatedAt":  "2023-01-18T11:25:51Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5SqpQ3",
+                                           "createdAt":  "2023-01-18T11:34:46Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOCy2m5A==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "bollhals",
+                                                                               "createdAt":  "2023-01-18T11:58:35Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "stephentoub",
+                                           "body":  "It\u0027s fine to leave it open. It\u0027s a feature request.\r\n\"This was never implemented and is sort of a missing feature.\"\r\n\"From this perspective it might really rather be a feature request than a bug to support the count.\" ",
+                                           "updatedAt":  "2023-01-18T11:34:46Z"
+                                       }
+                                   ],
+                         "totalCount":  5
+                     },
+        "title":  "SingleConsumerUnboundedChannel should allow access to reader count",
+        "labels":  [
+                       "area-System.Threading.Channels",
+                       "feature-request"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/59617",
+        "createdAt":  "2021-09-26T06:34:17Z",
+        "number":  59617,
+        "author":  "momvart",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHOC8ckDA==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "GSPP",
+                                            "createdAt":  "2021-11-06T10:54:52Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "theodorzoulias",
+                                            "createdAt":  "2022-11-24T20:19:06Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "julealgon",
+                                            "createdAt":  "2024-11-06T14:53:09Z"
+                                        }
+                                    ],
+                          "totalCount":  3
+                      },
+        "updatedAt":  "2024-11-06T14:06:20Z",
+        "body":  "I think that API documentation for System.Threading.Channels classes are quite abstract and short and do not include the necessary information.\r\n\r\nFor example, consider `TryWrite` method of `ChannelWriter`. It is only noted that if it successfully writes to the channel, the result will be true. OK, but when it is unsuccessful? In my case, I had to take a look at blog posts and the source code to realize that for an unbounded channel the result is always true unless the channel is completed while for a bounded one it may return false for other additional scenarios.\r\n\r\nI\u0027m not sure if I\u0027m right. Maybe as a purpose of abstraction, we should not be aware of these behaviors at all, but I believe that something is missing here and these details should be included somewhere either in remarks or any other appropriate place.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOkp5K9Q==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc43RJ0j",
+                                           "createdAt":  "2021-09-26T06:34:21Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-system-threading-channels\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\nI think that API documentation for System.Threading.Channels classes are quite abstract and short and do not include the necessary information.\r\n\r\nFor example, consider `TryWrite` method of `ChannelWriter`. It is only noted that if it successfully writes to the channel, the result will be true. OK, but when it is unsuccessful? In my case, I had to take a look at blog posts and the source code to realize that for an unbounded channel the result is always true unless the channel is completed while for a bounded one it may return false for other additional scenarios.\r\n\r\nI\u0027m not sure if I\u0027m right. Maybe as a purpose of abstraction, we should not be aware of these behaviors at all, but I believe that something is missing here and these details should be included somewhere either in remarks or any other appropriate place.\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003emomt99\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-System.Threading.Channels`, `untriaged`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2021-09-26T06:34:21Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc43huMD",
+                                           "createdAt":  "2021-09-30T19:03:47Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOD5rs3A==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "ROCKET",
+                                                                               "user":  "julealgon",
+                                                                               "createdAt":  "2024-11-06T14:51:57Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "carlossanlop",
+                                           "body":  "Thanks for reporting. I\u0027m glad you could clarify some of your questions by reading the blog post, they are part of our documentation as well. I assume you\u0027re talking about the official blog post and video?:\r\n\r\n- Blog post: https://devblogs.microsoft.com/dotnet/an-introduction-to-system-threading-channels/\r\n- Video: https://channel9.msdn.com/Shows/On-NET/Working-with-Channels-in-NET\r\n\r\nWe can definitely improve the MS Docs documentation with the info you found in the blog post. And external contributions are also welcome: If you go to the MS Docs page for the API you want to improve, click on Edit on the top right, then you can submit a PR to dotnet-api-docs to modify the xml containing the docs. The information you see there is what we publish in our IntelliSense.",
+                                           "updatedAt":  "2021-09-30T19:03:47Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc43mVaE",
+                                           "createdAt":  "2021-10-02T18:10:22Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "momvart",
+                                           "body":  "Thanks for the explanation. Indeed, the authors are more aware of the details and the essential points, and the best ones to complete the docs. However, I won\u0027t hesitate if I find an opportunity to contribute.",
+                                           "updatedAt":  "2021-10-02T18:11:24Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6SnesN",
+                                           "createdAt":  "2024-11-06T13:56:36Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "enclave-marc-barry",
+                                           "body":  "I hit the same miss-understanding.\n\n```\nusing System;\nusing System.Threading.Channels;\n\nnamespace ChannelTest\n{\n    class Program\n    {\n        static void Main(string[] args)\n        {\n            var channel = Channel.CreateBounded\u003cstring\u003e(new BoundedChannelOptions(5)\n            {\n                SingleWriter = true,\n                SingleReader = true,\n                FullMode = BoundedChannelFullMode.DropWrite,\n            });\n\n            // Fill the channel with 5 items, which is its maximum capacity\n            for (int i = 1; i \u003c= 5; i++)\n            {\n                bool writeResult = channel.Writer.TryWrite($\"Message {i}\");\n                Console.WriteLine($\"Writing Message {i}: Success = {writeResult}\");\n            }\n\n            // Attempt to write additional items; these should return false\n            for (int i = 6; i \u003c= 10; i++)\n            {\n                bool writeResult = channel.Writer.TryWrite($\"Message {i}\");\n                Console.WriteLine($\"Writing Message {i}: Success = {writeResult} (should be false since channel is full)\");\n            }\n        }\n    }\n}\n```\n\nI would expect to see messages 6 to 10 returning False, however, this is not what happens.\n\nDespite `BoundedChannelFullMode.DropWrite` mode, the output below shows `TryWrite()` returns `True` even when the Channel is full, which is semantically, both surprising and unexpected for me.\n\n```\nWriting Message 1: Success = True\nWriting Message 2: Success = True\nWriting Message 3: Success = True\nWriting Message 4: Success = True\nWriting Message 5: Success = True\nWriting Message 6: Success = True (should be false since channel is full)\nWriting Message 7: Success = True (should be false since channel is full)\nWriting Message 8: Success = True (should be false since channel is full)\nWriting Message 9: Success = True (should be false since channel is full)\nWriting Message 10: Success = True (should be false since channel is full)\n```\n\nThe documentation does not clarify when [TryWrite()](https://learn.microsoft.com/en-us/dotnet/api/system.threading.channels.channelwriter-1.trywrite) should return False or whether [DropWrite ](https://learn.microsoft.com/en-us/dotnet/api/system.threading.channels.boundedchannelfullmode) has any impact on this behaviour. Just that \"true if the item was written; otherwise, false.\" and \"DropWrite drops the item being written.\"\n\nIf the Channel is full, and we\u0027re in DropWrite mode, surely it stands to reason that a false Boolean would help inform users of the API that the item was not written to the Channel (despite the operation to try having succeeded, and resulted in a dropped message)?\n",
+                                           "updatedAt":  "2024-11-06T13:56:36Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6SngGc",
+                                           "createdAt":  "2024-11-06T13:58:56Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "stephentoub",
+                                           "body":  "\u003e If the Channel is full, and we\u0027re in DropWrite mode, surely it stands to reason that a false Boolean would help inform users of the API that the item was not written to the Channel (despite the operation to try having succeeded, and resulted in a dropped message)?\n\nNo, the write was successful, with the channel then dropping an element, and choosing based on the selected policy to drop the one that was just written.",
+                                           "updatedAt":  "2024-11-06T13:58:56Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6SnijW",
+                                           "createdAt":  "2024-11-06T14:02:51Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "enclave-marc-barry",
+                                           "body":  "Not to nit-pick, but in `DropWrite` mode, I\u0027m not sure we actually are completing any kind of write and drop operation? https://github.com/dotnet/runtime/blob/main/src/libraries/System.Threading.Channels/src/System/Threading/Channels/BoundedChannel.cs#L423-L428\n\nRegardless, it would still be helpful to update the documentation if possible.",
+                                           "updatedAt":  "2024-11-06T14:03:56Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6Snkr1",
+                                           "createdAt":  "2024-11-06T14:06:19Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOD5rt2A==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "enclave-marc-barry",
+                                                                               "createdAt":  "2024-11-06T14:07:02Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "julealgon",
+                                                                               "createdAt":  "2024-11-06T14:53:05Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  2
+                                                         },
+                                           "author":  "stephentoub",
+                                           "body":  "\u003e I\u0027m not sure we actually are completing any kind of write and drop operation?\n\nWe are. The item is passed to the channel, which accepts it, declares that it was written, and then has to drop one, and based on policy, it selects the one just written. The actual way that\u0027s achieved is an implementation detail.\n\n\u003e Regardless, it would still be helpful to update the documentation if possible.\n\nYup, thanks.",
+                                           "updatedAt":  "2024-11-06T14:06:19Z"
+                                       }
+                                   ],
+                         "totalCount":  7
+                     },
+        "title":  "Improve documentation for System.Threading.Channels",
+        "labels":  [
+                       "documentation",
+                       "area-System.Threading.Channels"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/60472",
+        "createdAt":  "2021-10-15T15:13:05Z",
+        "number":  60472,
+        "author":  "MaximLipnin",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2023-08-08T04:41:48Z",
+        "body":  "Some System.Threading.Channels.Tests tests failed during the library tests run in https://github.com/dotnet/runtime/pull/59503. \r\n\r\n```\r\nException messages: System.InvalidOperationException : The result of the operation was already consumed and may not be used again.\r\nException stack traces:    at System.Threading.Channels.AsyncOperation.ThrowIncorrectCurrentIdException()\r\nat System.Threading.Channels.AsyncOperation`1[[System.Int32, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]].GetStatus(Int16 token)\r\nat System.Threading.Channels.Tests.ChannelTestBase.ReadAsync_Canceled_CanceledAsynchronously()\r\n--- End of stack trace from previous location ---\r\n```\r\n\r\nThe failed tests:\r\n```\r\n- System.Threading.Channels.Tests.SyncMultiReaderUnboundedChannelTests.ReadAsync_Canceled_CanceledAsynchronously\r\n- System.Threading.Channels.Tests.SyncMultiReaderUnboundedChannelTests.ReadAsync_ThenWriteAsync_Succeeds\r\n- System.Threading.Channels.Tests.SyncMultiReaderUnboundedChannelTests.ReadAsync_AwaitThenGetResult_Throws\r\n- System.Threading.Channels.Tests.SyncMultiReaderUnboundedChannelTests.SingleProducerConsumer_PingPong_Success\r\n- System.Threading.Channels.Tests.SyncMultiReaderUnboundedChannelTests.ReadAsync_ConsecutiveReadsSucceed\r\n- System.Threading.Channels.Tests.SyncMultiReaderUnboundedChannelTests.ReadAsync_Canceled_WriteAsyncCompletesNextReader\r\n- System.Threading.Channels.Tests.SyncMultiReaderUnboundedChannelTests.SingleProducerConsumer_ConcurrentReadWrite_Success\r\n- System.Threading.Channels.Tests.BoundedChannelTests.ReadAsync_Canceled_WriteAsyncCompletesNextReader\r\n- System.Threading.Channels.Tests.BoundedChannelTests.ReadAsync_AwaitThenGetResult_Throws\r\n```\r\n\r\n\r\nhttps://helixre8s23ayyeko0k025g8.blob.core.windows.net/dotnet-runtime-refs-pull-59503-merge-6a39ae2c5ebe465885/System.Threading.Channels.Tests/1/net.dot.System.Threading.Channels.Tests.log?sv=2019-07-07\u0026se=2021-11-04T12%3A32%3A55Z\u0026sr=c\u0026sp=rl\u0026sig=uGlnckHfuNwI574Zg9QR%2Fr0%2BDjML7iDVVEgDHDmLF58%3D\r\n\r\ncc @steveisok @akoeplinger ",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOU3dgFg==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc44Sh8y",
+                                           "createdAt":  "2021-10-15T15:13:10Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-system-threading-channels\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\nSome System.Threading.Channels.Tests tests failed during the library tests run in https://github.com/dotnet/runtime/pull/59503. \r\n\r\n```\r\nException messages: System.InvalidOperationException : The result of the operation was already consumed and may not be used again.\r\nException stack traces:    at System.Threading.Channels.AsyncOperation.ThrowIncorrectCurrentIdException()\r\nat System.Threading.Channels.AsyncOperation`1[[System.Int32, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]].GetStatus(Int16 token)\r\nat System.Threading.Channels.Tests.ChannelTestBase.ReadAsync_Canceled_CanceledAsynchronously()\r\n--- End of stack trace from previous location ---\r\n```\r\n\r\nhttps://helixre8s23ayyeko0k025g8.blob.core.windows.net/dotnet-runtime-refs-pull-59503-merge-6a39ae2c5ebe465885/System.Threading.Channels.Tests/1/net.dot.System.Threading.Channels.Tests.log?sv=2019-07-07\u0026se=2021-11-04T12%3A32%3A55Z\u0026sr=c\u0026sp=rl\u0026sig=uGlnckHfuNwI574Zg9QR%2Fr0%2BDjML7iDVVEgDHDmLF58%3D\r\n\r\ncc @steveisok @akoeplinger \n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003eMaximLipnin\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-System.Threading.Channels`, `untriaged`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2021-10-15T15:13:10Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5Tb05t",
+                                           "createdAt":  "2023-01-23T04:54:04Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "stephentoub",
+                                           "body":  "@steveisok, are these tests disabled?  I don\u0027t see a disabled test label, and the issue is from a year and a half ago.",
+                                           "updatedAt":  "2023-01-23T04:54:04Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5Td2AW",
+                                           "createdAt":  "2023-01-23T13:22:48Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "steveisok",
+                                           "body":  "Yes, the entire suite is disabled in tests.proj",
+                                           "updatedAt":  "2023-01-23T13:22:48Z"
+                                       }
+                                   ],
+                         "totalCount":  3
+                     },
+        "title":  "[tvOS] System.Threading.Channels.Tests : System.InvalidOperationException : The result of the operation was already consumed and may not be used again",
+        "labels":  [
+                       "area-System.Threading.Channels",
+                       "disabled-test",
+                       "os-ios"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/66281",
+        "createdAt":  "2022-03-07T05:25:17Z",
+        "number":  66281,
+        "author":  "davidfowl",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHOC2QMRA==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "theodorzoulias",
+                                            "createdAt":  "2022-03-08T05:30:51Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "AlgorithmsAreCool",
+                                            "createdAt":  "2022-03-13T18:57:12Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "omariom",
+                                            "createdAt":  "2023-01-01T11:28:57Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "JVanloofsvelt",
+                                            "createdAt":  "2024-03-02T12:54:51Z"
+                                        }
+                                    ],
+                          "totalCount":  4
+                      },
+        "updatedAt":  "2023-01-04T08:41:21Z",
+        "body":  "### Background and motivation\r\n\r\nToday bounded channels let the channel creator set a maximum capacity for the queue inside of the channel. This critical for making sure that backpressure can be applied to the consumer once the bounds have been hit (it can affects the reliability and performance of system using channels). When the consumer hits the capacity, the channel can be configured to behave in different ways by configuring the [BoundedChannelFullMode](https://docs.microsoft.com/en-us/dotnet/api/system.threading.channels.boundedchannelfullmode?view=net-6.0). When this mode is set to wait, if the writer is using `WaitToWriteAsync` or `WriteAsync`, the method call will return an incomplete task until the reader consumes the one element that keeps it under the capacity. This normally isn\u0027t an issue but when building systems that want to react to this back pressure with a more heavy weight process, flipping from no wait to wait start on every single write operation could be costly.\r\n\r\nThe idea is to add a `ResumeCapacity` that applies when `BoundedChannelFullMode.Wait` is set that wouldn\u0027t resume the writer until that capacity is reached. By default it would be set to Capacity - 1, but somebody could set it to any value \u003e= 0 and \u003c Capacity. This would make it so that the writer could only start writing again after the queue size reached `ResumeCapacity` after it reach the original Capacity.\r\n\r\nToday this is somewhat possible by polling the Count on the channel reader but it has a bunch of problems:\r\n- The writer might not have access to the reader\r\n- The writer doesn\u0027t want to think about bounds in wait mode, just what to do with the item when TryWrite returns false (or just have WriteAsync do the right thing).\r\n\r\n### API Proposal\r\n\r\n```C#\r\nnamespace System.Threading.Channels;\r\n\r\npublic class BoundedChannelOptions\r\n{\r\n    public int? DrainCapacity { get; set; }\r\n}\r\n```\r\n\r\n\r\n### API Usage\r\n\r\n```C#\r\nvar channel = Channel.CreateBounded\u003cint\u003e(new BoundedChannelOptions(10) {\r\n   DrainCapacity = 5 \r\n});\r\n\r\nasync Task WriteNumbersAsync()\r\n{\r\n    for (var i = 0; ; i++)\r\n    {\r\n        // This will write 10 numbers, then wait until 5 of them has been consumed, then will write 5 more\r\n        await channel.Writer.WriteAsync(i);\r\n    }\r\n}\r\n\r\n_ = WriteNumbersAsync();\r\n\r\nawait foreach (var value in channel.Reader.ReadAllAsync())\r\n{\r\n     Console.WriteLine(value);\r\n     // The reader is a little slower than the writer\r\n     await Task.Delay(1000);\r\n}\r\n```\r\n\r\n\r\n### Alternative Designs\r\n\r\nInstead of a setting, it could be done at the callsite with an overload of WaitToWriteAsync.\r\n\r\n```C#\r\nnamespace System.Threading.Channels;\r\n\r\npublic abstract class ChannelWriter\r\n{\r\n    public virtual ValueTask\u003cbool\u003e WaitToWriteAsync(int numberOfItems);\r\n}\r\n```\r\n\r\n```C#\r\nvar channel = Channel.CreateBounded\u003cint\u003e(new BoundedChannelOptions(10));\r\n\r\nasync Task WriteNumbersAsync()\r\n{\r\n    for (var i = 0; ; i++)\r\n    {\r\n        // This will write 10 numbers, then wait until 5 of them has been consumed, then will write 5 more\r\n        await WriteNumberAsync(i);\r\n    }\r\n\r\n    async Task WriteNumberAsync(int n)\r\n    {\r\n        if (!channel.TryWrite(i))\r\n        {\r\n           // We hit back pressure, now poll until the reader consumes enough...\r\n           await channel.Writer.WaitToWriteAsync(5);\r\n           channel.TryWrite(i); // Now we should be able to write\r\n        }\r\n    }\r\n}\r\n\r\n_ = WriteNumbersAsync();\r\n\r\nawait foreach (var value in channel.Reader.ReadAllAsync())\r\n{\r\n     Console.WriteLine(value);\r\n     // The reader is a little slower than the writer\r\n     await Task.Delay(1000);\r\n}\r\n```\r\n\r\n### Risks\r\n\r\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOUatXYQ==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc4_MX4s",
+                                           "createdAt":  "2022-03-07T05:25:23Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-system-threading-channels\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Background and motivation\n\nToday bounded channels let the channel creator set a maximum capacity for the queue inside of the channel. This critical for making sure that backpressure can be applied to the consumer once the bounds have been hit (it can affects the reliability and performance of system using channels). When the consumer hits the capacity, it can the channel can be configured to behave in different ways by configuring the [BoundedChannelFullMode](https://docs.microsoft.com/en-us/dotnet/api/system.threading.channels.boundedchannelfullmode?view=net-6.0). When this mode is set to wait, if the writer is using `WaitToWriteAsync` or `WriteAsync`, the method call will return an incomplete task until the reader consumes the one element that keeps it under the capacity. This normally isn\u0027t an issue but when building systems that want to react to this back pressure with a more heavy weight process, flipping from no wait to wait start on every single write operation could be costly.\r\n\r\nThe idea is to add a `ResumeCapacity` that applies when `BoundedChannelFullMode.Wait` is set that wouldn\u0027t resume the writer until that capacity is reached. By default it would be set to Capacity - 1, but somebody could set it to any value \u003e= 0 and \u003c Capacity. This would make it so that the writer could only start writing again after the queue size reached `ResumeCapacity` after it reach the original Capacity.\r\n\r\nToday this is somewhat possible by polling the Count on the channel reader but it has a bunch of problems:\r\n- The writer might not have access to the reader\r\n- The writer doesn\u0027t want to think about bounds in wait mode, just what to do with the item when TryWrite returns false (or just have WriteAsync do the right thing).\n\n### API Proposal\n\n```C#\r\nnamespace System.Threading.Channels;\r\n\r\npublic class BoundedChannelOptions\r\n{\r\n    public int? ResumeCapacity { get; set; }\r\n}\r\n```\r\n\n\n### API Usage\n\n```C#\r\nvar channel = Channel.CreateBounded\u003cint\u003e(new BoundedChannelOptions(10) {\r\n   ResumeCapacity = 5 \r\n});\r\n\r\nasync Task WriteNumbersAsync()\r\n{\r\n    for (var i = 0; ; i++)\r\n    {\r\n        // This will write 10 numbers, then wait until 5 of them has been consumed, then will write 5 more\r\n        await channel.Writer.WriteAsync(i);\r\n    }\r\n}\r\n\r\n_ = WriteNumbersAsync();\r\n\r\nawait foreach (var value in channel.Reader.ReadAllAsync())\r\n{\r\n     Console.WriteLine(value);\r\n     // The reader is a little slower than the writer\r\n     await Task.Delay(1000);\r\n}\r\n```\r\n\n\n### Alternative Designs\n\n_No response_\n\n### Risks\n\n_No response_\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003edavidfowl\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`api-suggestion`, `area-System.Threading.Channels`, `untriaged`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2022-03-07T05:25:23Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc4_Ryie",
+                                           "createdAt":  "2022-03-08T10:28:06Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOCSrx_w==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "HEART",
+                                                                               "user":  "davidfowl",
+                                                                               "createdAt":  "2022-03-13T00:21:34Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "HEART",
+                                                                               "user":  "AlgorithmsAreCool",
+                                                                               "createdAt":  "2022-03-13T18:57:22Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  2
+                                                         },
+                                           "author":  "theodorzoulias",
+                                           "body":  "I can surely imagine myself having the need for this API, and using it if it was available. I can also imagine myself reviewing my code a month later, and struggling to remember what exactly this esoteric `ResumeCapacity` configuration means!",
+                                           "updatedAt":  "2022-03-08T10:28:06Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5AGa4z",
+                                           "createdAt":  "2022-03-22T17:31:08Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOCYx4zA==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "HEART",
+                                                                               "user":  "davidfowl",
+                                                                               "createdAt":  "2022-04-20T05:44:02Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "buyaa-n",
+                                           "body":  "For me `ResumeCapacity` or `ResumeWritersAtCapacity` might sound meaningful, anyway looks like we can mark the proposal ready for review and discuss the naming there\r\n\r\nMoving to `Future` milestone for now, @davidfowl if you need it in 7.0 feel free to move",
+                                           "updatedAt":  "2022-03-22T17:31:08Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5Rj5za",
+                                           "createdAt":  "2023-01-01T06:28:08Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "fernandozago",
+                                           "body":  "I think we have something like this in `System.IO.Pipelines` don\u0027t we?\n\n![IMG_20230101_032549.jpg](https://user-images.githubusercontent.com/12010709/210162758-938cb49d-d134-4943-a520-7161d675ae7a.jpg)",
+                                           "updatedAt":  "2023-01-01T06:28:08Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5Rq1dh",
+                                           "createdAt":  "2023-01-03T20:14:15Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "theodorzoulias",
+                                           "body":  "\u003e ```cs\r\n\u003e async Task WriteNumbersAsync()\r\n\u003e {\r\n\u003e     for (var i = 0; ; i++)\r\n\u003e     {\r\n\u003e         // This will write 10 numbers, then wait until 5 of them has been consumed,\r\n\u003e         // then will write 5 more\r\n\u003e         await channel.Writer.WriteAsync(i);\r\n\u003e     }\r\n\u003e }\r\n\u003e ```\r\n\r\n@davidfowl supporting this scenario implies that the [`ChannelWriter.WriteAsync`](https://learn.microsoft.com/en-us/dotnet/api/system.threading.channels.channelwriter-1.writeasync) method will have a dual personality. It will complete immediately when the channel has space available, otherwise it will complete when the channel contains less than `DrainCapacity` items. This behavior might have unexpected consequences, in case the channel has more than one producers:\r\n\r\n- The producer 1 calls `WriteAsync(\"A\")` at a time that the channel is full.\r\n- Some time later the producer 2 calls `WriteAsync(\"B\")`, at a time that the channel has a few free slots.\r\n- The value `\"B\"` is added in the channel before the value `\"A\"`.\r\n- The consumer gets the value `\"B\"` before the value `\"A\"`.\r\n\r\nMy suggestion is to avoid this scenario, and limit the effect of the `DrainCapacity` only on the [`WaitToWriteAsync`](https://learn.microsoft.com/en-us/dotnet/api/system.threading.channels.channelwriter-1.waittowriteasync) method (the existing, not the proposed overload). The `WriteAsync` should ignore this setting. The original example modified:\r\n\r\n```cs\r\nasync Task WriteNumbersAsync()\r\n{\r\n    for (var i = 0; ; i++)\r\n    {\r\n        // This will write 10 numbers, then wait until 5 of them has been consumed,\r\n        // then will write 5 more\r\n        if (channel.Writer.TryWrite(i) continue;\r\n        await channel.Writer.WriteAsync(i);      // DrainCapacity-oblivious\r\n        await channel.Writer.WaitToWriteAsync(); // DrainCapacity-sensitive\r\n    }\r\n}\r\n```\r\n\r\n---\r\n\r\n**Edit:** Actually the scenario that I mentioned above, with the wrong order of `\"A\"` and `\"B\"`, can be avoided if the `ChannelWriter.WriteAsync` has the behavior of writing the item in the channel as soon as possible, and then idling until the `DrainCapacity` has been reached. It would be a weird behavior though, because the completion of the channel or cancellation of the token during the idling period could not be propagated by faulting the resulting `ValueTask`. After writing successfully the item in the channel, the `ValueTask` could only complete with success (to communicate the successful write), even though the completion of the `ValueTask` might happen a long time after the writing of the item.",
+                                           "updatedAt":  "2023-01-04T08:41:21Z"
+                                       }
+                                   ],
+                         "totalCount":  5
+                     },
+        "title":  "[API Proposal]: Support a lower bound on BoundedChannelOptions",
+        "labels":  [
+                       "api-suggestion",
+                       "area-System.Threading.Channels"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/100443",
+        "createdAt":  "2024-03-29T15:18:33Z",
+        "number":  100443,
+        "author":  "stephentoub",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-04-01T15:06:04Z",
+        "body":  "I\u0027ve had a few discussions lately with folks that have wanted something akin to a broadcasting ChannelWriter, where you could supply multiple channel writers and multiplex across them, with a single writer writing the same value to all of them. There\u0027s also been a desire for participants to come and go, such that targets could be added/removed dynamically. Any targets there when the write is issued would receive it, just forwarding along the write.\r\n\r\nEffectively, it would look like this:\r\n```C#\r\npublic sealed class BroadcastChannelWriter\u003cT\u003e : ChannelWriter\u003cT\u003e\r\n{\r\n    public void Add(ChannelWriter\u003cT\u003e target);\r\n    public void Remove(ChannelWriter\u003cT\u003e target);\r\n    public override bool TryWrite(T item);\r\n    public override ValueTask\u003cbool\u003e WaitToWriteAsync(CancellationToken cancellationToken = default);\r\n    public override ValueTask WriteAsync(T item, CancellationToken cancellationToken = default);\r\n    public override bool TryComplete(Exception? error = null);\r\n}\r\n```\r\n\r\nUnfortunately, I don\u0027t know how to define the semantics for this in a way that makes sense for an arbitrary consumer of the type via the abstraction. WriteAsync is straightforward, e.g. the equivalent of:\r\n```C#\r\npublic override async ValueTask WriteAsync(T item, CancellationToken cancellationToken = default)\r\n{\r\n    foreach (ChannelWriter\u003cT\u003e writer in _participants)\r\n    {\r\n        await writer.WriteAsync(item, cancellationToken);\r\n    }\r\n}\r\n```\r\nBut... what, for example, should the semantics of TryWrite be? If TryWrite returns true for one participant but then false for another, what should the method return? If it returns true, that indicates to the consumer that the data was written, but it wasn\u0027t to all targets. If it returns false, that indicates to the consumer that they might try again, in which case they could end up writing the same value multiple times to some of the participants.\r\n\r\nI\u0027m opening this issue in case folks who are interested have suggestions for how to rationalize this, since at present I\u0027m not comfortable adding something like this.  The best I\u0027ve come up with is to have the type not actually be a ChannelWriter, e.g.\r\n```C#\r\npublic sealed class BroadcastChannelWriter\u003cT\u003e\r\n{\r\n    public void Add(ChannelWriter\u003cT\u003e target);\r\n    public void Remove(ChannelWriter\u003cT\u003e target);\r\n    public ValueTask WriteAsync(T item, CancellationToken cancellationToken = default);\r\n    public override bool TryComplete(Exception? error = null);\r\n}\r\n```\r\nsuch that you can\u0027t use it polymorphically and use the problematic operations. But that then also loses meaningful functionality.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOeP3yRg==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc544V8p",
+                                           "createdAt":  "2024-03-30T12:26:06Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODcfgow==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "colejohnson66",
+                                                                               "createdAt":  "2024-03-31T15:06:02Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "gfoidl",
+                                           "body":  "\u003e If it returns false, that indicates to the consumer that they might try again, in which case they could end up writing the same value multiple times to some of the participants.\r\n\r\nThis would adhere \"at least once\" semantics, and I think that\u0027s the way to go here. \"At most once\" is bad, as data may be missing, and \"exactly once\" is almost impossible to have in such scenarios.\r\n\r\nWhen that behavior is documented, then the consumers need to be aware of this, and ideally the operations should be idempotent so \"at least once\" isn\u0027t a real problem.\r\n\r\n---\r\n\r\nAnother option would be to throw a `NotSuppotedException` for the problematic methods, but IMO that would be bad and violates the principle of least astonishment. \r\nThe option w/o deriving from `ChannelWriter\u003cT\u003e` would be better, but my vote is for the \"at least once\" semantics (see above).",
+                                           "updatedAt":  "2024-03-30T12:26:06Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc54_M69",
+                                           "createdAt":  "2024-04-01T14:20:22Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "stephentoub",
+                                           "body":  "\u003e so \"at least once\" isn\u0027t a real problem.\r\n\r\nI\u0027m missing why duplicated data would be any less of a problem than missing data. If this was just about logging, then sure. But for many other situations, either way you get a wrong answer: if the data was numbers and a consumer was summing the data, missing or duplication both show up as a wrong answer.",
+                                           "updatedAt":  "2024-04-01T14:20:22Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc54_Tco",
+                                           "createdAt":  "2024-04-01T14:38:39Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "gfoidl",
+                                           "body":  "You quoted only a piece of the information 😉 A better quote would be\r\n\r\n\u003e When that behavior is documented, then the consumers need to be aware of this, and ideally the operations should be idempotent so \"at least once\" isn\u0027t a real problem.\r\n\r\nSo just in that context (documented, push consumers towards idempotent implementation) \"at least once\" isn\u0027t a problem. \r\nOtherwise you\u0027re right.\r\n\r\nBut that\u0027s a problem that many (all?) messaging systems have in common.",
+                                           "updatedAt":  "2024-04-01T14:38:39Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc54_WBo",
+                                           "createdAt":  "2024-04-01T14:44:36Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "stephentoub",
+                                           "body":  "\u003e So just in that context (documented, push consumers towards idempotent implementation) \"at least once\" isn\u0027t a problem.\r\n\r\nSure, but I could just as easily say we document that data might be missing, at which point when someone codes to that, \"at most once\" isn\u0027t a problem. :smile:",
+                                           "updatedAt":  "2024-04-01T14:44:36Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc54_fJG",
+                                           "createdAt":  "2024-04-01T15:06:03Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "gfoidl",
+                                           "body":  "True 😄 \r\n\r\nMy PoV is motivated by other messaging systems ([MQTT](https://www.hivemq.com/blog/mqtt-essentials-part-6-mqtt-quality-of-service-levels/), message queues, and so on), and that duplicated detection is easier (e.g. by also having an identifier sent with the data) than detection of missing data.",
+                                           "updatedAt":  "2024-04-01T15:06:03Z"
+                                       }
+                                   ],
+                         "totalCount":  5
+                     },
+        "title":  "[API Proposal]: BroadcastChannelWriter",
+        "labels":  [
+                       "api-suggestion",
+                       "area-System.Threading.Channels"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/101292",
+        "createdAt":  "2024-04-19T14:16:12Z",
+        "number":  101292,
+        "author":  "andreas-eriksson",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHODO_tfw==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "WeihanLi",
+                                            "createdAt":  "2024-06-17T00:31:39Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "tiaan-lg",
+                                            "createdAt":  "2025-02-22T13:43:56Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "Athari",
+                                            "createdAt":  "2025-04-19T21:51:52Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "SeungHuLee",
+                                            "createdAt":  "2025-09-08T05:10:51Z"
+                                        }
+                                    ],
+                          "totalCount":  4
+                      },
+        "updatedAt":  "2024-09-13T09:50:58Z",
+        "body":  "### Background and motivation\n\nThis is a follow up to the UnboundedPrioritizedChannel https://github.com/dotnet/runtime/issues/62761\r\n\r\nIt would be nice to have a prioritized bounded channel so that consumers could work on the highest priority item in a channel while still being able to limit the number of items held in the channel.\r\n\r\ncc: @stephentoub \n\n### API Proposal\n\n```csharp\r\nnamespace System.Threading.Channels;\r\n\r\npublic class Channel\r\n{\r\n+   public static Channel\u003cT\u003e CreateBoundedPrioritized\u003cT\u003e();\r\n+   public static Channel\u003cT\u003e CreateBoundedPrioritized\u003cT\u003e(BoundedPrioritizedChannelOptions\u003cT\u003e options);\r\n}\r\n+public sealed partial class BoundedPrioritizedChannelOptions\u003cT\u003e : BoundedChannelOptions\r\n+{\r\n+   public System.Collections.Generic.IComparer\u003cT\u003e? Comparer { get; set; }\r\n+}\r\n```\r\n\n\n### API Usage\n\n```csharp\r\nvar queue = Channel.CreateBoundedPrioritized\u003cFoo\u003e(100);\r\n```\r\n\n\n### Alternative Designs\n\n_No response_\n\n### Risks\n\nI may be hard to understand what happens when items with higher priority are written to the channel when the channel has reached capacity, but I don\u0027t think there is ant other option that is valid.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOi_uIbQ==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc57MW92",
+                                           "createdAt":  "2024-04-19T15:43:47Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "stephentoub",
+                                           "body":  "\u003e I may be hard to understand what happens when items with higher priority are written to the channel when the channel has reached capacity, but I don\u0027t think there is ant other option that is valid.\r\n\r\nWhat behavior are you proposing, and why aren\u0027t there any other valid behaviors? ",
+                                           "updatedAt":  "2024-04-19T15:43:47Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc57NZ7M",
+                                           "createdAt":  "2024-04-19T18:46:05Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "andreas-eriksson",
+                                           "body":  "On second thought I think it should be possible to implement all FullMode options. The DropNewest could probably drop the least prioritized and the DropOldest could drop the item next in turn.\r\n\r\nIt might however be worth implementing new options as it is not crystal clear what item to drop otherwise.\r\n\r\n```csharp\r\npublic enum BoundedPrioritizedChannelFullMode\r\n{\r\n    /// \u003csummary\u003eWait for space to be available in order to complete the write operation.\u003c/summary\u003e\r\n    Wait,\r\n    /// \u003csummary\u003eRemove and ignore the least prioritized item in the channel in order to make room for the item being written.\u003c/summary\u003e\r\n    DropLeastPrioritized,\r\n    /// \u003csummary\u003eRemove and ignore the most prioritized item in the channel in order to make room for the item being written.\u003c/summary\u003e\r\n    DropMostPrioritized,\r\n    /// \u003csummary\u003eDrop the item being written.\u003c/summary\u003e\r\n    DropWrite\r\n    }\r\n```\r\n",
+                                           "updatedAt":  "2024-04-19T18:46:05Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6LvUh2",
+                                           "createdAt":  "2024-09-11T18:53:09Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Zetanova",
+                                           "body":  "I wrote a priority `ChannelTaskScheduler` for the akka.net project view years ago. \r\nIt can be used as a regular TaskScheduler. \r\n\r\nThe assumption to get the highest priority item by using a simple `Comparer` does not solve all use cases.\r\nIn many queues the priority of an item can depend on waiting-time or better depending on how often it got passed by a higher priority item.\r\n\r\nThere should be a counter for each item that should be passed to the `Comparer` \r\nor a `State` instance to include processing stats. \r\n\r\nExample:\r\n1. An item D with priority-low got passed 5 times by a higher priority item.\r\n2. An item A with priority-high got queued up\r\n3. Both items are compared with the help of the supplied `Comparer`\r\n4. The comparers result is that D has higher priority then A, \r\n    because of some internal decision like `if count \u003e= 5 then highest`\r\n\r\nThe `ChannelTaskScheduler` uses 4 priorities and creates for each priority an dedicated Channel.\r\nBut dequeues depending on how many higher priority items got processed before. \r\nsee [DoWork](https://github.com/akkadotnet/akka.net/blob/6f937b532717372270a6a802cacc2fdac4adfdc0/src/core/Akka/Dispatch/ChannelSchedulerExtension.cs#L268)\r\n\r\n\r\n \r\n\r\n\r\n",
+                                           "updatedAt":  "2024-09-11T18:53:09Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6L6YFf",
+                                           "createdAt":  "2024-09-12T22:14:36Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "julealgon",
+                                           "body":  "What would a valid workaround to this be today? I assume one would need 2 channels: one for \"normal\" priority items, and another for \"high priority\" ones, and then have the consumer check the high priority channel first?",
+                                           "updatedAt":  "2024-09-12T22:14:36Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6L9xIn",
+                                           "createdAt":  "2024-09-13T07:25:54Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODyJ3hg==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "julealgon",
+                                                                               "createdAt":  "2024-09-13T14:05:54Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "Zetanova",
+                                           "body":  "Don\u0027t really know what\u0027s the best/performant solution is, \r\nbut the current one simply lacks the flexibility. \r\n\r\nTo use multiple channels for this feature is only a workaround.\r\nThe awaiting of multiple channels at the same time (ValueTask =\u003e Tasks =\u003e WhenAny)\r\nit\u0027s complex/not optimal.\r\n\r\nI would have two ideas, they could be used both together:\r\n- Include a counter to the channel and tag each item with a position.\r\n  Passed count would be the difference of (current counter - item position)\r\n  The comparer would take then a tuple of (Item,PassedCount) to make it\u0027s comparison \r\n- Add priority buckets into the mix. \r\n  Instead of the comparer, the user need supply then a bucket-id function.\r\n  I think a `Hashed Wheel Timer` concept would be optimal for it. \r\n    \r\n\r\n\r\n",
+                                           "updatedAt":  "2024-09-13T07:25:54Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6L9zUz",
+                                           "createdAt":  "2024-09-13T07:31:01Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Zetanova",
+                                           "body":  "By the way the ordering need to be declared or optional possible to set.\r\nIt is currently not defined, if an absolute or best-effort ordering is used.  \r\n\r\n\r\n",
+                                           "updatedAt":  "2024-09-13T07:31:01Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6L-4ht",
+                                           "createdAt":  "2024-09-13T09:44:59Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Zetanova",
+                                           "body":  "I had one more idea what could be simple to implement.\r\n\r\nBeside to taking an instance of a comparer, the Channel could take a `Comparer Factory`\r\nA new instance of the comparer could be created on the second item write and used until the first item read.\r\nIf necessary, a comparer instance could be created on the second read and used until the first item write.\r\n\r\nWith the combination of the item-position the user could implement a proper priority algorithms \r\nand initialize some state like take the time only once in the constructor.\r\n\r\n\r\n\r\n",
+                                           "updatedAt":  "2024-09-13T09:44:59Z"
+                                       }
+                                   ],
+                         "totalCount":  7
+                     },
+        "title":  "[API Proposal] Channel.CreateBoundedPrioritized",
+        "labels":  [
+                       "api-suggestion",
+                       "area-System.Threading.Channels",
+                       "needs-further-triage"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/111486",
+        "createdAt":  "2025-01-16T08:23:30Z",
+        "number":  111486,
+        "author":  "scharnyw",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-05-13T22:11:36Z",
+        "body":  "### Description\n\nThe XML docs for [`ChannelOptions.AllowSynchronousContinuations`](https://github.com/dotnet/runtime/blob/c75bba356a06855a628b9fed7b2f903e3f71b6db/src/libraries/System.Threading.Channels/src/System/Threading/Channels/ChannelOptions.cs#L39C9-L39C64) says:\n\n\u003e Setting this option to \u003ccode\u003etrue\u003c/code\u003e can provide measurable throughput improvements by avoiding scheduling additional work items.\n\nBut the following benchmark produces surprising results:\n\n```csharp\n[SimpleJob(RunStrategy.Throughput, RuntimeMoniker.Net80)]\n[MemoryDiagnoser]\npublic class ChannelBenchmark\n{\n    private const int Count = 1_000_000;\n\n    private double[] _data;\n\n    [GlobalSetup]\n    public void GlobalSetup()\n    {\n        _data = Enumerable.Range(0, Count)\n            .Select(_ =\u003e Random.Shared.NextDouble() * 10000)\n            .ToArray();\n    }\n\n    [ParamsSource(nameof(ChannelsSource))]\n    public Func\u003cChannel\u003cdouble\u003e\u003e ChannelCreator { get; set; }\n\n    public IEnumerable\u003cFunc\u003cChannel\u003cdouble\u003e\u003e\u003e ChannelsSource =\u003e\n        new[]\n        {\n            () =\u003e Channel.CreateUnbounded\u003cdouble\u003e(new UnboundedChannelOptions\n                { SingleReader = true, SingleWriter = true, AllowSynchronousContinuations = true }),\n            () =\u003e Channel.CreateUnbounded\u003cdouble\u003e(new UnboundedChannelOptions\n                { SingleReader = true, SingleWriter = true, AllowSynchronousContinuations = false }),\n            () =\u003e Channel.CreateBounded\u003cdouble\u003e(new BoundedChannelOptions(Count)\n                { SingleReader = true, SingleWriter = true, AllowSynchronousContinuations = true }),\n            () =\u003e Channel.CreateBounded\u003cdouble\u003e(new BoundedChannelOptions(Count)\n                { SingleReader = true, SingleWriter = true, AllowSynchronousContinuations = false }),\n        };\n\n    [Benchmark]\n    public Task\u003cdouble\u003e Run()\n    {\n        var channel = ChannelCreator();\n        var tcs = new TaskCompletionSource\u003cdouble\u003e();\n\n        Task.Run(async () =\u003e\n        {\n            var total = 0d;\n            await foreach (var output in channel.Reader.ReadAllAsync())\n            {\n                total += output;\n            }\n\n            tcs.SetResult(total);\n        });\n\n        foreach (var input in _data)\n        {\n            channel.Writer.TryWrite(input);\n        }\n\n        channel.Writer.Complete();\n\n        return tcs.Task;\n    }\n}\n```\n\nResults:\n| Method | ChannelCreator       | Mean      | Error    | StdDev   | Gen0     | Gen1     | Gen2     | Allocated   |\n|------- |------------------------ |----------:|---------:|---------:|---------:|---------:|---------:|------------:|\n| Run    | Syste(...)ble]] [65] // sync unbounded  | 121.34 ms | 2.392 ms | 3.431 ms |        - |        - |        - |    38.53 KB |\n| Run    | Syste(...)ble]] [65] // async unbounded |  44.34 ms | 2.355 ms | 6.908 ms |        - |        - |        - |   269.07 KB |\n| Run    | Syste(...)ble]] [65] // sync bounded      |  90.52 ms | 2.052 ms | 5.954 ms | 285.7143 | 285.7143 | 285.7143 |    15216 KB |\n| Run    | Syste(...)ble]] [65] // async bounded    |  86.18 ms | 1.714 ms | 3.502 ms | 571.4286 | 571.4286 | 571.4286 | 16386.46 KB |\n\nIn both bounded and unbounded channels, the async version runs faster than the sync version (at the cost of higher memory consumption).\n\nI get that by setting `AllowSynchronousContinuations` to `true`, the benchmark code essentially becomes single-threaded and that could make processing take longer (as opposed to having one producer and one consumer working concurrently). But given that the \"data consumption\" is only a single increment, I imagine that should be extremely fast (much faster than a context switch, at least), so the fact that the async version runs so much faster is still surprising.\n\nNonetheless, in an attempt to rule out the possibility that the async version runs faster due to having more workers, I ran the following benchmark which is essentially the same thing as above, but running it `Environment.ProcessorCount` times in parallel (`Environment.ProcessorCount` is 20 on my machine):\n\n```csharp\n[SimpleJob(RunStrategy.Throughput, RuntimeMoniker.Net80)]\n[MemoryDiagnoser]\npublic class ChannelBenchmark\n{\n    private const int Count = 1_000_000;\n\n    private double[] _data;\n\n    [GlobalSetup]\n    public void GlobalSetup()\n    {\n        _data = Enumerable.Range(0, Count)\n            .Select(_ =\u003e Random.Shared.NextDouble() * 10000)\n            .ToArray();\n    }\n\n    [ParamsSource(nameof(ChannelsSource))]\n    public Func\u003cChannel\u003cdouble\u003e\u003e ChannelCreator { get; set; }\n\n    public IEnumerable\u003cFunc\u003cChannel\u003cdouble\u003e\u003e\u003e ChannelsSource =\u003e\n        new[]\n        {\n            () =\u003e Channel.CreateUnbounded\u003cdouble\u003e(new UnboundedChannelOptions\n                { SingleReader = true, SingleWriter = true, AllowSynchronousContinuations = true }),\n            () =\u003e Channel.CreateUnbounded\u003cdouble\u003e(new UnboundedChannelOptions\n                { SingleReader = true, SingleWriter = true, AllowSynchronousContinuations = false }),\n            () =\u003e Channel.CreateBounded\u003cdouble\u003e(new BoundedChannelOptions(Count)\n                { SingleReader = true, SingleWriter = true, AllowSynchronousContinuations = true }),\n            () =\u003e Channel.CreateBounded\u003cdouble\u003e(new BoundedChannelOptions(Count)\n                { SingleReader = true, SingleWriter = true, AllowSynchronousContinuations = false }),\n        };\n\n    [Benchmark]\n    public async Task\u003cdouble\u003e Run()\n    {\n        var tasks = Enumerable.Range(0, Environment.ProcessorCount)\n            .Select(_ =\u003e RunOnce(ChannelCreator(), _data))\n            .ToArray();\n\n        var totals = await Task.WhenAll(tasks);\n        return totals.Sum();\n    }\n\n    private static Task\u003cdouble\u003e RunOnce(Channel\u003cdouble\u003e channel, double[] data)\n    {\n        var tcs = new TaskCompletionSource\u003cdouble\u003e();\n\n        Task.Run(async () =\u003e\n        {\n            var total = 0d;\n            await foreach (var output in channel.Reader.ReadAllAsync())\n            {\n                total += output;\n            }\n\n            tcs.SetResult(total);\n        });\n\n        foreach (var input in data)\n        {\n            channel.Writer.TryWrite(input);\n        }\n\n        channel.Writer.Complete();\n\n        return tcs.Task;\n    }\n}\n```\n\nThe results are still in favor of the async versions:\n\n| Method | ChannelCreator       | Mean       | Error    | StdDev    | Gen0       | Gen1       | Gen2       | Allocated |\n|------- |--------------------- |-----------:|---------:|----------:|-----------:|-----------:|-----------:|----------:|\n| Run    | Syste(...)ble]] [65] // sync unbounded   | 2,290.5 ms | 29.86 ms |  24.94 ms |          - |          - |          - |      1 MB |\n| Run    | Syste(...)ble]] [65] // async unbounded |   940.9 ms | 34.49 ms | 101.71 ms |          - |          - |          - |   1.74 MB |\n| Run    | Syste(...)ble]] [65] // sync bounded       | 1,137.0 ms | 27.12 ms |  78.69 ms |  7000.0000 |  7000.0000 |  7000.0000 | 312.04 MB |\n| Run    | Syste(...)ble]] [65] // async bounded     | 1,093.4 ms | 23.37 ms |  68.92 ms | 16000.0000 | 16000.0000 | 16000.0000 | 320.05 MB |\n\n### Configuration\n\nBenchmarkDotNet v0.14.0, Windows 11 (10.0.22631.4602/23H2/2023Update/SunValley3)\n12th Gen Intel Core i7-12800H, 1 CPU, 20 logical and 14 physical cores\n.NET SDK 9.0.100-preview.5.24307.3\n  [Host]     : .NET 8.0.10 (8.0.1024.46610), X64 RyuJIT AVX2\n  Job-RRGDGB : .NET 8.0.10 (8.0.1024.46610), X64 RyuJIT AVX2\n\nRuntime=.NET 8.0  RunStrategy=Throughput",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOmqqW6g==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc6aqpbq",
+                                           "createdAt":  "2025-01-16T08:40:46Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-system-threading-channels\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2025-01-16T08:40:46Z"
+                                       }
+                                   ],
+                         "totalCount":  1
+                     },
+        "title":  "Setting AllowSynchronousContinuations to true significantly reduces throughput for System.Threading.Channels.Channel",
+        "labels":  [
+                       "area-System.Threading.Channels",
+                       "tenet-performance"
+                   ]
+    }
+]

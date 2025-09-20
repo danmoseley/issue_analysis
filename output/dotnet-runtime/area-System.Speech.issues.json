@@ -1,0 +1,775 @@
+﻿[
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/81692",
+        "createdAt":  "2023-02-06T11:47:18Z",
+        "number":  81692,
+        "author":  "premun",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-07-26T10:40:37Z",
+        "body":  "### Context\r\n\r\nThe key goal of source-build is to satisfy the official packaging rules of commonly used Linux distributions, such as [Fedora](https://fedoraproject.org/wiki/Packaging:Guidelines) and [Debian](https://www.debian.org/doc/manuals/maint-guide/build.en.html). Many Linux distributions have similar rules. These rules tend to have two main principles: consistent reproducibility, and source code for everything.\r\n\r\nIn order to support the \"source code for everything\" requirement, binary files are not allowed in product repositories. Aside from, binaries that can be created during the build process from source are better not to be checked in as one of the main goals of git is that humans can review the code changes.\r\n\r\n### Questions\r\n\r\n- What scenario / which RID are these files used for?\r\n- Are these files necessary for a successful build of the .NET SDK?\r\n- If they are is, can they be removed from the repository and replaced with a source and process that synthesizes them during build?\r\n\r\n### Goal\r\n\r\nWe should comply with the source build requirements and get rid of these binaries. Based on the discussion [here](https://teams.microsoft.com/l/message/19:977f68c19ca2422db22072560f93ae27@thread.skype/1675076942682?tenantId=72f988bf-86f1-41af-91ab-2d7cd011db47\u0026groupId=014ca51d-be57-47fa-9628-a15efcc3c376\u0026parentMessageId=1675076942682\u0026teamName=dotnet%2Fruntime%20repo\u0026channelName=General\u0026createdTime=1675076942682), it seems we might have following options:\r\n- These can be serialized from json/xml https://github.com/dotnet/runtime/blob/main/src/libraries/System.Speech/src/Internal/AlphabetConverter.cs#L238-L258\r\n- We can move this project into https://github.com/dotnet/maintenance-packages in case it\u0027s not part of the SDK.\r\n\r\n### Possible workarounds\r\n\r\nAt the moment, we only source-build Linux x64/arm64 so if this file is required for other RIDs, it can be temporarily removed from the source build. This is only in case it\u0027s difficult to replace the file with source. Other platforms will be supported by source build in the future though, so this problem will re-surface in case we go around it this way.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOY8gMxQ==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5Uk4ad",
+                                           "createdAt":  "2023-02-06T11:47:20Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "I couldn\u0027t figure out the best area label to add to this issue. If you have write-permissions please help me learn by adding exactly one [area label](https://github.com/dotnet/runtime/blob/master/docs/area-owners.md).",
+                                           "updatedAt":  "2023-02-06T11:47:20Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5UlaDY",
+                                           "createdAt":  "2023-02-06T13:34:23Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @ericstj, @jeffhandley\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Context\r\n\r\nThe key goal of source-build is to satisfy the official packaging rules of commonly used Linux distributions, such as [Fedora](https://fedoraproject.org/wiki/Packaging:Guidelines) and [Debian](https://www.debian.org/doc/manuals/maint-guide/build.en.html). Many Linux distributions have similar rules. These rules tend to have two main principles: consistent reproducibility, and source code for everything.\r\n\r\nIn order to support the \"source code for everything\" requirement, binary files are not allowed in product repositories. Aside from, binaries that can be created during the build process from source are better not to be checked in as one of the main goals of git is that humans can review the code changes.\r\n\r\n### Questions\r\n\r\n- What scenario / which RID are these files used for?\r\n- Are these files necessary for a successful build of the .NET SDK?\r\n- If they are is, can they be removed from the repository and replaced with a source and process that synthesizes them during build?\r\n\r\n### Goal\r\n\r\nWe should comply with the source build requirements and get rid of these binaries. Based on the discussion [here](https://teams.microsoft.com/l/message/19:977f68c19ca2422db22072560f93ae27@thread.skype/1675076942682?tenantId=72f988bf-86f1-41af-91ab-2d7cd011db47\u0026groupId=014ca51d-be57-47fa-9628-a15efcc3c376\u0026parentMessageId=1675076942682\u0026teamName=dotnet%2Fruntime%20repo\u0026channelName=General\u0026createdTime=1675076942682), it seems we might have following options:\r\n- These can be serialized from json/xml https://github.com/dotnet/runtime/blob/main/src/libraries/System.Speech/src/Internal/AlphabetConverter.cs#L238-L258\r\n- We can move this project into https://github.com/dotnet/maintenance-packages in case it\u0027s not part of the SDK.\r\n\r\n### Possible workarounds\r\n\r\nAt the moment, we only source-build Linux x64/arm64 so if this file is required for other RIDs, it can be temporarily removed from the source build. This is only in case it\u0027s difficult to replace the file with source. Other platforms will be supported by source build in the future though, so this problem will re-surface in case we go around it this way.\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003epremun\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`untriaged`, `area-System.Speech`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2023-02-06T13:34:23Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5Uum8-",
+                                           "createdAt":  "2023-02-07T21:50:36Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ericstj",
+                                           "body":  "\u003e We can move this project into https://github.com/dotnet/maintenance-packages in case it\u0027s not part of the SDK.\r\n\r\nCan\u0027t we achieve the same without actually moving it?  This library is only built for shipping as a nuget package and should not be consumed by any up-stack repositories.  We can just omit it from source build.  cc @ViktorHofer ",
+                                           "updatedAt":  "2023-02-07T21:50:36Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5Uusmq",
+                                           "createdAt":  "2023-02-07T22:09:11Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ViktorHofer",
+                                           "body":  "Right, we already exclude other projects during source build and moving the project to another repo to solve this issue doesn\u0027t sound right. ",
+                                           "updatedAt":  "2023-02-07T22:09:11Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5UxOIg",
+                                           "createdAt":  "2023-02-08T08:04:59Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ViktorHofer",
+                                           "body":  "Just add the project to these two places:\r\n- https://github.com/dotnet/runtime/blob/main/src/libraries/oob-src.proj#L31-L33\r\n- https://github.com/dotnet/runtime/blob/main/src/libraries/oob-all.proj#L22-L25",
+                                           "updatedAt":  "2023-02-08T08:04:59Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5UxdL4",
+                                           "createdAt":  "2023-02-08T08:57:56Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "premun",
+                                           "body":  "Thanks! What would happen if I just cloaked it from the VMR so that it wouldn\u0027t be present? Is the project referenced somewhere or the behaviour is \"build all .csprojs you can find\"? Would it need to be rather kept but excluded through these proj files only with the binaries cloaked away?",
+                                           "updatedAt":  "2023-02-08T08:57:56Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5Uxna1",
+                                           "createdAt":  "2023-02-08T09:28:33Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ViktorHofer",
+                                           "body":  "\u003e Thanks! What would happen if I just cloaked it from the VMR so that it wouldn\u0027t be present?\r\n\r\nAre such binaries prohibited, even if they are unused? Asking as excluding the ProjectReference to System.Speech from oob-src.proj and oob-all.proj will make them (.upsmap) unused.",
+                                           "updatedAt":  "2023-02-08T09:28:33Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5Ux93T",
+                                           "createdAt":  "2023-02-08T10:38:06Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "premun",
+                                           "body":  "I think it\u0027s quite impossible for RedHat to tell which files are used during the actual build so I think it\u0027s reasonable for them to scan for binaries and expect that whatever is not used is not there.\r\n\r\nThey do have exemptions for test folders and other so the rules are quite blurry actually and of course you could technically put a binary in a test folder and use it from a regular build so yeah... But regardless of that, if we can omit binaries, that we don\u0027t use, from a repo, I think we just should?",
+                                           "updatedAt":  "2023-02-08T10:38:06Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5UyCys",
+                                           "createdAt":  "2023-02-08T10:54:30Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ViktorHofer",
+                                           "body":  "I\u0027m just concerned about the case in .NET 9 when the VMR build will replace the official build (including on Windows) and we suddenly can\u0027t build that library anymore. If those files are just an implementation detail and don\u0027t leak to the customer, we should just relace them with non binary formats (what you suggested as an option in the top post).",
+                                           "updatedAt":  "2023-02-08T10:54:30Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5U0B1T",
+                                           "createdAt":  "2023-02-08T16:46:32Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODc5UOw==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "omajid",
+                                                                               "createdAt":  "2024-04-03T18:57:26Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "ericstj",
+                                           "body":  "I see it as somewhat general goodness to have a text sources for binary files since they\u0027re more human readable and change-trackable.  I put together a quick tool that can reproduce the binary content from JSON as suggested.  \r\nhttps://gist.github.com/ericstj/6eae8007ba05fdf302c09baaa6ed8540\r\n\r\nI\u0027m not too happy with the verbosity of the json form, probably would prefer CSV or something similar.  We might even be able to just convert to some static C# with lazily evaluated construction of these tables.\r\n\r\nWe discussed this in the VMR sync today and agreed that these binary resource files of well understood format shouldn\u0027t be blocking for our Linux partners - they haven\u0027t been so far.  If that changes then we can add a build step like this that generates the binary form from text.",
+                                           "updatedAt":  "2023-02-08T16:50:12Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5U4JyE",
+                                           "createdAt":  "2023-02-09T11:03:13Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "premun",
+                                           "body":  "Thank you again, @ericstj, for taking the time!",
+                                           "updatedAt":  "2023-02-09T11:03:13Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5jyAzF",
+                                           "createdAt":  "2023-08-10T23:37:14Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ericstj",
+                                           "body":  "Moving this to 9.0 since it\u0027s not blocking.",
+                                           "updatedAt":  "2023-08-10T23:37:14Z"
+                                       }
+                                   ],
+                         "totalCount":  12
+                     },
+        "title":  "`.upsmap` binaries in `System.Speech`",
+        "labels":  [
+                       "enhancement",
+                       "source-build",
+                       "Priority:3",
+                       "area-System.Speech"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/97822",
+        "createdAt":  "2024-02-01T15:40:05Z",
+        "number":  97822,
+        "author":  "NoahCxrest",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-03-08T17:04:01Z",
+        "body":  "Hi all,\r\n\r\nThis issue was originally in a discussion post, however, I have determined that the root of this issue is the .NET System.Speech framework itself.\r\nAll helpful information is in the discussion; however, If I missed something important, please let me know and I will get back to you as soon as possible!\r\n\r\n_Originally posted by @NoahCxrest in https://github.com/dotnet/runtime/discussions/97723_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOdmEXLg==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5yiYl7",
+                                           "createdAt":  "2024-02-01T15:40:12Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @tommcdon\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\nHi all,\r\n\r\nThis issue was originally in a discussion post, however, I have determined that the root of this issue is the .NET System.Speech framework itself.\r\nAll helpful information is in the discussion; however, If I missed something important, please let me know and I will get back to you as soon as possible!\r\n\r\n_Originally posted by @NoahCxrest in https://github.com/dotnet/runtime/discussions/97723_\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003eNoahCxrest\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-Diagnostics-coreclr`, `untriaged`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2024-02-01T15:40:12Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5yid3b",
+                                           "createdAt":  "2024-02-01T15:50:58Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "NoahCxrest",
+                                           "body":  "Tagging people in System.Speech area: \r\n@ericstj \r\n@jeffhandley ",
+                                           "updatedAt":  "2024-02-01T15:50:58Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5yi0og",
+                                           "createdAt":  "2024-02-01T16:34:10Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ericstj",
+                                           "body":  "@NoahCxrest this issue needs a simple isolated repro that illustrates the problem you are reporting as an issue with the library.  The snippets shared in the linked discussion are not complete nor show which streams are in use here.  For example - if any of those streams are MemoryStreams it would explain your observations.\r\n\r\nYou can check out https://learn.microsoft.com/en-us/dotnet/core/diagnostics/debug-memory-leak for help in diagnosing a memory leak in your application.  If you\u0027re able to isolate the problem down to a simple repro that demonstrates an issue with the library we can have a look.",
+                                           "updatedAt":  "2024-02-01T16:34:10Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5yi0yY",
+                                           "createdAt":  "2024-02-01T16:34:28Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "This issue has been marked `needs-author-action` and may be missing some important information.",
+                                           "updatedAt":  "2024-02-01T16:34:28Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5yjUtg",
+                                           "createdAt":  "2024-02-01T17:39:06Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-system-speech\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\nHi all,\r\n\r\nThis issue was originally in a discussion post, however, I have determined that the root of this issue is the .NET System.Speech framework itself.\r\nAll helpful information is in the discussion; however, If I missed something important, please let me know and I will get back to you as soon as possible!\r\n\r\n_Originally posted by @NoahCxrest in https://github.com/dotnet/runtime/discussions/97723_\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003eNoahCxrest\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-Diagnostics-coreclr`, `area-System.Speech`, `needs-author-action`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003eFuture\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2024-02-01T17:39:06Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5yjVQ9",
+                                           "createdAt":  "2024-02-01T17:40:24Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "NoahCxrest",
+                                           "body":  "Hi, working on getting that isolated repro for you now. Thanks for the quick reply.",
+                                           "updatedAt":  "2024-02-01T17:40:24Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5yjtfN",
+                                           "createdAt":  "2024-02-01T18:32:07Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "NoahCxrest",
+                                           "body":  "@ericstj \nWe solved the constant memory growth while running by just setting the GC mode from server to workstation. But now we still have the issue that when a client disconnects and after everything is disposed (including the SpeechRecognitionEngine) the memory doesnt actually get freed. It just slightly drops because the buffers aren\u0027t in use anymore, but the actual SRE itself doesnt seem to dispose correctly, any ideas as to how that could be solved?\n\nRepository with a reproduction of my issue: https://github.com/1FriendlyDoge/SRELeakReproduction",
+                                           "updatedAt":  "2024-02-01T18:32:07Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5ykU7l",
+                                           "createdAt":  "2024-02-01T19:56:16Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ericstj",
+                                           "body":  "You\u0027re creating some very large arrays in this sample - are you sure you aren\u0027t just putting things on the LOH and the size increase you see is just the growth of the GH heap that hasn\u0027t been returned to the OS?  How did you determine that there\u0027s an actual memory leak here?\r\n\r\nYou could try to reduce the sample down to the specific actions with the API you think might be causing a leak, then show unbounded memory growth by just performing those actions.",
+                                           "updatedAt":  "2024-02-01T19:56:16Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5ykdVA",
+                                           "createdAt":  "2024-02-01T20:17:33Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "NoahCxrest",
+                                           "body":  "\u003e You\u0027re creating some very large arrays in this sample - are you sure you aren\u0027t just putting things on the LOH and the size increase you see is just the growth of the GH heap that hasn\u0027t been returned to the OS?  How did you determine that there\u0027s an actual memory leak here?\n\u003e \n\u003e \n\u003e \n\u003e You could try to reduce the sample down to the specific actions with the API you think might be causing a leak, then show unbounded memory growth by just performing those actions.\n\n@ericstj \n\nEven after the speech engine is already disposed, memory usage does not go down",
+                                           "updatedAt":  "2024-02-01T20:17:33Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5ytBDM",
+                                           "createdAt":  "2024-02-02T17:50:43Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ericstj",
+                                           "body":  "Right, but a managed GC keeps pages alive - there\u0027s also potential fragmentation - so just looking at memory usage isn\u0027t a sufficient indication.  We also know nothing about the memory usage of underlying Windows speech APIs in the OS and it\u0027s not uncommon to see memory growth on first use of a component as modules are loaded / static data is initialized / etc.  There are no guarantees that that memory is freed up when you stop using an instance of such a component.\r\n\r\nTo demonstrate a *leak* you should reduce it down to a small repo that can show repeated operations result in unbounded growth.  The repro should include the actual steps and measurements used to observe that growth.",
+                                           "updatedAt":  "2024-02-02T17:52:07Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5ytBJq",
+                                           "createdAt":  "2024-02-02T17:50:57Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "This issue has been marked `needs-author-action` and may be missing some important information.",
+                                           "updatedAt":  "2024-02-02T17:50:57Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5ytY8j",
+                                           "createdAt":  "2024-02-02T18:59:24Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "NoahCxrest",
+                                           "body":  "@ericstj \r\nThanks for your continued contribution, I may be missing something, but I don\u0027t think I can reduce it further without the repro not working.",
+                                           "updatedAt":  "2024-02-03T01:51:04Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5ytfMc",
+                                           "createdAt":  "2024-02-02T19:18:33Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "NoahCxrest",
+                                           "body":  "Even after ~200 objects of the SpeechRecognitionEngine are no longer in use and should be disposed; memory doesnt actually get freed. This results in a usage of 2GB for just objects that are no longer being used. This shows up as unmanaged memory.",
+                                           "updatedAt":  "2024-02-05T16:40:43Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5y7XhY",
+                                           "createdAt":  "2024-02-05T21:55:51Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "NoahCxrest",
+                                           "body":  "I\u0027ve spent part of yesterday and a majority of today trying to reduce the size of the repro and diagnose further, got almost no leads. This is a really tricky issue.\nI ran a test for 30 minutes, none of the memory was freed in any of that time. Keeps going up until it crashes.",
+                                           "updatedAt":  "2024-02-05T21:56:59Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5zPBuO",
+                                           "createdAt":  "2024-02-08T03:47:52Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ericstj",
+                                           "body":  "I tried going about this a different direction - here\u0027s a sample that shows continued use of speech recognition without a leak.\r\nhttps://gist.github.com/ericstj/75f72c76f93c104a6483a88e4c262887\r\n\r\nA couple distinct things to notice 1) no use of networking -- have you vetted that your networking setup is leak free?   You could probably remove all the use of speech from your sample to see if you still repro the leak.  2) no use of `SetInputToAudioStream` that API could be a cause of a problem but I haven\u0027t looked closer yet.\r\n\r\nTo be honest - we aren\u0027t the experts on System.Speech.  The component was ported from WPF for compatibility only.  \r\nFrom https://github.com/dotnet/runtime/pull/45941\r\n\u003e We are porting it to enable existing code that uses System.Speech on .NET Framework to continue to work on .NET Core, including within Powershell Core scripts. This is a Windows-only legacy tech that will not receive new investment or features.\r\n\r\nI\u0027ll try to help out as I get some free cycles but we\u0027ll need some pretty definitive evidence of a leak and fix to take a change.",
+                                           "updatedAt":  "2024-02-08T03:47:52Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5zSLC9",
+                                           "createdAt":  "2024-02-08T13:38:43Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "NoahCxrest",
+                                           "body":  "@ericstj \n\u003e no use of SetInputToAudioStream that API could be a cause of a problem but I haven\u0027t looked closer yet.\n\nI observed this as well. A note that local never had a leak, only when I ran it on a server did it have a leak. \nThe network is leak free, I ran the reproduction without starting the recognizer and it didn\u0027t leak. ",
+                                           "updatedAt":  "2024-02-08T13:38:43Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5zTUkK",
+                                           "createdAt":  "2024-02-08T16:04:49Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ericstj",
+                                           "body":  "Could you test out that theory by removing the networking component completely, removing your bufferedByteStream, and just using a MemoryStream with some buffer similar to what you\u0027d pass to this server?  Do that in a loop and see if it still leaks?\r\n\r\nThat would eliminate the networking component and your custom stream.  If we see that still leaking it points to an issue with `SetInputToAudioStream` and dispose.",
+                                           "updatedAt":  "2024-02-08T16:04:49Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5zU7m1",
+                                           "createdAt":  "2024-02-08T20:16:00Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "NoahCxrest",
+                                           "body":  "@ericstj \nThanks for your input, I am going to be on vacation for the next two weeks. Once I\u0027m back, I will try out your idea and give a good response back.\n\nAgain, thank you for your help so far. I almost lost hope in this project as a whole. 😂",
+                                           "updatedAt":  "2024-02-08T20:16:00Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc51_Qb6",
+                                           "createdAt":  "2024-03-05T19:49:08Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "NoahCxrest",
+                                           "body":  "@ericstj I am so sorry for the delay on my response.\nHowever, I am back now and ready to keep investigating this.\nI still strongly believe that this is a problem with the SpeechRecognitonEngine itself as I have researched it even more. \nCould you please let me know what you think I should try out? ",
+                                           "updatedAt":  "2024-03-05T19:49:08Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc52YRcu",
+                                           "createdAt":  "2024-03-08T17:04:00Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "NoahCxrest",
+                                           "body":  "Any updates on this? Still haven\u0027t gotten any leads from personal research. ",
+                                           "updatedAt":  "2024-03-08T17:04:00Z"
+                                       }
+                                   ],
+                         "totalCount":  20
+                     },
+        "title":  "Memory Leak inside of System.Speech \u0026 Microsoft.Speech",
+        "labels":  [
+                       "needs-further-triage",
+                       "area-System.Speech"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/101487",
+        "createdAt":  "2024-04-24T11:04:47Z",
+        "number":  101487,
+        "author":  "vsfeedback",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-07-18T05:59:14Z",
+        "body":  "_This issue has been moved from [a ticket on Developer Community](https://developercommunity.visualstudio.com/t/Microsoft-Speech-Synthesizer-defualt-fem/10631212)._\n\n---\n[severity:It\u0027s more difficult to complete my work]\nIt seems there is an issue with the windows default female voice recognizing pronunciation specified in a lexicon file. To replicate, follow the example outlined in [Microsofts AddLexicon Method documentation](https://learn.microsoft.com/en-us/dotnet/api/system.speech.synthesis.speechsynthesizer.addlexicon?view=dotnet-plat-ext-8.0) and modify the voice to be female via the SelectVoice or SelectVoiceByHints method.\n\nThere is an old stack overflow post with an answer that dives into this issue that might help : https://stackoverflow.com/questions/11529164/how-do-i-use-a-lexicon-with-speechsynthesizer\n\n\n\n---\n### Original Comments\n\n#### Feedback Bot on 4/7/2024, 04:05 AM: \n\n(private comment, text removed)\n\n---\n### Original Solutions\n(no solutions)",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOe7SUVQ==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc57tJRV",
+                                           "createdAt":  "2024-04-24T17:03:44Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-system-speech\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2024-04-24T17:03:44Z"
+                                       }
+                                   ],
+                         "totalCount":  1
+                     },
+        "title":  "Microsoft Speech Synthesizer defualt female voice lexicon file recognition",
+        "labels":  [
+                       "area-System.Speech"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/108991",
+        "createdAt":  "2024-10-17T17:48:57Z",
+        "number":  108991,
+        "author":  "vsfeedback",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-10-20T01:31:26Z",
+        "body":  "_This issue has been moved from [a ticket on Developer Community](https://developercommunity.visualstudio.com/t/When-using-the-voice-playback-API-provid/10729263)._\n\n---\n[severity:It\u0027s more difficult to complete my work]\n在使用SpeechSynthesizer.GetInstalledVoices()获取系统中的可用语音时只能获取到系统默认英文语音包和当前语言语音包,无法获取到我在windows设置在讲述人功能中下载的其他语音包 这使我很困惑\n\n---\n\nAI Summary (1 comments)\nIssue Summary:\n\nA user reported difficulty in retrieving all installed voice packs using the SpeechSynthesizer.GetInstalledVoices() API in Visual Studio. Specifically, they can only access the default English voice pack and the current language voice pack, but cannot retrieve other voice packs downloaded via the Windows Narrator settings. This issue complicates their work, prompting confusion. The feedback has been forwarded to the engineering team for further evaluation.\n\nReproduction Steps:\n\nUse SpeechSynthesizer.GetInstalledVoices() in a Visual Studio project.\nNote that only the default English voice and the current language voice are retrieved.\nVoice packs downloaded from Windows Narrator are missing.\n\n### Original Comments\n\n#### Feedback Bot on 8/22/2024, 08:26 PM: \n\n\u003cp\u003eWe have directed your feedback to the appropriate engineering team for further evaluation. The team will review the feedback and notify you about the next steps.\u003c/p\u003e\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOkEB-7Q==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc6QQH7t",
+                                           "createdAt":  "2024-10-17T17:50:36Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-system-speech\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2024-10-17T17:50:36Z"
+                                       }
+                                   ],
+                         "totalCount":  1
+                     },
+        "title":  "When using the voice playback API provided by Microsoft, I cannot get all the installed voice packets in the system",
+        "labels":  [
+                       "question",
+                       "needs-further-triage",
+                       "area-System.Speech"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/113484",
+        "createdAt":  "2025-03-13T17:31:05Z",
+        "number":  113484,
+        "author":  "vsfeedback",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-03-14T04:44:09Z",
+        "body":  "_This issue has been moved from [a ticket on Developer Community](https://developercommunity.visualstudio.com/t/System-Speech-Synthesis-and-Application-/10841768)._\n\n---\nHi,\n\nI have developed an ASP.Net web application that streams audio content using System.Speech.Synthesis to a HTML Audio control in a browser, which works locally on Windows 10/IIS. The local website in IIS has its own Application Pool and run the identity runs as ApplicationPoolIdentity\n\nWhen this web application is then deployed to a domain-controlled Windows Server 2019 Datacenter the functionality doesn’t work.\n\nAfter some investigation if I change the IIS website application pool identity to NetworkService, the functionality works.\n\nI would like to keep the identity as ApplicationPoolIdentity.\n\nAre then specific configurations or permissions that I can update to enable this to work with ApplicationPoolIdentity for the Windows Server 2019 Datacenter?\n\nThanks in advance \n\n\n---\n### Original Comments\n\n#### Feedback Bot on 2/4/2025, 09:42 PM: \n\n\u003cp\u003eWe have directed your feedback to the appropriate engineering team for further evaluation. The team will review the feedback and notify you about the next steps.\u003c/p\u003e\n\n#### Adam Derbyshire on 2/25/2025, 04:53 AM: \n\n(private comment, text removed)\n#### Eric St. John [MSFT] on 3/13/2025, 10:30 AM: \n\n\u003cp\u003eWe have converted this feedback item to a suggestion. This change was done to better reflect the feedback’s nature. It will allow other developers to easily find it and engage on it.\u003c/p\u003e\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOolTPMA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc6iQlJs",
+                                           "createdAt":  "2025-03-13T17:57:07Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-system-speech\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2025-03-13T17:57:07Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6iVM8w",
+                                           "createdAt":  "2025-03-14T04:43:45Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ericstj",
+                                           "body":  "Seems to be an existing issue with the underlying speech API.  You can check https://learn.microsoft.com/en-us/previous-versions/windows/desktop/ms717236(v=vs.85) for support of this API.  Keep in mind that System.Speech is provided mainly for compatibility with applications moving from .NETFramework.  I did find mention of https://stackoverflow.com/questions/44783315/what-permissions-are-required-to-use-system-speech-synthesis - this might help.  Perhaps the ApplicationPoolIdentity needs a user profile created to have a voice configured.\n\nThat said - Windows recommends https://learn.microsoft.com/en-us/azure/ai-services/speech-service/speech-sdk for this task.  You might give that a try.",
+                                           "updatedAt":  "2025-03-14T04:43:45Z"
+                                       }
+                                   ],
+                         "totalCount":  2
+                     },
+        "title":  "System Speech Synthesis and Application Pool Identity",
+        "labels":  [
+                       "question",
+                       "area-System.Speech"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/118819",
+        "createdAt":  "2025-08-17T13:50:26Z",
+        "number":  118819,
+        "author":  "rampaa",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-08-31T17:51:11Z",
+        "body":  "### Description\n\nWhen using `System.Speech` with a voice provided by [SAPIForVOICEVOX](https://github.com/shigobu/SAPIForVOICEVOX), `System.Speech` crashes the entire program. I have tried calling the `SpeechSynthesizer.Speak` and `SpeechSynthesizer.SpeakAsync` methods within a `try-catch` block to to at least prevent the crash, but it did not work.\n\nNote that these voices function as expected when used with Windows Narrator without any issues whatsoever.\n\nHere\u0027s the exception I get:\n`Unhandled exception at 0x00007FFA2C1B1A21 (ntdll.dll) in JL.exe.12272.dmp: Unknown __fastfail() status code: 0x0000000000000030.`\n\nHere\u0027s the dump file in case it\u0027s useful:\nhttps://uploadnow.io/en/share?utm_source=P8d7wy4\n\n\n### Reproduction Steps\n\n1. Install [VOICEVOX](https://github.com/VOICEVOX/voicevox/releases/download/0.24.2/VOICEVOX.Web.Setup.0.24.2.exe) and [SAPIForVOICEVOX](https://github-com.translate.goog/shigobu/SAPIForVOICEVOX?_x_tr_sl=ja\u0026_x_tr_tl=en\u0026_x_tr_hl=en). *(Be sure to read the README of SAPIForVOICEVOX)*\n\n2. Make sure the installed voice appears under:\n   **Windows Settings → Ease of Access → Narrator → Personalize Narrator\u0027s voice → Choose a voice** dropdown menu.\n\n3. Turn on Windows Narrator to confirm that it works with a voice provided by SAPIForVOICEVOX.\n\n4. Try using the same voice with `System.Speech`, using code similar to the following:\n\n    ```csharp\n    try\n    {\n        SpeechSynthesizer speechSynthesizer = new();\n        speechSynthesizer.SelectVoice(voiceName); // The voice you\u0027ve tested with Narrator, e.g., \"VOICEVOX 四国めたん ささやき\"\n        speechSynthesizer.SetOutputToDefaultAudioDevice();\n        speechSynthesizer.Speak(\"テスト\");\n    }\n    catch (Exception ex)\n    {\n        Debug.WriteLine(ex.Message); // Program crashes before reaching this line, boohoo!\n    }\n    ```\n\n5. Observe the crash.\n\n\n### Expected behavior\n\n`System.Speech` should be able to use voices provided by SAPIForVOICEVOX, just as Windows Narrator does, and it should definitely not cause the entire program to crash.\n\n### Actual behavior\n\n`System.Speech` causes the entire program to crash, and even a `try-catch` block does not prevent the crash.\n\n### Regression?\n\n_No response_\n\n### Known Workarounds\n\n_No response_\n\n### Configuration\n\n\u003e Which version of .NET is the code running on?\n\n.NET 9\n\n\u003eWhat OS and version, and what distro if applicable?\n\nWindows 10, 22H2\n\n\u003eWhat is the architecture (x64, x86, ARM, ARM64)?\n\nx64\n\n### Other information\n\nUpon examining the dump file, it seems that the exception occurs in the `GetOutputFormat` method of the `TtsProxySapi` class. The issue arises at line 27, where `_sapiEngine.GetOutputFormat(ref pTargetFmtId, preferredFormat, out pOutputFormatId, out ppCoMemOutputWaveFormatEx)` is invoked.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOvma5Cg==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc6-ZrkK",
+                                           "createdAt":  "2025-08-17T13:56:32Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-system-speech\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2025-08-17T13:56:32Z"
+                                       }
+                                   ],
+                         "totalCount":  1
+                     },
+        "title":  "Unhandled exception thrown by System.Speech when using it with SAPIForVOICEVOX",
+        "labels":  [
+                       "help wanted",
+                       "needs-further-triage",
+                       "area-System.Speech"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/119531",
+        "createdAt":  "2025-09-10T12:11:22Z",
+        "number":  119531,
+        "author":  "vsfeedback",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-09-10T12:14:10Z",
+        "body":  "_This issue has been moved from [a ticket on Developer Community](https://developercommunity.visualstudio.com/t/A-Turkish-sound-library-is-missing-from-/10958943)._\n\n---\n[severity:It\u0027s more difficult to complete my work]\nA Turkish sound library is missing from the C# Speech library. I can\u0027t use the Speech library in my language.\n\nThe code I developed:\n\nSystem.Globalization.CultureInfo culture = new System.Globalization.CultureInfo(\"en-US\");\nSystem.Speech.Recognition.SpeechRecognitionEngine speech_recognizationEngine = new SpeechRecognitionEngine(culture);\nGrammarBuilder gb = new GrammarBuilder();\nGB. Culture = culture;\nspeech_recognizationEngine.LoadGrammar(new Grammar(gb));\nrichTextBox.Text = rr. Text;\nSystem.Speech.Synthesis.SpeechSynthesizer speech_synt = new System.Speech.Synthesis.SpeechSynthesizer();\nspeech_synt. Speak(richTextBoxSpeak.Text);\n\nCommands do not recognize Turkish. I can improve this code further, but it doesn\u0027t recognize my language as tr-TR.\n\n---\n### Original Comments\n\n#### Feedback Bot on 9/1/2025, 04:29 AM: \n\n\u003cp\u003eWe have directed your feedback to the appropriate engineering team for further evaluation. The team will review the feedback and notify you about the next steps.\u003c/p\u003e\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOwy-0Iw==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc7DL7Qj",
+                                           "createdAt":  "2025-09-10T12:14:10Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-system-speech\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2025-09-10T12:14:10Z"
+                                       }
+                                   ],
+                         "totalCount":  1
+                     },
+        "title":  "A Turkish sound library is missing from the C# Speech library. I don\u0027t use the Speech library in my language.",
+        "labels":  [
+                       "untriaged",
+                       "area-System.Speech"
+                   ]
+    }
+]

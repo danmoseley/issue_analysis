@@ -1,0 +1,169 @@
+﻿[
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/83350",
+        "createdAt":  "2023-03-13T20:16:12Z",
+        "number":  83350,
+        "author":  "ds1709",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-09-09T04:30:07Z",
+        "body":  "### Description\n\nAs described on [MSDN](https://learn.microsoft.com/ru-ru/dotnet/api/system.dynamic.dynamicobject.trybinaryoperation?view=net-7.0), in DLR operations `AndAlso` and `OrElse` represent pairs of `IsFalse/And` and `IsTrue/Or`. This is becoming a problem when I\u0027m trying to implement some zero/non-zero boolean logic.\r\n\r\nFor example, I have some dynamic object over integer. Zero value is false, non-zero is true. In c++ it works like this:\r\n```cpp\r\nint a = 10;\r\nint b = 20;\r\ncout \u003c\u003c (a \u0026\u0026 b); // out \u00271\u0027, coz 10 and 20 both are non-zero values\r\ncout \u003c\u003c (a \u0026 b); // out \u00270\u0027, coz it\u0027s a result of bitwise and\r\n```\r\nWith current implementation of DLR I can\u0027t implement such behavior coz when I binding binary operation, I got `And/Or` operation type instead of expected `AndAlso/OrElse`. So I dont know, was it logical or bitwise operation.\n\n### Reproduction Steps\n\nDefine this simple class:\r\n```csharp\r\npublic sealed class MetaUInt32 : DynamicObject\r\n{\r\n    private readonly uint value;\r\n\r\n    public MetaUInt32(uint value)\r\n    {\r\n        this.value = value;\r\n    }\r\n\r\n    public override bool TryUnaryOperation(UnaryOperationBinder binder, out object? result)\r\n    {\r\n        if (binder.Operation == ExpressionType.IsFalse)\r\n        {\r\n            result = (value == 0u);\r\n            return true;\r\n        }\r\n        else\r\n        {\r\n            return base.TryUnaryOperation(binder, out result);\r\n        }\r\n    }\r\n\r\n    public override bool TryBinaryOperation(BinaryOperationBinder binder, object arg, out object? result)\r\n    {\r\n        if (arg is MetaUInt32 m \u0026\u0026 binder.Operation is ExpressionType.And)\r\n        {\r\n            result = new MetaUInt32(value \u0026 m.value);\r\n            return true;\r\n        }\r\n        else\r\n        {\r\n            return base.TryBinaryOperation(binder, arg, out result);\r\n        }\r\n    }\r\n}\r\n```\r\nAnd then use it like this:\r\n```csharp\r\ndynamic a = new MetaUInt32(10);\r\ndynamic b = new MetaUInt32(20);\r\nvar c = a \u0026\u0026 b;\r\n```\n\n### Expected behavior\n\nVariable `c` must be instance of `MetaUInt32` over `1`, because `a` and `b` are non-zero values (`10` and `20`).\n\n### Actual behavior\n\nVariable `c` is instance of `MetaUInt32` over `0`, because it\u0027s a result of `bitwise and` over `10` and `20`.\n\n### Regression?\n\n_No response_\n\n### Known Workarounds\n\nAs workaround, I can implement casting of `MetaUInt32` to boolean and then make boolean binary operation over cast results, like this:\r\n```csharp\r\ndynamic c = new MetaUInt32((bool)a \u0026\u0026 (bool)c ? 1 : 0);\r\n```\r\nIt\u0027s not too hard to do, but if your dynamic class also implements bitwise logic, you must keep in mind, that boolean binary logic works correctly only if you cast your object to boolean first.\r\n\r\nAlso it\u0027s becoming a problem when you are working with dynamic expressions (`System.Linq.Expressions.Expression.Dynamic`). If you\u0027are implementing binary operation, you must have special case for `AndAlso/OrElse` operations, because them are not supported by `BinaryOperationBinder`.\n\n### Configuration\n\n_No response_\n\n### Other information\n\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOV4sCNg==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5XbxEK",
+                                           "createdAt":  "2023-03-13T20:16:15Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "I couldn\u0027t figure out the best area label to add to this issue. If you have write-permissions please help me learn by adding exactly one [area label](https://github.com/dotnet/runtime/blob/master/docs/area-owners.md).",
+                                           "updatedAt":  "2023-03-13T20:16:15Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5Xem1x",
+                                           "createdAt":  "2023-03-14T08:37:03Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @cston\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Description\n\nAs described on [MSDN](https://learn.microsoft.com/ru-ru/dotnet/api/system.dynamic.dynamicobject.trybinaryoperation?view=net-7.0), in DLR operations `AndAlso` and `OrElse` represent pairs of `IsFalse/And` and `IsTrue/Or`. This is becoming a problem when I\u0027m trying to implement some zero/non-zero boolean logic.\r\n\r\nFor example, I have some dynamic object over integer. Zero value is false, non-zero is true. In c++ it works like this:\r\n```cpp\r\nint a = 10;\r\nint b = 20;\r\ncout \u003c\u003c (a \u0026\u0026 b); // out \u00271\u0027, coz 10 and 20 both are non-zero values\r\ncout \u003c\u003c (a \u0026 b); // out \u00270\u0027, coz it\u0027s a result of bitwise and\r\n```\r\nWith current implementation of DLR I can\u0027t implement such behavior coz when I binding binary operation, I got `And/Or` operation type instead of expected `AndAlso/OrElse`. So I dont know, was it logical or bitwise operation.\n\n### Reproduction Steps\n\nDefine this simple class:\r\n```csharp\r\npublic sealed class MetaUInt32 : DynamicObject\r\n{\r\n    private readonly uint value;\r\n\r\n    public MetaUInt32(uint value)\r\n    {\r\n        this.value = value;\r\n    }\r\n\r\n    public override bool TryUnaryOperation(UnaryOperationBinder binder, out object? result)\r\n    {\r\n        if (binder.Operation == ExpressionType.IsFalse)\r\n        {\r\n            result = (value == 0u);\r\n            return true;\r\n        }\r\n        else\r\n        {\r\n            return base.TryUnaryOperation(binder, out result);\r\n        }\r\n    }\r\n\r\n    public override bool TryBinaryOperation(BinaryOperationBinder binder, object arg, out object? result)\r\n    {\r\n        if (arg is MetaUInt32 m \u0026\u0026 binder.Operation is ExpressionType.And)\r\n        {\r\n            result = new MetaUInt32(value \u0026 m.value);\r\n            return true;\r\n        }\r\n        else\r\n        {\r\n            return base.TryBinaryOperation(binder, arg, out result);\r\n        }\r\n    }\r\n}\r\n```\r\nAnd then use it like this:\r\n```csharp\r\ndynamic a = new MetaUInt32(10);\r\ndynamic b = new MetaUInt32(20);\r\nvar c = a \u0026\u0026 b;\r\n```\n\n### Expected behavior\n\nVariable `c` must be instance of `MetaUInt32` over `1`, because `a` and `b` are non-zero values (`10` and `20`).\n\n### Actual behavior\n\nVariable `c` is instance of `MetaUInt32` over `0`, because it\u0027s a result of `bitwise and` over `10` and `20`.\n\n### Regression?\n\n_No response_\n\n### Known Workarounds\n\nAs workaround, I can implement casting of `MetaUInt32` to boolean and then make boolean binary operation over cast results, like this:\r\n```csharp\r\ndynamic c = new MetaUInt32((bool)a \u0026\u0026 (bool)c ? 1 : 0);\r\n```\r\nIt\u0027s not too hard to do, but if your dynamic class also implements bitwise logic, you must keep in mind, that boolean binary logic works correctly only if you cast your object to boolean first.\r\n\r\nAlso it\u0027s becoming a problem when you are working with dynamic expressions (`System.Linq.Expressions.Expression.Dynamic`). If you\u0027are implementing binary operation, you must have special case for `AndAlso/OrElse` operations, because them are not supported by `BinaryOperationBinder`.\n\n### Configuration\n\n_No response_\n\n### Other information\n\n_No response_\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003eds1709\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-System.Dynamic.Runtime`, `untriaged`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2023-03-14T08:37:03Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5Ximhs",
+                                           "createdAt":  "2023-03-14T19:14:34Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOC30wtw==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "ds1709",
+                                                                               "createdAt":  "2023-03-14T19:39:16Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "svick",
+                                           "body":  "The DLR is basically fossilized now, so I wouldn\u0027t expect it to improve here. But the information you\u0027re looking for is actually present on the `CSharpBinaryOperationBinder`, just hidden in an `internal` property. If accessing that is acceptable for you, you could get the information you need:\r\n\r\n```c#\r\nprivate static Type cSharpBinaryOperationBinder = typeof(Microsoft.CSharp.RuntimeBinder.Binder).Assembly\r\n    .GetType(\"Microsoft.CSharp.RuntimeBinder.CSharpBinaryOperationBinder\")!;\r\n\r\n...\r\n\r\nif (binder.GetType() == cSharpBinaryOperationBinder)\r\n{\r\n    bool isLogicalOperation = (bool)cSharpBinaryOperationBinder\r\n        .GetProperty(\"IsLogicalOperation\", BindingFlags.Instance | BindingFlags.NonPublic)!\r\n        .GetValue(binder)!;\r\n\r\n    ...\r\n}\r\n```",
+                                           "updatedAt":  "2023-03-14T19:14:34Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5XiwI2",
+                                           "createdAt":  "2023-03-14T19:48:19Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ds1709",
+                                           "body":  "\u003e But the information you\u0027re looking for is actually present on the `CSharpBinaryOperationBinder`, just hidden in an `internal` property.\r\n\r\nThnx for information. Seems like it can work, will try.\r\nHowever, it\u0027s better to be any `public` way to do this.",
+                                           "updatedAt":  "2023-03-14T19:48:19Z"
+                                       }
+                                   ],
+                         "totalCount":  4
+                     },
+        "title":  "Existing behavior of AndAlso and OrElse in DLR is wrong",
+        "labels":  [
+                       "area-System.Dynamic.Runtime"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/86118",
+        "createdAt":  "2023-05-11T14:30:32Z",
+        "number":  86118,
+        "author":  "BillWagner",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2023-05-15T13:50:47Z",
+        "body":  "**Version Used**: Compiler version 4.5.2-3.23171.7.  LangVersions 7.3 - 11.0 exhibit the behavior.\r\n\r\n**Steps to Reproduce**:\r\n\r\n1. Compiler and run the following code. [Sharplab](https://sharplab.io/#v2:EYLgtghglgdgNAFxAJwK7wCYgNQB8ACATAIwCwAUAAQVGUDClA3hZa5fsQGzsAslAYugAUsSrARi4YmBIBWASiYs2KjgE4hAIkEwRMaQinj5m+QG5lrAL4tL7LrwHDkAUwBmByZQA2AexgA5pQKSlQqbOpaOkKuHuJSfoEm5nY2VHYc3Ph8ALLQuorMYeGeUJQAvJQADBbpxeHRsV5V5pQA9G2UAMYQ3t4Azk66TfE+/gHydiqN7l5CGACeMBBgUF3yLWbtnT19g9Gio8ZTbB1DenOLy6vrm9uULsjIvsj0AMoAHADMnDypFGkgA)\r\n\r\n```csharp\r\nusing System;\r\n \r\nclass C {\r\n    static void Fun(in int i, int j) {\r\n        Console.WriteLine(\"Fun(in int, int)\");\r\n    }\r\n \r\n    static void Fun(ref int i, long j) {\r\n        Console.WriteLine(\"Fun(ref int, long)\");\r\n    }\r\n \r\n    static void Main() {\r\n        int i = 0;\r\n \r\n        Fun(ref i, 0); // calls Fun(ref int, long)\r\n        Fun(ref i, (dynamic)0); // calls Fun(in int, int)\r\n        // Fun(in i, (dynamic)0); // error CS8364\r\n    }\r\n}\r\n```\r\n\r\nFrom a number of experiments, getting this behavior requires two overloads where all the following are true:\r\n\r\n1. One positional parameter differ in `in` and `ref` only.\r\n2. Another positional parameter where an implicit conversion from `dynamic` is \"better\" for the version with the `in` parameter. (Above the conversion from `dynamic` to `int` is better than the conversion from `dynamic` to `long`.)\r\n\r\nThen, call the overloaded method with the one parameter as a `ref` parameter, and a dynamic variable as the value parameter.\r\n\r\n**Expected Behavior**:\r\n\r\nThe call to `Fun(ref i, (dynamic)0);` should resolve to `Fun(ref int, long j)`, not `Fun(in int, int)`. \r\n\r\n**Actual Behavior**:\r\n\r\nThe function `Fun(in int, int)` shouldn\u0027t be considered a candidate method.\r\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOXEMFrA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5cEGHi",
+                                           "createdAt":  "2023-05-11T15:02:15Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOC7kBdw==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "jcouv",
+                                                                               "createdAt":  "2023-05-11T19:34:18Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "cston",
+                                           "body":  "The runtime dynamic binder should be updated to distinguish between `ref` and `in` parameters and only consider overloads with `ref` for the first argument in this case.",
+                                           "updatedAt":  "2023-05-11T15:02:15Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5cEGPM",
+                                           "createdAt":  "2023-05-11T19:43:12Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @cston\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n**Version Used**: Compiler version 4.5.2-3.23171.7.  LangVersions 7.3 - 11.0 exhibit the behavior.\r\n\r\n**Steps to Reproduce**:\r\n\r\n1. Compiler and run the following code. [Sharplab](https://sharplab.io/#v2:EYLgtghglgdgNAFxAJwK7wCYgNQB8ACATAIwCwAUAAQVGUDClA3hZa5fsQGzsAslAYugAUsSrARi4YmBIBWASiYs2KjgE4hAIkEwRMaQinj5m+QG5lrAL4tL7LrwHDkAUwBmByZQA2AexgA5pQKSlQqbOpaOkKuHuJSfoEm5nY2VHYc3Ph8ALLQuorMYeGeUJQAvJQADBbpxeHRsV5V5pQA9G2UAMYQ3t4Azk66TfE+/gHydiqN7l5CGACeMBBgUF3yLWbtnT19g9Gio8ZTbB1DenOLy6vrm9uULsjIvsj0AMoAHADMnDypFGkgA)\r\n\r\n```csharp\r\nusing System;\r\n \r\nclass C {\r\n    static void Fun(in int i, int j) {\r\n        Console.WriteLine(\"Fun(in int, int)\");\r\n    }\r\n \r\n    static void Fun(ref int i, long j) {\r\n        Console.WriteLine(\"Fun(ref int, long)\");\r\n    }\r\n \r\n    static void Main() {\r\n        int i = 0;\r\n \r\n        Fun(ref i, 0); // calls Fun(ref int, long)\r\n        Fun(ref i, (dynamic)0); // calls Fun(in int, int)\r\n        // Fun(in i, (dynamic)0); // error CS8364\r\n    }\r\n}\r\n```\r\n\r\nFrom a number of experiments, getting this behavior requires two overloads where all the following are true:\r\n\r\n1. One positional parameter differ in `in` and `ref` only.\r\n2. Another positional parameter where an implicit conversion from `dynamic` is \"better\" for the version with the `in` parameter. (Above the conversion from `dynamic` to `int` is better than the conversion from `dynamic` to `long`.)\r\n\r\nThen, call the overloaded method with the one parameter as a `ref` parameter, and a dynamic variable as the value parameter.\r\n\r\n**Expected Behavior**:\r\n\r\nThe call to `Fun(ref i, (dynamic)0);` should resolve to `Fun(ref int, long j)`, not `Fun(in int, int)`. \r\n\r\n**Actual Behavior**:\r\n\r\nThe function `Fun(in int, int)` shouldn\u0027t be considered a candidate method.\r\n\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003eBillWagner\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-System.Dynamic.Runtime`, `needs-area-label`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003eFuture\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2023-05-11T19:43:12Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5cQwWs",
+                                           "createdAt":  "2023-05-15T13:50:46Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "KalleOlaviNiemitalo",
+                                           "body":  "\u003e Another positional parameter where an implicit conversion from dynamic is \"better\" for the version with the in parameter.\n\nThe issue can be reproduced even if all methods in the method group have the same conversion from `dynamic`.  [SharpLab](https://sharplab.io/#v2:EYLgtghglgdgNAFxAJwK7wCYgNQB8DEMqANsRMMQKYAEGUAzuVQLABQbAAgEwCMbnXagGFqAbzbVJ1DjwBs0gCzUAYugAUsarARa4WmDoBWegPbBDlAMY6A1gEoxEqc5kBONQCJVMDTH0I9bVNzKwQ7DzsAbidJAF8JGOk5RRV1ZEoAM39damITGABzamNqMwtrantHVmcXHncvNMz/PTzC4PKwiOiaqXiaxJl5DiUAWWgfB3Fe2uyoagBeagAGHupE5281dKyoPWW9IlIo6gB6U+pLCFJ6VJ8dltz8go7Quw2pLYe9lb01DAAnjAIGAoJY7EdiCdzpdrsRbltNEFHmU3h9JDDEX4fgdqP8gSCwRCSFDImcLpRkMgTMhhABlAAcAGZZApEv1YkA=)\n\n```csharp\n#nullable disable\r\n\r\nusing System;\r\n\r\nclass C {\r\n    static void Fun(in int i, int j, object k) {\r\n        Console.WriteLine(\"Fun(in int, int, object)\");\r\n    }\r\n \r\n    static void Fun(ref int i, long j, object k) {\r\n        Console.WriteLine(\"Fun(ref int, long, object)\");\r\n    }\r\n \r\n    static void Main() {\r\n        int i = 0;\r\n \r\n        Fun(ref i, 0, null); // calls Fun(ref int, long, object)\r\n        Fun(ref i, 0, (dynamic)null); // calls Fun(in int, int, object)\r\n        // Fun(in i, 0, (dynamic)null); // error CS8364\r\n    }\r\n}\r\n```\n",
+                                           "updatedAt":  "2023-05-15T13:50:46Z"
+                                       }
+                                   ],
+                         "totalCount":  3
+                     },
+        "title":  "Interaction between implicit dynamic conversion and ref / in parameter chooses the incorrect overload.",
+        "labels":  [
+                       "area-System.Dynamic.Runtime"
+                   ]
+    }
+]

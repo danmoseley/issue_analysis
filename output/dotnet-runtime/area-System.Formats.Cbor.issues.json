@@ -1,0 +1,387 @@
+﻿[
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/92068",
+        "createdAt":  "2023-09-14T16:10:10Z",
+        "number":  92068,
+        "author":  "vcsjones",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-07-16T05:51:35Z",
+        "body":  "RFC 8949 obsoletes RFC 7049, and the latter is what System.Formats.Cbor is built from.\r\n\r\nThe revised RFC changes, subtly, the sorting of map keys. The new RFC uses lexicographic sorting, as noted in section 4.2.1.\r\n\r\nSection 4.2.3 goes on to say:\r\n\r\n\u003e The core deterministic encoding requirements ([Section 4.2.1](https://datatracker.ietf.org/doc/html/rfc8949#core-det)) sort map keys in a different order from the one suggested by [Section 3.9](https://www.rfc-editor.org/rfc/rfc7049#section-3.9) of [[RFC7049](https://datatracker.ietf.org/doc/html/rfc7049)] (called \"Canonical CBOR\" there). Protocols that need to be compatible with the order specified in [[RFC7049](https://datatracker.ietf.org/doc/html/rfc7049)] can instead be specified in terms of this specification\u0027s \"length-first core deterministic encoding requirements\"\r\n\r\n\r\nI would propose a new `CborConformanceMode` called `Rfc8949Deterministic`. The new RFC tries to avoid the word \"canonical\" and instead use \"deterministic\", which is reflected in the suggested mode\u0027s name.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOZoHJAQ==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5mgT_8",
+                                           "createdAt":  "2023-09-14T16:10:18Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-system-formats-cbor, @bartonjs, @vcsjones\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\nRFC 8949 obsoletes RFC 7049, and the latter is what System.Formats.Cbor is built from.\r\n\r\nThe revised RFC changes, subtly, the sorting of map keys. The new RFC uses lexicographic sorting, as noted in section 4.2.1.\r\n\r\nSection 4.2.3 goes on to say:\r\n\r\n\u003e The core deterministic encoding requirements ([Section 4.2.1](https://datatracker.ietf.org/doc/html/rfc8949#core-det)) sort map keys in a different order from the one suggested by [Section 3.9](https://www.rfc-editor.org/rfc/rfc7049#section-3.9) of [[RFC7049](https://datatracker.ietf.org/doc/html/rfc7049)] (called \"Canonical CBOR\" there). Protocols that need to be compatible with the order specified in [[RFC7049](https://datatracker.ietf.org/doc/html/rfc7049)] can instead be specified in terms of this specification\u0027s \"length-first core deterministic encoding requirements\"\r\n\r\n\r\nI would propose a new `CborConformanceMode` called `Rfc8949Deterministic`. The new RFC tries to avoid the word \"canonical\" and instead use \"deterministic\", which is reflected in the suggested mode\u0027s name.\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003evcsjones\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-System.Formats.Cbor`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2023-09-14T16:10:18Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5mgbnS",
+                                           "createdAt":  "2023-09-14T16:31:00Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "eiriktsarpalis",
+                                           "body":  "Will the revised RFC have any impact on future FIDO specs? The CTAP2 conformance mode is based on RFC 7049 canonical mode.",
+                                           "updatedAt":  "2023-09-14T16:31:00Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5mgckB",
+                                           "createdAt":  "2023-09-14T16:33:54Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODG1g0Q==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "eiriktsarpalis",
+                                                                               "createdAt":  "2023-09-14T17:02:05Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "vcsjones",
+                                           "body":  "\u003e Will the revised RFC have any impact on future FIDO specs? The CTAP2 conformance mode is based on RFC 7049 canonical mode.\r\n\r\nAs I understand it, FIDO2 / CTAP2 specifically reference RFC 7049. A future version of FIDO or CTAP may adjust the conformance to RFC 8949, but no such document exists to my knowledge.",
+                                           "updatedAt":  "2023-09-14T16:33:54Z"
+                                       }
+                                   ],
+                         "totalCount":  3
+                     },
+        "title":  "Cbor{Reader, Writer} should support RFC 8949 determinism",
+        "labels":  [
+                       "area-System.Formats.Cbor"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/92567",
+        "createdAt":  "2023-09-25T00:13:17Z",
+        "number":  92567,
+        "author":  "mofosyne",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2023-10-07T11:32:42Z",
+        "body":  "Created a CBOR semantic tag code generator in python for C headers in https://github.com/mofosyne/iana-headers\r\n\r\nThis could be adapted to sync https://github.com/dotnet/runtime/blob/c8f97e8df6eaa4f21944ed80661c089403cf8f85/src/libraries/System.Formats.Cbor/src/System/Formats/Cbor/CborTag.cs#L4-L14 with IANA registry for cbor semantic tags",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOaGiklg==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5nRxXg",
+                                           "createdAt":  "2023-09-25T00:13:26Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-system-formats-cbor, @bartonjs, @vcsjones\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\nCreated a CBOR semantic tag code generator in python for C headers in https://github.com/mofosyne/iana-headers\r\n\r\nThis could be adapted to sync https://github.com/dotnet/runtime/blob/c8f97e8df6eaa4f21944ed80661c089403cf8f85/src/libraries/System.Formats.Cbor/src/System/Formats/Cbor/CborTag.cs#L4 with IANA registry for cbor semantic tags\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003emofosyne\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`untriaged`, `area-System.Formats.Cbor`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2023-09-25T00:13:26Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5oV8ZC",
+                                           "createdAt":  "2023-10-06T12:34:45Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "krwq",
+                                           "body":  "would you be interested in doing this? it would be nice if the code was as similar to original where possible. Note this would need to be manually generated anyway because we have API approval process (unless you only think of internal stuff) - note the existing APIs cannot change and this class seems kinda small so I\u0027m not sure it\u0027s worth it - especially when new tags are added you\u0027d need to add equivalent APIs anyway",
+                                           "updatedAt":  "2023-10-06T12:37:03Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5oZ6Cv",
+                                           "createdAt":  "2023-10-07T06:28:51Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "mofosyne",
+                                           "body":  "I\u0027m mostly a C to C++ coder, so not as familiar with CSharp.\r\n\r\nI may help, but no immediate plans to do so for now, plus may want to just  see if the C headers is received well by other CBOR C implementations first before working on a CSharp separate code generators. (e.g. found I should add depreciated enum support, so both the new/old enums can be supported).\r\n\r\nBut at the very least, the idea of my repo is to help encourage a semi-standard for cbor naming (especially since the IANA database entry does not have a name section). My code generator has some simple heuristics to read the description field and clean it up so it can at least be used as a variable name.\r\n\r\nSo I would encourage you to tackle this instead. If there is a way to make it easier for you to use it, let me know. E.g. would you like me to make my code generator output the list as a csv over python console so you can separately grok it later?\r\n\r\n**In terms of priority level. I would too deem this as low priority, but good to note, especially if you want to add new enums in manually later**\r\n",
+                                           "updatedAt":  "2023-10-07T06:29:41Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5oZ_Qc",
+                                           "createdAt":  "2023-10-07T07:59:30Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "krwq",
+                                           "body":  "I think for simple thing like generating a single class T4 templates might be much easier than source gen - C# is much easier than C/C++ (I also originally come from C/C++ world. Now world is easier and you can write a code partially by ChatGPT and just validate the logic since code should be readable enough). The major thing is that I anticipate this will generate public APIs and we cannot generate public APIs during the build as that would need to be deterministic.\r\n\r\nYou can adapt similar approach I took with ciphersuites in the SslStream class:\r\n\r\ngenerator code: https://github.com/dotnet/runtime/blob/main/src/libraries/System.Net.Security/src/System/Net/Security/TlsCipherSuite.tt\r\n(since I needed to do some more logic there is also: https://github.com/dotnet/runtime/blob/main/src/libraries/System.Net.Security/src/System/Net/Security/TlsCipherSuiteNameParser.ttinclude but you likely won\u0027t need that)\r\n\r\nHere is the  code it generated:\r\nhttps://github.com/dotnet/runtime/blob/main/src/libraries/System.Net.Security/src/System/Net/Security/TlsCipherSuite.cs\r\n\r\nnote how it also uses IANA registry to generate that code: https://github.com/dotnet/runtime/blob/main/src/libraries/System.Net.Security/src/System/Net/Security/TlsCipherSuite.tt#L29C41-L29C41 (and track down usage from there)\r\n\r\nnote how also project file was modified to take extra flag so that this doesn\u0027t happen automatically on every build and only when we consciously want to update:\r\nhttps://github.com/dotnet/runtime/blob/main/src/libraries/System.Net.Security/src/System.Net.Security.csproj#L140",
+                                           "updatedAt":  "2023-10-07T08:43:21Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5oaKSW",
+                                           "createdAt":  "2023-10-07T11:32:42Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "mofosyne",
+                                           "body":  "I think I was aiming to use Python as I was trying to aim for the least common denominator and lowest dependency approach so it can be integrated in various codebases. \r\n\r\nT4 templating looks to be a native feature of [.NET Framework](https://en.wikipedia.org/wiki/.NET_Framework), [.NET Core](https://en.wikipedia.org/wiki/.NET_Core) and [Mono](https://en.wikipedia.org/wiki/Mono_(software)). \r\n\r\nNevertheless, at the moment I don\u0027t personally got the mental bandwidth to figure C Sharp currently. But I do like how integrated the code structure and template is. I\u0027m not sure how it would deal with backward compatibility with other existing headers, but I don\u0027t really see too many CSharp CBOR implementations so I think we should be safe.\r\n\r\nI do think we should only call the templating engine for [runtime/src/libraries/System.Formats.Cbor/src/System/Formats/Cbor/CborTag.cs](https://github.com/dotnet/runtime/blob/c8f97e8df6eaa4f21944ed80661c089403cf8f85/src/libraries/System.Formats.Cbor/src/System/Formats/Cbor/CborTag.cs#L4-L14) manually or it will throw off the build determinism.\r\n\r\nI take the same consideration (But wondering if it make sense to print some form of warning if the iana registry has been updated), hence I don\u0027t intend my generator to be triggered on every build but rather as needed.\r\n\r\n----\r\n\r\np.s. Regarding how I should organise my IANA Header repo ergo instead of I think my approach of organizing the folders in my https://github.com/mofosyne/iana-headers project to be incorrect. I should arrange it by language, instead of by protocols. This should make it easier to share code between our codebase.\r\n\r\n```\r\n├── cbor\r\n│   ├── c\r\n│   ├── c_sharp\r\n├── coap\r\n│   ├── c\r\n│   ├── c_sharp\r\n├── http\r\n│   ├── c\r\n│   ├── c_sharp\r\n```\r\n\r\nI should arrange it as\r\n\r\n```\r\n├── c\r\n│   ├── cbor\r\n│   ├── coap\r\n│   ├── http\r\n├── c_sharp\r\n│   ├── cbor\r\n│   ├── coap\r\n│   ├── http\r\n```",
+                                           "updatedAt":  "2023-10-07T11:32:42Z"
+                                       }
+                                   ],
+                         "totalCount":  5
+                     },
+        "title":  "Proposal: Add a codegen to update public enum CborTag with IANA CBOR Tags Registry",
+        "labels":  [
+                       "enhancement",
+                       "area-System.Formats.Cbor"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/99993",
+        "createdAt":  "2024-03-20T03:54:26Z",
+        "number":  99993,
+        "author":  "knutwannheden",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-08-01T16:44:27Z",
+        "body":  "### Background and motivation\n\nWhen reading very large documents or documents that are read via a slow network connection, it seems very limiting that the whole document must be read into contiguous memory before it can be parsed. That can consume a lot of memory and doesn\u0027t allow an application to implement streaming in a reasonable way.\n\n### API Proposal\n\nNo concrete proposal. It should just allow data to be read from a stream.\n\n### API Usage\n\nNone.\n\n### Alternative Designs\n\n_No response_\n\n### Risks\n\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOhupkOQ==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc53uTAZ",
+                                           "createdAt":  "2024-03-20T03:56:05Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "knutwannheden",
+                                           "body":  "Getting very close to ID 100,000 here 😄 \r\n\r\nTagging @bartonjs here which I saw commenting on the only other CBOR issue I could find.",
+                                           "updatedAt":  "2024-03-20T03:56:05Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc530tgq",
+                                           "createdAt":  "2024-03-20T18:20:09Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "bartonjs",
+                                           "body":  "Reading from a stream would suggest that we\u0027d also want Async versions of all of the reader methods, because there\u0027s no guarantee that the next element can finish without blocking; so it\u0027s a somewhat expensive proposal.\r\n\r\nHow big of CBOR documents are you working with? When we were spinning up the project to make the reader everything was just a few kilobytes.",
+                                           "updatedAt":  "2024-03-20T18:20:09Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc530zDj",
+                                           "createdAt":  "2024-03-20T18:33:25Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "knutwannheden",
+                                           "body":  "Could be megabytes. I was however also thinking that streaming would be nice because it would let a reader start processing the tokens even before all data has been transferred by the client.",
+                                           "updatedAt":  "2024-03-20T18:33:25Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc532MDC",
+                                           "createdAt":  "2024-03-20T21:44:24Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "kasperk81",
+                                           "body":  "this nodejs package supports streaming https://github.com/kriszyp/cbor-x?tab=readme-ov-file#streams. if format spec doesn\u0027t restrict block reading all data for encoding or decoding, can dotnet implementation change to process data progressively too?",
+                                           "updatedAt":  "2024-03-20T21:44:24Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5383P2",
+                                           "createdAt":  "2024-03-21T14:27:07Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "AlgorithmsAreCool",
+                                           "body":  "@knutwannheden Is this proposal just for stream reading helpers that accept a stream and return a CborReader? Or is it for an incremental reader api that would allow interpreting partially downloaded data?",
+                                           "updatedAt":  "2024-03-21T14:27:07Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc539T92",
+                                           "createdAt":  "2024-03-21T15:09:28Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "knutwannheden",
+                                           "body":  "@AlgorithmsAreCool If I understand your question correctly, it is the latter. So the `CborReader` would read bytes from the stream (as necessary) whenever a method is called on the reader to return the next token.",
+                                           "updatedAt":  "2024-03-21T15:09:28Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc54Arbo",
+                                           "createdAt":  "2024-03-21T19:26:47Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "AlgorithmsAreCool",
+                                           "body":  "In that case, I would also be interested in a `CborReader` that had the incremental API much like `JsonDocument` that allowed us to read from very large CBOR documents and possibly CBOR Sequences. CBOR is basically binary JSON and we already accomodate massive JSON documents, so I think this is natrual.\r\n\r\nBut it is a big feature and new API surface",
+                                           "updatedAt":  "2024-03-21T19:26:47Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc59unI6",
+                                           "createdAt":  "2024-05-14T06:17:39Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "knutwannheden",
+                                           "body":  "Further, allowing the `CborWriter` to also write directly to a `Stream` would also feel like a sensible addition. For my use case I have no need for async methods, as I don\u0027t have any desire to \"async all the way up\" my code base.",
+                                           "updatedAt":  "2024-05-14T06:17:39Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6G6mQ5",
+                                           "createdAt":  "2024-08-01T16:44:25Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "IS4Code",
+                                           "body":  "I was quite confused seeing that there are no methods for operating with `Stream` instances, both for reading and writing. Are we supposed to process data in one big array like it\u0027s the C age again?\r\n\r\nThe current \"buffer\" approach is fine, but there must be away to update the buffer without resetting the whole state. This could be quite a novel approach to semi-`async` data processing (synchronous parsing, asynchronous advancing), but without it, `CborReader` and `CborWriter` are pretty much unusable.",
+                                           "updatedAt":  "2024-08-01T16:44:25Z"
+                                       }
+                                   ],
+                         "totalCount":  9
+                     },
+        "title":  "[API Proposal]: Allow `CborReader` to read from a stream",
+        "labels":  [
+                       "api-suggestion",
+                       "area-System.Formats.Cbor"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/115454",
+        "createdAt":  "2025-05-11T17:25:08Z",
+        "number":  115454,
+        "author":  "AlgorithmsAreCool",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-05-12T09:10:42Z",
+        "body":  "### Background and motivation\n\nSince CBOR stores text strings in UTF8 format, it would be nice to be able to write those bytes verbatim if a user already has a UTF8 encoded string. Today, you would need to reencode the ut8 byte back into utf-16 chars and then pass them to `WriteTextString()` which will then reencode them back to utf-8. \n\n\n### API Proposal\n\n```diff\npublic class CborWriter\n{\n+    public void WriteUtf8TextString(ReadOnlySpan\u003cbyte\u003e utf8Bytes);\n}\n```\n\n\n### API Usage\n\n```csharp\nvar utf8Bytes = GetSomeUtf8Bytes();\n\ncborWriter.WriteUtf8TextString(utf8Bytes);\n```\n\n\n### Alternative Designs\n\n_No response_\n\n### Risks\n\nMinimal",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOqxFyag==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc6rEXJq",
+                                           "createdAt":  "2025-05-11T18:47:36Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-system-formats-cbor, @bartonjs, @vcsjones\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2025-05-11T18:47:36Z"
+                                       }
+                                   ],
+                         "totalCount":  1
+                     },
+        "title":  "[API Proposal]: [CborWriter] WriteUtf8TextString",
+        "labels":  [
+                       "api-suggestion",
+                       "area-System.Formats.Cbor"
+                   ]
+    }
+]

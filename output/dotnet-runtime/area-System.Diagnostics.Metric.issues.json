@@ -1,0 +1,1049 @@
+﻿[
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/71563",
+        "createdAt":  "2022-07-01T20:50:36Z",
+        "number":  71563,
+        "author":  "noahfalk",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHOC309Zg==",
+                          "nodes":  [
+                                        {
+                                            "content":  "EYES",
+                                            "user":  "PaulusParssinen",
+                                            "createdAt":  "2024-05-11T07:54:42Z"
+                                        }
+                                    ],
+                          "totalCount":  1
+                      },
+        "updatedAt":  "2025-07-26T10:39:14Z",
+        "body":  "Currently the MetricsEventSource uses locks or interlocked instructions to synchronize against multiple threads recording data points and this introduces contention. The goal is to eliminate the overhead of this contention as much as possible, ideally to the point that multi-threaded and single-threaded scenarios look identical. Its likely that reducing contention will require increasing memory footprint, decreasing measurement precision, or both. Depending on the difference in behavior we can decide whether it is acceptable to make it the new default or if we need settings that folks opt into.\r\n\r\n[This issue](https://github.com/dotnet/aspnetcore/issues/50412) shows the problem for counters. Some work was done in .NET 8 to improve it, but I think we are still wasting 7/8ths of each cache line so there is definite room to do better within the same memory footprint.\r\n\r\n\r\nFor histograms quick benchmarking with 10 threads each issuing 100M updates shows this performance:\r\n\r\nno listener - 1 sec\r\ndotnet-counters listening - 40 sec\r\ndotnet-counters listening + histogram dimension added with current thread id - 6 secs\r\n\r\nAdding a thread id dimension causes the aggregator to track unique histograms per thread which eliminates the lock contention revealing the sizable perf overhead. I\u0027m thinking to resolve this we should move to per-thread histogram buckets, but we probably need some compensating changes to ensure memory usage doesn\u0027t go really high. Right now histograms are using a minimum of 32KB each for first level bucketing array and then I think each 2nd level array 2^14 entries (64KB) to maintain a \u003c 1:10,000 error bound. We could split the first level 4096 entries into two levels of 64 entries each and lower the default error bounds to something like 1:100 which should bring the footprint down to a few KB per thread.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  null,
+                         "nodes":  [
+
+                                   ],
+                         "totalCount":  0
+                     },
+        "title":  "[Feature Request] Faster aggregation for the MetricsEventSource under concurrency",
+        "labels":  [
+                       "feature-request",
+                       "area-System.Diagnostics.Metric"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/83822",
+        "createdAt":  "2023-03-23T15:26:36Z",
+        "number":  83822,
+        "author":  "LGouellec",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHODDjfbQ==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "julealgon",
+                                            "createdAt":  "2024-09-20T21:52:06Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "LGouellec",
+                                            "createdAt":  "2024-09-25T17:52:32Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "BrannanKovachev",
+                                            "createdAt":  "2024-09-25T18:00:57Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "asasine",
+                                            "createdAt":  "2024-09-28T16:12:31Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "tmakin",
+                                            "createdAt":  "2024-10-09T21:54:36Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "ajwells128",
+                                            "createdAt":  "2025-02-12T14:11:29Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "aradalvand",
+                                            "createdAt":  "2025-06-10T13:43:30Z"
+                                        }
+                                    ],
+                          "totalCount":  7
+                      },
+        "updatedAt":  "2025-06-11T14:07:06Z",
+        "body":  "### Background and motivation\n\nFor now, when you create an instance of Meter you can create multiple types of instrument (Histogram, Counter, ObservableGauge or ObservableCounter).\r\n\r\nBut you can\u0027t delete one observable gauge (for instance) previously created. The only way is to dispose the Meter instance and recreate from scratch with all instruments minus the instrument supposed to remove. It\u0027s not efficient at all. \n\n### API Proposal\n\n```csharp\r\n\r\n public class Meter : IDisposable\r\n{\r\n       private List\u003cInstrument\u003e _instruments = new List\u003cInstrument\u003e();\r\n       // ....\r\n\r\n      public void Remove(Instrument instrument) {\r\n           _instruments.Remove(instrument)\r\n     }\r\n}\r\n```\r\n\n\n### API Usage\n\n```csharp\r\nvar meter = new Meter(\"ServiceName\");\r\nvar gauge =  meter.CreateObservableGauge(\r\n                        key, \r\n                        () =\u003e new[]\r\n                        {\r\n                            new Measurement\u003cdouble\u003e(\r\n                                value,\r\n                                tags)\r\n                        },\r\n                        description: summary);           \r\n\r\nmeter.Remove(gauge);\r\n```\r\n\n\n### Alternative Designs\n\n_No response_\n\n### Risks\n\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOsJuGIw==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5YiIzB",
+                                           "createdAt":  "2023-03-27T15:31:02Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "tommcdon",
+                                           "body":  "@noahfalk @tarekgh ",
+                                           "updatedAt":  "2023-03-27T15:31:02Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5nBK-a",
+                                           "createdAt":  "2023-09-20T20:10:38Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOEWDMqQ==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "aradalvand",
+                                                                               "createdAt":  "2025-06-10T13:43:47Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "asasine",
+                                           "body":  "I would think that having `Instrument` implement `IDisposable` is the canonical way to indicate that instruments are disposable. Stealing from the [Observer design pattern](https://learn.microsoft.com/en-us/dotnet/standard/events/observer-design-pattern), the instances of `Instrument` can hold references to their `Meter` and remove themself from the meter\u0027s collection when disposed. This further supports the DI model as types only need to depend on the appropriate instrument, not the meter, to accurately dispose of the instrument when the DI container disposes them.",
+                                           "updatedAt":  "2023-09-20T20:11:04Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6M8db0",
+                                           "createdAt":  "2024-09-20T21:45:10Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "LGouellec",
+                                           "body":  "Hey there, \r\n\r\nDo you have any news on top of that matter ? \r\n\r\nBest regards,",
+                                           "updatedAt":  "2024-09-20T21:45:10Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6M8e_v",
+                                           "createdAt":  "2024-09-20T21:52:01Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "julealgon",
+                                           "body":  "@LGouellec could you elaborate what kinds of use cases this would be used with? I tend to agree with your proposal but I\u0027m curious to understand what scenario you have that requires removing instruments dynamically like this.",
+                                           "updatedAt":  "2024-09-20T21:52:01Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6M8hnr",
+                                           "createdAt":  "2024-09-20T22:04:06Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODzPFvA==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "julealgon",
+                                                                               "createdAt":  "2024-09-23T14:41:04Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "LGouellec",
+                                           "body":  "@julealgon \r\n\r\nI work on this [open source project ](https://github.com/LGouellec/streamiz), a .Net Kafka Streams implementation. \r\nTypically, I need to expose couple of instruments based on a Kafka Partition and probably you know but the kafka partitions can be reassigned if you have more consumers in the loop, basically if you scale in or out the number of your applications. \r\n\r\nSo when the partition is reassigned, I need to drop the instrument in the app A to avoid incoherent monitoring. \r\n\r\nLet me know, if you have any further questions.",
+                                           "updatedAt":  "2024-09-20T22:04:06Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6Ni_ED",
+                                           "createdAt":  "2024-09-25T17:42:44Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOEWDM9Q==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "aradalvand",
+                                                                               "createdAt":  "2025-06-10T13:44:17Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "BrannanKovachev",
+                                           "body":  "My team is also interested in such a feature. We would like our application to begin collecting specific metrics from a gauge given a condition. Then once the condition is no longer met, stop the instrument from reporting. It doesn\u0027t make sense to destroy the entire meter and re-register all the instruments.\r\n\r\nThe OpenTelemetery Metrics API docs [describe this as a requirement](https://opentelemetry.io/docs/specs/otel/metrics/api/#asynchronous-counter-operations) (you can look at any of the asynchronous instruments).",
+                                           "updatedAt":  "2024-09-25T17:42:44Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6NjDFC",
+                                           "createdAt":  "2024-09-25T17:51:17Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "julealgon",
+                                           "body":  "\u003e My team is also interested in such a feature.\r\n\r\n@BrannanKovachev upvote the original post to signal that if you can.",
+                                           "updatedAt":  "2024-09-25T17:51:17Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6PQpCk",
+                                           "createdAt":  "2024-10-09T21:59:27Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOEWDNDw==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "julealgon",
+                                                                               "createdAt":  "2024-10-10T14:11:05Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "LGouellec",
+                                                                               "createdAt":  "2024-10-29T21:35:13Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "aradalvand",
+                                                                               "createdAt":  "2025-06-10T13:44:26Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  3
+                                                         },
+                                           "author":  "tmakin",
+                                           "body":  "I\u0027ve been exploring the new Meter features with a view to replacing the Prometheus.net exporter. The lack of remove/delete for expired instruments is currently a blocker for adoption, so I think this feature would be really useful. My use case is to track equipment with intermittent availability, when the source goes offline I don\u0027t want the old metrics hanging around. Tearing down the entire meter every few seconds seems like overkill, as there are some instruments that I don\u0027t want to drop. ",
+                                           "updatedAt":  "2024-10-09T21:59:27Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6RCIxh",
+                                           "createdAt":  "2024-10-23T19:24:20Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "LGouellec",
+                                           "body":  "For you information, the way that we can\u0027t delete a specific metrics force me to `Dispose` the Meter after each iteration which generate a MemoryLeak in the OpenTelemetry reporter. See : https://github.com/open-telemetry/opentelemetry-dotnet/issues/5922",
+                                           "updatedAt":  "2024-10-23T19:24:20Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6RwYDb",
+                                           "createdAt":  "2024-10-29T21:38:18Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "LGouellec",
+                                           "body":  "@julealgon \n\nAny change that it will be part of 10.0 milestone ? ",
+                                           "updatedAt":  "2024-10-29T21:38:18Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6Rwex5",
+                                           "createdAt":  "2024-10-29T21:58:21Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "julealgon",
+                                           "body":  "\u003e [@julealgon](https://github.com/julealgon)\n\u003e \n\u003e Any change that it will be part of 10.0 milestone ?\n\nI can\u0027t answer to that as I\u0027m not part of the .NET team @LGouellec , but I hope it does.",
+                                           "updatedAt":  "2024-10-29T21:58:21Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6wY7Kl",
+                                           "createdAt":  "2025-06-10T13:44:52Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "aradalvand",
+                                           "body":  "Utterly embarrassing that this is not supported. The [OTEL specs literally require this](https://opentelemetry.io/docs/specs/otel/metrics/api/#asynchronous-counter-operations):\n\u003e For callback functions registered after an asynchronous instrument is created, the API is required to support a mechanism for unregistration. For example, the object returned from register_callback can support an unregister() method directly.\n\n",
+                                           "updatedAt":  "2025-06-10T13:46:03Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6wm4Yj",
+                                           "createdAt":  "2025-06-11T14:07:06Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "KalleOlaviNiemitalo",
+                                           "body":  "@aradalvand, that part of the OTel spec is about unregistering a callback from an instrument, not about unregistering the whole instrument.  And it does not apply to .NET because .NET does not implement this recommendation:\n\n\u003e The API SHOULD support registration of callback functions associated with asynchronous instruments after they are created.",
+                                           "updatedAt":  "2025-06-11T14:07:06Z"
+                                       }
+                                   ],
+                         "totalCount":  13
+                     },
+        "title":  "[API Proposal]: Allow to delete an instrument inside a Meter instance",
+        "labels":  [
+                       "enhancement",
+                       "api-suggestion",
+                       "area-System.Diagnostics.Metric"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/84412",
+        "createdAt":  "2023-04-06T11:17:59Z",
+        "number":  84412,
+        "author":  "noahfalk",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-01-10T22:02:56Z",
+        "body":  "Currently MetricsEventSource has a default of limit of I think 100 histograms that it will track because each one uses a non-trivial amount of memory. We are starting to see use cases that are likely to easily exhaust those limits such as the duration counters added in https://github.com/dotnet/aspnetcore/issues/47536. The limit is adjustable so a brute force approach is simply to raise the limit and use a bunch of memory but that probably isn\u0027t a great option.\r\n\r\nIn order to make tools built on top of MetricsEventSource be more effective we probably need to improve this by doing one of:\r\n- Creating options to track more histograms using less memory for each. We could do this by some combination of reducing accuracy or increasing CPU usage per measurement to use a more memory efficient data storage.\r\n- Creating options that let tools be more precise about which attribute values they want to track\r\n- Creating options that let tools request that some attribute values be elided so there will be fewer total histograms produced.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOWXKW6g==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5ZZQRs",
+                                           "createdAt":  "2023-04-07T00:35:04Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "samsp-msft",
+                                           "body":  "What is the 100 limit for - is it histogram buckets, or the combination of dimension values? And is this per Histogram or is this across all the histograms?",
+                                           "updatedAt":  "2023-04-07T00:35:04Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5Zcpbq",
+                                           "createdAt":  "2023-04-07T22:04:48Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "noahfalk",
+                                           "body":  "\u003e What is the 100 limit for \r\n\r\nIt is a limit on the number histogram time-series that will be reported by MetricsEventSource by default. Each unique combination of a Histogram instrument + the unordered set of tag name-value pairs generates a unique time-series. Out of those the subscriber to MetricsEventSource may have only requested that certain instruments be tracked so only combinations using those instruments will be reported on. As a hypothetical example:\r\n\r\n```\r\nMeter meterA = new Meter(\"A\");\r\nHistogram a = meterA.CreateHistogram(...);\r\nHistogram a2 = meterA.CreateHistogram(...);\r\nMeter meterB = new Meter(\"B\");\r\nHistogram b = meterB.CreateHistogram(...);\r\na.Record(1, color=blue,size=big);\r\na.Record(2, size=big,color=blue);\r\na.Record(3, color=red,size=big);\r\na.Record(4, color=red);\r\na2.Record(5, color=red);\r\nb.Record(6, color=orange,size=big);\r\n```\r\n\r\nIf the MetricsEventSource subscriber requests to track meter \"A\" then there will be 4 time-series reported counting against that limit:\r\nhistogram a, color=blue, size=big\r\nhistogram a, color=red, size=big\r\nhistogram a, color=red\r\nhistogram a2, color=red\r\n\r\nBy default after 100 different combinations have been observed future combinations will not be reported.",
+                                           "updatedAt":  "2023-04-07T22:04:48Z"
+                                       }
+                                   ],
+                         "totalCount":  2
+                     },
+        "title":  "Feature Request: Support handling more histograms in MetricsEventSource",
+        "labels":  [
+                       "enhancement",
+                       "area-System.Diagnostics.Metric"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/89363",
+        "createdAt":  "2023-07-23T11:16:43Z",
+        "number":  89363,
+        "author":  "tomas-pajurek",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-02-04T13:45:09Z",
+        "body":  "### Background and motivation\r\n\r\nCurrently, all constructors of the type [Measurement\\\u003cT\\\u003e](https://github.com/dotnet/runtime/blob/main/src/libraries/System.Diagnostics.DiagnosticSource/src/System/Diagnostics/Metrics/Measurement.cs) are allocating new internal array (copy) of supplied tags (except for an empty tag collection). I understand there are reasons for this defensive copying but on the other hand, this is not ideal in situations where the collection of tags is immutable but the value of `Measurement\u003cT\u003e` is changing.\r\n\r\nTo avoid the need for allocating new array of tags for each new measurement, I propose to add a safe API that would create and internal defensive copy just once and that copy could be used multiple times.\r\n\r\n### API Proposal\r\n\r\n```csharp\r\n\r\nnamespace System.Diagnostics.Metrics\r\n\r\n// New type\r\n\r\npublic readonly struct MeasurementTags\r\n{\r\n    private readonly KeyValuePair\u003cstring, object?\u003e[] _tags; \r\n   \r\n    public MeasurementTags() { _tags = Instrument.EmptyTags; }\r\n\r\n    // Constructors consistent with Measurement\u003cT\u003e\u0027s constructors that are doing a defensive copy internally.\r\n\r\n    public Measurement(IEnumerable\u003cKeyValuePair\u003cstring, object?\u003e\u003e? tags) { ... }\r\n    public Measurement(params KeyValuePair\u003cstring, object?\u003e[]? tags) { ... }\r\n    public Measurement(ReadOnlySpan\u003cKeyValuePair\u003cstring, object?\u003e\u003e tags) { ... }\r\n\r\n    public ReadOnlySpan\u003cKeyValuePair\u003cstring, object?\u003e\u003e Tags =\u003e _tags.AsSpan();    \r\n\r\n    internal KeyValuePair\u003cstring, object?\u003e GetUnderlyingTags() =\u003e _tags;\r\n}\r\n\r\n\r\n// Existing type with new constructor\r\n\r\npublic readonly struct Measurement\u003cT\u003e where T : struct\r\n{\r\n    public Measurement\u003cT\u003e(T value, MeasurementTags tags)\r\n    {\r\n        _tags = tags.GetUnderlyingTags();\r\n        Value = value;\r\n    }\r\n}\r\n```\r\n\r\n\r\n### API Usage\r\n\r\n```csharp\r\n...\r\n\r\nvar tags = new MeasurementTags(KeyValuePair.Create(\"dim1\", 42), KeyValuePair.Create(\"dim2\", 43));\r\n\r\nvar someObservable = new SomeObservable(tags);\r\n\r\nMeter meter = ...\r\n\r\nObservableUpDownCounter\u003cT\u003e counter = meter.CreateObservableUpDownCounter(... , observeValue: someObservable.GetMeasurement(), ...);\r\n\r\n...\r\n\r\nclass SomeObservable\r\n{\r\n    private readonly MeasurementTags _tags;\r\n\r\n    public class SomeObservable(MeasurementTags tags) { _tags = tags; }\r\n\r\n    public Measurement\u003cT\u003e GetMeasurement()\r\n    {\r\n        var value = GetValue();\r\n        return new(value, _tags);\r\n    }\r\n\r\n    private T GetValue() { ... }\r\n}\r\n\r\n\r\n\r\n\r\n\r\n```\r\n\r\n### Alternative Designs\r\n\r\nAt first, I tried to reuse existing [TagList](https://github.com/dotnet/runtime/blob/main/src/libraries/System.Diagnostics.DiagnosticSource/src/System/Diagnostics/Metrics/TagList.cs) type but I failed because I was not able to make following public property of `Measurement\u003cT\u003e` type work with it:\r\n\r\n```csharp\r\npublic readonly struct Measurement\u003cT\u003e where T : struct\r\n{\r\n    /// \u003csummary\u003e\r\n    /// Gets the measurement tags list.\r\n    /// \u003c/summary\u003e\r\n    public ReadOnlySpan\u003cKeyValuePair\u003cstring, object?\u003e\u003e Tags =\u003e _tags.AsSpan();\r\n}\r\n```\r\n\r\nAlternative design that does not require a new type would be something along this lines:\r\n\r\n```csharp\r\npublic readonly struct Measurement\u003cT\u003e where T : struct\r\n{\r\n    public Measurement\u003cT\u003e WithValue(T value) =\u003e new(value, _tags, reuseTags: true);\r\n\r\n    private Measurement\u003cT\u003e(T value, KeyValuePair\u003cstring, object?\u003e tags, bool reuseTags)\r\n    {\r\n       // Do not copy tags if reuseTags == true.\r\n    }\r\n\r\n    // Factory method that would create default \"empty\" measurement so there is an idiomatic way of creating first measurement before `WithValue` is used. \r\n    public static Measurement\u003cT\u003e CreateDefault(ReadOnlySpan\u003cKeyValuePair\u003cstring, object?\u003e\u003e tags) =\u003e new(default, tags);\r\n\r\n}\r\n\r\n// Usage:\r\n\r\nclass SomeObservable\r\n{\r\n    private readonly Measurement\u003cT\u003e _measurement;\r\n\r\n    public class SomeObservable(ReadOnlySpan\u003cKeyValuePair\u003cstring, object?\u003e\u003e tags)\r\n    {\r\n        _measurement = Measurement\u003cT\u003e.CreateDefault(tags);\r\n    }\r\n\r\n    public Measurement\u003cT\u003e GetMeasurement()\r\n    {\r\n        var value = GetValue();\r\n        return _measurement.WithValue(value);\r\n    }\r\n\r\n    private T GetValue() { ... }\r\n}\r\n\r\n\r\n\r\n```\r\n\r\n\r\n\r\n### Risks\r\n\r\nAdditional type `MeasurementTags` that is quite similar to the existing `TagsList` type might be confusing.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOcsixxg==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5iPquB",
+                                           "createdAt":  "2023-07-24T16:58:34Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "tommcdon",
+                                           "body":  "@tarekgh @noahfalk PTAL",
+                                           "updatedAt":  "2023-07-24T16:58:34Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5yyLHG",
+                                           "createdAt":  "2024-02-04T13:45:07Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "brantburnett",
+                                           "body":  "I agree that this is a need, there is a lot of expensive array allocation in places like multi-tag implementations of an `ObservableGauge\u003cT\u003e` callback. I came here today to file this issue myself and found it already existed.\r\n\r\nA couple of possible alternative API surfaces:\r\n\r\n```csharp\r\n// This approach is similar to StringBuilder or UriBuilder\r\npublic sealed class MeasurementBuilder\u003cT\u003e\r\n{\r\n    public ReadOnlySpan\u003cT\u003e Tags { get; }\r\n\r\n    public MeasurementBuilder(IEnumerable\u003cKeyValuePair\u003cstring, object?\u003e\u003e? tags);\r\n    public MeasurementBuilder(params KeyValuePair\u003cstring, object?\u003e[]? tags);\r\n    public MeasurementBuilder(ReadOnlySpan\u003cKeyValuePair\u003cstring, object?\u003e\u003e tags);\r\n\r\n    public Measurement\u003cT\u003e Create(T value);\r\n}\r\n```\r\n\r\n```csharp\r\n// Probably the simplest alternative, just add a copy style constructor\r\npublic readonly struct Measurement\u003cT\u003e where T : struct\r\n{\r\n    public Measurement(T value, Measurement\u003cT\u003e source);\r\n}\r\n```",
+                                           "updatedAt":  "2024-02-04T13:45:07Z"
+                                       }
+                                   ],
+                         "totalCount":  2
+                     },
+        "title":  "[API Proposal]: Support for copying Measurement\u003cT\u003e with same tags but different value",
+        "labels":  [
+                       "api-suggestion",
+                       "area-System.Diagnostics.Metric"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/96850",
+        "createdAt":  "2024-01-11T17:27:06Z",
+        "number":  96850,
+        "author":  "et1975",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHOC_k5Vw==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "splitt3r",
+                                            "createdAt":  "2024-04-01T10:47:53Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "nimro",
+                                            "createdAt":  "2024-07-22T16:01:07Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "WeihanLi",
+                                            "createdAt":  "2024-09-23T23:58:44Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "kerryjiang",
+                                            "createdAt":  "2025-01-15T17:57:31Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "mthesing88",
+                                            "createdAt":  "2025-02-28T10:04:28Z"
+                                        }
+                                    ],
+                          "totalCount":  5
+                      },
+        "updatedAt":  "2024-06-20T23:27:01Z",
+        "body":  "### Background and motivation\r\n\r\n`System.Diagnostics.Metrics.Meter` exposes [the set of `CreateObservableGauge` overloads](https://learn.microsoft.com/en-us/dotnet/api/system.diagnostics.metrics.meter.createobservablegauge?view=net-8.0), but none of them allow for safe and efficient use of threads in the callback implementation. I.e. given that most of modern IO APIs are starting to ship exclusively with Async APIs (returning `Task` or similar), acquiring the value for the gauge metric will mean blocking the thread in order to conform to the sync callback signature.\r\n\r\n\r\n### API Proposal\r\nAdd the overloads to support async signatures, for example:\r\n\r\n```csharp\r\nCreateObservableGauge\u003cT\u003e(String, Func\u003cTask\u003cMeasurement\u003cT\u003e\u003e\u003e, String, String, IEnumerable\u003cKeyValuePair\u003cString,Object\u003e\u003e)\r\n```\r\n\r\n\r\n### API Usage\r\n\r\n```csharp\r\nmeter.CreateObservableGauge\u003cint\u003e(\"name\", MyTaskReturingFunction)\r\n```\r\n\r\n\r\n### Alternative Designs\r\n\r\nAlternatives, like separating the acquisition of the metric value from the callback impl would complicate and potentially defeat the purpose of having the configurable framework that already has an internal scheduler.\r\n\r\n### Risks\r\n\r\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  null,
+                         "nodes":  [
+
+                                   ],
+                         "totalCount":  0
+                     },
+        "title":  "[API Proposal]: Gauge metric creation should support async callback signature",
+        "labels":  [
+                       "api-suggestion",
+                       "area-System.Diagnostics.Metric"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/108152",
+        "createdAt":  "2024-09-23T18:24:02Z",
+        "number":  108152,
+        "author":  "Leonardo-Ferreira",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-12-20T03:12:40Z",
+        "body":  "Is there a way to increase the frequency of metrics like \"Memory Usage\" or \"Cpu Usage\"?\r\n\r\nPerhaps not necessarily increase the frequency of reporting but the capturing, so 1 report can have multiple data points? like, capture every 5 sec but report once every 120 sec along with the minimum value observed, the maximum, the average, the median and the std deviation",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOmFx1BQ==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc6NZZPY",
+                                           "createdAt":  "2024-09-24T19:52:18Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODzcElQ==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "tarekgh",
+                                                                               "createdAt":  "2024-09-24T20:30:43Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "ericstj",
+                                           "body":  "cc @dotnet/area-system-diagnostics-metric \r\nI think you can do that during collection, the metrics themselves are meant to be very fast and have low overhead so as to minimally impact the code being monitored.\r\n\r\nYou can read more about collection here: https://learn.microsoft.com/en-us/dotnet/core/diagnostics/metrics-collection",
+                                           "updatedAt":  "2024-09-24T19:52:18Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6NZxCM",
+                                           "createdAt":  "2024-09-24T20:38:43Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "tarekgh",
+                                           "body":  "@Leonardo-Ferreira how you are listening to the metrics? are you using specific tools or manually collecting it (in-proc or out-of-proc)?",
+                                           "updatedAt":  "2024-09-24T20:38:43Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6NaKS4",
+                                           "createdAt":  "2024-09-24T21:45:47Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "noahfalk",
+                                           "body":  "\u003e Perhaps not necessarily increase the frequency of reporting but the capturing, so 1 report can have multiple data points?\r\n\r\nNothing does that entire process out-of-the-box that I am aware of, but there are some building blocks you could use to make a custom solution that does that. Here is one possibility:\r\n1. Define a new [Histogram](https://learn.microsoft.com/dotnet/api/system.diagnostics.metrics.meter.createhistogram?view=net-8.0) with whatever name you like that will do in-process aggregation of some CPU or memory data. Use multiple histograms if you want to do this for more than one metric.\r\n2. Create a timer that polls at whatever frequency you like for collecting data in-proc.\r\n3. When the timer triggers, invoke an API such as Process.GetCurrentProcess().UserProcessorTime to read the value you care about. Pass that value to the Histogram.Record() to store it.\r\n4. Use your tool of choice (OpenTelemetry, Prometheus.NET, dotnet-counters, dotnet-monitor, etc) to report the Histogram statistics at the lower over-the-network frequency. The reported histogram will contain some statistics about the distribution of values that were observed, but exactly what stats are captured varies by tool.\r\n\r\nYou may already be aware but just wanted to mention - this type of in-proc polling+aggregation is doable but atypical. Many folks would likely handle this by capturing high fidelity data initially and then downsample it as part of querying or downsample the raw data within the storage of the time-series database. For example with queries PromQL supports functions that can report the [min/max/avg over a time range](https://prometheus.io/docs/prometheus/latest/querying/functions/#aggregation_over_time). There are certainly tradeoffs to the different choices and nothing is wrong with doing the aggregation in-process if you are OK with complexity to maintain the custom metrics. Hope that helps!\r\n",
+                                           "updatedAt":  "2024-09-24T21:45:47Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6NgYmm",
+                                           "createdAt":  "2024-09-25T13:23:02Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Leonardo-Ferreira",
+                                           "body":  "\u003e @Leonardo-Ferreira how you are listening to the metrics? are you using specific tools or manually collecting it (in-proc or out-of-proc)?\r\n\r\nI have applications using App Insights, Datadog and .Net OTEL...",
+                                           "updatedAt":  "2024-09-25T13:23:02Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6Nil0k",
+                                           "createdAt":  "2024-09-25T17:02:13Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "tarekgh",
+                                           "body":  "CC @reyang @cijothomas @CodeBlanch ",
+                                           "updatedAt":  "2024-09-25T17:02:13Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6NjE4D",
+                                           "createdAt":  "2024-09-25T17:53:47Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "cijothomas",
+                                           "body":  "In OTel Spec, the metric export frequency is same as observable call back frequency. i.e If exporting occurs every 60 secs, then observable callbacks are also triggered every 60 secs. There was some ask to support a separate interval for the observable callback, but [it didn\u0027t made it to OTel spec.](https://github.com/open-telemetry/opentelemetry-specification/issues/1432), but there seems to be few workaround suggested there already. \r\nNone of them are super straightforward. (Noah\u0027s suggestion is equally good, but it is not provided out-of-box, so have to code them yourself).",
+                                           "updatedAt":  "2024-09-25T17:53:47Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6NjMvK",
+                                           "createdAt":  "2024-09-25T18:04:07Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "tarekgh",
+                                           "body":  "@Leonardo-Ferreira do you have any more questions? or ok to close the issue?",
+                                           "updatedAt":  "2024-09-25T18:04:07Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6YXHUF",
+                                           "createdAt":  "2024-12-20T03:12:39Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Leonardo-Ferreira",
+                                           "body":  "sorry for being away, had to deal with some other problems, but now im back\n\nSo, I was not expecting this to be configurable at the OTel SDK... I was expecting the answer to be either \"No, that value is hard coded, cannot be configured\" or \"Yes, like this: `System.Diagnostics.DiagnosticListener.Get(\"CPU\").SetCollectionFrequency(TimeSpan.FromSeconds(10))`\"\n\nim almost going with @noahfalk \u0027s suggestion, but it would be nice to have this on the runtime itself...",
+                                           "updatedAt":  "2024-12-20T03:12:39Z"
+                                       }
+                                   ],
+                         "totalCount":  8
+                     },
+        "title":  "Frequency of Metrics report",
+        "labels":  [
+                       "question",
+                       "area-System.Diagnostics.Metric"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/109397",
+        "createdAt":  "2024-10-31T02:16:24Z",
+        "number":  109397,
+        "author":  "WeihanLi",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHOC8jpcw==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "PaulusParssinen",
+                                            "createdAt":  "2024-11-02T13:36:04Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_DOWN",
+                                            "user":  "julealgon",
+                                            "createdAt":  "2024-11-11T13:20:04Z"
+                                        }
+                                    ],
+                          "totalCount":  2
+                      },
+        "updatedAt":  "2025-01-13T21:39:27Z",
+        "body":  "### Background and motivation\n\nCurrently, we\u0027re trying to migrate the previous AppMetrics to dotnet Meter, we found the previous AppMetrics added a default `application_` prefix, and had to add the prefix for each metric now, could we introduce prefix support for the meter\n\n### API Proposal\n\n```diff\nnamespace System.Diagnostics.Metrics;\n\npublic class MeterOptions\n{\n+   public string? Prefix { get; set; }\n}\n```\n\nNot sure if we should expose the `Prefix` for the `Meter`\n\n### API Usage\n\n```csharp\nvar meterOptions = new MeterOptions(\"MyTesting\")\n{\n  Prefix = \"my_testing_\"\n};\nvar meter = new Meter(meterOptions);\nvar testCounter = meter.CreateCounter\u003cint\u003e(\"test\");\ntestCounter.Add(1);\n\nvar testCounter = meter.CreateCounter\u003cint\u003e(\"test2\");\ntestCounter.Add(1);\n```\n\nexpecting `my_testing_test`/`my_testing_test2` metric name\n\n\n### Alternative Designs\n\n_No response_\n\n### Risks\n\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOkwBjsA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc6SVhG7",
+                                           "createdAt":  "2024-11-04T16:07:59Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "julealgon",
+                                           "body":  "\u003e Currently, we\u0027re trying to migrate the previous AppMetrics to dotnet Meter, we found the previous AppMetrics added a default `application_` prefix, and had to add the prefix for each metric now, could we introduce prefix support for the meter\n\nThat seems like a fairly specialized need. \n\nCan\u0027t you just subclass the `Meter` class and create a `PrefixedMeter` class that appends your prefix when creating the instruments? You might even be able to implement it as a decorator if you want.",
+                                           "updatedAt":  "2024-11-04T16:07:59Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6TAGOw",
+                                           "createdAt":  "2024-11-09T16:30:01Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "WeihanLi",
+                                           "body":  "\u003e That seems like a fairly specialized need.\n\nthink it could be a common need especially when we want to separate metrics into different meter metrics when the same metrics from different meter would produce the same metrics, though we could distinguish them by labels, it\u0027s still not clear, so think maybe it would be better to separate with a prefix\n\n![Image](https://github.com/user-attachments/assets/19dc9e86-5fcc-4fe2-8197-b2b9bd0648a9)\n\n\n\u003e Can\u0027t you just subclass the Meter class and create a PrefixedMeter class that appends your prefix when creating the instruments? You might even be able to implement it as a decorator if you want.\n\nYeah we could, while think it\u0027s pretty simple to support, so trying to draft this to see if it\u0027s acceptable to add.\n",
+                                           "updatedAt":  "2024-11-10T07:01:15Z"
+                                       }
+                                   ],
+                         "totalCount":  2
+                     },
+        "title":  "[API Proposal]: Introduce Prefix for MeterOptions",
+        "labels":  [
+                       "api-suggestion",
+                       "area-System.Diagnostics.Metric"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/112077",
+        "createdAt":  "2025-02-02T23:45:55Z",
+        "number":  112077,
+        "author":  "rakeshv1",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-07-26T10:53:11Z",
+        "body":  "In the documentation it is mentioned that the ThreadPool ThreadCount metics is of type [UpDownCounter](https://learn.microsoft.com/en-us/dotnet/core/diagnostics/built-in-metrics-runtime#metric-dotnetthread_poolthreadcount)\n\nBut it looks like it is implemented as a Monotonic counter as it uses `CreateObservableCounter` instead of `CreateObservableUpDownCounter`\n\nhttps://github.com/dotnet/runtime/blob/6f3f67528f9c1e6fd3b8614aac054286f3b2e7e0/src/libraries/System.Diagnostics.DiagnosticSource/src/System/Diagnostics/Metrics/RuntimeMetrics.cs#L99\n\n\nShouldn\u0027t it be an UpDownCounter or a Gauge if it is The number of thread pool threads that currently exist?",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOnNh1Dw==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc6cwE4q",
+                                           "createdAt":  "2025-02-03T03:58:50Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "tommcdon",
+                                           "body":  "@noahfalk @tarekgh ",
+                                           "updatedAt":  "2025-02-03T03:58:50Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6cw9lQ",
+                                           "createdAt":  "2025-02-03T06:29:12Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOEFB3XA==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "rakeshv1",
+                                                                               "createdAt":  "2025-02-03T09:11:20Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "tommcdon",
+                                                                               "createdAt":  "2025-02-03T15:24:21Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  2
+                                                         },
+                                           "author":  "noahfalk",
+                                           "body":  "Yeah, that looks like a bug. Thanks for the report @rakeshv1! \ncc @samsp-msft \n\n@tarekgh - mind if I assign this to you?",
+                                           "updatedAt":  "2025-02-03T06:29:12Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6c2HUP",
+                                           "createdAt":  "2025-02-03T16:06:46Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "tarekgh",
+                                           "body":  "I assigned it to myself. @rakeshv1 are you interested in submitting a PR for that? ",
+                                           "updatedAt":  "2025-02-03T16:06:46Z"
+                                       }
+                                   ],
+                         "totalCount":  3
+                     },
+        "title":  "Runtime metrics for ThreadPool ThreadCount is not implemented as UpDownCounter",
+        "labels":  [
+                       "area-System.Diagnostics.Metric"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/118662",
+        "createdAt":  "2025-08-13T01:33:08Z",
+        "number":  118662,
+        "author":  "SakeTao",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-08-13T14:35:46Z",
+        "body":  "**Failed in:** [runtime-coreclr libraries-jitstress 20250812.1](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_build/results?buildId=1120162)\n\n**Failed tests:**\n```\nnet10.0-windows-Release-arm64-disabler2r-Windows.11.Arm64.Open\n    - System.Diagnostics.Metrics.Tests.MetricsTests.TestRecordingMeasurementsWithTagList\n```\n\n**Error message:**\n```\nMicrosoft.DotNet.RemoteExecutor.RemoteExecutionException : Half-way through waiting for remote process.\nMemory load: 37\n\nImage Name                     PID Services                                    \n========================= ======== ============================================\nsvchost.exe                    976 BrokerInfrastructure, DcomLaunch, Power,    \n                                   SystemEventsBroker                          \nsvchost.exe                    436 RpcEptMapper, RpcSs                         \nsvchost.exe                    864 LSM                                         \nsvchost.exe                   1220 CoreMessagingRegistrar                      \nsvchost.exe                   1228 CryptSvc                                    \nsvchost.exe                   1236 TermService                                 \nsvchost.exe                   1252 lmhosts                                     \nsvchost.exe                   1424 AppIDSvc                                    \nsvchost.exe                   1456 NcbService                                  \nsvchost.exe                   1496 Schedule                                    \nsvchost.exe                   1524 DispBrokerDesktopSvc                        \nsvchost.exe                   1548 ProfSvc                                     \nsvchost.exe                   1620 TimeBrokerSvc                               \nsvchost.exe                   1688 UserManager                                 \nsvchost.exe                   1704 UmRdpService                                \nsvchost.exe                   1812 nsi                                         \nsvchost.exe                   1920 netprofm                                    \nsvchost.exe                   1932 vmicheartbeat                               \nsvchost.exe                   1944 vmickvpexchange                             \nsvchost.exe                   1972 vmicshutdown                                \nsvchost.exe                   1992 vmictimesync                                \nsvchost.exe                   2008 LanmanWorkstation                           \nsvchost.exe                   2212 EventLog                                    \nsvchost.exe                   2300 SessionEnv                                  \nsvchost.exe                   2320 SysMain                                     \nsvchost.exe                   2328 EventSystem                                 \nsvchost.exe                   2344 Themes                                      \nsvchost.exe                   2372 Dnscache                                    \nsvchost.exe                   2424 CertPropSvc                                 \nsvchost.exe                   2500 SENS                                        \nsvchost.exe                   2588 AudioEndpointBuilder                        \nsvchost.exe                   2600 FontCache                                   \nsvchost.exe                   2756 Dhcp                                        \nsvchost.exe                   2832 Audiosrv                                    \nsvchost.exe                   2920 WinHttpAutoProxySvc                         \nsvchost.exe                   2936 TextInputManagementService                  \nsvchost.exe                   3028 DusmSvc                                     \nsvchost.exe                   3052 Wcmsvc                                      \nsvchost.exe                   2696 ShellHWDetection                            \nsvchost.exe                   3020 RmSvc                                       \nsvchost.exe                   3264 BFE, mpssvc                                 \nsvchost.exe                   3356 DiagTrack                                   \nsvchost.exe                   3364 DPS                                         \nsvchost.exe                   3372 iphlpsvc                                    \nsvchost.exe                   3384 LanmanServer                      \n```\n\n**Stack trace:**\n```\n   at Microsoft.DotNet.RemoteExecutor.RemoteInvokeHandle.Dispose(Boolean disposing) in /_/src/arcade/src/Microsoft.DotNet.RemoteExecutor/src/RemoteInvokeHandle.cs:line 225\n   at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)\n   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args) in /_/src/coreclr/System.Private.CoreLib/src/System/Reflection/MethodBaseInvoker.CoreCLR.cs:line 36\n   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr) in /_/src/libraries/System.Private.CoreLib/src/System/Reflection/MethodBaseInvoker.cs:line 57\n```",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOvcr9Vw==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc69yv1X",
+                                           "createdAt":  "2025-08-13T14:35:46Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "AndyAyersMS",
+                                           "body":  "While this is a jitstress test, it is possibly some subtle timing issue with the test itself (jitstress, especially disabling R2R, can alter execution timing significantly).",
+                                           "updatedAt":  "2025-08-13T14:35:46Z"
+                                       }
+                                   ],
+                         "totalCount":  1
+                     },
+        "title":  "Test failure: System.Diagnostics.Metrics.Tests.MetricsTests.TestRecordingMeasurementsWithTagList",
+        "labels":  [
+                       "arch-arm64",
+                       "os-windows",
+                       "JitStress",
+                       "untriaged",
+                       "blocking-clean-ci-optional",
+                       "area-System.Diagnostics.Metric"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/118881",
+        "createdAt":  "2025-08-19T12:05:51Z",
+        "number":  118881,
+        "author":  "JanEggers",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-08-31T17:52:41Z",
+        "body":  "I also created a bug in open telemetry because im not sure if its an otel issue or in Microsoft.Extensions.Diagostics\n\nhttps://github.com/open-telemetry/opentelemetry-dotnet/issues/6447\n\nI can observe significant memory usage when running my unittests because MetricsListener are not disposed correctly.\n\nim not sure who owns this but it seems to be root cause of the issue:\n\nhttps://github.com/dotnet/runtime/blob/fad7576aeb3ba738a99073e9054d257c3baef259/src/libraries/Microsoft.Extensions.Diagnostics/src/Metrics/ListenerSubscription.cs#L11",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOv1wKNA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc6-w8UG",
+                                           "createdAt":  "2025-08-19T12:11:10Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "MihuBot",
+                                           "body":  "I\u0027m a bot. Here is a possible related and/or duplicate issue (I may be wrong):\n- https://github.com/dotnet/runtime/issues/94434",
+                                           "updatedAt":  "2025-08-19T12:11:10Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6_EJgE",
+                                           "createdAt":  "2025-08-20T10:44:23Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOEgSpdw==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "jeffhandley",
+                                                                               "createdAt":  "2025-08-31T17:51:50Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "JanEggers",
+                                           "body":  "here is a minimal repro of the issue\n\nhttps://github.com/JanEggers/ReproMemoryLeakOpenTelemetryListener\n\n\u003cimg width=\"1382\" height=\"901\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/a23bd602-98c0-4a38-a80d-f960551a3e43\" /\u003e",
+                                           "updatedAt":  "2025-08-20T10:44:56Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6_ExZm",
+                                           "createdAt":  "2025-08-20T11:13:24Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "JanEggers",
+                                           "body":  "may also be relevant for who ever is responsible for Microsoft.Extensions.DependencyInjection/ Hosting\n\n\u003cimg width=\"1739\" height=\"646\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/94354472-03ef-486e-80bf-e8e4475d4da6\" /\u003e\n\nbecause the listeners keep the service provider alive which keeps basically the whole asp.net stuff alive. maybe this can be improved so that if the root service provider is disposed / clears the list of disposable services after dispose. Im sort of split here. its nice to be able to look inside the service provider to see how all the disposed services look like when they are disposed but that basically keeps a whole lot of objects alive that by them selfes would be disposed \n\n\n",
+                                           "updatedAt":  "2025-08-20T11:13:24Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6_Sno6",
+                                           "createdAt":  "2025-08-21T07:22:23Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "JanEggers",
+                                           "body":  "with the workaround from https://github.com/CodeBlanch/opentelemetry-dotnet/blob/24322e8b7157ac694b24c77cdf63f3270d28bd74/test/OpenTelemetry.Tests/Metrics/MetricTestsBase.cs#L210\n\nI was able to get rid of the metric listeners but the Http client seems to still keep alive the service provider:\n\nhttps://github.com/dotnet/runtime/issues/113494\n \n",
+                                           "updatedAt":  "2025-08-21T07:22:23Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6_XAo0",
+                                           "createdAt":  "2025-08-21T12:52:53Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOEgSpig==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "HEART",
+                                                                               "user":  "jeffhandley",
+                                                                               "createdAt":  "2025-08-31T17:52:12Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "JanEggers",
+                                           "body":  "this is my workaround for now:\n\n```csharp\npublic static void DisposeAllTheThings(this IHost? host)\n{\n    if (host == null)\n    {\n        return;\n    }\n\n    var metricsSubscriptionManager = host.Services.GetService(\n        typeof(ConsoleMetrics).Assembly.GetType(\"Microsoft.Extensions.Diagnostics.Metrics.MetricsSubscriptionManager\")!);\n\n    var server = host.Services.GetService\u003cIServer\u003e();\n    var httpClientFactory = host.Services.GetService\u003cIHttpClientFactory\u003e();\n    host.Dispose();\n\n\n    var callSiteFactory = host.Services.GetType()\n            .GetProperty(\"CallSiteFactory\", BindingFlags.Instance | BindingFlags.NonPublic)!;\n\n    var callSiteFactoryValue = callSiteFactory.GetValue(host.Services)!;\n    var descriptors = callSiteFactoryValue.GetType()\n        .GetField(\"_descriptors\", BindingFlags.Instance | BindingFlags.NonPublic)!;\n    var descriptorLookup = callSiteFactoryValue.GetType()\n        .GetField(\"_descriptorLookup\", BindingFlags.Instance | BindingFlags.NonPublic)!;\n\n    var descriptorsValue = (IList)descriptors.GetValue(callSiteFactoryValue)!;\n    descriptorsValue.Clear();\n\n    var dictionary = descriptorLookup.GetValue(callSiteFactoryValue)!;\n    var clearDictionary = dictionary.GetType().GetMethod(\"Clear\")!;\n    clearDictionary.Invoke(dictionary, new object[0]);\n\n    var callSiteCache = callSiteFactoryValue.GetType()\n        .GetField(\"_callSiteCache\", BindingFlags.Instance | BindingFlags.NonPublic)!;\n    var callSiteCacheDictionary = callSiteCache.GetValue(callSiteFactoryValue)!;\n    var clearcallSiteCacheDictionary = callSiteCacheDictionary.GetType().GetMethod(\"Clear\")!;\n    clearcallSiteCacheDictionary.Invoke(callSiteCacheDictionary, new object[0]);\n\n\n    var callSiteLocks = callSiteFactoryValue.GetType()\n        .GetField(\"_callSiteLocks\", BindingFlags.Instance | BindingFlags.NonPublic)!;\n    var callSiteLocksDictionary = callSiteLocks.GetValue(callSiteFactoryValue)!;\n    var clearcallSiteLocksDictionary = callSiteLocksDictionary.GetType().GetMethod(\"Clear\")!;\n    clearcallSiteLocksDictionary.Invoke(callSiteLocksDictionary, new object[0]);\n\n\n    var serviceAccessors = host.Services.GetType()\n        .GetField(\"_serviceAccessors\", BindingFlags.Instance | BindingFlags.NonPublic)!;\n    var serviceAccessorsDictionary = serviceAccessors.GetValue(host.Services)!;\n    var serviceAccessorsClearDictionary = serviceAccessorsDictionary.GetType().GetMethod(\"Clear\")!;\n    serviceAccessorsClearDictionary.Invoke(serviceAccessorsDictionary, new object[0]);\n\n\n    var hostProp = host!.GetType().GetField(\"_host\", BindingFlags.Instance | BindingFlags.NonPublic)!;\n    var hostValue = hostProp.GetValue(host)!;\n\n\n    var hostedServices =\n        hostValue!.GetType().GetField(\"_hostedServices\", BindingFlags.Instance | BindingFlags.NonPublic)!;\n    hostedServices.SetValue(hostValue, null);\n\n    if (server != null)\n    {\n        var options = server.GetType().GetProperty(\"Options\", BindingFlags.Instance | BindingFlags.Public)!;\n        var optionsValue = options.GetValue(server)!;\n        var codeBackedListenOptions = optionsValue.GetType()\n            .GetProperty(\"CodeBackedListenOptions\", BindingFlags.Instance | BindingFlags.NonPublic)!;\n        var codeBackedListenOptionsValue = (IEnumerable)codeBackedListenOptions.GetValue(optionsValue)!;\n\n        foreach (var listenOption in codeBackedListenOptionsValue)\n        {\n            var middleware =\n                listenOption.GetType().BaseType!.GetField(\"_middleware\", BindingFlags.Instance | BindingFlags.NonPublic)!;\n            var middlewareValue = (IList)middleware.GetValue(listenOption)!;\n            middlewareValue.Clear();\n        }\n        var addressBindingContext =\n            server.GetType().GetProperty(\"AddressBindContext\", BindingFlags.Instance | BindingFlags.NonPublic)!;\n        addressBindingContext.SetValue(server, null);\n    }\n\n    var root = host.Services.GetType().GetProperty(\"Root\", BindingFlags.Instance | BindingFlags.NonPublic)!;\n    var rootScope = root.GetValue(host.Services)!;\n    var disposables = rootScope.GetType().GetProperty(\"Disposables\", BindingFlags.Instance | BindingFlags.NonPublic)!;\n    var disposablesValue = (IList)disposables.GetValue(rootScope)!;\n    disposablesValue.Clear();\n\n    var engine = host.Services.GetType().GetField(\"_engine\", BindingFlags.Instance | BindingFlags.NonPublic)!;\n    var engineValue = engine.GetValue(host.Services)!;\n    engine.SetValue(host.Services, null);\n\n    var resolverBuilder = engineValue.GetType().GetProperty(\"ResolverBuilder\")!;\n    var resolverBuilderValue = resolverBuilder.GetValue(engineValue)!;\n\n    var builderTypeDelegate = resolverBuilderValue.GetType().GetField(\"_buildTypeDelegate\", BindingFlags.Instance | BindingFlags.NonPublic)!;\n    builderTypeDelegate.SetValue(resolverBuilderValue, null);\n    var scopeResolverCache = resolverBuilderValue.GetType().GetField(\"_scopeResolverCache\", BindingFlags.Instance | BindingFlags.NonPublic)!;\n    scopeResolverCache.SetValue(resolverBuilderValue, null);\n\n    var createServiceAccessor = host.Services.GetType().GetField(\"_createServiceAccessor\", BindingFlags.Instance | BindingFlags.NonPublic)!;\n    createServiceAccessor.SetValue(host.Services, null);\n\n    if (metricsSubscriptionManager != null)\n    {\n        metricsSubscriptionManager.GetType().GetMethod(\"Dispose\")!.Invoke(metricsSubscriptionManager, null);\n    }\n\n    if (httpClientFactory != null)\n    {\n        var handlers = (IDictionary)httpClientFactory.GetType().GetField(\"_activeHandlers\", BindingFlags.Instance | BindingFlags.NonPublic)!\n            .GetValue(httpClientFactory)!;\n\n        foreach (var entry in handlers)\n        {\n            var lazyValue = entry.GetType().GetProperty(\"Value\")!.GetValue(entry)!;\n            var value = lazyValue.GetType().GetProperty(\"Value\")!.GetValue(lazyValue)!;\n            var timer = value.GetType().GetField(\"_timer\", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(value);\n            if (timer != null)\n            {\n                value.GetType().GetMethod(\"Timer_Tick\", BindingFlags.Instance | BindingFlags.NonPublic)!.Invoke(value, null);\n            }\n\n            value.GetType().GetField(\"_callback\", BindingFlags.Instance | BindingFlags.NonPublic)!.SetValue(value, null);\n        }\n        handlers.Clear();\n\n\n        httpClientFactory.GetType().GetMethod(\"StopCleanupTimer\", BindingFlags.Instance | BindingFlags.NonPublic)!.Invoke(httpClientFactory, null);\n    } \n```",
+                                           "updatedAt":  "2025-08-21T12:52:53Z"
+                                       }
+                                   ],
+                         "totalCount":  5
+                     },
+        "title":  "Memory Leak while unittesting in MetricsListener",
+        "labels":  [
+                       "tenet-reliability",
+                       "area-System.Diagnostics.Metric"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/119264",
+        "createdAt":  "2025-09-02T12:52:17Z",
+        "number":  119264,
+        "author":  "duke-bartholomew",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-09-03T07:28:20Z",
+        "body":  "### Description\n\nAccording to the API documentation, `System.Diagnostics.DiagnosticsHelper.CompareTags` takes 2 parameters.  The first, a **sorted** tag-list, and the second any other tag-list (can be unsorted) and evaluate whether these tag-lists are equal or not.\n\nWell, this is not entirely true.\n\nWhen I pass in following parameters:\n\n`sortedTags = [ new(\"A\", \"a\"), new(\"B\", \"b\"), new(\"C\", \"c\") ]`\n`tags2 = [ new(\"A\", \"a\"), new(\"C\", \"c\"), new(\"B\", \"bbb\") ]`\n\nthe function returns `True` instead of `False`.\n\nreason being(I guess) is following line:\nhttps://github.com/dotnet/runtime/blob/09e6ddd5aae72dda15200e0d7dc1a9c25ad0bc47/src/libraries/Common/src/System/Diagnostics/DiagnosticsHelper.cs#L67\n\nHere: `compareResult \u003c 0` implies sorting, and, as the function documentation sais, the second list does not need to be sorted.\n\n### Reproduction Steps\n\nCan be reproduced with a simple unit-test:\n\n```\n        List\u003cKeyValuePair\u003cstring, object\u003e\u003e        sortedTags = [ new(\"A\", \"a\"), new(\"B\", \"b\"), new(\"C\", \"c\") ];\n        IEnumerable\u003cKeyValuePair\u003cstring, object\u003e\u003e tags2      = [ new(\"A\", \"a\"), new(\"C\", \"c\"), new(\"B\", \"bbb\") ];\n        \n        DiagnosticsHelper.CompareTags(sortedTags, tags2).Should().BeFalse();\n```\n\n### Expected behavior\n\nAbove mentioned unit-test should succeed.\n\n### Actual behavior\n\nAbove mentioned unit-test fails.\n\n### Regression?\n\n_No response_\n\n### Known Workarounds\n\nOnly _work-around_ here would be to make sure **both** input lists are sorted.\n\n### Configuration\n\n_No response_\n\n### Other information\n\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  null,
+                         "nodes":  [
+
+                                   ],
+                         "totalCount":  0
+                     },
+        "title":  "System.Diagnostics.DiagnosticsHelper.CompareTags is wrong",
+        "labels":  [
+                       "untriaged",
+                       "area-System.Diagnostics.Metric"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/119394",
+        "createdAt":  "2025-09-05T15:12:07Z",
+        "number":  119394,
+        "author":  "aik-jahoda",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-09-09T16:05:11Z",
+        "body":  "### Background and motivation\n\nThe `TagList` is a structure optimized for memory allocations. However, when it is used in the foreach loop, it allocates **168 B** on the heap.\nThe `TagList.Enumerable` is a struct, however because of implicit implementation of `IEnumerable\u003cKeyValuePair\u003cstring, object?\u003e\u003e.GetEnumerator()` the  `TagList.Enumerable` is boxed.\n\n### API Proposal\n\nUnfortunately the fix is to change the API of `TagList` and create `GetEnumerator()` method returning `TagList.Enumerable` to prevent boxing:\n\n```diff\npublic struct TagList : ...\n{\n...\n         // Implement IEnumerable\u003cKeyValuePair\u003cstring, object?\u003e\u003e.GetEnumerator() explicitly\n-        public readonly IEnumerator\u003cKeyValuePair\u003cstring, object?\u003e\u003e GetEnumerator();\n+        readonly IEnumerator\u003cKeyValuePair\u003cstring, object?\u003e\u003e IEnumerable\u003cKeyValuePair\u003cstring, object?\u003e\u003e.GetEnumerator();\n\n         // Add a new method which will be used by foreach and direct `TaglistAccess` preventing boxing\n+        public readonly Enumerator GetEnumerator();\n...\n}\n```\n\n\n\n### Alternative Designs\n\nThere is a workaround: use `for` instead of `foreach` to achieve zero the allocation iteration. The alternative design would be mention this allocation and the workaround in the documantation.\nConsider code analyzer to highlight the API is allocating on the heap (especially when this class is designed to not allocate in case of small amount of tags).\n\n### Risks\n\nThis introduce API breaking change, however in most cases it will require just recompilation. \nReal issue can happen when someone depend on relection.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOwkYC-A==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc7CPFX5",
+                                           "createdAt":  "2025-09-05T15:16:46Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "MihuBot",
+                                           "body":  "I\u0027m a bot. Here is a possible related and/or duplicate issue (I may be wrong):\n- https://github.com/dotnet/runtime/issues/87022",
+                                           "updatedAt":  "2025-09-05T15:16:46Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc7CPvYY",
+                                           "createdAt":  "2025-09-05T16:08:51Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "huoyaoyuan",
+                                           "body":  "It\u0027s a breaking change to change the public `GetEnumerator` method. With escape analysis since .NET 10, the allocation will be eliminated.",
+                                           "updatedAt":  "2025-09-05T16:08:51Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc7CRgL4",
+                                           "createdAt":  "2025-09-05T18:30:06Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "AndyAyersMS",
+                                           "body":  "\u003e It\u0027s a breaking change to change the public `GetEnumerator` method. With escape analysis since .NET 10, the allocation will be eliminated.\n\nIt\u0027s likely the allocation will be eliminated when running with Dynamic PGO, once the code doing the enumeration reaches Tier1. It would be good to verify this as the optimization is new and can be fragile.",
+                                           "updatedAt":  "2025-09-05T18:30:06Z"
+                                       }
+                                   ],
+                         "totalCount":  3
+                     },
+        "title":  "[API Proposal]: Non boxing GetEnumerator in TagList",
+        "labels":  [
+                       "api-suggestion",
+                       "untriaged",
+                       "area-System.Diagnostics.Metric"
+                   ]
+    }
+]

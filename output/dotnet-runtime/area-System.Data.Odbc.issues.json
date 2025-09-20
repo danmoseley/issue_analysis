@@ -1,0 +1,1821 @@
+﻿[
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/23998",
+        "createdAt":  "2017-10-30T12:11:53Z",
+        "number":  23998,
+        "author":  "fredericDelaporte",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHOC__c2A==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "fretje",
+                                            "createdAt":  "2025-03-12T11:56:46Z"
+                                        }
+                                    ],
+                          "totalCount":  1
+                      },
+        "updatedAt":  "2024-10-05T19:31:14Z",
+        "body":  "According to [ODBC documentation](https://docs.microsoft.com/en-us/sql/relational-databases/native-client-odbc-date-time/data-type-support-for-odbc-date-and-time-improvements), ODBC supports the SQL 2008+ types like `datetime2`, `date`, `time` and `datetimeoffset`.\r\n\r\nBut it seems impossible to use them with `System.Data.Odbc` available on MyGet since dotnet/runtime#19102, excepted `Date`. They look unsupported by this ODBC client, although I have the \"ODBC Driver 13 for SQL Server\" and its \"SQL Server Native Client 11.0\" driver:\r\n\r\n - Trying to read a `Time` column with a `System.Data.Odbc` reader `GetValue`\r\n   yields:\r\n\r\n        System.ArgumentException : Unknown SQL type - SS_TIME_EX.\r\n           at System.Data.Odbc.TypeMap.FromSqlType(SQL_TYPE sqltype)\r\n           at System.Data.Odbc.OdbcDataReader.GetSqlType(Int32 i)\r\n           at System.Data.Odbc.OdbcDataReader.GetValue(Int32 i)\r\n\r\n - Trying to read a `Time` column with a `System.Data.Odbc` reader `GetTime` cuts fractional seconds.\r\n - Trying to set a `Time` parameter on an `OdbcCommand` cuts its fractional seconds.\r\n - Trying to set a `DateTime2` parameter on an `OdbcCommand` yields:\r\n\r\n        System.ArgumentException : No mapping exists from DbType DateTime2 to a known\r\n        OdbcType.\r\n           at System.Data.Odbc.TypeMap.FromDbType(DbType dbType)\r\n           at System.Data.Odbc.OdbcParameter.set_DbType(DbType value)\r\n\r\n - Setting a `DateTimeOffset` parameter yields the same error with just the db-type name accordingly changed.\r\n - Trying to read a `DateTimeOffset` column with a `System.Data.Odbc` reader `GetValue`\r\n   yields:\r\n\r\n        System.ArgumentException : Unknown SQL type - -155.\r\n           at System.Data.Odbc.TypeMap.FromSqlType(SQL_TYPE sqltype)\r\n           at System.Data.Odbc.OdbcDataReader.GetSqlType(Int32 i)\r\n           at System.Data.Odbc.OdbcDataReader.GetValue(Int32 i)\r\n\r\n - Trying to read a `DateTimeOffset` column with a `System.Data.Odbc` reader `GetDateTime` cuts offset (but preserves fractional seconds (all 7 digits)).\r\n - Checking [`OdbcType`](https://github.com/dotnet/corefx/blob/master/src/System.Data.Odbc/src/System/Data/Odbc/OdbcType.cs) enumeration, it does not have types for `datetimeoffset` or `datetime2`.\r\n - Trying to dodge the trouble for `datetime2` by using `DbType.DateTime` instead for parameter:\r\n   - Requires to set the parameter scale, otherwise fails with:\r\n\r\n            System.Data.Odbc.OdbcException : ERROR [22008]\r\n            [Microsoft][SQL Server Native Client 11.0]Datetime field overflow.\r\n            Fractional second precision exceeds the scale specified in the parameter binding.\r\n               at System.Data.Odbc.OdbcCommand.ExecuteReaderObject(CommandBehavior behavior, String method, Boolean needReader, Object[] methodArguments, SQL_API odbcApiMethod)\r\n               at System.Data.Odbc.OdbcCommand.ExecuteReaderObject(CommandBehavior behavior, String method, Boolean needReader)\r\n               at System.Data.Odbc.OdbcCommand.ExecuteScalar()\r\n\r\n   - When setting the parameter scale to 7, cuts fractional milliseconds even if the column in database is `datetime2`. This gives the one millisecond precision (compared to SQL Server `datetime` ten thirds of ms precision), but `datetime2` can go down to 100ns. Catching the query with SQL Server Profiler, we can see this:\r\n\r\n            exec sp_executesql N\u0027select count(*) from Types2008 where [DateTime2] = @P1\u0027,\r\n            N\u0027@P1 datetime2\u0027,\u00272017-10-26 20:01:55.1630000\u0027\r\n\r\n       So the value is `datetime2` typed but has its fractional milliseconds zeroed out (yes my original value was not having them already zeroed).\r\n\r\n       By the way this `datetime2` typing causes issues when the underlying table column is `datetime` instead, because it occurs in this case too. It causes `where` equality conditions to fail matching on two thirds of `datetime` values. Those ending with `3` or `7` milliseconds are not considered equal to the \"same\" value when typed `datetime2` with four trailing zero. Only those ending with 0 millisecond match.\r\n\r\nThose results were obtained with .Net Core 2.0, System.Data.Odbc 4.5.0-preview1-25829-02, a SQL Server Express 2016, and as connection string:\r\n\r\n    Driver={SQL Server Native Client 11.0};\r\n    Server=.\\sql_express;\r\n    Database=test;\r\n    Trusted_Connection=yes;\r\n    Mars_Connection=yes;\r\n\r\nHere is a complete [gist](https://gist.github.com/fredericDelaporte/e1563b1510ce31a01e7d9dc9e9387e6d) of tests reproducing those issues.\r\n\r\nThose troubles exist with .Net Framework too, and are reported [here](https://developercommunity.visualstudio.com/content/problem/281326/systemdataodbc-support-of-sql-server-datetime2-tim.html).",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOjsNZjA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDM2MzI5NDc3OA==",
+                                           "createdAt":  "2018-02-06T02:58:36Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "divega",
+                                           "body":  "Moving out of area-System.Data because it is a provider specific features request. SqlClient it is for now until we have a better way to track ODBC issues.\r\n\r\ncc @saurabh500  ",
+                                           "updatedAt":  "2018-02-06T02:58:36Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQ4OTQyNTUzMA==",
+                                           "createdAt":  "2019-05-05T13:15:28Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "agilmore30",
+                                           "body":  "Hi\r\n\r\nI am getting a similar issue with DateTimeOffset as the OP. \r\n\r\nThe exception is \u0027Unknown SQL type - -155.Unknown SQL type - -155.)\u0027\r\n\r\nIf you look at this link:\r\nhttps://docs.microsoft.com/en-us/sql/relational-databases/native-client-odbc-date-time/data-type-support-for-odbc-date-and-time-improvements?view=sql-server-2017\r\n\r\nyou see that DateTimeOffset\r\n\r\nmaps like this:\r\n\r\nDatetimeOFFSET | SQL_SS_TIMESTAMPOFFSET | -155 (SQLNCLI.h)\r\n\r\nand to ODBC Types:\r\n\r\nSQL_SS_TIMESTAMPOFFSET | SQL_SS_TIMESTAMPOFFSET_STRUCT | SQL_C_SS_TIMESTAMPOFFSETSQL_C_BINARY (ODBC 3.5 and earlier) | 0x4001 (sqlncli.h)SQL_BINARY (-2)\r\n-- | -- | -- | --\r\n\r\nThis occurs with the following ODBC Drivers\r\n\r\nODBC Driver 13 for SQL Server - 2017.140.1000.169\r\nODBC Driver 17 for SQL Server - 2017.172.00.01\r\nSQL Native Client 11.0 - 2011.110.6540\r\n\r\nIt seems that it\u0027s by design that these clients return -155 for DateTimeOffset\r\n\r\nAs the OP noted OdbcType enumeration does not have types for datetimeoffset  or -155\r\n\r\nIs it possible that ODBC just doesn\u0027t support a type like DateTimeOffset? The closest I found is SQL_TYPE_UTCDATETIME.\r\n\r\nCould the class library receive the data type as Binary then convert to DateTimeOffset?\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n",
+                                           "updatedAt":  "2019-05-05T13:15:28Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQ5MTA2MjE1Ng==",
+                                           "createdAt":  "2019-05-09T20:53:10Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "voltcode",
+                                           "body":  "Any idea when those sql types will be available through odbc? It\u0027s been a while, lack of support for otherwise working types can result in really weird bugs in data access code.",
+                                           "updatedAt":  "2019-05-09T20:53:10Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDgxMTI0NzU4MQ==",
+                                           "createdAt":  "2021-03-31T16:51:33Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jackfoxy",
+                                           "body":  "I am seeing this same problem.",
+                                           "updatedAt":  "2021-03-31T16:51:33Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5DQwhG",
+                                           "createdAt":  "2022-05-17T06:30:17Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ammadj",
+                                           "body":  "Hi, Is there any update on this? or any ETA? ",
+                                           "updatedAt":  "2022-05-17T06:30:17Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5yL69l",
+                                           "createdAt":  "2024-01-29T23:03:08Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Bysza",
+                                           "body":  "Same here. ",
+                                           "updatedAt":  "2024-01-29T23:03:08Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6Ow1mM",
+                                           "createdAt":  "2024-10-05T19:31:13Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "popisms",
+                                           "body":  "Same issue.\r\n",
+                                           "updatedAt":  "2024-10-05T19:31:13Z"
+                                       }
+                                   ],
+                         "totalCount":  7
+                     },
+        "title":  "System.Data.Odbc support of SQL Server datetime2, time, date, datetimeoffset types",
+        "labels":  [
+                       "bug",
+                       "area-System.Data.Odbc"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/31533",
+        "createdAt":  "2019-11-20T20:35:27Z",
+        "number":  31533,
+        "author":  "BockTim91",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHOA8a7Mw==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "mike-koch",
+                                            "createdAt":  "2019-11-21T14:16:51Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "tb-mtg",
+                                            "createdAt":  "2020-02-25T03:49:59Z"
+                                        }
+                                    ],
+                          "totalCount":  2
+                      },
+        "updatedAt":  "2021-10-04T13:55:47Z",
+        "body":  "We are trying to hit our AS400 running a DB2 instance. When we run a OdbcCommand.ExecuteNonQuery() for select, everything works no issue. However, when executing a simple update, or delete command, we encounter the below error. Our current workaround is to just squish all arithmetic errors out of our execute command, which is unacceptable.\r\n\r\n```\r\nArithmetic operation resulted in an overflow.\r\n   at System.Data.Odbc.OdbcDataReader.FirstResult()\r\n   at System.Data.Odbc.OdbcCommand.ExecuteReaderObject(CommandBehavior behavior, String method, Boolean needReader, Object[] methodArguments, SQL_API odbcApiMethod)\r\n   at System.Data.Odbc.OdbcCommand.ExecuteReaderObject(CommandBehavior behavior, String method, Boolean needReader)\r\n   at System.Data.Odbc.OdbcCommand.ExecuteNonQuery()\r\n```\r\n\r\nWe are using VS 2017 with netcore 2.2",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHON6RAkQ==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDU1NjcwOTc0Nw==",
+                                           "createdAt":  "2019-11-21T00:57:38Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "danmoseley",
+                                           "body":  "Is it possible to attach a debugger to figure out exactly where (what line/values) this is coming from in the code?\r\n\r\nVS should be able to resolve symbols and sources when you debug.",
+                                           "updatedAt":  "2019-11-21T00:57:38Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDU1NzA5OTk0Mg==",
+                                           "createdAt":  "2019-11-21T14:07:20Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "BockTim91",
+                                           "body":  "In enabling full debugging, it appears the issue occurs at line 1912 and 1913 of OdbcDataReader.\r\n\r\n```C#\r\n            cRowsAffected = GetRowCount();              // get rowcount of the current resultset (if any)\r\n            CalculateRecordsAffected(cRowsAffected);    // update recordsaffected\r\n```\r\n\r\nWhen running a select statement cRowsAffected gets -1 as expected, however when running a delete it appears to be overloading the int causing it to crash into SR GetResourceString.\r\n```C#\r\n        internal static string GetResourceString(string resourceKey, string defaultString)\r\n        {\r\n            string resourceString = null;\r\n            try { resourceString = InternalGetResourceString(resourceKey); }\r\n            catch (MissingManifestResourceException) { }\r\n\r\n            if (defaultString != null \u0026\u0026 resourceKey.Equals(resourceString, StringComparison.Ordinal))\r\n            {\r\n                return defaultString;\r\n            }\r\n\r\n            return resourceString;\r\n        }\r\n```\r\n\r\nUpon trying to add cRowsAffected into my watch and casting as an int or long it gives a, \"Cannot obtain value of the local variable or argument because it is not available.\" when doing a delete. However when running a Select it returns a -1 as expected.\r\n\r\nLet me know if there is anything else you need.",
+                                           "updatedAt":  "2019-11-21T14:07:36Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDU1NzIxMTI2NA==",
+                                           "createdAt":  "2019-11-21T18:23:22Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Clockwork-Muse",
+                                           "body":  "[`CalculateRecordsAffected` is takes an `int`](https://github.com/dotnet/corefx/blob/0cc22ccba707d7552159363d586262fa9c4e8a2a/src/System.Data.Odbc/src/System/Data/Odbc/OdbcDataReader.cs#L273):\r\n\r\n```csharp\r\ninternal int CalculateRecordsAffected(int cRowsAffected)\r\n{\r\n    if (0 \u003c= cRowsAffected)\r\n    {\r\n        if (-1 == _recordAffected)\r\n        {\r\n            _recordAffected = cRowsAffected;\r\n        }\r\n        else\r\n        {\r\n            _recordAffected += cRowsAffected;\r\n        }\r\n    }\r\n    return _recordAffected;\r\n}\r\n```\r\n\r\nthis is causing `cRowsAffected` (which is a wrapper around an `IntPtr`) to [call this operator](https://github.com/dotnet/corefx/blob/b49a8a9be1d53cd9e50cb68fd8540be25c65d433/src/System.Data.Odbc/src/System/Data/Odbc/OdbcStatementHandle.cs#L43):\r\n\r\n```csharp\r\npublic static unsafe implicit operator int(SQLLEN value)\r\n{\r\n#if WIN32\r\n    return (int)value._value.ToInt32();\r\n#else\r\n    long l = (long)value._value.ToInt64();\r\n    return checked((int)l);\r\n#endif\r\n}\r\n```\r\nI\u0027m assuming it\u0027s the `return checked((int)l);` line that is actually throwing, which implies that your statement affected 2 billion+ rows.  \r\n\r\nWhich is certainly in a believable range (I\u0027m not sure if they\u0027re all stored in the same or partitioned tables, but we definitely have cause for that many rows on an iSeries database here).  Unfortunately `DbDataReader.RowsAffected` is a strict 32-bit int...\r\n\r\n\r\n\r\n\u003chr /\u003e\r\n\r\n`GetResourceString` is almost certainly just from reporting the overflow, an not at issue.\r\n",
+                                           "updatedAt":  "2019-11-21T18:23:22Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDU1NzIxNTQxNQ==",
+                                           "createdAt":  "2019-11-21T18:34:11Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "BockTim91",
+                                           "body":  "I can safely say the table I was updating has less than 12 million records in it. The statement I am running is on the key affecting only one record.",
+                                           "updatedAt":  "2019-11-21T18:34:11Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDU5MDY2ODc2MQ==",
+                                           "createdAt":  "2020-02-25T03:46:43Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "tb-mtg",
+                                           "body":  "I too am having this problem.  \r\n\r\nI created a simple test project and with basic insert, update \u0026 delete OdbcCommands.  They only work when the following is set:\r\n\r\n`\u003cPlatformTarget\u003ex86\u003c/PlatformTarget\u003e.`\r\n\r\nThe problem is our real application platform target is x64.",
+                                           "updatedAt":  "2020-02-25T05:23:21Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDU5MDY3MzQ4Nw==",
+                                           "createdAt":  "2020-02-25T04:09:42Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "danmoseley",
+                                           "body":  "@saurabh500 ",
+                                           "updatedAt":  "2020-02-25T04:09:42Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDU5NDgyMTg3NQ==",
+                                           "createdAt":  "2020-03-04T20:37:46Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "saurabh500",
+                                           "body":  "I think this one suffers from the lack of an WIN32 build for System.Data.Odbc, which has surfaced in System.Data.OleDb also. I will look into it.",
+                                           "updatedAt":  "2020-03-04T20:37:46Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDU5NDk0NDQzNQ==",
+                                           "createdAt":  "2020-03-04T23:51:11Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOBjmr6Q==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "koen-debacker",
+                                                                               "createdAt":  "2021-03-16T11:33:58Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "tb-mtg",
+                                           "body":  "Turns out I had an out of date IBM Client Access ODBC driver 13.0.1.0.\r\n\r\nI downloaded and installed the latest AS400 Client Access service pack si68573 from IBM and I think it may have fixed the problem.\r\n\r\nThe IBM i Access ODBC drivers versions are now:\r\n* 13.0.21.0 for 32 bit (C:\\Windows\\SysWOW64\\cwbodbc.dll)\r\n* 13.64.21.0 for 64 bit (C:\\Windows\\System32\\cwbodbc.dll)\r\n",
+                                           "updatedAt":  "2020-03-04T23:51:11Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY0ODMyMTk4Nw==",
+                                           "createdAt":  "2020-06-23T17:55:56Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ajcvickers",
+                                           "body":  "@saurabh500 Do you believe that there is still work to be done here?",
+                                           "updatedAt":  "2020-06-23T17:55:56Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDgwNDQ5MDU2Nw==",
+                                           "createdAt":  "2021-03-23T00:22:59Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODOD_hw==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "squirlyfoxy",
+                                                                               "createdAt":  "2023-11-30T14:19:37Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "misha-p",
+                                           "body":  "Experiencing the same issue with Vertica DB. When ODBC client is in 64 bit (.NET 5) and rows affected \u003e Int32.MaxValue, overflow exception is thrown. I believe @Clockwork-Muse is exactly right in his analysis of the root cause https://github.com/dotnet/runtime/issues/31533#issuecomment-557211264\r\n\r\nUnfortunately recent optimization done in .NET 6 preview branch - https://github.com/dotnet/runtime/commit/3d200308e1c9eb8daabd0498d7a2ee02635452b1 - will not solve the issue: `checked((int)l)` is removed, but ToInt32() called on IntPtr will throw OverflowException still.\r\n\r\nWe are building x86 target for now, just to overcome that issue. I guess getting some negative int for rows affected instead of the real count (\u003e int.MaxValue) would be better then an overflow exception.",
+                                           "updatedAt":  "2021-03-23T00:36:00Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDg0NzAyNDQyMA==",
+                                           "createdAt":  "2021-05-24T12:58:06Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOBsBCgA==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "EYES",
+                                                                               "user":  "tb-mtg",
+                                                                               "createdAt":  "2021-05-25T00:06:09Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "PoojaSingh15",
+                                           "body":  "@BockTim91, could you please share how are you connecting to as400?\r\nI am using .net5 and IBM.data.DB2.core package to connect to my iSeries database. had no luck so far.\r\n",
+                                           "updatedAt":  "2021-05-24T12:58:06Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDg0NzgyODk1MA==",
+                                           "createdAt":  "2021-05-25T12:31:50Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "BockTim91",
+                                           "body":  "@PoojaSingh15 We are using System.Data.ODBC (.net core 3.1 currently) and using basic ODBC connections straight to our AS400 connecting to it through windows ODBC Data Sources. The ODBC data source is using iSeries Access ODBC Driver to connect.",
+                                           "updatedAt":  "2021-05-25T12:31:50Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc43m5om",
+                                           "createdAt":  "2021-10-03T12:48:07Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "franciskhoury",
+                                           "body":  "Hello, I am encountering this problem in .NET5.  The ArithmeticException is being raised on INSERT and DELETE statements (even if affecting 0 rows).  However, the MERGE statement is not raising an exception, and is returning the correct row count.",
+                                           "updatedAt":  "2021-10-03T12:48:07Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc43npPK",
+                                           "createdAt":  "2021-10-04T04:45:07Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "danmoseley",
+                                           "body":  "@saurabh500 per @ajcvickers  is there more work here?",
+                                           "updatedAt":  "2021-10-04T04:45:07Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc43ocWp",
+                                           "createdAt":  "2021-10-04T10:24:49Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "franciskhoury",
+                                           "body":  "EDIT: I take back what I had said here about not being able to reproduce the issue.  It does happen consistently after all.  Sorry, I forgot that the latest code I was testing is handling the AritmeticException, so in my tired state, I fooled myself into thinking it wasn\u0027t happening any more.",
+                                           "updatedAt":  "2021-10-04T13:04:13Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc43pECR",
+                                           "createdAt":  "2021-10-04T13:55:46Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "danmoseley",
+                                           "body":  "@franciskhoury if you repro under a debugger (VS should download sources and symbols) can you confirm the diagnosis above? And that the driver is returning an erroneous number of rows?\r\n\r\nAlthough (I’m not familiar with this area) if our code simply does not support a number of rows that it ought to work with, perhaps that needs a fix as well.",
+                                           "updatedAt":  "2021-10-04T13:55:46Z"
+                                       }
+                                   ],
+                         "totalCount":  16
+                     },
+        "title":  "ODBC Arithmetic overflow error Accessing AS400 DB2 (Update, Delete, Insert)",
+        "labels":  [
+                       "area-System.Data.Odbc"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/898",
+        "createdAt":  "2019-12-16T11:39:29Z",
+        "number":  898,
+        "author":  "esso23",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-03-05T16:20:02Z",
+        "body":  "System.Data.Odbc v4.7.0\r\n**Platform:** Windows Server 2019 version 1809 (build 17763.805)\r\n**Runtime:** .NET Core 3.1 (Library with odbc dependency is .NET Standard 2.1)\r\n**Exception:**\r\n```\r\nSystem.PlatformNotSupportedException: System.Data.ODBC is not supported on this platform.\r\n   at System.Data.Odbc.OdbcConnection..ctor(String connectionString)\r\n   at Connector.SysCfg.Odbc.OdbcSysCfgRepository..ctor(String dsnName) in D:\\Sync\\Repositories-Ipecon\\paragon-platform\\src\\Connector.SysCfg\\Odbc\\OdbcSysCfgRepository.cs:line 28\r\n...\r\n```\r\n**Code:**\r\n```cs\r\nmConnection = new OdbcConnection($\"DSN={mDsnName};\");\r\n```\r\n\r\n**Additional info:**\r\nJust migrated from .NET Framework 4.6.1 to .NET Core 3.1 on the same machine. OdbcConnection worked fine on .NET Framework 4.6.1.\r\nApplication is x86.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOdfdp3g==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDU2NzAxMzM5NA==",
+                                           "createdAt":  "2019-12-18T12:34:11Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "esso23",
+                                           "body":  "Ok, I figured out it was because of the .NET Standard, which is not supported. I still see some problems with this though:\r\nIt\u0027s not the **platform** that is not supported. I was targeting win-x86 **platform** which **is** supported.\r\nI had to go to dotnet/corefx repo, check the System.Data.Odbc.csproj to find out what\u0027s going on. On this line:\r\n```\r\n\u003cGeneratePlatformNotSupportedAssemblyMessage Condition=\"\u0027$(TargetGroup)\u0027 == \u0027netstandard\u0027\"\u003eSR.Odbc_PlatformNotSupported\u003c/GeneratePlatformNotSupportedAssemblyMessage\u003e\r\n```\r\n\r\nI think the exception is misleading and should be changed to something else.\r\n",
+                                           "updatedAt":  "2019-12-18T12:34:11Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY0ODMwNzg0Nw==",
+                                           "createdAt":  "2020-06-23T17:32:50Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ajcvickers",
+                                           "body":  "@esso23 Please attach a small, runnable project or post a small, runnable code listing that reproduces what you are seeing so that we can investigate.",
+                                           "updatedAt":  "2020-06-23T17:32:50Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY1OTI1MjQ3OA==",
+                                           "createdAt":  "2020-07-16T08:38:00Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOBWBkyg==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "johnfakeacc",
+                                                                               "createdAt":  "2020-11-06T23:46:08Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "ligf",
+                                           "body":  "I also encountered a similar problem\r\nThe class library refers to odbc, and the console refers to the dll file, and it will prompt \"System.Data.ODBC is not supported on this platform.\"",
+                                           "updatedAt":  "2020-07-16T08:38:00Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDc0NjYwOTEzMA==",
+                                           "createdAt":  "2020-12-16T16:44:06Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "roji",
+                                           "body":  "This looks like it should no longer be relevant, as there won\u0027t be further versions of .NET Standard and libraries are expected to simply target .NET.",
+                                           "updatedAt":  "2020-12-16T16:44:06Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDg0NTk0MDAyNw==",
+                                           "createdAt":  "2021-05-21T13:11:13Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ActionNamou",
+                                           "body":  "Same issue here. I am new to c# and I was trying to make a connection to an sql table to fill a dataset like this\r\n\r\n```\r\npublic static DataSet GetDataSetFromAdapter(DataSet dataSet, string connectionString, string queryString)\r\n        {\r\n            using (OdbcConnection connection =\r\n                       new OdbcConnection(connectionString))\r\n            {\r\n                OdbcDataAdapter adapter =\r\n                    new OdbcDataAdapter(queryString, connection);\r\n\r\n                // Open the connection and fill the DataSet.\r\n                try\r\n                {\r\n                    connection.Open();\r\n                    adapter.Fill(dataSet);\r\n                    MessageBox.Show(\"here u did it\");\r\n\r\n                }\r\n                catch (Exception ex)\r\n                {\r\n                    Console.WriteLine(ex.Message);\r\n                }\r\n                // The connection is automatically closed when the\r\n                // code exits the using block.\r\n            }\r\n            return dataSet;\r\n        }\r\n```\r\nPlease let me know how we can fix this error. ",
+                                           "updatedAt":  "2021-05-21T13:11:43Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5OifLm",
+                                           "createdAt":  "2022-11-16T21:01:23Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "MicahKimel",
+                                           "body":  "I am also having this issue in .net5.0, my code is similar to @ActionNamou ",
+                                           "updatedAt":  "2022-11-16T21:01:23Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5Ok-Bt",
+                                           "createdAt":  "2022-11-17T09:08:42Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "roji",
+                                           "body":  "@ActionNamou @MicahKimel which .NET version (TFM) are you targetting? Can you please share your csproj file?",
+                                           "updatedAt":  "2022-11-17T09:08:42Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5OltA-",
+                                           "createdAt":  "2022-11-17T11:37:15Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "BryanCrotaz",
+                                           "body":  "I\u0027m seeing this targeting .Net 6.0 (in the application and all the class libraries) and running as a service on a Windows 10 Pro VM",
+                                           "updatedAt":  "2022-11-17T11:38:17Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5OluL8",
+                                           "createdAt":  "2022-11-17T11:41:32Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "roji",
+                                           "body":  "Can you please share a minimal, runnable code sample - including your csproj?",
+                                           "updatedAt":  "2022-11-17T11:41:32Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5OmPWd",
+                                           "createdAt":  "2022-11-17T13:35:02Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "MicahKimel",
+                                           "body":  "@roji Sure, here is an ASP.NET Core Web API template with TargetFramework `netcoreapp3.1` with @ActionNamou code in the default controller. I didn\u0027t include my odbc connection string in the controller, but my connection string is valid and works fine in the `Server Explorer`. Thanks!\r\n\r\nI get the error on the following line in the controller\r\n`using (OdbcConnection connection = new OdbcConnection(\"my connection string\"))`\r\n\r\nhttps://github.com/MicahKimel/SystemDataOdbcError ",
+                                           "updatedAt":  "2022-11-17T15:06:02Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5OreYK",
+                                           "createdAt":  "2022-11-18T13:50:56Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOCw_ThA==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "MicahKimel",
+                                                                               "createdAt":  "2022-11-18T18:38:59Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "Pietervdw",
+                                                                               "createdAt":  "2022-12-09T11:59:02Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  2
+                                                         },
+                                           "author":  "MaceWindu",
+                                           "body":  "@MicahKimel you should downgrade System.Data.Odbc to v6.0.1 https://github.com/dotnet/runtime/discussions/78550",
+                                           "updatedAt":  "2022-11-18T13:50:56Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5Os6V9",
+                                           "createdAt":  "2022-11-18T18:39:55Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "MicahKimel",
+                                           "body":  "@MaceWindu Sweet Thanks!!",
+                                           "updatedAt":  "2022-11-18T18:39:55Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5OuGX3",
+                                           "createdAt":  "2022-11-19T00:43:46Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "BryanCrotaz",
+                                           "body":  "6.0.1 gives the same error when the project is entirely built in .Net 6.0.\r\n```\r\nSystem.PlatformNotSupportedException: System.Data.ODBC is not supported on this platform.\r\n   at System.Data.Odbc.OdbcCommand..ctor(String cmdText)\r\n   at Signergy.Queries.Installations.GetUpdatedCrewQuery.Run(Int32 since, CancellationToken cancellationToken)\r\n   at Signergy.Repositories.CrewRepository.GetCrewModifiedSince(Int32 modifiedSince, CancellationToken cancellationToken)\r\n   at ServiceProcess.SignergyAgentProcess.QueryCrew(CancellationToken cancellationToken)\r\n   at ServiceProcess.SignergyAgentProcess.LoopingQuery(CancellationToken token)\r\n```\r\n\r\n```csharp\r\npublic class GetUpdatedCrewQuery : BaseQuery\u003cIEnumerable\u003cInstallation\u003e\u003e\r\n    {\r\n        public GetUpdatedCrewQuery(IDBConnection db) : base(db)\r\n        {\r\n        }\r\n\r\n        public async Task\u003cModifiedSinceResponse\u003cCrewMember, int\u003e\u003e Run(int since, CancellationToken cancellationToken)\r\n        {\r\n            var command = new OdbcCommand(@\"\r\n                SELECT \r\n\t                Installation_crew_members.INSTALLATION_CREW_MEMBERSID AS CrewId,\r\n\t                Installation_crew_members.STAFFID AS CrewStaffId,\r\n\t                Installation_crew_members.MemberName AS CrewName\r\n                FROM\r\n                    Installation_crew_members\r\n                WHERE\r\n                    CrewId \u003e {Since}\r\n                ORDER BY CrewId\r\n            \");\r\n\r\n            command.Connection = Connection;\r\n            command.Parameters.AddWithValue(\"Since\", since);\r\n\r\n            Console.WriteLine(\"Querying crew since \" + since);\r\n            var reader = await command.ExecuteReaderAsync(CommandBehavior.SequentialAccess);\r\n\r\n            var result = new List\u003cCrewMember\u003e();\r\n            var lastModified = since;\r\n            var columns = new OdbcReaderColumnCache(reader);\r\n\r\n            while (reader.Read())\r\n            {\r\n                try\r\n                {\r\n                    var crewId = columns.ValueIntFor(\"CrewId\");\r\n                    var crewMember = new CrewMember(\r\n                        id: crewId,\r\n                        staffId: columns.ValueIntFor(\"CrewStaffId\"),\r\n                        name: columns.ValueStringFor(\"CrewName\")\r\n                    );\r\n                    result.Add(crewMember);\r\n                    if (crewId \u003e lastModified)\r\n                    {\r\n                        lastModified = crewId;\r\n                    }                        \r\n                }\r\n                catch (Exception e)\r\n\t\t\t\t{\r\n                    Console.WriteLine(\"Skipping unreadable crew \" + columns.ValueFor(\"CrewId\") + \u0027 \u0027 + e.Message + \u0027 \u0027);\r\n\t\t\t\t}\r\n            }\r\n\r\n            return new ModifiedSinceResponse\u003cCrewMember, int\u003e(lastModified, result);\r\n        }\r\n    }\r\n```\r\n\r\n*Library project file - Signergy.dll*\r\n```xml\r\n\u003cProject Sdk=\"Microsoft.NET.Sdk\"\u003e\r\n\r\n  \u003cPropertyGroup\u003e\r\n    \u003cTargetFramework\u003enet6.0\u003c/TargetFramework\u003e\r\n    \u003cImplicitUsings\u003eenable\u003c/ImplicitUsings\u003e\r\n    \u003cNullable\u003eenable\u003c/Nullable\u003e\r\n    \u003cPlatforms\u003eAnyCPU;x64\u003c/Platforms\u003e\r\n  \u003c/PropertyGroup\u003e\r\n\r\n  \u003cItemGroup\u003e\r\n    \u003cPackageReference Include=\"System.Data.Odbc\" Version=\"6.0.1\" /\u003e\r\n  \u003c/ItemGroup\u003e\r\n\r\n  \u003cItemGroup\u003e\r\n    \u003cProjectReference Include=\"..\\Models\\Models.csproj\" /\u003e\r\n  \u003c/ItemGroup\u003e\r\n\r\n\u003c/Project\u003e\r\n```\r\n\r\n*App project file*\r\n```xml\r\n\u003cProject Sdk=\"Microsoft.NET.Sdk.Worker\"\u003e\r\n\r\n  \u003cPropertyGroup\u003e\r\n    \u003cTargetFramework\u003enet6.0\u003c/TargetFramework\u003e\r\n    \u003cUserSecretsId\u003edotnet-AgentWorkerService-2FBADBB8-2A06-47B2-A199-77A89EB9A91B\u003c/UserSecretsId\u003e\r\n\t\u003cAutoGenerateBindingRedirects\u003etrue\u003c/AutoGenerateBindingRedirects\u003e\r\n\t\u003cProduceReferenceAssembly\u003eFalse\u003c/ProduceReferenceAssembly\u003e\r\n\t\u003cAssemblyVersion\u003e1.1\u003c/AssemblyVersion\u003e\r\n\t\u003cFileVersion\u003e1.1\u003c/FileVersion\u003e\r\n\t\u003cPlatforms\u003eAnyCPU;x64\u003c/Platforms\u003e\r\n  \u003c/PropertyGroup\u003e\r\n\r\n  \u003cItemGroup\u003e\r\n    \u003cPackageReference Include=\"Microsoft.Extensions.Hosting\" Version=\"6.0.1\" /\u003e\r\n    \u003cPackageReference Include=\"Microsoft.Extensions.Logging\" Version=\"7.0.0\" /\u003e\r\n    \u003cPackageReference Include=\"NetEscapades.Extensions.Logging.RollingFile\" Version=\"2.4.1\" /\u003e\r\n  \u003c/ItemGroup\u003e\r\n\r\n  \u003cItemGroup\u003e\r\n    \u003cProjectReference Include=\"..\\ServiceProcess\\ServiceProcess.csproj\" /\u003e\r\n    \u003cProjectReference Include=\"..\\Signergy\\Signergy.csproj\" /\u003e\r\n  \u003c/ItemGroup\u003e\r\n\u003c/Project\u003e\r\n```",
+                                           "updatedAt":  "2022-11-19T00:47:56Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5O0FyU",
+                                           "createdAt":  "2022-11-21T15:56:49Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "BryanCrotaz",
+                                           "body":  "@roji what\u0027s wrong with the above app - why is it reporting this error whether running as a cmd line exe or as a service, on Windows 10?\r\n\r\nI\u0027ve tried with x86, Any CPU and x64 with version 7.0 and 6.0.1",
+                                           "updatedAt":  "2022-11-21T15:57:51Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5O0MGE",
+                                           "createdAt":  "2022-11-21T16:14:12Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "roji",
+                                           "body":  "@BryanCrotaz and others, it will probably take me a few more days to look into this, thanks for your patience.",
+                                           "updatedAt":  "2022-11-21T16:14:12Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5O0Zlh",
+                                           "createdAt":  "2022-11-21T16:51:32Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "BryanCrotaz",
+                                           "body":  "@roji Emailed you source code in case that helps you diagnose. It fails immediately on startup",
+                                           "updatedAt":  "2022-11-21T16:52:08Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5PKz2u",
+                                           "createdAt":  "2022-11-27T12:13:43Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "MaceWindu",
+                                           "body":  "@BryanCrotaz I don\u0027t know what exactly wrong with your code, but workers build produce runtimes sub-folder with runtime-specific builds. For some reason when you run your program it cannot locate proper runtime for windows and default files from build root used. And they contain `netstandard2.0` version of odbc assembly, which always will throw such exception. You should check you don\u0027t remove/have `windows` runtime subfolder ",
+                                           "updatedAt":  "2022-11-27T12:16:25Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5Y6NUx",
+                                           "createdAt":  "2023-03-31T09:52:28Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "chkrishna2001",
+                                           "body":  "Is there a fix for this ?, I am getting this error when I use .net 5.0, but works when using .net 6.0",
+                                           "updatedAt":  "2023-03-31T09:52:28Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5Y6y6G",
+                                           "createdAt":  "2023-03-31T11:48:49Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ajcvickers",
+                                           "body":  "@chkrishna2001 .NET 5 is out-of-support.",
+                                           "updatedAt":  "2023-03-31T11:48:49Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5Y7HYm",
+                                           "createdAt":  "2023-03-31T13:01:13Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "chkrishna2001",
+                                           "body":  "@ajcvickers I know, but until we migrate, is there a work around to this ?",
+                                           "updatedAt":  "2023-03-31T13:01:13Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5ZKQpt",
+                                           "createdAt":  "2023-04-04T12:09:12Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ajcvickers",
+                                           "body":  "I\u0027m not aware of any workarounds.",
+                                           "updatedAt":  "2023-04-04T12:09:12Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5gR5KB",
+                                           "createdAt":  "2023-07-01T00:25:38Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "gordon-matt",
+                                           "body":  "Just noticed this issue. Linking to one I recently opened myself: #88281",
+                                           "updatedAt":  "2023-07-01T00:25:38Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5oVvOG",
+                                           "createdAt":  "2023-10-06T12:06:16Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODZaHJA==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "donnyv",
+                                                                               "createdAt":  "2024-03-05T16:19:39Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "ActionNamou",
+                                           "body":  "Fixed this issue long ago but here is a little help for anyone new: Fix the issue by matching the System.Data.Odbc package version relative to the dotnet version you are on. Example, if you are on .net 5, go to System.Data.Odbc package and make sure you are also on one of the versions starting with 5. ",
+                                           "updatedAt":  "2023-10-06T12:06:16Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5192ne",
+                                           "createdAt":  "2024-03-05T16:20:01Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "donnyv",
+                                           "body":  "@ActionNamou That saved me. Thanks!",
+                                           "updatedAt":  "2024-03-05T16:20:01Z"
+                                       }
+                                   ],
+                         "totalCount":  24
+                     },
+        "title":  "System.Data.Odbc PlatformNotSupportedException",
+        "labels":  [
+                       "area-System.Data.Odbc"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/44289",
+        "createdAt":  "2020-11-05T12:05:04Z",
+        "number":  44289,
+        "author":  "krwq",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2021-07-13T18:17:59Z",
+        "body":  "See docs: https://docs.microsoft.com/en-us/dotnet/api/system.data.odbc.odbcconnection.serverversion?view=dotnet-plat-ext-3.1\r\n\r\nbut implementation OdbcConnectionOpen.ServerVersion will return null in some cases.\r\n\r\nEither docs or implementation should be fixed here.\r\n\r\nFound when applying nullable annotations",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOKw8ClA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDcyMjMzNjM4NQ==",
+                                           "createdAt":  "2020-11-05T12:05:06Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @roji, @ajcvickers\nSee info in area-owners.md if you want to be subscribed.",
+                                           "updatedAt":  "2020-11-05T12:05:06Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDcyMjM2ODc4Nw==",
+                                           "createdAt":  "2020-11-05T13:11:32Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "roji",
+                                           "body":  "Yeah, I ran across this during annotation: https://github.com/dotnet/runtime/blob/master/src/libraries/System.Data.Odbc/src/System/Data/Odbc/OdbcConnectionOpen.cs#L35 (based on https://github.com/dotnet/runtime/pull/689).",
+                                           "updatedAt":  "2020-11-05T13:11:32Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDcyMjQwMzk4OA==",
+                                           "createdAt":  "2020-11-05T14:14:00Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOBV1fPA==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "roji",
+                                                                               "createdAt":  "2020-11-05T14:33:26Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "krwq",
+                                           "body":  "Yes, this is based on your comment, I\u0027ll be removing TODO-NULLABLEs or replacing them with issues or fixing in a PR soon",
+                                           "updatedAt":  "2020-11-05T14:14:00Z"
+                                       }
+                                   ],
+                         "totalCount":  3
+                     },
+        "title":  "OdbcConnection.ServerVersion may return null but docs says it will throw or return \"\" instead",
+        "labels":  [
+                       "area-System.Data.Odbc"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/76094",
+        "createdAt":  "2022-09-23T18:56:47Z",
+        "number":  76094,
+        "author":  "rjschulte",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-02-15T14:10:04Z",
+        "body":  "### Description\n\nThank you for releasing the system.data.odbc v 6.0.9 last week - my request Remove 1024 character limit on ODBC connection strings #73155 was included \r\nfrom NuGet I have updated my code to use System.Data.Odbc v 6.0.9\r\nI have since tested in .NET 6.0 and it works great, I can put a connection string as big as length of 2k  \r\nunfortunately, it does not in .NET Framework 4.x I still get the 1024-character error \r\n    System.ArgumentException: \u0027Connection string exceeds maximum allowed length of 1024.\u0027\r\n\r\ndo not know if this is related to Framework having system.data.odbc also in system.data.dll if that is the case is there a way to bypass the references in system.data? and point directly to the new version.  I tried aliasing the Dll but did not work\n\n### Reproduction Steps\n\nTried both directly and aliasing the ODBC.DLL \r\n\r\nusing System.Data;\r\n//using System.Data.Odbc;\r\nusing ODBC2 =  System.Data.Odbc;\r\n\r\nstring connetionString = \"Driver={SomeDriver};server=us-east-1.server;warehouse=;authenticator=oauth;tracing=4;TOKEN=SUzI1NiIsIng1dCI6Ik1yNS1BVWliZkJpaTdOZDFqQmViYXhib1hXMCIsImtpZCI6Ik1yNS1BVWliZkJpaTdOZDFqQmViYXhib1hXMCJ9.eyJhdWQiOiI1YTMzOWY4Mi0yMjZkLTQ0MmMtYjBjNi03YzYxNzZlMGM3ZjEiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC82YzdlYzU3NC01OTA0LTRkNDktYmQxOC02YWIzZDQzMmFkMmQvIiwiaWF0IjoxNjQzNjQ4NTYyLCJuYmYiOjE2NDM2NDg1NjIsImV4cCI6MTY0MzY1MzIyNSwiYWNyIjoiMSIsImFpbyI6IkFUUUF5LzhUQUFBQURrOHltTk9vVXhUZWhYSHpXTmxDVGVjbU1KaHZkTERtczZxK01FN2RwRHVOeERRMFBsMnRERHltWVczVkkxQVYiLCJhbXIiOlsicHdkIl0sImFwcGlkIjoiYTYyZTdmOWMtYjNmZi00YjQxLWFkMWMtNGQwZTA2OTA1NzkxIiwiYXBwaWRhY3IiOiIwIiwiZmFtaWx5X25hbWUiOiJTY2h1bHRlIiwiZ2l2ZW5fbmFtZSI6IlJpY2hhcmQiLCJpcGFkZHIiOiIxNzAuMjE4LjQ2LjIzIiwibmFtZSI6IlJpY2hhcmQgSiBTY2h1bHRlIiwib2lkIjoiMWEwYmRmMTUtZTE4Yy00YTQ0LTljY2ItZDYyY2ZhYTY2Y2M1Iiwib25wcmVtX3NpZCI6IlMtMS01LTIxLTg2MTU2NzUwMS0xNTQ3MTYxNjQyLTE4MDE2NzQ1MzEtMzEwMjA4IiwicmgiOiIwLkFS\";\r\n\r\nODBC2.OdbcConnection cnn;  \u003c - error here! \r\n System.ArgumentException: \u0027Connection string exceeds maximum allowed length of 1024.\u0027\r\n\n\n### Expected behavior\n\nsuccessful connection with ODBC driver to database server in the cloud using an Azure Token that has a length of 1650 \r\n\r\nlike we new get in .NET 6\n\n### Actual behavior\n\n   System.ArgumentException: \u0027Connection string exceeds maximum allowed length of 1024.\u0027\r\n\r\nsame error we were getting before the fix\n\n### Regression?\n\nsee above System.Data.Odbc v 6.0.9 released last week only work in .NET 6\n\n### Known Workarounds\n\nWe have many data applications still using Framework that need to access cloud databases via ODBC and cannot  \n\n### Configuration\n\n_No response_\n\n### Other information\n\nAgain thanks for fixing System.Data.Odbc in .NET 6 but we REALLY need to also have it Work in Framework 4.X",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOdAAe7w==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5K5aXe",
+                                           "createdAt":  "2022-09-23T18:56:54Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @roji, @ajcvickers\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Description\n\nThank you for releasing the system.data.odbc v 6.0.9 last week - my request Remove 1024 character limit on ODBC connection strings #73155 was included \r\nfrom NuGet I have updated my code to use System.Data.Odbc v 6.0.9\r\nI have since tested in .NET 6.0 and it works great, I can put a connection string as big as length of 2k  \r\nunfortunately, it does not in .NET Framework 4.x I still get the 1024-character error \r\n    System.ArgumentException: \u0027Connection string exceeds maximum allowed length of 1024.\u0027\r\n\r\ndo not know if this is related to Framework having system.data.odbc also in system.data.dll if that is the case is there a way to bypass the references in system.data? and point directly to the new version.  I tried aliasing the Dll but did not work\n\n### Reproduction Steps\n\nTried both directly and aliasing the ODBC.DLL \r\n\r\nusing System.Data;\r\n//using System.Data.Odbc;\r\nusing ODBC2 =  System.Data.Odbc;\r\n\r\nstring connetionString = \"Driver={SomeDriver};server=us-east-1.server;warehouse=;authenticator=oauth;tracing=4;TOKEN=SUzI1NiIsIng1dCI6Ik1yNS1BVWliZkJpaTdOZDFqQmViYXhib1hXMCIsImtpZCI6Ik1yNS1BVWliZkJpaTdOZDFqQmViYXhib1hXMCJ9.eyJhdWQiOiI1YTMzOWY4Mi0yMjZkLTQ0MmMtYjBjNi03YzYxNzZlMGM3ZjEiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC82YzdlYzU3NC01OTA0LTRkNDktYmQxOC02YWIzZDQzMmFkMmQvIiwiaWF0IjoxNjQzNjQ4NTYyLCJuYmYiOjE2NDM2NDg1NjIsImV4cCI6MTY0MzY1MzIyNSwiYWNyIjoiMSIsImFpbyI6IkFUUUF5LzhUQUFBQURrOHltTk9vVXhUZWhYSHpXTmxDVGVjbU1KaHZkTERtczZxK01FN2RwRHVOeERRMFBsMnRERHltWVczVkkxQVYiLCJhbXIiOlsicHdkIl0sImFwcGlkIjoiYTYyZTdmOWMtYjNmZi00YjQxLWFkMWMtNGQwZTA2OTA1NzkxIiwiYXBwaWRhY3IiOiIwIiwiZmFtaWx5X25hbWUiOiJTY2h1bHRlIiwiZ2l2ZW5fbmFtZSI6IlJpY2hhcmQiLCJpcGFkZHIiOiIxNzAuMjE4LjQ2LjIzIiwibmFtZSI6IlJpY2hhcmQgSiBTY2h1bHRlIiwib2lkIjoiMWEwYmRmMTUtZTE4Yy00YTQ0LTljY2ItZDYyY2ZhYTY2Y2M1Iiwib25wcmVtX3NpZCI6IlMtMS01LTIxLTg2MTU2NzUwMS0xNTQ3MTYxNjQyLTE4MDE2NzQ1MzEtMzEwMjA4IiwicmgiOiIwLkFS\";\r\n\r\nODBC2.OdbcConnection cnn;  \u003c - error here! \r\n System.ArgumentException: \u0027Connection string exceeds maximum allowed length of 1024.\u0027\r\n\n\n### Expected behavior\n\nsuccessful connection with ODBC driver to database server in the cloud using an Azure Token that has a length of 1650 \r\n\r\nlike we new get in .NET 6\n\n### Actual behavior\n\n   System.ArgumentException: \u0027Connection string exceeds maximum allowed length of 1024.\u0027\r\n\r\nsame error we were getting before the fix\n\n### Regression?\n\nsee above System.Data.Odbc v 6.0.9 released last week only work in .NET 6\n\n### Known Workarounds\n\nWe have many data applications still using Framework that need to access cloud databases via ODBC and cannot  \n\n### Configuration\n\n_No response_\n\n### Other information\n\nAgain thanks for fixing System.Data.Odbc in .NET 6 but we REALLY need to also have it Work in Framework 4.X\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003erjschulte\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-System.Data`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2022-09-23T18:56:54Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5K7CCk",
+                                           "createdAt":  "2022-09-24T14:57:03Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @roji, @ajcvickers\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Description\n\nThank you for releasing the system.data.odbc v 6.0.9 last week - my request Remove 1024 character limit on ODBC connection strings #73155 was included \r\nfrom NuGet I have updated my code to use System.Data.Odbc v 6.0.9\r\nI have since tested in .NET 6.0 and it works great, I can put a connection string as big as length of 2k  \r\nunfortunately, it does not in .NET Framework 4.x I still get the 1024-character error \r\n    System.ArgumentException: \u0027Connection string exceeds maximum allowed length of 1024.\u0027\r\n\r\ndo not know if this is related to Framework having system.data.odbc also in system.data.dll if that is the case is there a way to bypass the references in system.data? and point directly to the new version.  I tried aliasing the Dll but did not work\n\n### Reproduction Steps\n\nTried both directly and aliasing the ODBC.DLL \r\n\r\nusing System.Data;\r\n//using System.Data.Odbc;\r\nusing ODBC2 =  System.Data.Odbc;\r\n\r\nstring connetionString = \"Driver={SomeDriver};server=us-east-1.server;warehouse=;authenticator=oauth;tracing=4;TOKEN=SUzI1NiIsIng1dCI6Ik1yNS1BVWliZkJpaTdOZDFqQmViYXhib1hXMCIsImtpZCI6Ik1yNS1BVWliZkJpaTdOZDFqQmViYXhib1hXMCJ9.eyJhdWQiOiI1YTMzOWY4Mi0yMjZkLTQ0MmMtYjBjNi03YzYxNzZlMGM3ZjEiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC82YzdlYzU3NC01OTA0LTRkNDktYmQxOC02YWIzZDQzMmFkMmQvIiwiaWF0IjoxNjQzNjQ4NTYyLCJuYmYiOjE2NDM2NDg1NjIsImV4cCI6MTY0MzY1MzIyNSwiYWNyIjoiMSIsImFpbyI6IkFUUUF5LzhUQUFBQURrOHltTk9vVXhUZWhYSHpXTmxDVGVjbU1KaHZkTERtczZxK01FN2RwRHVOeERRMFBsMnRERHltWVczVkkxQVYiLCJhbXIiOlsicHdkIl0sImFwcGlkIjoiYTYyZTdmOWMtYjNmZi00YjQxLWFkMWMtNGQwZTA2OTA1NzkxIiwiYXBwaWRhY3IiOiIwIiwiZmFtaWx5X25hbWUiOiJTY2h1bHRlIiwiZ2l2ZW5fbmFtZSI6IlJpY2hhcmQiLCJpcGFkZHIiOiIxNzAuMjE4LjQ2LjIzIiwibmFtZSI6IlJpY2hhcmQgSiBTY2h1bHRlIiwib2lkIjoiMWEwYmRmMTUtZTE4Yy00YTQ0LTljY2ItZDYyY2ZhYTY2Y2M1Iiwib25wcmVtX3NpZCI6IlMtMS01LTIxLTg2MTU2NzUwMS0xNTQ3MTYxNjQyLTE4MDE2NzQ1MzEtMzEwMjA4IiwicmgiOiIwLkFS\";\r\n\r\nODBC2.OdbcConnection cnn;  \u003c - error here! \r\n System.ArgumentException: \u0027Connection string exceeds maximum allowed length of 1024.\u0027\r\n\n\n### Expected behavior\n\nsuccessful connection with ODBC driver to database server in the cloud using an Azure Token that has a length of 1650 \r\n\r\nlike we new get in .NET 6\n\n### Actual behavior\n\n   System.ArgumentException: \u0027Connection string exceeds maximum allowed length of 1024.\u0027\r\n\r\nsame error we were getting before the fix\n\n### Regression?\n\nsee above System.Data.Odbc v 6.0.9 released last week only work in .NET 6\n\n### Known Workarounds\n\nWe have many data applications still using Framework that need to access cloud databases via ODBC and cannot  \n\n### Configuration\n\n_No response_\n\n### Other information\n\nAgain thanks for fixing System.Data.Odbc in .NET 6 but we REALLY need to also have it Work in Framework 4.X\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003erjschulte\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`untriaged`, `area-System.Data.Odbc`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2022-09-24T14:57:03Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5K_pfJ",
+                                           "createdAt":  "2022-09-26T15:16:18Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ajcvickers",
+                                           "body":  "@rjschulte We are considering porting this change to .NET Framework, but no decision has yet been made.",
+                                           "updatedAt":  "2022-09-26T15:16:18Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5LAZC4",
+                                           "createdAt":  "2022-09-26T17:43:05Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "rjschulte",
+                                           "body":  "Thank you for considering for Framework. One of my Primary reason for needing it fixed in framework beside C# applications is it\u0027s also failing in Microsoft Integration Services SSIS with the same error VS 2019 SSDT when previewing data. Probably also SSRS and SSAS-Tabular- (if you want I can confirm).  \r\n",
+                                           "updatedAt":  "2022-09-26T17:43:05Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5R-fs1",
+                                           "createdAt":  "2023-01-09T09:38:18Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "MasterKuat",
+                                           "body":  "Hi @ajcvickers,\r\nWe wish to use ODBC connection with token authentication. Unfortunately, we are not able using .NET as our system is based on Azure automation.\r\nPorting this .NET change to Framework, will a great help for us.",
+                                           "updatedAt":  "2023-01-09T09:38:18Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5jwhMe",
+                                           "createdAt":  "2023-08-10T17:57:32Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "pgr-rick-schulte",
+                                           "body":  "I\u0027m still getting Framework request for OAuth ODBC \u003e1024. Can you please make the change - It only requires commenting out 2 lines of code!     ",
+                                           "updatedAt":  "2023-08-10T17:57:32Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc50AB7v",
+                                           "createdAt":  "2024-02-15T14:05:49Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "gabrielius",
+                                           "body":  "Indeed, having a longer Connection String would make things easier. In our products, we have to save a lot of information in ODBC Connection Strings (things like _OAuth Refresh Token_). We have to introduce all kinds of workarounds regarding it. Making this string longer would empower us.",
+                                           "updatedAt":  "2024-02-15T14:10:04Z"
+                                       }
+                                   ],
+                         "totalCount":  7
+                     },
+        "title":  "#73155 Remove 1024 character limit on ODBC connection strings Fix works in .NET 6 but not in Framework 4.X",
+        "labels":  [
+                       "tracking-external-issue",
+                       "area-System.Data.Odbc"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/86490",
+        "createdAt":  "2023-05-19T11:06:10Z",
+        "number":  86490,
+        "author":  "shessane",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHOC6XsxA==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "chrisandchris",
+                                            "createdAt":  "2024-08-21T14:31:25Z"
+                                        }
+                                    ],
+                          "totalCount":  1
+                      },
+        "updatedAt":  "2024-08-27T07:40:38Z",
+        "body":  "### Description\r\n\r\nTo read data from an ODBC datasource a client app uses the class OdbcDataReader. The method to read a string value is GetString. This method calls the [internalGetString](https://github.com/dotnet/runtime/blob/f346aac205644f237a43092e3f2952d143b521ad/src/libraries/System.Data.Odbc/src/System/Data/Odbc/OdbcDataReader.cs#L936). This will read a string value by chunks of 4kB by calling the SQLGetData from an underlying driver as many as it needed to complete the read. The first call to SQLGetData returns the total string length, and all the other calls returns the length of the actual chunk.\r\n\r\nCurrent implementation of internalGetString assumes that the total string length will be equal to the sum of all chunk string length that the underlying driver will return (and the first chunk is 4094).\r\nThis assumption is used in a while loop to decrement a variable called [cbMissing](https://github.com/dotnet/runtime/blob/f346aac205644f237a43092e3f2952d143b521ad/src/libraries/System.Data.Odbc/src/System/Data/Odbc/OdbcDataReader.cs#L1016) with the chunk length returned by GetData, until cbMissing is equal to 0, or the GetData returns false.\r\n\r\nBut if a buggy driver don\u0027t respect this assumption, an infinite read loop is caused.\r\nMy case using the IBM DB2 ODBC DRIVER, and reading an UTF8 string with a length greater than 4kB, and containing a mix of 1-byte and 2-bytes characters in all chunks (like é or â).\r\n\r\n### Reproduction Steps\r\n\r\nCreate a testjson proc stock that read a 5kB Utf8 string returned by some DB2 function (like [json_object](https://www.ibm.com/docs/en/db2/11.5?topic=functions-json-object)). The resulted string should contain a mix of 1-byte and 2-bytes characters in all chunks (like é or â).\r\n\r\nThen we will read the result using this simple C# program\r\n``` csharp\r\n        public async Task TestJsonOdbc()\r\n        {\r\n            const string connectionString = \"dsn=...;driver={IBM DB2 ODBC DRIVER};uid=..;pwd=..\";\r\n            await using var connection = new OdbcConnection(connectionString);\r\n\r\n            await connection.OpenAsync();\r\n\r\n            var command = connection.CreateCommand();\r\n            command.CommandText = \"call testjson()\";\r\n            command.CommandType = CommandType.StoredProcedure;\r\n\r\n            await using var reader = await command.ExecuteReaderAsync();\r\n\r\n            while (await reader.ReadAsync())\r\n            {\r\n                var str = reader.GetString(0); // This call never ends\r\n            }\r\n        }\r\n```\r\n\r\nThe ODBC trace produced by the GetString :\r\n```\r\npowershell      54b8-237c\tENTER SQLGetData \r\n\t\tHSTMT               0x0000028E94CC1610\r\n\t\tUWORD                        1 \r\n\t\tSWORD                       -8 \u003cSQL_C_WCHAR\u003e\r\n\t\tPTR                 0x0000028EAD2400F0 \r\n\t\tSQLLEN                  4094\r\n\t\tSQLLEN *            0x000000D3E5F4D950\r\n\r\npowershell      54b8-237c\tEXIT  SQLGetData  with return code 1 (SQL_SUCCESS_WITH_INFO)\r\n\t\tHSTMT               0x0000028E94CC1610\r\n\t\tUWORD                        1 \r\n\t\tSWORD                       -8 \u003cSQL_C_WCHAR\u003e\r\n\t\tPTR                 0x0000028EAD2400F0 [    4094] \"...\"\r\n\t\tSQLLEN                  4094\r\n\t\tSQLLEN *            0x000000D3E5F4D950 (4608)\r\n\r\n\t\tDIAG [01004] [IBM][System i Access ODBC Driver]Column 1: Data truncated. (30196) \r\n\r\npowershell      54b8-237c\tENTER SQLGetData \r\n\t\tHSTMT               0x0000028E94CC1610\r\n\t\tUWORD                        1 \r\n\t\tSWORD                       -8 \u003cSQL_C_WCHAR\u003e\r\n\t\tPTR                 0x0000028EAD2400F0 \r\n\t\tSQLLEN                  4094\r\n\t\tSQLLEN *            0x000000D3E5F4D950\r\n\r\npowershell      54b8-237c\tEXIT  SQLGetData  with return code 0 (SQL_SUCCESS)\r\n\t\tHSTMT               0x0000028E94CC1610\r\n\t\tUWORD                        1 \r\n\t\tSWORD                       -8 \u003cSQL_C_WCHAR\u003e\r\n\t\tPTR                 0x0000028EAD2400F0 [     502] \"...\"\r\n\t\tSQLLEN                  4094\r\n\t\tSQLLEN *            0x000000D3E5F4D950 (502)\r\n\r\npowershell      54b8-237c\tENTER SQLGetData \r\n\t\tHSTMT               0x0000028E94CC1610\r\n\t\tUWORD                        1 \r\n\t\tSWORD                       -8 \u003cSQL_C_WCHAR\u003e\r\n\t\tPTR                 0x0000028EAD2400F0 \r\n\t\tSQLLEN                  4094\r\n\t\tSQLLEN *            0x000000D3E5F4D950\r\n\r\npowershell      54b8-237c\tEXIT  SQLGetData  with return code 100 (SQL_NO_DATA_FOUND)\r\n\t\tHSTMT               0x0000028E94CC1610\r\n\t\tUWORD                        1 \r\n\t\tSWORD                       -8 \u003cSQL_C_WCHAR\u003e\r\n\t\tPTR                 0x0000028EAD2400F0 \r\n\t\tSQLLEN                  4094\r\n\t\tSQLLEN *            0x000000D3E5F4D950\r\n\r\npowershell      54b8-237c\tENTER SQLGetData \r\n\t\tHSTMT               0x0000028E94CC1610\r\n\t\tUWORD                        1 \r\n\t\tSWORD                       -8 \u003cSQL_C_WCHAR\u003e\r\n\t\tPTR                 0x0000028EAD2400F0 \r\n\t\tSQLLEN                  4094\r\n\t\tSQLLEN *            0x000000D3E5F4D950\r\n\r\npowershell      54b8-237c\tEXIT  SQLGetData  with return code 100 (SQL_NO_DATA_FOUND)\r\n\t\tHSTMT               0x0000028E94CC1610\r\n\t\tUWORD                        1 \r\n\t\tSWORD                       -8 \u003cSQL_C_WCHAR\u003e\r\n\t\tPTR                 0x0000028EAD2400F0 \r\n\t\tSQLLEN                  4094\r\n\t\tSQLLEN *            0x000000D3E5F4D950\r\n\r\npowershell      54b8-237c\tENTER SQLGetData \r\n\t\tHSTMT               0x0000028E94CC1610\r\n\t\tUWORD                        1 \r\n\t\tSWORD                       -8 \u003cSQL_C_WCHAR\u003e\r\n\t\tPTR                 0x0000028EAD2400F0 \r\n\t\tSQLLEN                  4094\r\n\t\tSQLLEN *            0x000000D3E5F4D950\r\n\r\n... (infinite SQLGetData  with return code 100 (SQL_NO_DATA_FOUND))\r\n```\r\n\r\nThe Utf8 string that we try to read contains 2277 chars, with a length of 2304. The first SQLGetData returns a total size of 4608 (2304 * 2). The driver bug is here as it over estimate the size (it should returns only 2277 * 2=4554).\r\nSo after the first SQLGetData, the driver fills the 4094 buffer with the first chunk (actually 4092 + 2 for the end char). The second call to SQLGetData fill the buffer with the remaining chunk, and returns 502 (the remaining chunk contains 251 chars with an Utf8 length of 258). So the cbMissing=4608-4092-502=14.\r\nThe cbMissing is never 0, and all the next SQLGetData returns SQL_NO_DATA_FOUND with 0 [that is considered a success](https://github.com/dotnet/runtime/blob/f346aac205644f237a43092e3f2952d143b521ad/src/libraries/System.Data.Odbc/src/System/Data/Odbc/OdbcDataReader.cs#L1756C17-L1763). Hence the infinite loop.\r\n\r\nFor now I tested only the IBM DB2 ODBC Driver, reading from a DB2 server. I\u0027ll try to reproduce with SQL server or SQlite later.\r\n\r\n### Expected behavior\r\n\r\nOdbcReader should not make assumptions based on the string length, but should read all the buffer returned by the driver until the end. Then using the StringBuilder it will convert the buffer to a C# string.\r\nThis will make the OdbcReader solid to a bug in the length returned by the driver.\r\n\r\n### Actual behavior\r\n\r\nInfinite read loop, causing high CPU usage by the read thread. As the infinite loop is on the reader side, this cause the Odbc query never ends. Query timeouts are thrown on a timeout communication between the driver and the server, and don\u0027t include the odbc adaptation. The SQLGetData keeps returning SQL_NO_DATA_FOUND, and the reader reads 0 byte chunk in an infinite loop.\r\n\r\nIn the case of an API that serves multiple request, each request causes a start of a thread with a while(true) that never ends. This causes CPU rise to 100%, and the only way to fix it is to restart the process.\r\n\r\n\r\n### Regression?\r\n\r\nNo, the same bug is present in .Net Framework 4.7, netcore 3.1 and net 6\r\n\r\n### Known Workarounds\r\n\r\nInstead of reading a string we read bytes, OdbcDataReader.GetBytes(), and construct a c# string manually. The GetBytes uses internally the same GetData, but make no assumption based on remaining length calculated by the underlying driver.\r\nAnother workaround in the case of IBM driver is to force the server to return Ebcdic value instead of UTF8. But this is a server side workaround that is out of the scope of Odbc.\r\n\r\n### Configuration\r\n\r\nTested on Windows 10 and Windows 2019 Server with netcore 3.1 and net 6 app. Confirmed with powershell script that uses NetFramework 4.7\r\n\r\nI think it\u0027s global to any configuration.\r\n\r\n### Other information\r\n\r\nA bug to IBM is reported to fix the driver SQLGetData returns. The current issue is just about the infinite loop. If you are open to contribution I can propose you a fix.\r\n\r\n[Edit] Add explanation about the Odbc trace produced.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOicsc9A==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5cqim_",
+                                           "createdAt":  "2023-05-19T14:15:51Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @roji, @ajcvickers\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Description\r\n\r\nTo read data from an ODBC datasource a client app uses the class OdbcDataReader. The method to read a string value is GetString. This method calls the [internalGetString](https://github.com/dotnet/runtime/blob/f346aac205644f237a43092e3f2952d143b521ad/src/libraries/System.Data.Odbc/src/System/Data/Odbc/OdbcDataReader.cs#L936). This will read a string value by chunks of 4kB by calling the SQLGetData from an underlying driver as many as it needed to complete the read. The first call to SQLGetData returns the total string length, and all the other calls returns the length of the actual chunk.\r\n\r\nCurrent implementation of internalGetString assumes that the total string length will be equal to the sum of all chunk string length that the underlying driver will return (and the first chunk is 4094).\r\nThis assumption is used in a while loop to decrement a variable called [cbMissing](https://github.com/dotnet/runtime/blob/f346aac205644f237a43092e3f2952d143b521ad/src/libraries/System.Data.Odbc/src/System/Data/Odbc/OdbcDataReader.cs#L1016) with the chunk length returned by GetData, until cbMissing is equal to 0, or the GetData returns false.\r\n\r\nBut if a buggy driver don\u0027t respect this assumption, an infinite read loop is caused.\r\nMy case using the IBM DB2 ODBC DRIVER, and reading an UTF8 string with a length greater than 4kB, and containing a mix of 1-byte and 2-bytes characters in all chunks (like é or â).\r\n\r\n### Reproduction Steps\r\n\r\nCreate a testjson proc stock that read a 5kB Utf8 string returned by some DB2 function (like [json_object](https://www.ibm.com/docs/en/db2/11.5?topic=functions-json-object)). The resulted string should contain a mix of 1-byte and 2-bytes characters in all chunks (like é or â).\r\n\r\nThen we will read the result using this simple C# program\r\n``` csharp\r\n        public async Task TestJsonOdbc()\r\n        {\r\n            const string connectionString = \"dsn=...;driver={IBM DB2 ODBC DRIVER};uid=..;pwd=..\";\r\n            await using var connection = new OdbcConnection(connectionString);\r\n\r\n            await connection.OpenAsync();\r\n\r\n            var command = connection.CreateCommand();\r\n            command.CommandText = \"call testjson()\";\r\n            command.CommandType = CommandType.StoredProcedure;\r\n\r\n            await using var reader = await command.ExecuteReaderAsync();\r\n\r\n            while (await reader.ReadAsync())\r\n            {\r\n                var str = reader.GetString(0); // This call never ends\r\n            }\r\n        }\r\n```\r\n\r\nThe ODBC trace produced by the GetString :\r\n```\r\npowershell      54b8-237c\tENTER SQLGetData \r\n\t\tHSTMT               0x0000028E94CC1610\r\n\t\tUWORD                        1 \r\n\t\tSWORD                       -8 \u003cSQL_C_WCHAR\u003e\r\n\t\tPTR                 0x0000028EAD2400F0 \r\n\t\tSQLLEN                  4094\r\n\t\tSQLLEN *            0x000000D3E5F4D950\r\n\r\npowershell      54b8-237c\tEXIT  SQLGetData  with return code 1 (SQL_SUCCESS_WITH_INFO)\r\n\t\tHSTMT               0x0000028E94CC1610\r\n\t\tUWORD                        1 \r\n\t\tSWORD                       -8 \u003cSQL_C_WCHAR\u003e\r\n\t\tPTR                 0x0000028EAD2400F0 [    4094] \"...\"\r\n\t\tSQLLEN                  4094\r\n\t\tSQLLEN *            0x000000D3E5F4D950 (4608)\r\n\r\n\t\tDIAG [01004] [IBM][System i Access ODBC Driver]Column 1: Data truncated. (30196) \r\n\r\npowershell      54b8-237c\tENTER SQLGetData \r\n\t\tHSTMT               0x0000028E94CC1610\r\n\t\tUWORD                        1 \r\n\t\tSWORD                       -8 \u003cSQL_C_WCHAR\u003e\r\n\t\tPTR                 0x0000028EAD2400F0 \r\n\t\tSQLLEN                  4094\r\n\t\tSQLLEN *            0x000000D3E5F4D950\r\n\r\npowershell      54b8-237c\tEXIT  SQLGetData  with return code 0 (SQL_SUCCESS)\r\n\t\tHSTMT               0x0000028E94CC1610\r\n\t\tUWORD                        1 \r\n\t\tSWORD                       -8 \u003cSQL_C_WCHAR\u003e\r\n\t\tPTR                 0x0000028EAD2400F0 [     502] \"...\"\r\n\t\tSQLLEN                  4094\r\n\t\tSQLLEN *            0x000000D3E5F4D950 (502)\r\n\r\npowershell      54b8-237c\tENTER SQLGetData \r\n\t\tHSTMT               0x0000028E94CC1610\r\n\t\tUWORD                        1 \r\n\t\tSWORD                       -8 \u003cSQL_C_WCHAR\u003e\r\n\t\tPTR                 0x0000028EAD2400F0 \r\n\t\tSQLLEN                  4094\r\n\t\tSQLLEN *            0x000000D3E5F4D950\r\n\r\npowershell      54b8-237c\tEXIT  SQLGetData  with return code 100 (SQL_NO_DATA_FOUND)\r\n\t\tHSTMT               0x0000028E94CC1610\r\n\t\tUWORD                        1 \r\n\t\tSWORD                       -8 \u003cSQL_C_WCHAR\u003e\r\n\t\tPTR                 0x0000028EAD2400F0 \r\n\t\tSQLLEN                  4094\r\n\t\tSQLLEN *            0x000000D3E5F4D950\r\n\r\npowershell      54b8-237c\tENTER SQLGetData \r\n\t\tHSTMT               0x0000028E94CC1610\r\n\t\tUWORD                        1 \r\n\t\tSWORD                       -8 \u003cSQL_C_WCHAR\u003e\r\n\t\tPTR                 0x0000028EAD2400F0 \r\n\t\tSQLLEN                  4094\r\n\t\tSQLLEN *            0x000000D3E5F4D950\r\n\r\npowershell      54b8-237c\tEXIT  SQLGetData  with return code 100 (SQL_NO_DATA_FOUND)\r\n\t\tHSTMT               0x0000028E94CC1610\r\n\t\tUWORD                        1 \r\n\t\tSWORD                       -8 \u003cSQL_C_WCHAR\u003e\r\n\t\tPTR                 0x0000028EAD2400F0 \r\n\t\tSQLLEN                  4094\r\n\t\tSQLLEN *            0x000000D3E5F4D950\r\n\r\npowershell      54b8-237c\tENTER SQLGetData \r\n\t\tHSTMT               0x0000028E94CC1610\r\n\t\tUWORD                        1 \r\n\t\tSWORD                       -8 \u003cSQL_C_WCHAR\u003e\r\n\t\tPTR                 0x0000028EAD2400F0 \r\n\t\tSQLLEN                  4094\r\n\t\tSQLLEN *            0x000000D3E5F4D950\r\n\r\n... (infinite SQLGetData  with return code 100 (SQL_NO_DATA_FOUND))\r\n```\r\n\r\nThe Utf8 string that we try to read contains 2277 chars, with a length of 2304. The first SQLGetData returns a total size of 4608 (2304*2). It fill the 4094 buffer with the first chunk (actually 4092 + 2 for the end char). But the second call to SQLGetData fill the buffer with the remaining chunk, but returns only 502 (the remaining chunk contains 251 chars with an Utf8 length of 258). So the cbMissing=4608-4092-502=14.\r\nThe cbMissing is never 0, and all the next SQLGetData returns SQL_NO_DATA_FOUND with 0 [that is considered a success](https://github.com/dotnet/runtime/blob/f346aac205644f237a43092e3f2952d143b521ad/src/libraries/System.Data.Odbc/src/System/Data/Odbc/OdbcDataReader.cs#L1756C17-L1763). Hence the infinite loop.\r\n\r\nFor now I tested only the IBM DB2 ODBC Driver, reading from a DB2 server. I\u0027ll try to reproduce with SQL server or SQlite later.\r\n\r\n### Expected behavior\r\n\r\nOdbcReader should not make assumptions based on the string length, but should read all the buffer returned by the driver until the end. Then using the StringBuilder it will convert the buffer to a C# string.\r\nThis will make the OdbcReader solid to a bug in the length returned by the driver.\r\n\r\n### Actual behavior\r\n\r\nInfinite read loop, causing high CPU usage by the read thread. As the infinite loop is on the reader side, this cause the Odbc query never ends. Query timeouts are thrown on a timeout communication between the driver and the server, and don\u0027t include the odbc adaptation. The SQLGetData keeps returning SQL_NO_DATA_FOUND, and the reader reads 0 byte chunk in an infinite loop.\r\n\r\nIn the case of an API that serves multiple request, each request causes a start of a thread with a while(true) that never ends. This causes CPU rise to 100%, and the only way to fix it is to restart the process.\r\n\r\n\r\n### Regression?\r\n\r\nNo, the same bug is present in .Net Framework 4.7, netcore 3.1 and net 6\r\n\r\n### Known Workarounds\r\n\r\nInstead of reading a string we read bytes, OdbcDataReader.GetBytes(), and construct a c# string manually. The GetBytes uses internally the same GetData, but make no assumption based on remaining length calculated by the underlying driver.\r\nAnother workaround in the case of IBM driver is to force the server to return Ebcdic value instead of UTF8. But this is a server side workaround that is out of the scope of Odbc.\r\n\r\n### Configuration\r\n\r\nTested on Windows 10 and Windows 2019 Server with netcore 3.1 and net 6 app. Confirmed with powershell script that uses NetFramework 4.7\r\n\r\nI think it\u0027s global to any configuration.\r\n\r\n### Other information\r\n\r\nA bug to IBM is reported to fix the driver SQLGetData returns. The current issue is just about the infinite loop. If you are open to contribution I can propose you a fix.\r\n\r\n[Edit] Add explanation about the Odbc trace produced.\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003eshessane\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`untriaged`, `area-System.Data.Odbc`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2023-05-19T14:15:51Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6Jyxz0",
+                                           "createdAt":  "2024-08-27T07:40:00Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "roji",
+                                           "body":  "@MohamedChaawa any interest in picking up your PR here again (#102885)?",
+                                           "updatedAt":  "2024-08-27T07:40:00Z"
+                                       }
+                                   ],
+                         "totalCount":  2
+                     },
+        "title":  "Infinite loop on OdbcDataReader.internalGetString() for buggy ODBC drivers",
+        "labels":  [
+                       "area-System.Data.Odbc"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/89526",
+        "createdAt":  "2023-07-26T20:47:46Z",
+        "number":  89526,
+        "author":  "madelson",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-08-27T16:27:54Z",
+        "body":  "### Description\n\nToday, System.Data.Odbc doesn\u0027t override async methods like `DbCommand.ExecuteNonQueryAsync(...)`, and as a result all execution is synchronous.\r\n\r\nThis is of interest because ODBC can be used to query Apache Impala and Apache Hive from .NET using the ADO.NET framework.\n\n### Reproduction Steps\n\n```\r\nusing OdbcConnection conn = new(\"...\"); // connect to SQL server\r\nconn.Open();\r\n\r\nusing var cmd = conn.CreateCommand();\r\ncmd.CommandText = \"WAITFOR DELAY \u002700:00:10\u0027;\"\r\nusing CancellationTokenSource cts = new();\r\nvar executeTask = cmd.ExecuteNonQueryAsync(cts.Token); // runs synchronously for 10s\r\ncts.Cancel();\r\nawait executTask; // not canceled\r\n```\n\n### Expected behavior\n\nIt would be nice if this used async IO under the hood. [https://learn.microsoft.com/en-us/sql/odbc/reference/develop-app/asynchronous-execution-notification-method?view=sql-server-ver16](these docs) seem to suggest it is possible, but I\u0027m not an Odbc expert...\n\n### Actual behavior\n\nFalls back to sync implementation.\n\n### Regression?\n\nNo\n\n### Known Workarounds\n\nYou can force async execution using `Task.Run`, but this blocks a thread.\n\n### Configuration\n\nWindows + .NET 6\n\n### Other information\n\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOidmI0g==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5ifroH",
+                                           "createdAt":  "2023-07-26T20:47:52Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @roji, @ajcvickers\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Description\n\nToday, System.Data.Odbc doesn\u0027t override async methods like `DbCommand.ExecuteNonQueryAsync(...)`, and as a result all execution is synchronous.\r\n\r\nThis is of interest because ODBC can be used to query Apache Impala and Apache Hive from .NET using the ADO.NET framework.\n\n### Reproduction Steps\n\n```\r\nusing OdbcConnection conn = new(\"...\"); // connect to SQL server\r\nconn.Open();\r\n\r\nusing var cmd = conn.CreateCommand();\r\ncmd.CommandText = \"WAITFOR DELAY \u002700:00:10\u0027;\"\r\nusing CancellationTokenSource cts = new();\r\nvar executeTask = cmd.ExecuteNonQueryAsync(cts.Token); // runs synchronously for 10s\r\ncts.Cancel();\r\nawait executTask; // not canceled\r\n```\n\n### Expected behavior\n\nIt would be nice if this used async IO under the hood. [https://learn.microsoft.com/en-us/sql/odbc/reference/develop-app/asynchronous-execution-notification-method?view=sql-server-ver16](these docs) seem to suggest it is possible, but I\u0027m not an Odbc expert...\n\n### Actual behavior\n\nFalls back to sync implementation.\n\n### Regression?\n\nNo\n\n### Known Workarounds\n\nYou can force async execution using `Task.Run`, but this blocks a thread.\n\n### Configuration\n\nWindows + .NET 6\n\n### Other information\n\n_No response_\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003emadelson\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-System.Data`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2023-07-26T20:47:52Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5ifsX8",
+                                           "createdAt":  "2023-07-26T20:50:12Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @roji, @ajcvickers\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Description\n\nToday, System.Data.Odbc doesn\u0027t override async methods like `DbCommand.ExecuteNonQueryAsync(...)`, and as a result all execution is synchronous.\r\n\r\nThis is of interest because ODBC can be used to query Apache Impala and Apache Hive from .NET using the ADO.NET framework.\n\n### Reproduction Steps\n\n```\r\nusing OdbcConnection conn = new(\"...\"); // connect to SQL server\r\nconn.Open();\r\n\r\nusing var cmd = conn.CreateCommand();\r\ncmd.CommandText = \"WAITFOR DELAY \u002700:00:10\u0027;\"\r\nusing CancellationTokenSource cts = new();\r\nvar executeTask = cmd.ExecuteNonQueryAsync(cts.Token); // runs synchronously for 10s\r\ncts.Cancel();\r\nawait executTask; // not canceled\r\n```\n\n### Expected behavior\n\nIt would be nice if this used async IO under the hood. [https://learn.microsoft.com/en-us/sql/odbc/reference/develop-app/asynchronous-execution-notification-method?view=sql-server-ver16](these docs) seem to suggest it is possible, but I\u0027m not an Odbc expert...\n\n### Actual behavior\n\nFalls back to sync implementation.\n\n### Regression?\n\nNo\n\n### Known Workarounds\n\nYou can force async execution using `Task.Run`, but this blocks a thread.\n\n### Configuration\n\nWindows + .NET 6\n\n### Other information\n\n_No response_\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003emadelson\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`untriaged`, `area-System.Data.Odbc`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2023-07-26T20:50:12Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5ijX0E",
+                                           "createdAt":  "2023-07-27T11:36:36Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODSPclg==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "madelson",
+                                                                               "createdAt":  "2024-01-12T13:03:20Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "roji",
+                                           "body":  "@madelson this may be possible, but we\u0027d have to do a thorough investigation to see if it can be well-supported on other platforms as well (Linux, Mac).\n\nNote also that the ODBC drivers themselves would obviously also need to support this. This may raise a thorny compatibility question: if System.Data.Odbc switches to using ODBC async APIs, what happens if a driver is in use which doesn\u0027t support async? We\u0027d need to fully understand this to avoid people suddenly breaking.\n\nOverall, we haven\u0027t received any requests for ODBC async support over the years, so this hasn\u0027t been prioritized. For most cases where a managed .NET driver exists (ADO.NET), that\u0027s usually the preferred option anyway, and async tends to be supported in ADO.NET drivers.",
+                                           "updatedAt":  "2024-08-27T16:27:54Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6J2YjS",
+                                           "createdAt":  "2024-08-27T14:30:07Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ashishoffline",
+                                           "body":  "@roji It would be great if System.Data.Odbc supported async APIs. I\u0027m using it with several databases where a native ADO.NET provider either doesn\u0027t exist or isn\u0027t available for .NET Core.",
+                                           "updatedAt":  "2024-08-27T14:30:07Z"
+                                       }
+                                   ],
+                         "totalCount":  4
+                     },
+        "title":  "Can the System.Data.Odbc driver support async IO?",
+        "labels":  [
+                       "area-System.Data.Odbc"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/96849",
+        "createdAt":  "2024-01-11T16:24:58Z",
+        "number":  96849,
+        "author":  "ashishoffline",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHOC1Hf0g==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "roji",
+                                            "createdAt":  "2024-01-11T18:24:59Z"
+                                        }
+                                    ],
+                          "totalCount":  1
+                      },
+        "updatedAt":  "2024-01-11T18:28:30Z",
+        "body":  "Enhance System.Data.Odbc\u0027s OdbcException by implementing the newly introduced properties, SqlState and IsTransient, in DbException.\r\nWhile the Error property of OdbcException currently allows accessing SqlState through OdbcError, directly exposing it through SqlState property in DbException would provide a more streamlined access to these properties.\r\n\r\nhttps://github.com/dotnet/runtime/issues/34817\r\nhttps://github.com/dotnet/runtime/issues/35601\r\n\r\n@roji ",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOcISD3w==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5wgUqI",
+                                           "createdAt":  "2024-01-11T16:25:05Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @roji, @ajcvickers\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\nEnhance System.Data.Odbc\u0027s OdbcException by implementing the newly introduced properties, SqlState and IsTransient, in DbException.\r\nWhile the Error property of OdbcException currently allows accessing SqlState through OdbcError, directly exposing it through SqlState property in DbException would provide a more streamlined access to these properties.\r\n\r\nhttps://github.com/dotnet/runtime/issues/34817\r\nhttps://github.com/dotnet/runtime/issues/35601\r\n\r\n@roji \n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003eashishoffline\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-System.Data`, `untriaged`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2024-01-11T16:25:05Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5whIIu",
+                                           "createdAt":  "2024-01-11T18:28:11Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "roji",
+                                           "body":  "Thanks, exposing [OdbcException.OdbcError](https://learn.microsoft.com/en-us/dotnet/api/system.data.odbc.odbcerror.sqlstate?view=dotnet-plat-ext-8.0#system-data-odbc-odbcerror-sqlstate) via [DbException.SqlState](https://learn.microsoft.com/en-us/dotnet/api/system.data.common.dbexception.sqlstate?view=net-7.0#system-data-common-dbexception-sqlstate) indeed seems like a good idea.\r\n\r\nHowever, I\u0027m not sure I like the idea of us hardcoding specific SQLSTATE codes (or classes) as transient; in theory codes and classes are standardized enough, but the situation in practice may be quite different, and it\u0027s probably better to not take a position there.",
+                                           "updatedAt":  "2024-01-11T18:28:11Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5whIPf",
+                                           "createdAt":  "2024-01-11T18:28:28Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @roji, @ajcvickers\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\nEnhance System.Data.Odbc\u0027s OdbcException by implementing the newly introduced properties, SqlState and IsTransient, in DbException.\r\nWhile the Error property of OdbcException currently allows accessing SqlState through OdbcError, directly exposing it through SqlState property in DbException would provide a more streamlined access to these properties.\r\n\r\nhttps://github.com/dotnet/runtime/issues/34817\r\nhttps://github.com/dotnet/runtime/issues/35601\r\n\r\n@roji \n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003eashishoffline\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`enhancement`, `area-System.Data.Odbc`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2024-01-11T18:28:28Z"
+                                       }
+                                   ],
+                         "totalCount":  3
+                     },
+        "title":  "Request for Implementation of DbException.SqlState and DbException.IsTransient in System.Data.Odbc",
+        "labels":  [
+                       "enhancement",
+                       "area-System.Data.Odbc"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/98549",
+        "createdAt":  "2024-02-16T10:27:54Z",
+        "number":  98549,
+        "author":  "ashishoffline",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-07-15T17:44:19Z",
+        "body":  "### Description\r\n\r\nWhen accessing a Vertica Database via System.Data.Odbc, the expected behavior of closing the underlying connection upon calling ExecuteReaderAsync(CommandBehavior.CloseConnection) is not observed. Despite disposing of the DbDataReader object returned by this method, the connection.State remains Open, indicating that the associated connection is not being closed as intended.\r\n\r\n### Reproduction Steps\r\n\r\n```\r\npublic static async Task ExecuteReaderAsync()\r\n{\r\n    string sqlQuery = \"SELECT {ColumnName} FROM {SchemaName.TableName};\";\r\n\r\n    var connection = new OdbcConnection(\"Driver=Vertica;{VerticaDatabase_Connection_String}\");\r\n\r\n    DbDataReader dataReader;\r\n    await using (var command = connection.CreateCommand())\r\n    {\r\n        command.CommandText = sqlQuery;\r\n        command.CommandType = CommandType.Text;\r\n\r\n        await connection.OpenAsync();\r\n        dataReader = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);\r\n    }\r\n\r\n    using (dataReader)\r\n    {\r\n        while (await dataReader.ReadAsync())\r\n        {\r\n            Console.WriteLine(dataReader[\"ColumnName\"]);\r\n        }\r\n    }\r\n\r\n    Console.WriteLine(connection.State);\r\n}\r\n```\r\n\r\nThis outputs:-\r\n![image](https://github.com/dotnet/runtime/assets/23460427/6181b50f-995f-46b3-adcc-59103dadb597)\r\n\r\n\r\n### Expected behavior\r\n\r\nWhen the ExecuteReaderAsync method is invoked with the CommandBehavior.CloseConnection enum, the underlying connection should automatically close upon disposing or closing the DbDataReader object returned by this method.\r\n\r\n### Actual behavior\r\n\r\nUpon calling the ExecuteReaderAsync method with the CommandBehavior.CloseConnection enum, the underlying connection remains open even after disposing or closing the DbDataReader object returned by this method.\r\n\r\n### Regression?\r\n\r\nI\u0027ve tested two versions of System.Data.Odbc (6.0.1 \u0026 8.0.0), and both exhibit the same issue.\r\n\r\n### Known Workarounds\r\n\r\n_No response_\r\n\r\n### Configuration\r\n\r\n- Which version of .NET is the code running on? -\u003e .NET 6\r\n- What OS and version ? -\u003e Windows 11\r\n- What is the architecture ? -\u003e x64\r\n\r\n### Other information\r\n\r\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOt0NTRg==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc50Hf0N",
+                                           "createdAt":  "2024-02-16T10:28:04Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @roji, @ajcvickers\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Description\n\nWhen accessing a Vertica Database via System.Data.Odbc, the expected behavior of closing the underlying connection upon calling ExecuteReaderAsync(CommandBehavior.CloseConnection) is not observed. Despite disposing of the DbDataReader object returned by this method, the connection.State remains Open, indicating that the associated connection is not being closed as intended.\n\n### Reproduction Steps\n\n`public static async Task ExecuteReaderAsync()\r\n{\r\n    string sqlQuery = \"SELECT {ColumnName} FROM {SchemaName.TableName};\";\r\n\r\n    var connection = new VerticaConnection(\"Driver=Vertica;{VerticaDatabase_Connection_String}\");\r\n\r\n    DbDataReader dataReader;\r\n    await using (var command = connection.CreateCommand())\r\n    {\r\n        command.CommandText = sqlQuery;\r\n        command.CommandType = CommandType.Text;\r\n\r\n        await connection.OpenAsync();\r\n        dataReader = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);\r\n    }\r\n\r\n    using (dataReader)\r\n    {\r\n        while (await dataReader.ReadAsync())\r\n        {\r\n            Console.WriteLine(dataReader[\"ColumnName\"]);\r\n        }\r\n    }\r\n\r\n    Console.WriteLine(connection.State);\r\n}`\r\n\r\nThis outputs:-\r\n![image](https://github.com/dotnet/runtime/assets/23460427/6181b50f-995f-46b3-adcc-59103dadb597)\r\n\n\n### Expected behavior\n\nWhen the ExecuteReaderAsync method is invoked with the CommandBehavior.CloseConnection enum, the underlying connection should automatically close upon disposing or closing the DbDataReader object returned by this method.\n\n### Actual behavior\n\nUpon calling the ExecuteReaderAsync method with the CommandBehavior.CloseConnection enum, the underlying connection remains open even after disposing or closing the DbDataReader object returned by this method.\n\n### Regression?\n\nI\u0027ve tested two versions of System.Data.Odbc (6.0.1 \u0026 8.0.0), and both exhibit the same issue.\n\n### Known Workarounds\n\n_No response_\n\n### Configuration\n\n- Which version of .NET is the code running on? -\u003e .NET 6\r\n- What OS and version ? -\u003e Windows 11\r\n- What is the architecture ? -\u003e x64\n\n### Other information\n\n_No response_\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003eashishoffline\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-System.Data`, `untriaged`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2024-02-16T10:28:04Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6JyoPM",
+                                           "createdAt":  "2024-08-27T07:18:15Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @roji, @ajcvickers\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2024-08-27T07:18:15Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6JyozM",
+                                           "createdAt":  "2024-08-27T07:19:43Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @roji, @ajcvickers\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2024-08-27T07:19:43Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6JypoU",
+                                           "createdAt":  "2024-08-27T07:21:37Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "roji",
+                                           "body":  "@ashishoffline apologies for taking so long to answer this.\n\nLooking at your code above, I don\u0027t see ODBC being used anywhere (as is implied in the issue title) - you seem to be using a Vertica ADO.NET database driver directly (ODBC use would have you using OdbcConnection instead of VerticaConnection).\n\nAs such, the behavior you\u0027re seeing here is fully implemented in the Vertica ADO.NET driver, and has nothing to do with the .NET runtime. You\u0027ll need to raise this with the maintainers of that driver.\n\nI\u0027ll go ahead and close this, but if you have further questions, don\u0027t hesitate to post back here.\n",
+                                           "updatedAt":  "2024-08-27T07:21:37Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6J0Kvy",
+                                           "createdAt":  "2024-08-27T10:31:07Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ashishoffline",
+                                           "body":  "@roji Apologies for the incorrect code snippet. I have now updated it with the correct code, and the issue I described still persists.\r\n\r\nI was testing whether the problem lies specifically with the Odbc or Vertica ADO.NET Driver also, and I mistakenly included the wrong code snippet. Issue is only with the System.Data.Odbc",
+                                           "updatedAt":  "2024-08-27T10:31:07Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6J0Sq3",
+                                           "createdAt":  "2024-08-27T10:48:38Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "roji",
+                                           "body":  "@ashishoffline ok, thanks. Can you please try this with a different ODBC provider and report on the results?",
+                                           "updatedAt":  "2024-08-27T10:48:38Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6J0nAF",
+                                           "createdAt":  "2024-08-27T11:14:01Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ashishoffline",
+                                           "body":  "@roji Just to clarify, are you asking me to try a different package other than System.Data.Odbc, or to test with a different database (e.g., MySQL, SQL Server, etc.)?",
+                                           "updatedAt":  "2024-08-27T11:14:01Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6J1A90",
+                                           "createdAt":  "2024-08-27T12:03:17Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "roji",
+                                           "body":  "A different database. This is to try to localize whether there\u0027s a general System.Data.Odbc issue (in which case I\u0027ll reopen), or whether this is somehow still specific to the Vertica ODBC driver.",
+                                           "updatedAt":  "2024-08-27T12:03:17Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6J13Yr",
+                                           "createdAt":  "2024-08-27T13:41:12Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ashishoffline",
+                                           "body":  "@roji I\u0027ve tested the issue with two additional databases, ClickHouse and SQL Server, and the problem persists across both. It seems to be a general issue with `System.Data.Odbc`.",
+                                           "updatedAt":  "2024-08-27T13:41:12Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6J3fJB",
+                                           "createdAt":  "2024-08-27T16:29:30Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @roji, @ajcvickers\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2024-08-27T16:29:30Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6J3fLD",
+                                           "createdAt":  "2024-08-27T16:29:34Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "roji",
+                                           "body":  "@ashishoffline thanks for checking, I\u0027ve reopened the issue. It\u0027s too late to get this fixed for 9.0, but I\u0027m tentatively putting this in the .NET 10 milestone.",
+                                           "updatedAt":  "2024-08-27T16:29:34Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc63Q1NG",
+                                           "createdAt":  "2025-07-15T17:44:12Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "SamMonoRT",
+                                           "body":  "We are not going to get to this in the 10.0 timeframe. Moving to 11.0",
+                                           "updatedAt":  "2025-07-15T17:44:12Z"
+                                       }
+                                   ],
+                         "totalCount":  12
+                     },
+        "title":  "System.Data.Odbc - Connection Object Not Closed When DataReader Object is Disposed/Closed Upon Command Execution",
+        "labels":  [
+                       "bug",
+                       "area-System.Data.Odbc"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/112422",
+        "createdAt":  "2025-02-11T16:14:31Z",
+        "number":  112422,
+        "author":  "carlossanlop",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-09-20T22:02:55Z",
+        "body":  "## Build Information\nBuild: https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_build/results?buildId=947948\nBuild error leg or test failing: System.Data.Odbc.Tests.WorkItemExecution\nPull request: N/A\n\u003c!-- Error message template  --\u003e\n## Error Message\n\nFill the error message using [step by step known issues guidance](https://github.com/dotnet/arcade/blob/main/Documentation/Projects/Build%20Analysis/KnownIssueJsonStepByStep.md).\n\n\u003c!-- Use ErrorMessage for String.Contains matches. Use ErrorPattern for regex matches (single line/no backtracking). Set BuildRetry to `true` to retry builds with this error. Set ExcludeConsoleLog to `true` to skip helix logs analysis. --\u003e\n\n```json\n{\n  \"ErrorMessage\": [\"Starting:    System.Data.Odbc.Tests\", \"Got a SIGSEGV while executing native code\"],\n  \"ErrorPattern\": \"\",\n  \"BuildRetry\": false,\n  \"ExcludeConsoleLog\": false\n}\n```\n\n- Log: https://helixr1107v0xd1eu3ibi6ka.blob.core.windows.net/dotnet-runtime-refs-heads-release-90-staging-66f4c640b26742cbbb/System.Data.Odbc.Tests/1/console.5b65a948.log?helixlogtype=result\n- Output:\n```\n----- start Tue Feb 11 09:00:29 UTC 2025 =============== To repro directly: =====================================================\npushd .\n/root/helix/work/correlation/dotnet exec --runtimeconfig System.Data.Odbc.Tests.runtimeconfig.json --depsfile System.Data.Odbc.Tests.deps.json xunit.console.dll System.Data.Odbc.Tests.dll -xml testResults.xml -nologo -nocolor -notrait category=IgnoreForCI -notrait category=OuterLoop -notrait category=failing \npopd\n===========================================================================================================\n/root/helix/work/workitem/e /root/helix/work/workitem/e\n  Discovering: System.Data.Odbc.Tests (method display = ClassAndMethod, method display options = None)\n  Discovered:  System.Data.Odbc.Tests (found 18 test cases)\n  Starting:    System.Data.Odbc.Tests (parallel test collections = on [4 threads], stop on fail = off)\n\n=================================================================\n\tNative Crash Reporting\n=================================================================\nGot a SIGSEGV while executing native code. This usually indicates\na fatal error in the mono runtime or one of the native libraries \nused by your application.\n=================================================================\n\n=================================================================\n\tNative stacktrace:\n=================================================================\n\t0x7ce7b39fab7f - Unknown\n\t0x7ce7b39a00ce - Unknown\n\t0x7ce7b3905701 - Unknown\n\t0x7ce7b4accd20 - Unknown\n\t0x7ce7b3a01c2b - Unknown\n\t0x7ce7b39fc1f6 - Unknown\n\t0x7ce7b3b31a77 - Unknown\n\t0x7ce7b3b3a521 - Unknown\n\t0x7ce7b3aef92b - Unknown\n\t0x7ce7b3af9c8b - Unknown\n\t0x7ce7b3a0e0db - Unknown\n\t0x7ce7b3a0c8d5 - Unknown\n\t0x7ce7b39fe669 - Unknown\n\t0x7ce7b39fc1f6 - Unknown\n\t0x7ce7b3b31a77 - Unknown\n\t0x7ce7b3b49be9 - Unknown\n\t0x7ce7b4ac21ca - Unknown\n\t0x7ce7b3dee8d3 - Unknown\n\n=================================================================\n\tExternal Debugger Dump:\n=================================================================\n\n=================================================================\n\tNative Crash Reporting\n=================================================================\nGot a SIGSEGV while executing native code. This usually indicates\na fatal error in the mono runtime or one of the native libraries \nused by your application.\n=================================================================\n\nAn error has occurred in the native fault reporting. Some diagnostic information will be unavailable.\n\nExiting early due to double fault.\n/root/helix/work/workitem/e\n----- end Tue Feb 11 09:00:29 UTC 2025 ----- exit code 255 ----------------------------------------------------------\n```\n\r\n\u003c!-- Known issue validation start --\u003e\r\n ### Known issue validation\r\n**Build: :mag_right:** https://dev.azure.com/dnceng-public/public/_build/results?buildId=947948\r\n**Error message validated:** `[Starting:    System.Data.Odbc.Tests Got a SIGSEGV while executing native code`]\r\n**Result validation:** :white_check_mark: Known issue matched with the provided build.\r\n**Validation performed at:** 2/11/2025 4:15:13 PM UTC\r\n\u003c!-- Known issue validation end --\u003e\r\n\u003c!--Known issue error report start --\u003e\r\n\r\n### Report\r\n#### Summary\r\n|24-Hour Hit Count|7-Day Hit Count|1-Month Count|\r\n|---|---|---|\r\n|0|0|0|\r\n\u003c!--Known issue error report end --\u003e",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOvUajBQ==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc6eB6kx",
+                                           "createdAt":  "2025-02-11T16:15:00Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @roji, @ajcvickers\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2025-02-11T16:15:00Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc63RNyp",
+                                           "createdAt":  "2025-07-15T18:02:22Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "SamMonoRT",
+                                           "body":  "Moving to 11.0 ",
+                                           "updatedAt":  "2025-07-15T18:02:22Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc69RqMF",
+                                           "createdAt":  "2025-08-11T15:55:13Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jeffschwMSFT",
+                                           "body":  "removing blocking-clean-ci as this has not failed in 30 days\n\n4-Hour Hit Count | 7-Day Hit Count | 1-Month Count\n-- | -- | --\n0 | 0 | 0\n",
+                                           "updatedAt":  "2025-08-11T15:55:13Z"
+                                       }
+                                   ],
+                         "totalCount":  3
+                     },
+        "title":  "[9.0] Native crash in System.Data.Odbc tests in linux x64 mono",
+        "labels":  [
+                       "os-linux",
+                       "arch-x64",
+                       "runtime-mono",
+                       "area-System.Data.Odbc",
+                       "Known Build Error"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/115389",
+        "createdAt":  "2025-05-08T02:27:58Z",
+        "number":  115389,
+        "author":  "TonyValenti",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-08-11T16:05:24Z",
+        "body":  "### Description\n\nHi .NET Team\nWhen querying Filemaker Pro ODBC databases through .NET ODBC, we\u0027re running into some issues.\n(This does not affect Java ODBC connectors)\n\nSpecifically, it seems that some fields represent their length as 0x00000000ffffffff (-1).\n\nThis is causing overflow errors in SQLLEN.cs when trying to parse the field at this code:\n```\n\tpublic static implicit operator int(SQLLEN value)\n\t{\n\t\treturn ((IntPtr)value._value).ToInt32();\n\t}\n```\n\nInstead of:\n```\nreturn ((IntPtr)value._value).ToInt32();\n```\n\nI think the code should be:\n```\nreturn (int)value.ToInt64();\n```\n\n\n### Reproduction Steps\n\nI can provide a sample database if contacted\n\n### Expected behavior\n\nNo Error occurs\n\n### Actual behavior\n\nAn overflow exception occurs.\n\n### Regression?\n\n_No response_\n\n### Known Workarounds\n\nI can wrap the access and return null if this happens.\n\n### Configuration\n\n.NET 9.0 on Windows.\n\n### Other information\n\nJava ODBC libraries are not affected by this issue.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOvUfvNQ==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc6qjgne",
+                                           "createdAt":  "2025-05-08T02:49:03Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @roji, @ajcvickers\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2025-05-08T02:49:03Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6qjiEJ",
+                                           "createdAt":  "2025-05-08T02:52:04Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "huoyaoyuan",
+                                           "body":  "`IntPtr.ToInt32()` is checked. The new explicit cast operator is unchecked since C# 11, but only available on newer frameworks.",
+                                           "updatedAt":  "2025-05-08T02:52:04Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6qjkMB",
+                                           "createdAt":  "2025-05-08T02:54:34Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOERQonA==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "CONFUSED",
+                                                                               "user":  "neon-sunset",
+                                                                               "createdAt":  "2025-05-08T03:31:46Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "TonyValenti",
+                                           "body":  "Hi All - Some additional information.\nThis works fine with 32-bit EXEs but crashes on 64-bit EXEs.  Here\u0027s why:\nIf you take a look at this line:\n\nhttps://github.com/dotnet/runtime/blob/1b5f93069a92615938c16cb10e363abee2768bd2/src/libraries/System.Data.Odbc/src/System/Data/Odbc/OdbcDataReader.cs#L589\n\nYou\u0027ll see that the cast is happening inside of an unchecked operation.  This is correct.\nHowever, ```IntPtr.ToInt32()``` is checked and is throwing.\n\n@huoyaoyuan - This is an important fix for us.  Can you get a PR rolling?\n",
+                                           "updatedAt":  "2025-05-08T02:54:34Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6qs5jk",
+                                           "createdAt":  "2025-05-08T18:21:38Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "TonyValenti",
+                                           "body":  "@huoyaoyuan  -\nShould this be moved out of untriaged?",
+                                           "updatedAt":  "2025-05-08T18:21:38Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6qtNrv",
+                                           "createdAt":  "2025-05-08T18:49:32Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "huoyaoyuan",
+                                           "body":  "\u003e Should this be moved out of untriaged?\n\nIt should be done by the area owners of System.Data. The decision about the behavior is also up to the owners.",
+                                           "updatedAt":  "2025-05-08T18:49:32Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6quG0A",
+                                           "createdAt":  "2025-05-08T20:23:42Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "TonyValenti",
+                                           "body":  "@roji - Could you take a look at this one when you have a chance?",
+                                           "updatedAt":  "2025-05-08T20:23:42Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6q2LE2",
+                                           "createdAt":  "2025-05-09T12:15:08Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "SamMonoRT",
+                                           "body":  "We will not get to this anytime soon. Adding to 10.0 milestone for tracking",
+                                           "updatedAt":  "2025-05-09T12:15:08Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc63Qyb5",
+                                           "createdAt":  "2025-07-15T17:42:24Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "SamMonoRT",
+                                           "body":  "This has a known work-around, will not be able to get to the actual fix in 10.0. Moving to 11.0 ",
+                                           "updatedAt":  "2025-07-15T17:42:24Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc63VcNE",
+                                           "createdAt":  "2025-07-15T21:55:38Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "TonyValenti",
+                                           "body":  "What is the workaround?\n\nAre you sure there is no way to get this in for 10?  We have really been waiting patiently for this. ",
+                                           "updatedAt":  "2025-07-15T21:55:38Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6324H4",
+                                           "createdAt":  "2025-07-17T16:03:30Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "SamMonoRT",
+                                           "body":  "Hey @TonyValenti  - I was referring to \"Known Workarounds - I can wrap the access and return null if this happens.\"  Given other priorities, yes, this is going to be extremely difficult getting this in for 10.0 - we do welcome community PRs if anyone wants to give it a try.",
+                                           "updatedAt":  "2025-07-17T16:03:30Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc633PdJ",
+                                           "createdAt":  "2025-07-17T16:36:23Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "TonyValenti",
+                                           "body":  "That\u0027s not a real workaround - that is just a way to keep my app from crashing. I end up not getting the value at all.",
+                                           "updatedAt":  "2025-07-17T16:36:23Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc64KuSH",
+                                           "createdAt":  "2025-07-18T15:15:01Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "SamMonoRT",
+                                           "body":  "Got it, we\u0027ll see if we can get something in for 10.0, but looks unlikely. ",
+                                           "updatedAt":  "2025-07-18T15:15:01Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc69R-81",
+                                           "createdAt":  "2025-08-11T16:05:24Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "TonyValenti",
+                                           "body":  "Hi @SamMonoRT -\nI just wanted to nudge on this and let you know I\u0027m super hopeful you can find a way to squeeze this in.",
+                                           "updatedAt":  "2025-08-11T16:05:24Z"
+                                       }
+                                   ],
+                         "totalCount":  13
+                     },
+        "title":  "System.Data.Odbc - SQLLEN does not handle -1",
+        "labels":  [
+                       "area-System.Data.Odbc"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/115424",
+        "createdAt":  "2025-05-09T14:05:03Z",
+        "number":  115424,
+        "author":  "TonyValenti",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-08-25T15:02:55Z",
+        "body":  "### Description\n\nODBC errors when trying to access DateTimeOffset or Time columns.\n```time(7)``` throws: ```Unknown SQL type - SS_TIME_EX```\n```[datetimeoffset](7)``` throws ```Unknown SQL type - -155```\n\n### Reproduction Steps\n\nCreate this SQL table:\n```\nCREATE TABLE [dbo].[TestTable1](\n\t[Id] [int] NULL,\n\t[time(7)] [time](7) NULL\n) ON [PRIMARY]\nGO\n\n\nCREATE TABLE [dbo].[TestTable2](\n\t[id] [int] NULL,\n\t[datetimeoffset(7)] [datetimeoffset](7) NULL\n) ON [PRIMARY]\nGO\n\nINSERT INTO TestTable1(ID) VALUES(1)\nINSERT INTO TestTable2(ID) VALUES(1)\n```\n\nAnd run this C# code:\n\n```\nusing System.Data.Odbc;\n\nusing var C = new OdbcConnection(\"Driver={ODBC Driver 17 for SQL Server};server=localhost;database=TestDb;trusted_connection=Yes;\");\nC.Open();\n\nvar Tables = new[] {\n    \"TestTable1\",\n    \"TestTable2\",\n};\n\nforeach (var Table in Tables) {\n\n\n    var CMD = C.CreateCommand();\n    CMD.CommandText = $@\"SELECT * FROM {Table}\";\n\n    using var DR = CMD.ExecuteReader();\n\n    var Names = new Dictionary\u003cint, string\u003e();\n    for (var i = 0; i \u003c DR.FieldCount; i++) {\n        Names[i] = DR.GetName(i);\n    }\n\n    while (DR.Read()) {\n        foreach (var (Index, Item) in Names) {\n            try {\n                var Value = DR[Item];\n            } catch (Exception ex) {\n                Console.WriteLine($@\"Error getting {Table}.{Item} [{Index}]\");\n                Console.WriteLine(ex);\n            }\n        }\n\n    }\n\n}\n\n```\n\n### Expected behavior\n\nValues should be retrieved\n\n### Actual behavior\n\nExceptions are thrown.\n\n### Regression?\n\nNo\n\n### Known Workarounds\n\nNone\n\n### Configuration\n\nWindows 11.x64\n\n### Other information\n\nI\u0027m demonstrating this issue using SQL Server because it is easy to reproduce but we are experiencing this in a non-SQL Server database that is only accessible through ODBC.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOquEZ3A==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc6q4Rnc",
+                                           "createdAt":  "2025-05-09T14:57:32Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @roji, @ajcvickers\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2025-05-09T14:57:32Z"
+                                       }
+                                   ],
+                         "totalCount":  1
+                     },
+        "title":  "System.Data.Odbc does not support Time or DateTimeOffset data types",
+        "labels":  [
+                       "area-System.Data.Odbc"
+                   ]
+    }
+]

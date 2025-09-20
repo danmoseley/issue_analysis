@@ -1,0 +1,146 @@
+﻿{
+    "url":  "https://github.com/dotnet/runtime/issues/97410",
+    "createdAt":  "2024-01-23T18:56:14Z",
+    "number":  97410,
+    "author":  "jlaanstra",
+    "reactions":  {
+                      "hasNextPage":  false,
+                      "endCursor":  null,
+                      "nodes":  [
+
+                                ],
+                      "totalCount":  0
+                  },
+    "updatedAt":  "2024-07-23T22:01:48Z",
+    "body":  "### Description\r\n\r\nRuntimeEventSource.Initialize ends up calling CoWaitForMultipleHandles which ends up calling CoInitializeSecurity. RuntimeEventSource is called before any user code preventing it from configuring COM with better process default via IGlobalOptions or setting different COM security.\r\n\r\n### Reproduction Steps\r\n\r\nAdd the following module initializer to a Windows app:\r\n\r\n```csharp\r\ninternal static class Initializer\r\n{\r\n    [ModuleInitializer]\r\n    internal static void Initialize()\r\n    {\r\n        Marshal.ThrowExceptionForHR(PInvoke.CoCreateInstance\u003cIGlobalOptions\u003e(new Guid(\"0000034B-0000-0000-C000-000000000046\"), null, CLSCTX.CLSCTX_INPROC_SERVER | CLSCTX.CLSCTX_NO_CODE_DOWNLOAD, out var globalOptions));\r\n        globalOptions-\u003eSet(GLOBALOPT_PROPERTIES.COMGLB_EXCEPTION_HANDLING, (nuint)GLOBALOPT_EH_VALUES.COMGLB_EXCEPTION_DONOT_HANDLE_ANY);\r\n        globalOptions-\u003eSet(GLOBALOPT_PROPERTIES.COMGLB_RO_SETTINGS, (nuint)GLOBALOPT_RO_FLAGS.COMGLB_FAST_RUNDOWN);\r\n    }\r\n}\r\n```\r\n\r\n### Expected behavior\r\n\r\nWe are able to successfully set COM IGlobalOptions in a module initializer.\r\n\r\n### Actual behavior\r\n\r\nSetting global options fails with RPC_E_TOOLATE as COM security is already initialized.\r\n\r\n### Regression?\r\n\r\nUnclear, but the scenario has worked in production for multiple releases with minimal issues.\r\n\r\n### Known Workarounds\r\n\r\n_No response_\r\n\r\n### Configuration\r\n\r\n_No response_\r\n\r\n### Other information\r\n\r\n_No response_",
+    "comments":  {
+                     "hasNextPage":  false,
+                     "endCursor":  "Y3Vyc29yOnYyOpHOfa5HjA==",
+                     "nodes":  [
+                                   {
+                                       "id":  "IC_kwDODI9FZc5xpmYK",
+                                       "createdAt":  "2024-01-23T18:58:08Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  "AaronRobinsonMSFT",
+                                       "body":  "This is also related to Interop and is another manifestation of https://github.com/dotnet/runtime/issues/73527.\r\n\r\n/cc @dotnet/interop-contrib @elinor-fung @dotnet/dotnet-diag ",
+                                       "updatedAt":  "2024-01-23T19:00:07Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDODI9FZc5xpnEg",
+                                       "createdAt":  "2024-01-23T18:59:34Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  "AaronRobinsonMSFT",
+                                       "body":  "I think we should try and figure out a solution here that doesn\u0027t break such core features like basic Profiling. The gist here is that profiling/tracing your application could now render you in a broken state.",
+                                       "updatedAt":  "2024-01-23T18:59:34Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDODI9FZc5xp-fG",
+                                       "createdAt":  "2024-01-23T20:00:50Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  "Y3Vyc29yOnYyOpHODTztkg==",
+                                                         "nodes":  [
+                                                                       {
+                                                                           "content":  "THUMBS_UP",
+                                                                           "user":  "hoyosjs",
+                                                                           "createdAt":  "2024-01-23T21:00:44Z"
+                                                                       },
+                                                                       {
+                                                                           "content":  "THUMBS_UP",
+                                                                           "user":  "delmyers",
+                                                                           "createdAt":  "2024-01-23T21:01:02Z"
+                                                                       },
+                                                                       {
+                                                                           "content":  "THUMBS_UP",
+                                                                           "user":  "jlaanstra",
+                                                                           "createdAt":  "2024-01-23T21:02:37Z"
+                                                                       }
+                                                                   ],
+                                                         "totalCount":  3
+                                                     },
+                                       "author":  "elinor-fung",
+                                       "body":  "\u003e The gist here is that profiling/tracing your application could now render you in a broken state.\r\n\r\nIt\u0027s not even actually profiling/tracing, right? It seems like simply having EventSource support enabled (so default behaviour) will make it so that the application can\u0027t configure global COM options?",
+                                       "updatedAt":  "2024-01-23T20:00:50Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDODI9FZc5xqSeM",
+                                       "createdAt":  "2024-01-23T21:00:59Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  "delmyers",
+                                       "body":  "Just throwing this out there. An alternative solution to this problem would be to have these options configurable in the app config, so that the CLR can guarantee that they run before app startup and ensure that they conform to the contract that Windows enforces. It would be a less brittle solution.\r\n",
+                                       "updatedAt":  "2024-01-23T21:00:59Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDODI9FZc5xqTgq",
+                                       "createdAt":  "2024-01-23T21:04:19Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  "delmyers",
+                                       "body":  "For reference, the issue was root-caused by investigation of this feedback ticket for VS:\r\n\r\nhttps://developercommunity.visualstudio.com/t/Unable-to-set-COM-global-options-or-call/10544708\r\n\r\nIt is also related to .NET runtime issue #[73527](https://github.com/dotnet/runtime/issues/73527), and impacts the Windows APP SDK: https://github.com/microsoft/WindowsAppSDK/issues/1727",
+                                       "updatedAt":  "2024-01-23T21:04:19Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDODI9FZc59h8h4",
+                                       "createdAt":  "2024-05-11T22:54:07Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  "AaronRobinsonMSFT",
+                                       "body":  "I finally found time to look into this. Startup hooks will never work due to the feature guaranteeing certain apartment states - see https://github.com/dotnet/runtime/blob/main/docs/design/features/host-startup-hook.md#threading-behavior.\r\n\r\nLooks like a new mechanism would be needed for configuring COM security.",
+                                       "updatedAt":  "2024-05-11T22:54:07Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDODI9FZc59rkeM",
+                                       "createdAt":  "2024-05-13T18:52:06Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  "AaronRobinsonMSFT",
+                                       "body":  "Speaking with some other people in this area, I realized my assumption here was wrong. This isn\u0027t about `CoInitializeEx` and `CoIntializeSecurity`, but rather just marshalling an interface. I\u0027ve tried to create simple repro with little luck.\r\n\r\nThe expectation is that when I enable the `RuntimeEventSource` I will get a non-zero `HRESULT` from `CoInitializeSecurity()`. Could someone reconfirm this still repros in their scenario?\r\n\r\n```csharp\r\nunsafe partial class Program\r\n{\r\n    static void Main(string[] args)\r\n    {\r\n        const int RPC_C_AUTHN_LEVEL_DEFAULT = 0;\r\n        const int RPC_C_IMP_LEVEL_ANONYMOUS = 1;\r\n        int hr = CoInitializeSecurity(null, -1, null, null, RPC_C_AUTHN_LEVEL_DEFAULT, RPC_C_IMP_LEVEL_ANONYMOUS, null, 0, null);\r\n        Console.WriteLine($\"{nameof(CoInitializeSecurity)}() {hr:x}\");\r\n\r\n        Console.WriteLine(\"In main... Press any key\");\r\n        Console.ReadKey();\r\n    }\r\n\r\n    [DllImport(\"Ole32\")]\r\n    private static extern int CoInitializeSecurity(\r\n      void* pSecDesc,\r\n      int cAuthSvc,\r\n      void* asAuthSvc,\r\n      void* pReserved1,\r\n      uint dwAuthnLevel,\r\n      uint dwImpLevel,\r\n      void* pAuthList,\r\n      uint dwCapabilities,\r\n      void* pReserved3);\r\n}\r\n```",
+                                       "updatedAt":  "2024-05-13T18:52:06Z"
+                                   }
+                               ],
+                     "totalCount":  7
+                 },
+    "title":  "RuntimeEventSource.Initialize being called before any user code prevents processes from setting safe and performant process defaults.",
+    "labels":  [
+                   "area-System.Diagnostics-coreclr"
+               ]
+}

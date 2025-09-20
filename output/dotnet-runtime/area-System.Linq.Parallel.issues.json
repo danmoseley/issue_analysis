@@ -1,0 +1,1352 @@
+﻿[
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/22626",
+        "createdAt":  "2017-07-05T06:12:43Z",
+        "number":  22626,
+        "author":  null,
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-01-16T01:26:04Z",
+        "body":  "Opened on behalf of @Jiayili1\n\nThe test `System.Linq.Parallel.Tests.ParallelQueryCombinationTests/SequenceEqual_OperationCanceledException(operation: SelectMany-ResultSelector)` has failed.\n\nAssert.Throws() Failure\\r\n    Expected: typeof(System.OperationCanceledException)\\r\n    Actual:   (No exception was thrown)\n\n        Stack Trace:\n\n           at System.Linq.Parallel.Tests.AssertThrows.EventuallyCanceled(Action`2 query)\n       at System.Linq.Parallel.Tests.ParallelQueryCombinationTests.SequenceEqual_OperationCanceledException(Labeled`1 operation)\nBuild : Master - 20170705.01 (UWP F5 Tests)\nFailing configurations:\n- Windows.10.Arm64-arm\n  - Release\n\nDetail: https://mc.dot.net/#/product/netcore/master/source/official~2Fcorefx~2Fmaster~2F/type/test~2Ffunctional~2Fuwp~2F/build/20170705.01/workItem/System.Linq.Parallel.Tests/analysis/xunit/System.Linq.Parallel.Tests.ParallelQueryCombinationTests~2FSequenceEqual_OperationCanceledException(operation:%20SelectMany-ResultSelector)",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOGYarKA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDMxMzIzNjc3Ng==",
+                                           "createdAt":  "2017-07-05T21:49:55Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "danmoseley",
+                                           "body":  "Unlikely this is UWP specific, more likely some rare timing problem that happened to show up on this ARM run. Moving out of UWP milestone until proven otherwise.",
+                                           "updatedAt":  "2017-07-05T21:49:55Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQxMzQwNzk5NQ==",
+                                           "createdAt":  "2018-08-16T02:54:07Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Sunny-pu",
+                                           "body":  "Failed again: https://mc.dot.net/#/product/netcore/30/source/official~2Fcorefx~2Fmaster~2F/type/test~2Ffunctional~2Fcli~2F/build/20180816.01/workItem/System.Linq.Parallel.Tests/analysis/xunit/System.Linq.Parallel.Tests.ParallelQueryCombinationTests~2FSequenceEqual_OperationCanceledException(operation:%20Union-Right)",
+                                           "updatedAt":  "2018-08-16T02:54:07Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQxODA0NjI3Mg==",
+                                           "createdAt":  "2018-09-03T08:49:34Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "AriNuer",
+                                           "body":  "Test Failed again:\r\nhttps://mc.dot.net/#/product/netcore/30/source/official~2Fcorefx~2Fmaster~2F/type/test~2Ffunctional~2Fcli~2F/build/20180902.04/workItem/System.Linq.Parallel.Tests/analysis/xunit/System.Linq.Parallel.Tests.ParallelQueryCombinationTests~2FSequenceEqual_OperationCanceledException(operation:%20Union-Right)",
+                                           "updatedAt":  "2018-09-03T08:49:34Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQyMTEwODA3OA==",
+                                           "createdAt":  "2018-09-13T18:34:13Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "danmoseley",
+                                           "body":  "Now almost always failing when on RedHat.69.Amd64-x64-Release",
+                                           "updatedAt":  "2018-09-13T18:34:13Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQyMTExMDQ5NQ==",
+                                           "createdAt":  "2018-09-13T18:42:17Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "danmoseley",
+                                           "body":  "On 3.0 and 2.1",
+                                           "updatedAt":  "2018-09-13T18:42:17Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQyNzkyNjg1Mg==",
+                                           "createdAt":  "2018-10-08T18:02:51Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "rmkerr",
+                                           "body":  "This has failed on RedHat 6.9 in [almost every daily test run](https://mc.dot.net/#/product/netcore/30/source/official~2Fcorefx~2Fmaster~2F/type/test~2Ffunctional~2Fcli~2F/build/20181008.01/workItem/System.Linq.Parallel.Tests/analysis/xunit/System.Linq.Parallel.Tests.ParallelQueryCombinationTests~2FSequenceEqual_OperationCanceledException(operation:%20Union-Right)) over the last few weeks.\r\n\r\nRedHat 6.9 is special because it\u0027s the only leg that runs on a single core machine. @tarekgh do you think that could be causing this failure?",
+                                           "updatedAt":  "2018-10-08T18:02:51Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQyNzkyNzM5NA==",
+                                           "createdAt":  "2018-10-08T18:04:40Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "stephentoub",
+                                           "body":  "\u003e RedHat 6.9 is special because it\u0027s the only leg that runs on a single core machine. do you think that could be causing this failure?\r\n\r\nDoes it fail on other systems if you pass `/p:XunitOptions=\"-maxthreads 1\"` when running the tests?",
+                                           "updatedAt":  "2018-10-08T18:04:53Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQyNzkzMTY5NQ==",
+                                           "createdAt":  "2018-10-08T18:18:37Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "rmkerr",
+                                           "body":  "On my Win10 machine it passes with maxthreads set to 1. I\u0027m not familiar enough with the code to know if Windows vs Unix could play a role here.",
+                                           "updatedAt":  "2018-10-08T18:18:37Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQyNzk1MzgxNw==",
+                                           "createdAt":  "2018-10-08T19:35:03Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "tarekgh",
+                                           "body":  "It looks the original report was failing on Windows arm 64 too. you may disable the test for now and I\u0027ll try to look at that in the first chance.",
+                                           "updatedAt":  "2018-10-08T19:35:03Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQyODA1OTUzOQ==",
+                                           "createdAt":  "2018-10-09T04:56:23Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Clockwork-Muse",
+                                           "body":  "Probably, [EventuallyCanceledSize](https://github.com/dotnet/corefx/blob/master/src/System.Linq.Parallel/tests/Combinatorial/CancellationParallelQueryCombinationTests.cs#L12) is too small, and needs to be larger.  I think I switched it from an infinite enumerable as a guarantee against lockups?  \r\nI can\u0027t check the build logs to make sure it\u0027s still a \"did-not-throw\" error.  My guess is that PLINQ is reading in a larger batch of rows between checks for the cancellation status than it used to (the operation is canceled after the four rows are read on the other enumerable).",
+                                           "updatedAt":  "2018-10-09T04:56:23Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQyODA2MjY4NQ==",
+                                           "createdAt":  "2018-10-09T05:16:11Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Clockwork-Muse",
+                                           "body":  "There\u0027s another instance of [`EventuallyCanceledSize`](https://github.com/dotnet/corefx/blob/master/src/System.Linq.Parallel/tests/Helpers/AssertThrows.cs#L12) as part of the thrower, too.",
+                                           "updatedAt":  "2018-10-09T05:16:11Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQyODI1NjA0MA==",
+                                           "createdAt":  "2018-10-09T16:16:57Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "rmkerr",
+                                           "body":  "@Clockwork-Muse here are the logs for the latest failure:\r\n\r\n```Assert.Throws() Failure\r\nExpected: typeof(System.OperationCanceledException)\r\nActual:   (No exception was thrown)\r\n   at System.Linq.Parallel.Tests.AssertThrows.EventuallyCanceled(Action`2 query) in /root/corefx-2099157/src/System.Linq.Parallel/tests/Helpers/AssertThrows.cs:line 33\r\n   at System.Linq.Parallel.Tests.ParallelQueryCombinationTests.SequenceEqual_OperationCanceledException(Labeled`1 operation) in /root/corefx-2099157/src/System.Linq.Parallel/tests/Combinatorial/CancellationParallelQueryCombinationTests.cs:line 614\r\n```",
+                                           "updatedAt":  "2018-10-09T16:16:57Z"
+                                       }
+                                   ],
+                         "totalCount":  12
+                     },
+        "title":  "Test: System.Linq.Parallel.Tests.ParallelQueryCombinationTests/SequenceEqual_OperationCanceledException(operation: SelectMany-ResultSelector) failed with \"Xunit.Sdk.ThrowsException\"",
+        "labels":  [
+                       "arch-arm32",
+                       "area-System.Linq.Parallel",
+                       "disabled-test",
+                       "test-bug"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/33769",
+        "createdAt":  "2020-03-19T16:42:30Z",
+        "number":  33769,
+        "author":  "terrajobst",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHOCJLIng==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "Mrxx99",
+                                            "createdAt":  "2020-04-04T12:19:24Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "AmrAlSayed0",
+                                            "createdAt":  "2020-06-03T22:41:56Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "danielchalmers",
+                                            "createdAt":  "2020-11-01T22:25:29Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "ericsampson",
+                                            "createdAt":  "2021-03-23T20:23:30Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "NN---",
+                                            "createdAt":  "2022-01-10T11:23:54Z"
+                                        }
+                                    ],
+                          "totalCount":  5
+                      },
+        "updatedAt":  "2022-07-09T07:35:05Z",
+        "body":  "Using `.AsParallel()` at the end of a LINQ query, e.g. `foreach (var item in src.Select(...).Where(...).AsParallel(...))`, is a nop and should either be removed or the `AsParallel()` moved earlier in the query.  I\u0027ve even seen developers write `foreach (var item in src.AsParallel())` thinking it parallelizes the `foreach` loop, which it doesn\u0027t... it\u0027d be good to warn about such misuse.\r\n\r\n**Category**: Performance",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHON4PQEQ==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDYwMTc5NTU4OQ==",
+                                           "createdAt":  "2020-03-20T16:35:50Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "stephentoub",
+                                           "body":  "Here\u0027s an example of the kinds of things we\u0027d like to catch:\r\nhttps://github.com/dotnet/sdk/issues/10937",
+                                           "updatedAt":  "2020-03-20T16:35:50Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDYwMTk2NjE2NQ==",
+                                           "createdAt":  "2020-03-21T00:36:09Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jeffhandley",
+                                           "body":  "Estimates:\r\n* Analyzer: Medium\r\n* Fixer: Medium",
+                                           "updatedAt":  "2020-03-21T00:36:09Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY4MzQyMTcyOA==",
+                                           "createdAt":  "2020-08-30T13:37:00Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Mrnikbobjeff",
+                                           "body":  "Would the fixer simply remove the call? I do not think it can add it earlier in the chain as it may cause race conditions depending on the implementation of the earlier linq chain, e.g. `list.Select(x =\u003e NonThreadSafeMethod(x)).AsParallel()` can only be resolved by removing the code. I guess that is the intended fix? Also, I guess the analyzer only triggers when the AsParallel is directly inside a foreach? Otherwise i may add other methods to the linq call chain after assigning the AsParallel() result at the end of the chain.",
+                                           "updatedAt":  "2020-08-30T13:43:30Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY4MzQyNDQ2OA==",
+                                           "createdAt":  "2020-08-30T14:02:51Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "stephentoub",
+                                           "body":  "\u003e guess the analyzer only triggers when the AsParallel is directly inside a foreach\r\n\r\nYes\r\n\r\n\u003e can only be resolved by removing the code. I guess that is the intended fix\r\n\r\nThat\u0027s the safe fix, in that it doesn\u0027t change the semantics. It\u0027d be fine to offer multiple fixes, though, with a second option being to move the call to the beginning of the chain, and if the developer chooses that, it\u0027s their choice.",
+                                           "updatedAt":  "2020-08-30T14:03:15Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY4MzQzNzU5MQ==",
+                                           "createdAt":  "2020-08-30T15:58:45Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Mrnikbobjeff",
+                                           "body":  "I have a working analyzer for the described scenario, as well as the safe fix as you described it. I would still have to integrate it with the analyzer structure in this project but otherwise I would love to work on this if this is available.",
+                                           "updatedAt":  "2020-08-30T15:59:03Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDcxMzE1MTcwOA==",
+                                           "createdAt":  "2020-10-20T21:31:28Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jeffhandley",
+                                           "body":  "@carlossanlop @buyaa-n Can you follow up with @Mrnikbobjeff on this? We would need to bring this in for API Review if we want to move it forward.",
+                                           "updatedAt":  "2020-10-20T21:31:28Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDcxNTU4MTgxNg==",
+                                           "createdAt":  "2020-10-23T20:46:14Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "carlossanlop",
+                                           "body":  "[This comment](https://github.com/dotnet/roslyn-analyzers/issues/2812#issuecomment-527908570) in dotnet/roslyn-analyzers#2812 gives a clear example of what to detect in a `foreach` and what should be suggested as a fix.\r\n[This issue](https://github.com/dotnet/sdk/issues/10937) gives an example of an enumeration that saves the value into a variable.\r\n\r\n- If an `AsParallel` invocation is found, check if it was added after enumerating invocations like `Select` or `Where`.\r\n    - The first case to address should be to detect `AsParallel` calls inside a `foreach`.\r\n    - The second case to address should be to detect `AsParallel` calls anywhere else, like when an enumeration result is saved into a variable.\r\n- If any of those two cases were found, then the fixer should suggest moving the `AsParallel` to the first position.\r\n\r\nAs long as we keep those rules in mind, we think this is ready for review. After it gets approved, we will let @Mrnikbobjeff know so he can start working on it.\r\n\r\nCategory: ~Reliability~ Performance\r\nAnalyzer size: Medium\r\nFixer size: Medium\r\nSuggested severity: Warning\r\nSuggested messages:\r\n    - Title: `Use \u0027AsParallel()\u0027 correctly`\r\n    - Message: `The \u0027AsParallel()\u0027 method should be called before enumerating.`\r\n    - Description: `The \u0027AsParallel()\u0027 method result is only effective when its returned value is consumed by enumerating methods.`\r\n\r\ncc @buyaa-n ",
+                                           "updatedAt":  "2020-10-27T18:21:57Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDcxNTYyMTAwNw==",
+                                           "createdAt":  "2020-10-23T22:44:31Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOBU3ghw==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "carlossanlop",
+                                                                               "createdAt":  "2020-10-27T17:35:08Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "buyaa-n",
+                                           "body":  "Thank you for your interest in contributing to this analzyer @Mrnikbobjeff, until the proposal get approved please take a look at our [definition of done list](https://github.com/dotnet/roslyn-analyzers/blob/master/docs/NetCore_GettingStarted.md#definition-of-done) -  the list of tasks/actions need to be completed/taken before, during, and after the analyzer implementation. You do not have to complete all tasks, but your PR needs to cover all requirements related to the analyzer and fixer implementations (first 2 bullets) at least.",
+                                           "updatedAt":  "2020-10-23T22:44:31Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDcxNzQyOTA5OQ==",
+                                           "createdAt":  "2020-10-27T18:12:53Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "terrajobst",
+                                           "body":  "[Video](https://www.youtube.com/watch?v=viYdlWGUiro\u0026t=1h0m17s)\n\nThis makes sense. The only thing we have to check with Manish is whether they analyzer should report separate IDs due to how fixers are advertised in the IDE.",
+                                           "updatedAt":  "2020-10-27T19:09:37Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDcxNzg1NDE4Mw==",
+                                           "createdAt":  "2020-10-28T10:54:06Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Mrnikbobjeff",
+                                           "body":  "\u003e * If any of those two cases were found, then the fixer should suggest moving the `AsParallel` to the first position.\r\n\r\nThis is surely something which could be done, but I do not think that would be advisable. Suppose I have a Select method which is not threadsafe, then we would introduce bugs with the fixer. This was not mentioned in the Video. I only have the remove fixer implemented as this is always valid.\r\n@carlossanlop ",
+                                           "updatedAt":  "2020-10-28T10:54:27Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDcxODI4NjU1Ng==",
+                                           "createdAt":  "2020-10-29T00:35:42Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "stephentoub",
+                                           "body":  "\u003e I do not think that would be advisable\r\n\r\nIf someone added the AsParallel(), they intended for something to be run in parallel.  And while we can\u0027t know for sure how much of the query that comes before it was intended, as an option I think it\u0027s reasonable to offer to fix it with our best guess for where it would go, which is at the beginning.  The only 100% safe fix is to remove it, but both can be offered, and if we have any control which is the \"default\" / first option, it should be the removal.",
+                                           "updatedAt":  "2020-10-29T00:35:42Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDcxODYyMjUyOQ==",
+                                           "createdAt":  "2020-10-29T10:36:23Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Mrnikbobjeff",
+                                           "body":  "\u003e \u003e I do not think that would be advisable\r\n\u003e \r\n\u003e If someone added the AsParallel(), they intended for something to be run in parallel. And while we can\u0027t know for sure how much of the query that comes before it was intended, as an option I think it\u0027s reasonable to offer to fix it with our best guess for where it would go, which is at the beginning. The only 100% safe fix is to remove it, but both can be offered, and if we have any control which is the \"default\" / first option, it should be the removal.\r\n\r\nI see the reasoning behing not completely removing the AsParallel call, I just was curious as I can not recall a codefix provider which might introduce bugs for fixing compiler warnings. As fas as I know this would be a first for codefix providers. I will still work on adding the second codefix provider",
+                                           "updatedAt":  "2020-10-29T11:18:12Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc400ICM",
+                                           "createdAt":  "2021-07-24T16:55:06Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "eiriktsarpalis",
+                                           "body":  "Hey @Mrnikbobjeff, would you still be interested in picking this up?",
+                                           "updatedAt":  "2021-07-24T16:55:06Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc43g9AR",
+                                           "createdAt":  "2021-09-30T14:40:31Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @tarekgh, @dotnet/area-system-linq-parallel\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\nUsing `.AsParallel()` at the end of a LINQ query, e.g. `foreach (var item in src.Select(...).Where(...).AsParallel(...))`, is a nop and should either be removed or the `AsParallel()` moved earlier in the query.  I\u0027ve even seen developers write `foreach (var item in src.AsParallel())` thinking it parallelizes the `foreach` loop, which it doesn\u0027t... it\u0027d be good to warn about such misuse.\r\n\r\n**Category**: Performance\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003eterrajobst\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003eMrnikbobjeff\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`api-approved`, `area-System.Linq`, `area-System.Linq.Parallel`, `code-analyzer`, `code-fixer`, `in pr`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e7.0.0\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2021-09-30T14:40:31Z"
+                                       }
+                                   ],
+                         "totalCount":  14
+                     },
+        "title":  "Use AsParallel() correctly",
+        "labels":  [
+                       "api-approved",
+                       "area-System.Linq.Parallel",
+                       "code-analyzer",
+                       "code-fixer",
+                       "in-pr"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/92329",
+        "createdAt":  "2021-05-14T12:19:06Z",
+        "number":  92329,
+        "author":  "Bxaa",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-06-28T14:39:26Z",
+        "body":  "\u003ca href=\"https://imgbb.com/\"\u003e\u003cimg src=\"https://i.ibb.co/gVxyrH5/iLc.jpg\" alt=\"iLc\" border=\"0\"\u003e\u003c/a\u003e\u003cbr /\u003e\u003ca target=\u0027_blank\u0027 href=\u0027https://imgbb.com/\u0027\u003e\u003c/a\u003e\u003cbr /\u003e\r\nPermanent loop with memory leak while compile :)\r\n\r\n```\r\nDim Test_DataBase As New ConcurrentDictionary(Of String, Long)\r\nDim Test_Data As New ConcurrentBag(Of String)\r\nDim Test_Ilc As Object = Encoding.UTF8.GetBytes(Join(Test_DataBase.AsParallel.Select(Function(z) z.Key \u0026 \"?\" \u0026 z.Value).Concat(Test_Data.AsParallel.Select(Function(z) New FileInfo(z.Substring(z.IndexOf(\"\u003e\"c) + 1).Trim).FullName \u0026 \"?\" \u0026 New FileInfo(z.Substring(z.IndexOf(\"\u003e\"c) + 1).Trim).LastWriteTime.Ticks)).ToArray, \"*\"))\r\n```\r\n\r\n`Test_Data.AsParallel.Select` - This cause it :)\r\n\r\nJust copy this strings to project :)\r\nThis is just example...",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHObIB9yA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDE3MjcxMDM0NDM=",
+                                           "createdAt":  "2021-05-18T01:46:21Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jkotas",
+                                           "body":  "This is infinite virtual generic method instantion in System.Linq.Parallel. Here is the cycle:\r\n```\r\nBinaryQueryOperator\u003cTLeftInput, TRightInput, TOutput\u003e.WrapPartitionedStream\u003cTLeftKey, TRightKey\u003e\r\n-\u003e (GVM - derived method instantiations) ConcatQueryOperator\u003cTSource\u003e.WrapPartitionedStream\u003cTLeftKey, TRightKey\u003e\r\n-\u003e WrapHelper\u003cTLeftKey, TRightKey\u003e\r\n-\u003e WrapHelper2\u003cTLeftKey, TRightKey\u003e\r\n-\u003e IPartitionedStreamRecipient\u003cTSource\u003e.Receive\u003cConcatKey\u003cTLeftKey, TRightKey\u003e\u003e\r\n-\u003e (GVM - ImplementingMethodInstantiation) BinaryQueryOperator.RightChildResultsRecipient\u003cTLeftKey\u003e.Receive\u003cConcatKey\u003cTLeftKey, TRightKey\u003e /* TRightKey */\u003e\r\n-\u003e BinaryQueryOperator\u003cTLeftInput, TRightInput, TOutput\u003e.WrapPartitionedStream\u003cTLeftKey, ConcatKey\u003cTLeftKey, TRightKey\u003e /* TRightKey */\u003e\r\n ```",
+                                           "updatedAt":  "2021-05-18T01:46:21Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDE3MjcxMDM0NDY=",
+                                           "createdAt":  "2021-06-25T09:12:21Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "kant2002",
+                                           "body":  "This is minimal example of the problem\r\n```\r\nvar x = new ImplementationOperator();\r\nx.WrapPartitionedStream(\"\");\r\n\r\nabstract class BinaryQueryOperator\r\n{\r\n    public abstract void WrapPartitionedStream\u003cTLeftKey\u003e(TLeftKey key);\r\n}\r\n\r\ninternal class ConcatKey\u003cTLeftKey\u003e\r\n{\r\n    internal readonly TLeftKey m_leftKey;\r\n\r\n    internal ConcatKey(TLeftKey leftKey)\r\n    {\r\n        m_leftKey = leftKey;\r\n    }\r\n}\r\n\r\nclass ImplementationOperator : BinaryQueryOperator\r\n{\r\n    public override void WrapPartitionedStream\u003cTLeftKey\u003e(TLeftKey key)\r\n    {\r\n        var x = new ImplementationOperator();\r\n        x.WrapPartitionedStream(new ConcatKey\u003cTLeftKey\u003e(key));\r\n    }\r\n}\r\n```\r\n\r\nNot sure how this should be solved. ",
+                                           "updatedAt":  "2021-06-25T09:12:21Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDE3MjcxMDM0NDk=",
+                                           "createdAt":  "2021-06-25T09:47:19Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "kant2002",
+                                           "body":  "Isn\u0027t this is https://github.com/dotnet/runtimelab/issues/776 ?",
+                                           "updatedAt":  "2021-06-25T09:47:19Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDE3MjcxMDM0NTI=",
+                                           "createdAt":  "2021-06-25T13:33:12Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jkotas",
+                                           "body":  "\u003e Not sure how this should be solved.\r\n\r\nRedesign the algorithm to avoid the infinite generic recursion over valuetypes.\r\n\r\n\u003e Isn\u0027t this is dotnet/runtimelab#776 ?\r\n\r\ndotnet/runtimelab#776 is about detecting the infinite generic recursion in the compiler, and dealing with it transparently for recursion involving reference type instantiations, or failing the compilation with the error for value type instantiations.",
+                                           "updatedAt":  "2021-06-25T13:33:12Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDE3MjcxMDM0NTU=",
+                                           "createdAt":  "2021-06-26T09:41:18Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "kant2002",
+                                           "body":  "\u003e Redesign the algorithm to avoid the infinite generic recursion over valuetypes.\r\nA bit puzzled what algorithm should be re-designed? Somewhere in the `System.Linq.Parallel` or somewhere in the compiler?\r\n\r\nIf latter, then I have questions what\u0027s the difference. My guess is that difference in fact that currently infinite expansion happens in the Generic Virtual Method, where in dotnet/runtimelab#776 it happens during type instantiation. So for implementer this is two different issues. Please correct me if I\u0027m wrong.\r\n\r\n",
+                                           "updatedAt":  "2021-06-26T09:41:18Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDE3MjcxMDM0NjA=",
+                                           "createdAt":  "2021-06-26T13:26:14Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODHRNng==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "kant2002",
+                                                                               "createdAt":  "2021-06-26T13:26:54Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "jkotas",
+                                           "body":  "\u003e Somewhere in the System.Linq.Parallel or somewhere in the compiler?\r\n\r\nSomewhere in the System.LinqParallel.",
+                                           "updatedAt":  "2021-06-26T13:26:14Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5m8YHq",
+                                           "createdAt":  "2021-07-27T10:25:02Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "MichalStrehovsky",
+                                           "body":  "The recursion is still there, but it doesn\u0027t crash the compiler when it\u0027s over reference types anymore (like in the example in the top post).",
+                                           "updatedAt":  "2021-07-27T10:25:16Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5m8YXI",
+                                           "createdAt":  "2023-09-20T07:13:04Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-system-linq-parallel\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n\u003ca href=\"https://imgbb.com/\"\u003e\u003cimg src=\"https://i.ibb.co/gVxyrH5/iLc.jpg\" alt=\"iLc\" border=\"0\"\u003e\u003c/a\u003e\u003cbr /\u003e\u003ca target=\u0027_blank\u0027 href=\u0027https://imgbb.com/\u0027\u003e\u003c/a\u003e\u003cbr /\u003e\r\nPermanent loop with memory leak while compile :)\r\n\r\n```\r\nDim Test_DataBase As New ConcurrentDictionary(Of String, Long)\r\nDim Test_Data As New ConcurrentBag(Of String)\r\nDim Test_Ilc As Object = Encoding.UTF8.GetBytes(Join(Test_DataBase.AsParallel.Select(Function(z) z.Key \u0026 \"?\" \u0026 z.Value).Concat(Test_Data.AsParallel.Select(Function(z) New FileInfo(z.Substring(z.IndexOf(\"\u003e\"c) + 1).Trim).FullName \u0026 \"?\" \u0026 New FileInfo(z.Substring(z.IndexOf(\"\u003e\"c) + 1).Trim).LastWriteTime.Ticks)).ToArray, \"*\"))\r\n```\r\n\r\n`Test_Data.AsParallel.Select` - This cause it :)\r\n\r\nJust copy this strings to project :)\r\nThis is just example...\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003eBxaa\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-System.Linq.Parallel`, `help wanted`, `untriaged`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2023-09-20T07:13:04Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5sV1pD",
+                                           "createdAt":  "2023-11-18T22:22:00Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "bbougot",
+                                           "body":  "I\u0027m getting those kind of errors as soon as I introduce `AsParallel()` in my code:\r\n```\r\nILC: Method \u0027[System.Linq.Parallel]System.Linq.Parallel.SelectManyQueryOperator`3\u003cSystem.__Canon,System.__Canon,Syste\r\n  m.__Canon\u003e.WrapPartitionedStreamNotIndexed\u003cPair`2\u003cPair`2\u003cPair`2\u003cPair`2\u003c__Canon,int32\u003e,int32\u003e,int32\u003e,int32\u003e\u003e(Partition\r\n  edStream`2\u003c__Canon,Pair`2\u003cPair`2\u003cPair`2\u003cPair`2\u003c__Canon,int32\u003e,int32\u003e,int32\u003e,int32\u003e\u003e,IPartitionedStreamRecipient`1\u003c__C\r\n  anon\u003e,QuerySettings)\u0027 will always throw because: Failed to load type \u0027System.Linq.Parallel.IPartitionedStreamRecipien\r\n  t`1\u003cSystem.__Canon\u003e\u0027 from assembly \u0027System.Linq.Parallel, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11\r\n  d50a3a\u0027\r\n  ILC: Method \u0027[System.Linq.Parallel]System.Linq.Parallel.SelectManyQueryOperator`3\u003cSystem.__Canon,System.__Canon,Syste\r\n  m.__Canon\u003e.WrapPartitionedStreamNotIndexed\u003cPair`2\u003cPair`2\u003cPair`2\u003cPair`2\u003cint32,int32\u003e,int32\u003e,int32\u003e,int32\u003e\u003e(Partitioned\r\n  Stream`2\u003c__Canon,Pair`2\u003cPair`2\u003cPair`2\u003cPair`2\u003cint32,int32\u003e,int32\u003e,int32\u003e,int32\u003e\u003e,IPartitionedStreamRecipient`1\u003c__Canon\r\n  \u003e,QuerySettings)\u0027 will always throw because: Failed to load type \u0027System.Linq.Parallel.PartitionedStream`2\u003cTOutput_Sy\r\n  stem.__Canon, System.Linq.Parallel.Pair`2\u003cSystem.Linq.Parallel.Pair`2\u003cSystem.Linq.Parallel.Pair`2\u003cSystem.Linq.Paralle\r\n  l.Pair`2\u003cSystem.Linq.Parallel.Pair`2\u003cInt32, Int32\u003e, Int32\u003e, Int32\u003e, Int32\u003e, Int32\u003e\u003e\u0027 from assembly \u0027System.Linq.Paral\r\n  lel, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a\u0027\r\n```\r\n\r\nI\u0027m using Microsoft.DotNet.ILCompiler and runtime.win-x64.Microsoft.DotNet.ILCompiler (build version 9.0.0-alpha.1.23561.3).\r\n\r\nAs our LOB app relies heavily on parallelism, it kinda block migration to AOT. Do you have an ETA for being able to use PLinq with AOT?",
+                                           "updatedAt":  "2023-11-19T07:44:40Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5sYfBb",
+                                           "createdAt":  "2023-11-20T07:14:26Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "MichalStrehovsky",
+                                           "body":  "\u003e I\u0027m getting those kind of errors as soon as I introduce AsParallel() in my code:\r\n\r\nThese are just messages - they are not even warnings. Are you getting a build failure? If so, could you post the message?\r\n\r\nThis should at most result in generating [IL3054](https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/warnings/il3054) warning. The compilation will take longer than it should and the executable will be larger that it should, but it should work.",
+                                           "updatedAt":  "2023-11-20T07:14:26Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5sZ1PI",
+                                           "createdAt":  "2023-11-20T09:53:20Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "bbougot",
+                                           "body":  "\u003e will always throw because: Failed to load type \u0027System.Linq.Parallel.IPartitionedStreamRecipien\r\n  t`1\u003cSystem.__Canon\u003e\u0027 from assembly \u0027System.Linq.Parallel, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11\r\n  d50a3a\u0027\r\n\r\nI was getting anxious about this message, are you telling this won\u0027t alter our production code while executing something like `AsParallel().SelectMany(...)` ?",
+                                           "updatedAt":  "2023-11-20T09:53:54Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5sgH3I",
+                                           "createdAt":  "2023-11-21T07:17:15Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODNL4Cw==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "bbougot",
+                                                                               "createdAt":  "2023-11-21T07:47:45Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "MichalStrehovsky",
+                                           "body":  "\u003e \u003e will always throw because: Failed to load type \u0027System.Linq.Parallel.IPartitionedStreamRecipien\r\n\u003e \u003e t`1\u003cSystem.__Canon\u003e\u0027 from assembly \u0027System.Linq.Parallel, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11\r\n\u003e \u003e d50a3a\u0027\r\n\u003e \r\n\u003e I was getting anxious about this message, are you telling this won\u0027t alter our production code while executing something like `AsParallel().SelectMany(...)` ?\r\n\r\nThe messages should eventually lead to IL3054 warning. The failure mode with that warning is described in the link in my previous comment. Our docs about warnings state: \"[If there are any AOT warnings, ensure there are no behavior changes by thoroughly testing your app after building as Native AOT.](https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/fixing-warnings)\"\r\n\r\nThere likely won\u0027t be an issue with it, but you should test. If there is an issue, it will manifest itself as a runtime exception (i.e. it will not be a data corruption or something terrible like that, just an exception).",
+                                           "updatedAt":  "2023-11-21T07:17:15Z"
+                                       }
+                                   ],
+                         "totalCount":  12
+                     },
+        "title":  "Infinite virtual generic method recursion in System.Linq.Parallel",
+        "labels":  [
+                       "area-System.Linq.Parallel"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/60604",
+        "createdAt":  "2021-10-19T01:29:02Z",
+        "number":  60604,
+        "author":  "VincentBu",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2022-08-02T04:41:25Z",
+        "body":  "Run: [runtime-libraries-coreclr outerloop 20211018.5](https://dev.azure.com/dnceng/public/_build/results?buildId=1426746\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=41265222\u0026paneView=debug\u0026resultId=103595)\r\n\r\nFailed test:\r\n```\r\nnet7.0-OSX-Release-arm64-CoreCLR_release-OSX.1100.ARM64.Open\r\n\r\n- System.Linq.Parallel.Tests.ParallelQueryCombinationTests.SequenceEqual_OperationCanceledException(operation: SelectMany-ResultSelector)\r\n\r\n```\r\n**Error message:**\r\n```\r\nAssert.Throws() Failure\r\nExpected: typeof(System.OperationCanceledException)\r\nActual:   (No exception was thrown)\r\n\r\n\r\nStack trace\r\n   at System.Linq.Parallel.Tests.AssertThrows.EventuallyCanceled(Action`2 query) in /_/src/libraries/System.Linq.Parallel/tests/Helpers/AssertThrows.cs:line 33\r\n   at System.Linq.Parallel.Tests.ParallelQueryCombinationTests.SequenceEqual_OperationCanceledException(Labeled`1 operation) in /_/src/libraries/System.Linq.Parallel/tests/Combinatorial/CancellationParallelQueryCombinationTests.cs:line 614\r\n```",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  null,
+                         "nodes":  [
+
+                                   ],
+                         "totalCount":  0
+                     },
+        "title":  "Test failure System.Linq.Parallel.Tests.ParallelQueryCombinationTests.SequenceEqual_OperationCanceledException(operation: SelectMany-ResultSelector)",
+        "labels":  [
+                       "test-failure",
+                       "arch-arm64",
+                       "area-System.Linq.Parallel",
+                       "os-mac-os-x"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/86218",
+        "createdAt":  "2023-05-14T14:27:33Z",
+        "number":  86218,
+        "author":  "superichmann",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-11-14T00:33:47Z",
+        "body":  "I have a process which I need to run very fast. when running with parallel.foreach (MaxDegreeOfParallelism = 8) (my cpu is 16) it takes 2 minutes. when changing MaxDegreeOfParallelism to 16 it takes more than 2 minutes. the cpu is not actually sweating (40%)\r\n\r\nWhen splitting the data and running it from two separate EXE processes, it takes 1 minute for both (half time, same data, cpu is 90%).\r\nAnyone knows why? or how can I fix it without running multiple processes? thanks :)\r\n\r\n```\r\n            Parallel.ForEach(sfs, new ParallelOptions { MaxDegreeOfParallelism = 8 }, sf =\u003e\r\n            {var success= PerformFromDatabase(sfString);}\r\n```",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOk4cd_w==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5cNAPh",
+                                           "createdAt":  "2023-05-14T14:27:44Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-system-linq-parallel\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\nI have a process which I need to run very fast. when running with parallel.foreach (MaxDegreeOfParallelism = 8) (my cpu is 16) it takes 2 minutes. when changing MaxDegreeOfParallelism to 16 it takes more than 2 minutes. the cpu is not actually sweating (40%)\r\n\r\nWhen splitting the data and running it from two separate EXE processes, it takes 1 minute for both (half time, same data, cpu is 90%).\r\nAnyone knows why? or how can I fix it without running multiple processes? thanks :)\r\n\r\n```\r\n            Parallel.ForEach(sfs, new ParallelOptions { MaxDegreeOfParallelism = 8 }, sf =\u003e\r\n            {var success= PerformFromDatabase(sfString);}\r\n```\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003esuperichmann\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-System.Linq.Parallel`, `tenet-performance`, `untriaged`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2023-05-14T14:27:44Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5cNCmJ",
+                                           "createdAt":  "2023-05-14T15:14:29Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOD6w_Yw==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "adamsitnik",
+                                                                               "createdAt":  "2023-05-17T09:43:44Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "cklutz",
+                                                                               "createdAt":  "2023-05-23T12:05:28Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "julealgon",
+                                                                               "createdAt":  "2024-11-13T20:46:25Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  3
+                                                         },
+                                           "author":  "svick",
+                                           "body":  "That depends entirely on what the body of the loop does. Without understanding that, we could only guess.",
+                                           "updatedAt":  "2023-05-14T15:14:29Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5cNKaW",
+                                           "createdAt":  "2023-05-14T17:30:02Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "superichmann",
+                                           "body":  "Hi @svick :]\r\n\r\nThe code inside the loop is performing about 4000 SELECTs to a database on the same machine. on each SELECT it is building an ML model (using ml.net `DatabaseLoader`).\r\n\r\nthe `sf` value goes to the `SELECT` statement `WHERE` clause, I am running on ~2000 sf values. so 2000 * 4000...\r\n\r\nI have no `locks` inside or stuff that should stop the thread from running.",
+                                           "updatedAt":  "2023-05-14T17:30:27Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5cNN4K",
+                                           "createdAt":  "2023-05-14T18:24:17Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOD6w_4A==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "Joe4evr",
+                                                                               "createdAt":  "2023-05-16T09:50:52Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "cklutz",
+                                                                               "createdAt":  "2023-05-23T12:05:42Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "julealgon",
+                                                                               "createdAt":  "2024-11-13T20:47:19Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  3
+                                                         },
+                                           "author":  "Clockwork-Muse",
+                                           "body":  "That\u0027s not sufficient information.\r\n\r\n\u003eto a database on the same machine\r\n\r\nSo, first, this is going to play havoc with any performance testing, because your application is going to be fighting with the database for resources.\r\n\r\n\u003e the sf value goes to the SELECT statement WHERE clause, I am running on ~2000 sf values. so 2000 * 4000...\r\n\r\nWhat this sounds like is you may have something that should be run as a single statement (ie, no loop at all on the application side), letting the database handle any potential mutlithreading aspects (which in most cases it\u0027s going to be much better at).  Otherwise you\u0027re just setting yourself for RBAR (row-by-agonizing-row).  We\u0027d need to see the statements for that, though.\r\n\r\n\u003e I have no locks inside or stuff that should stop the thread from running.\r\n\r\n_You_ may have written no locks.  That doesn\u0027t mean there aren\u0027t locks in other parts of the application, or that other things wouldn\u0027t be the cause.  We\u0027d need actual code to diagnose this.",
+                                           "updatedAt":  "2023-05-14T18:24:17Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5cNPHe",
+                                           "createdAt":  "2023-05-14T18:44:30Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOC74atQ==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "adamsitnik",
+                                                                               "createdAt":  "2023-05-17T09:44:19Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "stephentoub",
+                                           "body":  "I suggest profiling. That should highlight the issue. Most likely there is a shared resource protected by some kind of synchronization and that is bottlenecking the operation. By splitting into two processes, as a side-effect you\u0027d also be doubling the resources (eg a database connection that\u0027s inherently serialized), thereby doubling throughput. ",
+                                           "updatedAt":  "2023-05-14T18:44:30Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5cNUnl",
+                                           "createdAt":  "2023-05-14T20:36:37Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOC74auw==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "adamsitnik",
+                                                                               "createdAt":  "2023-05-17T09:44:22Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "omariom",
+                                           "body":  "Have a look at [Concurrency Visualizer](https://learn.microsoft.com/en-us/visualstudio/profiling/concurrency-visualizer?view=vs-2022).",
+                                           "updatedAt":  "2023-05-14T20:36:37Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5cPq48",
+                                           "createdAt":  "2023-05-15T10:37:06Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "superichmann",
+                                           "body":  "thanks @Clockwork-Muse @stephentoub @omariom @svick \nI have tried playing with the concurrency visualizer but no success :\\\n\nHere is the simplified console application code:\ngenerating selects and performing machine learning on them with ml.net.\n```C#\nusing Microsoft.ML;\nusing Microsoft.ML.AutoML;\nusing Microsoft.ML.Data;\nusing Microsoft.ML.Runtime;\nusing Npgsql;\nusing System.Collections.Concurrent;\nusing System.Data;\n\nvar watch = new System.Diagnostics.Stopwatch();\nwatch.Start();\nint nAmountOfRuns = 256;\nstring strSelect = \"SELECT rnd_double,rnd_double from long_sequence(2000)\";\nstring connectionString = $@\"host=127.0.0.1;port=8812;username=admin;password=quest;database=qdb;ServerCompatibilityMode=NoTypeLoading;Pooling=true;MaxPoolSize=99999;CommandTimeout=99999;\";\nMLContext mlXXX = new MLContext(666);\nDatabaseLoader.Column[] columns = new DatabaseLoader.Column[2];\ncolumns[0] = new DatabaseLoader.Column(\"rnd_double\", DbType.Double, 0);\ncolumns[1] = new DatabaseLoader.Column(\"rnd_double1\", DbType.Double, 1);\nConcurrentBag\u003c(int Key, double Value)\u003e hScores = new ConcurrentBag\u003c(int, double)\u003e();\nParallel.For(0, nAmountOfRuns, new ParallelOptions { MaxDegreeOfParallelism = 16 }, (i) =\u003e\n{\n    IDataView currData = LoadIntoIDataView(columns);\n    var splitted = mlXXX.Data.TrainTestSplit(currData, 0.01);\n    var experimentSettings = new RegressionExperimentSettings();\n    experimentSettings.MaxModels = 1;\n    experimentSettings.OptimizingMetric = RegressionMetric.MeanAbsoluteError;\n    RegressionExperiment experiment = mlXXX.Auto().CreateRegressionExperiment(experimentSettings);\n    var preDoubleToSingle = TransformDoubleToSingle(splitted.TrainSet);\n    ExperimentResult\u003cRegressionMetrics\u003e? experimentResult = null; \n    RegressionMetrics? metrics = null;\n    try\n    {\n        experimentResult = experiment.Execute(splitted.TrainSet, splitted.TestSet, \"rnd_double1\", preFeaturizer: preDoubleToSingle);\n        metrics = experimentResult.BestRun.ValidationMetrics;\n        Console.WriteLine($\"Total models produced: {experimentResult.RunDetails.Count()}\");\n        Console.WriteLine($\"{experimentResult.BestRun.TrainerName}\\t Score:\\t{experimentResult.BestRun.ValidationMetrics.MeanAbsoluteError}\");\n    }\n    catch (Exception ex)\n    {\n        Console.WriteLine(\"Experiment is dead\");\n        Console.WriteLine(ex.ToString());\n    }\n    hScores.Add((i, experimentResult.BestRun.ValidationMetrics.MeanAbsoluteError));\n    //Console.WriteLine(i);\n});\n\nvar sorted = hScores.OrderBy(entry =\u003e entry.Value).Take(5).ToList();\nConsole.WriteLine(\"Best runs:\");\nforeach (var g in sorted)\n{\n    Console.WriteLine(g.Key);\n}\nwatch.Stop();\n\nConsole.WriteLine($\"Execution Time: {watch.Elapsed.TotalSeconds}\");\n\nIDataView LoadIntoIDataView(DatabaseLoader.Column[] columns)\n{\n    IDataView idvContents;\n    DatabaseLoader loader = mlXXX.Data.CreateDatabaseLoader(columns);\n    DatabaseSource dbSource = new DatabaseSource(NpgsqlFactory.Instance, connectionString, strSelect, 201);\n    idvContents = loader.Load(dbSource);\n    return idvContents;\n}\n\nIEstimator\u003cITransformer\u003e TransformDoubleToSingle(IDataView data)\n{\n    var mlContext = new MLContext();\n\n    var doubleColumns = data.Schema\n        .Where(col =\u003e col.Type == NumberDataViewType.Double)\n        .Select(col =\u003e new InputOutputColumnPair($\"{col.Name}\", col.Name));\n    if (doubleColumns.Any())\n        return mlContext.Transforms.Conversion.ConvertType(doubleColumns.ToArray(), DataKind.Single);\n    else\n        return null;\n}\n```\n\nIf you would like to actually reproduce and take a look:\n\n- [this is the database](https://questdb.io/get-questdb/) just download and run it\n- Microsoft.ML and Microsoft.Auto.ML NuGet are from [dotnet-libraries](https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet-libraries/nuget/v3/index.json), stock version will not work.\n- npgsql NuGet is prerelease version\n- .Net 7\n\n\nOn my machine, running on `MaxDegreeOfParallelism = 1` takes 14.9451178 seconds, running on `MaxDegreeOfParallelism = 16` takes 21.1512313 seconds. and running on `MaxDegreeOfParallelism = 8` takes 15.6480345 seconds.\n\nrunning two instances of the same program EXE (splitting the data in two - so 128 and 128) takes 5 seconds.\n\n@LittleLittleCloud maybe you can take a look? since its ml related.. how is DatabaseLoader acting? it might lock some operations?",
+                                           "updatedAt":  "2024-11-14T00:30:11Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5cT21U",
+                                           "createdAt":  "2023-05-15T22:39:37Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOC7yU9g==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "ROCKET",
+                                                                               "user":  "superichmann",
+                                                                               "createdAt":  "2023-05-16T07:51:11Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "Clockwork-Muse",
+                                           "body":  "\u003e  `Console.WriteLine`\r\n\r\nAccess to the console has to be serialized, there\u0027s a lock there.  A fairly long-lived one, as output here can be relatively slow.  Don\u0027t do that.\r\n\r\nI don\u0027t know enough about the ML library, but what you want to look for is some way to create a batch of experiments, not a bunch of single experiments.\r\n\r\n\u003e `string strSelect = \"SELECT rnd_double,rnd_double from long_sequence(2000)\";`\r\n\r\nThis doesn\u0027t seem to be a thing in standard PostgreSQL, but from reading it and the rest of the code the implication is that you\u0027re getting a duplicated single column of 2000 rows **each time** you start a new experiment.  This has problems:\r\n 1. You\u0027re making a round trip to the database just to get this data, when it would be way faster to do it in-process.  (Same machine is somewhat irrelevant - you\u0027re still hitting the network stack and incurring serialization costs).\r\n 2. If those aren\u0027t actually random numbers, you\u0027re using the same data over and over again....\r\n 3.  (Potentially - depends on how ML.NET handles this) The conversion single-\u003edouble is possibly happening on the application side, instead of the database side.\r\n\r\nIt\u0027s also not clear to me whether the experiments need a \"live\" view of the data from the database, or whether you could capture it locally, or what.\r\n\r\n\u003e`var watch = new System.Diagnostics.Stopwatch();`\r\n\r\n1. Your capture is too wide.  For example, if the majority of the time was spent in sorting the bag at the end, you wouldn\u0027t be able to tell.  You\u0027re not testing the performance of just the parallel parts.\r\n2. The library we generally use for performance testing is [BenchmarkDotNet](https://github.com/dotnet/BenchmarkDotNet), not a raw `Stopwatch` (specifically because it handles certain trickier aspects better than doing it manually).",
+                                           "updatedAt":  "2023-05-15T22:39:37Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5cVvG7",
+                                           "createdAt":  "2023-05-16T08:11:00Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "superichmann",
+                                           "body":  "Thanks @Clockwork-Muse with your help I think I can solve this!\r\n\r\n- I have removed all console writes.\r\n- The values I extract are different on each SELECT. I could make one huge select and filter everything in IDataView but I don\u0027t know how to do it :\\\r\n- Conversion Double-\u003eSingle is due to the nature of ml.net and my SELECTs, moving this functionality to the database will be hard as well. **Update** I have moved the conversion o the db it and it is not improving performance\r\n\r\nBenchMarkDotNet:\r\n\r\n- Before even starting, when running the program with `dotnet run -c Release` as specified in the the BenchMarkDotNet page, execution time dropped in half 💯 I am not sure why. even in comparison to when running from release.\r\n- BenchMarkDotNet just running in loop over the entire code and never ending :\\ `WorkloadActual  63: 1 op, 1613725600.00 ns, 1.6137 s/op` each time with larger amount of time it takes to run each execution.\r\n- ok so it finished running. what should I actually do now?\r\n\r\n```\r\nBenchmarkDotNet=v0.13.5, OS=Windows 10 (10.0.19045.2846/22H2/2022Update)\r\nIntel Core i9-9880H CPU 2.30GHz, 1 CPU, 16 logical and 8 physical cores\r\n.NET SDK=7.0.203\r\n  [Host]     : .NET 7.0.5 (7.0.523.17405), X64 RyuJIT AVX2\r\n  DefaultJob : .NET 7.0.5 (7.0.523.17405), X64 RyuJIT AVX2\r\n```\r\n\r\n\r\n|      Method |     Mean |   Error |   StdDev |\r\n|------------ |---------:|--------:|---------:|\r\n| RunAllStuff | 333.7 ms | 7.88 ms | 23.23 ms |\r\n\r\nI have started implementing some changes and it improves performance:\r\n\r\n- Moving some settings to be created once at the beginning of the class and not dynamically before ml\r\n- removing all console write lines\r\n-  removing unnecessary ml models from the experiment.\r\n\r\nAfter all of this I still don\u0027t know why when changing to maximum threads (16) it gets **slower** but when running from **external EXEs** at the same time it finished much **faster**",
+                                           "updatedAt":  "2023-05-16T10:05:55Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5cbYi3",
+                                           "createdAt":  "2023-05-17T04:20:04Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "superichmann",
+                                           "body":  "My guess is that AutoML class is static and have some capping on the threads when running multiple experiments, @LittleLittleCloud ?\r\nI have as well tried to load the entire table into an IDataView and use `FilterRowsByColumn` and `DropColumns` in combination with `Data.Cache` but ml.net not really caches :\\\r\n```\r\nvar cachedTRAIN = mlx.Data.Cache(idvtrain);\r\nvar storeTRAIN = mlx.Data.FilterRowsByColumn(cachedTRAIN, \"col\", 1,2);\r\n... experiment.Execute // caching not working and AutoML goes to database again :\\\r\n```\r\nAs well when loading the entire table into IDataView (executing an experiment without filter, it takes really long time to load everything)",
+                                           "updatedAt":  "2023-05-17T04:20:04Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5cc8lo",
+                                           "createdAt":  "2023-05-17T09:52:03Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "adamsitnik",
+                                           "body":  "\u003e I have tried playing with the concurrency visualizer but no success :\\\r\n\r\nCould you please share the trace file?\r\n",
+                                           "updatedAt":  "2023-05-17T09:52:03Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5cc8vf",
+                                           "createdAt":  "2023-05-17T09:52:28Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "This issue has been marked `needs-author-action` and may be missing some important information.",
+                                           "updatedAt":  "2023-05-17T09:52:28Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5cpb12",
+                                           "createdAt":  "2023-05-19T10:28:29Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "superichmann",
+                                           "body":  "@adamsitnik Hi :] in my first comment there is the code and how to reproduce, it takes 5 minutes to setup I promise, so nothing complicated, and then you will be able to play with the threads amount and alter the code if needed.",
+                                           "updatedAt":  "2023-05-19T10:28:29Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6Tfk9D",
+                                           "createdAt":  "2024-11-13T19:23:57Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOD6xBuw==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "stephentoub",
+                                                                               "createdAt":  "2024-11-13T19:25:47Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "EYES",
+                                                                               "user":  "julealgon",
+                                                                               "createdAt":  "2024-11-13T20:50:46Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  2
+                                                         },
+                                           "author":  "PranavSenthilnathan",
+                                           "body":  "@superichmann  I was able to repro this. The concurrency visualizer trace is 99% synchronization. I couldn\u0027t get symbols to work with the tool but I was able to just debug the program, break and open up the \"parallel stacks\":\n![Image](https://github.com/user-attachments/assets/b85b3b30-9aee-4971-96c7-90cdc008e353)\n\nYou can see here that 12 threads are waiting on a lock held by thread 12164 and all of these are in the same code path. Looking at the code, this is likely the FastTreeShared.TrainLock (symbols are a little off, but it\u0027s above the green highlighted line in code). That lock is a global singleton lock as its name suggests: [see here](https://github.com/dotnet/machinelearning/blob/442d51cffb7cb95023bcedf4ee73511b199bc0b5/src/Microsoft.ML.FastTree/FastTree.cs#L43). This indicates to me that the function you pass into the `Parallel.For` are not parallelizable. It seems like training can\u0027t be done in parallel in a single process - at least in the way you are doing it. @michaelgsharp or @tarekgh might be able to confirm. Regardless, this isn\u0027t an issue with `Parallel.For`.\n\nIn the future, sharing the trace file can help us point out immediate red flags and to help you debug it further. We don\u0027t always have the context that you have on your code and dependencies.",
+                                           "updatedAt":  "2024-11-13T19:23:57Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6Thx3_",
+                                           "createdAt":  "2024-11-14T00:33:46Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "tarekgh",
+                                           "body":  "\u003e  It seems like training can\u0027t be done in parallel in a single process - at least in the way you are doing it. \n\n@michaelgsharp is this intentional behavior? ",
+                                           "updatedAt":  "2024-11-14T00:33:46Z"
+                                       }
+                                   ],
+                         "totalCount":  15
+                     },
+        "title":  "Parallel.ForEach is actually slow",
+        "labels":  [
+                       "area-System.Linq.Parallel",
+                       "tenet-performance"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/89476",
+        "createdAt":  "2023-07-25T21:49:13Z",
+        "number":  89476,
+        "author":  "douglasg14b",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-11-13T07:18:10Z",
+        "body":  "How can we use thread-local state with `Parallel.ForEachAsync`? Is this just not a feature that exists, or are we expected to do something special to make this work?\r\n\r\n\r\n`Parallel.ForEach` example definition:\r\n\r\n```cs\r\n        public static ParallelLoopResult ForEach\u003cTSource, TLocal\u003e(\r\n            Partitioner\u003cTSource\u003e source,\r\n            Func\u003cTLocal\u003e localInit,\r\n            Func\u003cTSource, ParallelLoopState, TLocal, TLocal\u003e body,\r\n            Action\u003cTLocal\u003e localFinally)\r\n        {\r\n```\r\n\r\nWorking with .Net 7.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOk2HnWA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5iYonh",
+                                           "createdAt":  "2023-07-25T22:05:46Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Clockwork-Muse",
+                                           "body":  "\u003e How can we use thread-local state with `Parallel.ForEachAsync`?\r\n\r\nDo you want actual per-thread data, or a (perhaps more nebulous) per-runner data?  There\u0027s a difference.",
+                                           "updatedAt":  "2023-07-25T22:05:46Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5iY0CV",
+                                           "createdAt":  "2023-07-25T22:52:31Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "douglasg14b",
+                                           "body":  "Per thread data, for instance if I am using DI and need to generate a scope for each thread, not necessarily per item.\r\n\r\nPerhaps I misunderstand the difference. Can you explain per-runner vs per-thread?",
+                                           "updatedAt":  "2023-07-25T22:52:31Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5iZByV",
+                                           "createdAt":  "2023-07-26T00:06:17Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Clockwork-Muse",
+                                           "body":  "`async` tasks can (and often do) move between runtime/OS threads.  So for your DI scenario, individual items might be moved between different scopes, which might not be what you expect.\r\n\r\nA per-runner context would _sort-of_ look like per-thread context, in that it would cover multiple items (almost certainly based on the partition, just as for threads), but it would follow the tasks over any suspension points, which is possibly less surprising behavior.\r\n\r\n",
+                                           "updatedAt":  "2023-07-26T00:06:17Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5iaXzs",
+                                           "createdAt":  "2023-07-26T06:49:48Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-system-linq-parallel\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\nHow can we use thread-local state with `Parallel.ForEachAsync`? Is this just not a feature that exists, or are we expected to do something special to make this work?\r\n\r\n\r\n`Parallel.ForEach` example definition:\r\n\r\n```cs\r\n        public static ParallelLoopResult ForEach\u003cTSource, TLocal\u003e(\r\n            Partitioner\u003cTSource\u003e source,\r\n            Func\u003cTLocal\u003e localInit,\r\n            Func\u003cTSource, ParallelLoopState, TLocal, TLocal\u003e body,\r\n            Action\u003cTLocal\u003e localFinally)\r\n        {\r\n```\r\n\r\nWorking with .Net 7.\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003edouglasg14b\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-System.Linq.Parallel`, `untriaged`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2023-07-26T06:49:48Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5ifKf7",
+                                           "createdAt":  "2023-07-26T19:01:04Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "douglasg14b",
+                                           "body":  "Gotcha, so yeah, I\u0027m talking about per-runner state.\r\n\r\nSimilar to if I created a bunch of these in a loop with some fragment of data from the enclosing scope:\r\n\r\n```cs\r\nTask.Run(async () =\u003e\r\n{\r\n    var services = _scopeFactory.CreateScope().ServiceProvider; // _scopeFactory in outer scope\r\n    var myService= services.GetRequiredService\u003cMyService\u003e();\r\n\r\n    await myService.DoIoBoundStuff();\r\n});\r\n```\r\n",
+                                           "updatedAt":  "2023-07-26T19:04:18Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6TYedY",
+                                           "createdAt":  "2024-11-13T07:17:56Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "PranavSenthilnathan",
+                                           "body":  "Sounds like a reasonable proposal. Similar to the case for `Parallel.ForEach`, having a partition-local variable avoids having to create a closure and/or hand-rolling state management in ways that could lead to bad perf from locking or false sharing.\n\n@douglasg14b could you update your post to follow the template [here](https://github.com/dotnet/runtime/blob/a593d9cd39355593e87c6cb8c876c52f4bf5145f/docs/project/api-review-process.md#steps)?",
+                                           "updatedAt":  "2024-11-13T07:18:10Z"
+                                       }
+                                   ],
+                         "totalCount":  6
+                     },
+        "title":  "Parallel.ForEachAsync with thread-local state just like Parallel.ForEach",
+        "labels":  [
+                       "question",
+                       "area-System.Linq.Parallel"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/98689",
+        "createdAt":  "2024-02-20T10:48:48Z",
+        "number":  98689,
+        "author":  "timcassell",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHODAeT2g==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "airbreather",
+                                            "createdAt":  "2025-01-25T15:34:33Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "c0shea",
+                                            "createdAt":  "2025-03-25T13:39:06Z"
+                                        }
+                                    ],
+                          "totalCount":  2
+                      },
+        "updatedAt":  "2025-07-16T05:55:24Z",
+        "body":  "### Background and motivation\r\n\r\nThe [documentation](https://learn.microsoft.com/en-us/dotnet/standard/parallel-programming/introduction-to-plinq) states \"PLINQ implements the full set of LINQ standard query operators as extension methods for the [System.Linq](https://learn.microsoft.com/en-us/dotnet/api/system.linq) namespace and has additional operators for parallel operations.\", but some new extensions were added to `System.Linq.Enumerable` that are missing in `System.Linq.ParallelEnumerable`. I propose they be added so that further queries will continue to be parallelizable (even if some extensions can\u0027t be parallelized, they should still return `ParallelQuery\u003cT\u003e`).\r\n\r\n\r\n\r\n### API Proposal\r\n\r\n```cs\r\nnamespace System.Linq\r\n\r\npublic static partial class ParallelEnumerable\r\n{\r\n    // Append\r\n    // Chunk\r\n    // DistinctBy\r\n    // ExceptBy\r\n    // IntersectBy\r\n    // MaxBy\r\n    // MinBy\r\n    // Order\r\n    // OrderDescending\r\n    // Prepend\r\n    // SkipLast\r\n    // TakeLast\r\n    // ToHashSet\r\n    // TryGetNonEnumeratedCount\r\n    // UnionBy\r\n}\r\n```\r\n\r\nAll the missing extensions from `System.Linq.Enumerable`, with the same shape (I didn\u0027t bother to write out the full declarations for brevity).\r\n\r\nAnd the new .Net 9 extensions:\r\n\r\n```cs\r\nnamespace System.Linq\r\n\r\npublic static partial class ParallelEnumerable\r\n{\r\n    // AggregateBy\r\n    // CountBy\r\n    // Index\r\n}\r\n```\r\n\r\n### API Usage\r\n\r\n```cs\r\nEnumerable.Range(0, 100)\r\n    .AsParallel()\r\n    .Append(200)\r\n    .TakeLast(20)\r\n    .MinBy(x =\u003e x)\r\n```\r\n\r\n\r\n### Alternative Designs\r\n\r\nUse `.AsSequential()` before using the new extensions.\r\n\r\n### Risks\r\n\r\nNew extensions may not run in parallel (but that\u0027s already called out in PLINQ documentation).",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOdHiJ9Q==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc50dt1O",
+                                           "createdAt":  "2024-02-20T10:48:58Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-system-linq\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Background and motivation\n\nThe [documentation](https://learn.microsoft.com/en-us/dotnet/standard/parallel-programming/introduction-to-plinq) states `PLINQ implements the full set of LINQ standard query operators as extension methods for the [System.Linq](https://learn.microsoft.com/en-us/dotnet/api/system.linq) namespace and has additional operators for parallel operations.`, but some new extensions were added to `System.Linq.Enumerable` that are missing in `System.Linq.ParallelEnumerable`. I propose they be added so that we don\u0027t need to use `.AsSequential` to use the new extensions.\r\n\r\n\n\n### API Proposal\n\n```cs\r\nnamespace System.Linq\r\n\r\npublic static partial class ParallelEnumerable\r\n{\r\n    // Append\r\n    // Chunk\r\n    // DistinctBy\r\n    // ExceptBy\r\n    // IntersectBy\r\n    // MaxBy\r\n    // MinBy\r\n    // Order\r\n    // OrderDescending\r\n    // Prepend\r\n    // SkipLast\r\n    // TakeLast\r\n    // ToHashSet\r\n    // TryGetNonEnumeratedCount\r\n    // UnionBy\r\n}\r\n```\r\n\r\nAll the missing extensions from `System.Linq.Enumerable`, with the same shape (I didn\u0027t bother to write out the full declarations for brevity).\r\n\r\nAnd the new .Net 9 extensions:\r\n\r\n```cs\r\nnamespace System.Linq\r\n\r\npublic static partial class ParallelEnumerable\r\n{\r\n    // AggregateBy\r\n    // CountBy\r\n    // Index\r\n}\r\n```\n\n### API Usage\n\n```cs\r\nEnumerable.Range(0, 100)\r\n    .AsParallel()\r\n    .Append(200)\r\n    .TakeLast(20)\r\n    .MinBy(x =\u003e x)\r\n```\r\n\n\n### Alternative Designs\n\nUse `.AsSequential()` before using the new extensions.\n\n### Risks\n\nNew extensions may not run in parallel (but that\u0027s already called out in PLINQ documentation).\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003etimcassell\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`api-suggestion`, `area-System.Linq`, `untriaged`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2024-02-20T10:48:58Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc50eD5L",
+                                           "createdAt":  "2024-02-20T11:41:14Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-system-linq-parallel\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Background and motivation\r\n\r\nThe [documentation](https://learn.microsoft.com/en-us/dotnet/standard/parallel-programming/introduction-to-plinq) states \"PLINQ implements the full set of LINQ standard query operators as extension methods for the [System.Linq](https://learn.microsoft.com/en-us/dotnet/api/system.linq) namespace and has additional operators for parallel operations.\", but some new extensions were added to `System.Linq.Enumerable` that are missing in `System.Linq.ParallelEnumerable`. I propose they be added so that we don\u0027t need to use `.AsSequential` to use the new extensions.\r\n\r\n\r\n\r\n### API Proposal\r\n\r\n```cs\r\nnamespace System.Linq\r\n\r\npublic static partial class ParallelEnumerable\r\n{\r\n    // Append\r\n    // Chunk\r\n    // DistinctBy\r\n    // ExceptBy\r\n    // IntersectBy\r\n    // MaxBy\r\n    // MinBy\r\n    // Order\r\n    // OrderDescending\r\n    // Prepend\r\n    // SkipLast\r\n    // TakeLast\r\n    // ToHashSet\r\n    // TryGetNonEnumeratedCount\r\n    // UnionBy\r\n}\r\n```\r\n\r\nAll the missing extensions from `System.Linq.Enumerable`, with the same shape (I didn\u0027t bother to write out the full declarations for brevity).\r\n\r\nAnd the new .Net 9 extensions:\r\n\r\n```cs\r\nnamespace System.Linq\r\n\r\npublic static partial class ParallelEnumerable\r\n{\r\n    // AggregateBy\r\n    // CountBy\r\n    // Index\r\n}\r\n```\r\n\r\n### API Usage\r\n\r\n```cs\r\nEnumerable.Range(0, 100)\r\n    .AsParallel()\r\n    .Append(200)\r\n    .TakeLast(20)\r\n    .MinBy(x =\u003e x)\r\n```\r\n\r\n\r\n### Alternative Designs\r\n\r\nUse `.AsSequential()` before using the new extensions.\r\n\r\n### Risks\r\n\r\nNew extensions may not run in parallel (but that\u0027s already called out in PLINQ documentation).\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003etimcassell\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`api-suggestion`, `area-System.Linq`, `area-System.Linq.Parallel`, `untriaged`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2024-02-20T11:41:14Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc50eETu",
+                                           "createdAt":  "2024-02-20T11:42:18Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "eiriktsarpalis",
+                                           "body":  "Some of the methods that you listed such as `Append`, `Prepend`, `Chunk`, `ToHashSet` and `TryGetNonEnumeratedCount` are inherently non-parallelizable. I\u0027m guessing they wouldn\u0027t be parallel as such, only accelerator methods mapping ParallelEnumerable values to the sequential implementations?",
+                                           "updatedAt":  "2024-02-20T11:42:18Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc50eIn1",
+                                           "createdAt":  "2024-02-20T11:53:46Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "timcassell",
+                                           "body":  "\u003e Some of the methods that you listed such as `Append`, `Prepend`, `Chunk`, `ToHashSet` and `TryGetNonEnumeratedCount` are inherently non-parallelizable. I\u0027m guessing they wouldn\u0027t be parallel as such, only accelerator methods mapping ParallelEnumerable values to the sequential implementations?\r\n\r\nExactly.\r\n\r\nAlso, I\u0027m sure I missed some new overloads for existing extensions (like `ElementAt` with a `System.Index` parameter). Basically I think the API surface should match like the intro-to-plinq documentation states, even though some can\u0027t actually be parallelized.",
+                                           "updatedAt":  "2024-02-20T11:53:46Z"
+                                       }
+                                   ],
+                         "totalCount":  4
+                     },
+        "title":  "[API Proposal]: PLINQ: add `ParallelEnumerable` extensions from `Enumerable`",
+        "labels":  [
+                       "api-suggestion",
+                       "area-System.Linq.Parallel",
+                       "needs-further-triage"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/114478",
+        "createdAt":  "2025-04-10T08:43:47Z",
+        "number":  114478,
+        "author":  "joshwkearney",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHODPt73g==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "shravan2x",
+                                            "createdAt":  "2025-09-10T20:56:43Z"
+                                        }
+                                    ],
+                          "totalCount":  1
+                      },
+        "updatedAt":  "2025-07-23T08:48:04Z",
+        "body":  "### Background and motivation\n\nLast year it seemed like LINQ extensions for `IAsyncEnumerable` would not make it into .NET, so I tried using the existing `System.Linq.Async` package but I found that it would not cover my use case for `IAsyncEnumerable`. Since then I have been implementing LINQ operators for `IAsyncEnumerable` in my project [AsyncAssortments](https://github.com/joshwkearney/async-assortments). \n\nLooking through recent PR for `System.Linq.AsyncEnumerable`, I noticed that my library still covers many more uses for `IAsyncEnumerable` that I think could be very helpful  when this officially ships with .NET. Here I would like to outline what those use cases are, and how they can be handled with minimal additional API surface. \n\n#### What is an `IAsyncEnumerable`?\nSo far, it seems like .NET, Ix.NET, and the new `System.Linq.AsyncEnumerable` PR all treat `IAsyncEnumerable` as modeling a linear sequence  that could potentially have a delay between elements. This is great for things like retrieving records from a database,  but there is also a very common pattern involving `IEnumerable` and `async/await` that does not fit this model. \n\nOften you have a regular `IEnumerable\u003cT\u003e`, and want to apply a series of transformations to the elements concurrently (each item is processed at the same time), where each transformation is an `async` function. Right now that looks something like this:\n\n```csharp\nvar items = new[] { 1, 2, 3, 4, 5 };\nvar step1 = await Task.WhenAll(items.Select(x =\u003e Process1Async(x)));\nvar step2 = await Task.WhenAll(items.Select(x =\u003e Process2Async(x)));\n```\n\nThis very unwieldy, and this example only involved `Select` operators. If you have other transformations it will get even more unreadable. It\u0027s also inefficient, because all of the first transformations must finish before any of the second start. Ideally, we could write this:\n\n```csharp\nvar results = new[] { 1, 2, 3, 4, 5 }\n    .ToSomeConcurrentAsyncCollection()\n    .AsyncSelect(async =\u003e await Process1Async(x))\n    .AsyncSelect(async =\u003e await Process2Async(x));\n```\n\nThis is simpler, cleaner, and it\u0027s easy to add more operators. Interestingly, if you think about what interface is required to support `async` transformations that execute concurrently like this, all it takes is the single method defined in `IAsyncEnumerable`. \n\n Just like an `IEnumerable` can be used to model different collection types, `IAsyncEnumerable` can model either a linear sequence of delayed elements, or a collection of tasks executing concurrently and yielding their results.\n\n\n#### The problem\n\nLike `IEnumerable`, `IAsyncEnumerable` should ship with LINQ operators that are compatible with many different underlying collections. Unfortunately, the implementation of operators like `AsyncSelect` above actually changes depending on if we\u0027re dealing with a sequence or a set of concurrent tasks.\n\nFor a sequence, we want to enumerate over the sequence and await the selector as we go, but for a set of concurrent tasks we want to enumerate the sequence and start the selectors in a non-awaiting manner so they can execute at the same time.\n\nThis means we actually need different operator implementations depending on the semantics we want, and we need a way of telling the operators which implementation to use.\n\n### API Proposal\n\n#### The proposal: `IScheduledAsyncEnumerable`\n\nThe core of this proposal is to add a new interface `IScheduledAsyncEnumerable`, which represents an `IAsyncEnumerable` that prefers its async operators to execute in a particular way. There are five options for executing async operators:\n\n1. **Sequential** - This is what the `System.Linq.AsyncEnumerable` operators do right now. The sequence is enumerated, and async operators are awaited during the enumeration one at a time.\n2. **ConcurrentOrdered** - Async operators are allowed to execute concurrently (at the same time but all on the original thread). The resulting sequence is gauranteed to be in the same order as the original.\n3. **ConcurrentUnordered** - Async operators are allowed to execute concurrently (at the same time but all on the original thread). The resulting sequence yields items as soon as they are available.\n4. **ParallelOrdered** - Async operators are allowed to execute in parallel (run on the threadpool with `Task.Run`). The resulting sequence is gauranteed to be in the same order as the original.\n5. **ParallelUnordered** - Async operators are allowed to execute in parallel (run on the threadpool with `Task.Run`). The resulting sequence yields items as soon as they are available.\n\n```csharp\nnamespace System.Linq;\n\npublic interface IScheduledAsyncEnumerable\u003cout T\u003e : IAsyncEnumerable\u003cT\u003e {\n    public AsyncEnumerableScheduleMode ScheduleMode { get; }\n}\n\npublic enum AsyncEnumerableScheduleMode {\n    Sequential,\n    ConcurrentOrdered,\n    ConcurrentUnordered,\n    ParallelOrdered,\n    ParallelUnordered\n}\n\npublic static partial class AsyncEnumerable {\n    public static IScheduledAsyncEnumerable\u003cTSource\u003e AsConcurrent\u003cTSource\u003e(this IAsyncEnumerable\u003cTSource\u003e source, bool preserveOrder = true);\n    public static IScheduledAsyncEnumerable\u003cTSource\u003e AsParallel\u003cTSource\u003e(this IAsyncEnumerable\u003cTSource\u003e source, bool preserveOrder = true);\n    public static IScheduledAsyncEnumerable\u003cTSource\u003e AsSequential\u003cTSource\u003e(this IAsyncEnumerable\u003cTSource\u003e source);\n}\n```\n\nAny LINQ operators defined for `IAsyncEnumerable` would have implementations that respect this scheduling preference if called on a `IScheduledAsyncEnumerable`.  Luckily, I already have all of this implemented 🚀 \n\nOne thing that\u0027s important: The default behavior for `IAsyncEnumerable` and its LINQ operators is sequential, just like they are right now. If the user wants concurrent or parallel execution they have to opt in manually with `AsConcurrent()` and `AsParallel()`.\n\n#### Operator Naming\n\nFor `IAsyncEnumerable` there are two versions of the LINQ operators: one that execute synchronously and one that executes asynchronously. I think for clarity, discoverability, and type inference purposes it would be helpful to distinguish these, like Ix.NET did with `Select` and `SelectAwait` for example. \n\nHowever .NET doesn\u0027t use `Await` as a method suffix, so instead I propose adding `AsyncXXX` as a prefix. This follows the naming conventions used elsewhere like in `IAsyncEnumerable`, where `Async` describes the method itself rather than the return type.\n\nThese are not new APIs, but simply renaming the operators already in the `System.Linq.AsyncEnumerable` PR to use the naming conventions above:\n\n```csharp\nnamespace System.Linq;\n\npublic static partial class AsyncEnumerable\n{\n    public static IAsyncEnumerable\u003cKeyValuePair\u003cTKey, TAccumulate\u003e\u003e AsyncAggregateBy\u003cTSource, TKey, TAccumulate\u003e(this IAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, CancellationToken, ValueTask\u003cTKey\u003e\u003e keySelector, Func\u003cTKey, CancellationToken, ValueTask\u003cTAccumulate\u003e\u003e seedSelector, Func\u003cTAccumulate, TSource, CancellationToken, ValueTask\u003cTAccumulate\u003e\u003e func, IEqualityComparer\u003cTKey\u003e? keyComparer = null) where TKey : notnull;\n    public static IAsyncEnumerable\u003cKeyValuePair\u003cTKey, TAccumulate\u003e\u003e AsyncAggregateBy\u003cTSource, TKey, TAccumulate\u003e(this IAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, CancellationToken, ValueTask\u003cTKey\u003e\u003e keySelector, TAccumulate seed, Func\u003cTAccumulate, TSource, CancellationToken, ValueTask\u003cTAccumulate\u003e\u003e func, IEqualityComparer\u003cTKey\u003e? keyComparer = null) where TKey : notnull;\n    public static IAsyncEnumerable\u003cKeyValuePair\u003cTKey, int\u003e\u003e AsyncCountBy\u003cTSource, TKey\u003e(this IAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, CancellationToken, ValueTask\u003cTKey\u003e\u003e keySelector, IEqualityComparer\u003cTKey\u003e? keyComparer = null) where TKey : notnull;\n    public static IAsyncEnumerable\u003cTSource\u003e AsyncDistinctBy\u003cTSource, TKey\u003e(this IAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, CancellationToken, ValueTask\u003cTKey\u003e\u003e keySelector, IEqualityComparer\u003cTKey\u003e? comparer = null);\n    public static IAsyncEnumerable\u003cTSource\u003e AsyncExceptBy\u003cTSource, TKey\u003e(this IAsyncEnumerable\u003cTSource\u003e first, IAsyncEnumerable\u003cTKey\u003e second, Func\u003cTSource, CancellationToken, ValueTask\u003cTKey\u003e\u003e keySelector, IEqualityComparer\u003cTKey\u003e? comparer = null);\n    public static IAsyncEnumerable\u003cIGrouping\u003cTKey, TSource\u003e\u003e AsyncGroupBy\u003cTSource, TKey\u003e(this IAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, CancellationToken, ValueTask\u003cTKey\u003e\u003e keySelector, IEqualityComparer\u003cTKey\u003e? comparer = null);\n    public static IAsyncEnumerable\u003cIGrouping\u003cTKey, TElement\u003e\u003e AsyncGroupBy\u003cTSource, TKey, TElement\u003e(this IAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, CancellationToken, ValueTask\u003cTKey\u003e\u003e keySelector, Func\u003cTSource, CancellationToken, ValueTask\u003cTElement\u003e\u003e elementSelector, IEqualityComparer\u003cTKey\u003e? comparer = null);\n    public static IAsyncEnumerable\u003cTResult\u003e AsyncGroupBy\u003cTSource, TKey, TResult\u003e(this IAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, CancellationToken, ValueTask\u003cTKey\u003e\u003e keySelector, Func\u003cTKey, IEnumerable\u003cTSource\u003e, CancellationToken, ValueTask\u003cTResult\u003e\u003e resultSelector, IEqualityComparer\u003cTKey\u003e? comparer = null);\n    public static IAsyncEnumerable\u003cTResult\u003e AsyncGroupBy\u003cTSource, TKey, TElement, TResult\u003e(this IAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, CancellationToken, ValueTask\u003cTKey\u003e\u003e keySelector, Func\u003cTSource, CancellationToken, ValueTask\u003cTElement\u003e\u003e elementSelector, Func\u003cTKey, IEnumerable\u003cTElement\u003e, CancellationToken, ValueTask\u003cTResult\u003e\u003e resultSelector, IEqualityComparer\u003cTKey\u003e? comparer = null);\n    public static IAsyncEnumerable\u003cTSource\u003e AsyncIntersectBy\u003cTSource, TKey\u003e(this IAsyncEnumerable\u003cTSource\u003e first, IAsyncEnumerable\u003cTKey\u003e second, Func\u003cTSource, CancellationToken, ValueTask\u003cTKey\u003e\u003e keySelector, IEqualityComparer\u003cTKey\u003e? comparer = null);\n    public static IAsyncEnumerable\u003cTResult\u003e AsyncJoin\u003cTOuter, TInner, TKey, TResult\u003e(this IAsyncEnumerable\u003cTOuter\u003e outer, IAsyncEnumerable\u003cTInner\u003e inner, Func\u003cTOuter, CancellationToken, ValueTask\u003cTKey\u003e\u003e outerKeySelector, Func\u003cTInner, CancellationToken, ValueTask\u003cTKey\u003e\u003e innerKeySelector, Func\u003cTOuter, TInner, CancellationToken, ValueTask\u003cTResult\u003e\u003e resultSelector, IEqualityComparer\u003cTKey\u003e? comparer = null);\n    public static IAsyncEnumerable\u003cTResult\u003e AsyncLeftJoin\u003cTOuter, TInner, TKey, TResult\u003e(this IAsyncEnumerable\u003cTOuter\u003e outer, IAsyncEnumerable\u003cTInner\u003e inner, Func\u003cTOuter, CancellationToken, ValueTask\u003cTKey\u003e\u003e outerKeySelector, Func\u003cTInner, CancellationToken, ValueTask\u003cTKey\u003e\u003e innerKeySelector, Func\u003cTOuter, TInner?, CancellationToken, ValueTask\u003cTResult\u003e\u003e resultSelector, IEqualityComparer\u003cTKey\u003e? comparer = null);\n    public static IOrderedAsyncEnumerable\u003cTSource\u003e AsyncOrderByDescending\u003cTSource, TKey\u003e(this IAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, CancellationToken, ValueTask\u003cTKey\u003e\u003e keySelector, IComparer\u003cTKey\u003e? comparer = null);\n    public static IOrderedAsyncEnumerable\u003cTSource\u003e AsyncOrderBy\u003cTSource, TKey\u003e(this IAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, CancellationToken, ValueTask\u003cTKey\u003e\u003e keySelector, IComparer\u003cTKey\u003e? comparer = null);\n    public static IAsyncEnumerable\u003cTResult\u003e AsyncRightJoin\u003cTOuter, TInner, TKey, TResult\u003e(this IAsyncEnumerable\u003cTOuter\u003e outer, IAsyncEnumerable\u003cTInner\u003e inner, Func\u003cTOuter, CancellationToken, ValueTask\u003cTKey\u003e\u003e outerKeySelector, Func\u003cTInner, CancellationToken, ValueTask\u003cTKey\u003e\u003e innerKeySelector, Func\u003cTOuter?, TInner, CancellationToken, ValueTask\u003cTResult\u003e\u003e resultSelector, IEqualityComparer\u003cTKey\u003e? comparer = null);\n    public static IAsyncEnumerable\u003cTResult\u003e AsyncSelectMany\u003cTSource, TResult\u003e(this IAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, int, CancellationToken, ValueTask\u003cIEnumerable\u003cTResult\u003e\u003e\u003e selector);\n    public static IAsyncEnumerable\u003cTResult\u003e AsyncSelectMany\u003cTSource, TResult\u003e(this IAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, CancellationToken, ValueTask\u003cIEnumerable\u003cTResult\u003e\u003e\u003e selector);\n    public static IAsyncEnumerable\u003cTResult\u003e AsyncSelectMany\u003cTSource, TCollection, TResult\u003e(this IAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, int, CancellationToken, ValueTask\u003cIEnumerable\u003cTCollection\u003e\u003e\u003e collectionSelector, Func\u003cTSource, TCollection, CancellationToken, ValueTask\u003cTResult\u003e\u003e resultSelector);\n    public static IAsyncEnumerable\u003cTResult\u003e AsyncSelectMany\u003cTSource, TCollection, TResult\u003e(this IAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, CancellationToken, ValueTask\u003cIEnumerable\u003cTCollection\u003e\u003e\u003e collectionSelector, Func\u003cTSource, TCollection, CancellationToken, ValueTask\u003cTResult\u003e\u003e resultSelector);\n    public static IAsyncEnumerable\u003cTResult\u003e AsyncSelect\u003cTSource, TResult\u003e(this IAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, int, CancellationToken, ValueTask\u003cTResult\u003e\u003e selector);\n    public static IAsyncEnumerable\u003cTResult\u003e AsyncSelect\u003cTSource, TResult\u003e(this IAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, CancellationToken, ValueTask\u003cTResult\u003e\u003e selector);\n    public static IAsyncEnumerable\u003cTSource\u003e AsyncSkipWhile\u003cTSource\u003e(this IAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, int, CancellationToken, ValueTask\u003cbool\u003e\u003e predicate);\n    public static IAsyncEnumerable\u003cTSource\u003e AsyncSkipWhile\u003cTSource\u003e(this IAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, CancellationToken, ValueTask\u003cbool\u003e\u003e predicate);\n    public static IAsyncEnumerable\u003cTSource\u003e AsyncTakeWhile\u003cTSource\u003e(this IAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, int, CancellationToken, ValueTask\u003cbool\u003e\u003e predicate);\n    public static IAsyncEnumerable\u003cTSource\u003e AsyncTakeWhile\u003cTSource\u003e(this IAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, CancellationToken, ValueTask\u003cbool\u003e\u003e predicate);\n    public static IOrderedAsyncEnumerable\u003cTSource\u003e AsyncThenByDescending\u003cTSource, TKey\u003e(this IOrderedAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, CancellationToken, ValueTask\u003cTKey\u003e\u003e keySelector, IComparer\u003cTKey\u003e? comparer = null);\n    public static IOrderedAsyncEnumerable\u003cTSource\u003e AsyncThenBy\u003cTSource, TKey\u003e(this IOrderedAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, CancellationToken, ValueTask\u003cTKey\u003e\u003e keySelector, IComparer\u003cTKey\u003e? comparer = null);\n    public static IAsyncEnumerable\u003cTSource\u003e AsyncUnionBy\u003cTSource, TKey\u003e(this IAsyncEnumerable\u003cTSource\u003e first, IAsyncEnumerable\u003cTSource\u003e second, Func\u003cTSource, CancellationToken, ValueTask\u003cTKey\u003e\u003e keySelector, IEqualityComparer\u003cTKey\u003e? comparer = null);\n    public static IAsyncEnumerable\u003cTSource\u003e AsyncWhere\u003cTSource\u003e(this IAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, int, CancellationToken, ValueTask\u003cbool\u003e\u003e predicate);\n    public static IAsyncEnumerable\u003cTSource\u003e AsyncWhere\u003cTSource\u003e(this IAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, CancellationToken, ValueTask\u003cbool\u003e\u003e predicate);\n}\n```\n\n\n#### Optional `CancellationToken`\n\nRight now all the async operators take selectors and predicates that require a `CancellationToken` because it was required for overload resolution with the non-async operators. Now that we renamed them with the `AsyncXXX` prefix, we are free to add overloads that don\u0027t require a `CancellationToken`:\n\n```csharp\nnamespace System.Linq;\n\npublic static partial class AsyncEnumerable\n{\n    public static IAsyncEnumerable\u003cKeyValuePair\u003cTKey, TAccumulate\u003e\u003e AsyncAggregateBy\u003cTSource, TKey, TAccumulate\u003e(this IAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, ValueTask\u003cTKey\u003e\u003e keySelector, Func\u003cTKey, ValueTask\u003cTAccumulate\u003e\u003e seedSelector, Func\u003cTAccumulate, TSource, ValueTask\u003cTAccumulate\u003e\u003e func, IEqualityComparer\u003cTKey\u003e? keyComparer = null) where TKey : notnull;\n    public static IAsyncEnumerable\u003cKeyValuePair\u003cTKey, TAccumulate\u003e\u003e AsyncAggregateBy\u003cTSource, TKey, TAccumulate\u003e(this IAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, ValueTask\u003cTKey\u003e\u003e keySelector, TAccumulate seed, Func\u003cTAccumulate, TSource, ValueTask\u003cTAccumulate\u003e\u003e func, IEqualityComparer\u003cTKey\u003e? keyComparer = null) where TKey : notnull;\n    public static IAsyncEnumerable\u003cKeyValuePair\u003cTKey, int\u003e\u003e AsyncCountBy\u003cTSource, TKey\u003e(this IAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, ValueTask\u003cTKey\u003e\u003e keySelector, IEqualityComparer\u003cTKey\u003e? keyComparer = null) where TKey : notnull;\n    public static IAsyncEnumerable\u003cTSource\u003e AsyncDistinctBy\u003cTSource, TKey\u003e(this IAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, ValueTask\u003cTKey\u003e\u003e keySelector, IEqualityComparer\u003cTKey\u003e? comparer = null);\n    public static IAsyncEnumerable\u003cTSource\u003e AsyncExceptBy\u003cTSource, TKey\u003e(this IAsyncEnumerable\u003cTSource\u003e first, IAsyncEnumerable\u003cTKey\u003e second, Func\u003cTSource, ValueTask\u003cTKey\u003e\u003e keySelector, IEqualityComparer\u003cTKey\u003e? comparer = null);\n    public static IAsyncEnumerable\u003cIGrouping\u003cTKey, TSource\u003e\u003e AsyncGroupBy\u003cTSource, TKey\u003e(this IAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, ValueTask\u003cTKey\u003e\u003e keySelector, IEqualityComparer\u003cTKey\u003e? comparer = null);\n    public static IAsyncEnumerable\u003cIGrouping\u003cTKey, TElement\u003e\u003e AsyncGroupBy\u003cTSource, TKey, TElement\u003e(this IAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, ValueTask\u003cTKey\u003e\u003e keySelector, Func\u003cTSource, ValueTask\u003cTElement\u003e\u003e elementSelector, IEqualityComparer\u003cTKey\u003e? comparer = null);\n    public static IAsyncEnumerable\u003cTResult\u003e AsyncGroupBy\u003cTSource, TKey, TResult\u003e(this IAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, ValueTask\u003cTKey\u003e\u003e keySelector, Func\u003cTKey, IEnumerable\u003cTSource\u003e, ValueTask\u003cTResult\u003e\u003e resultSelector, IEqualityComparer\u003cTKey\u003e? comparer = null);\n    public static IAsyncEnumerable\u003cTResult\u003e AsyncGroupBy\u003cTSource, TKey, TElement, TResult\u003e(this IAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, ValueTask\u003cTKey\u003e\u003e keySelector, Func\u003cTSource, ValueTask\u003cTElement\u003e\u003e elementSelector, Func\u003cTKey, IEnumerable\u003cTElement\u003e, ValueTask\u003cTResult\u003e\u003e resultSelector, IEqualityComparer\u003cTKey\u003e? comparer = null);\n    public static IAsyncEnumerable\u003cTSource\u003e AsyncIntersectBy\u003cTSource, TKey\u003e(this IAsyncEnumerable\u003cTSource\u003e first, IAsyncEnumerable\u003cTKey\u003e second, Func\u003cTSource, ValueTask\u003cTKey\u003e\u003e keySelector, IEqualityComparer\u003cTKey\u003e? comparer = null);\n    public static IAsyncEnumerable\u003cTResult\u003e AsyncJoin\u003cTOuter, TInner, TKey, TResult\u003e(this IAsyncEnumerable\u003cTOuter\u003e outer, IAsyncEnumerable\u003cTInner\u003e inner, Func\u003cTOuter, ValueTask\u003cTKey\u003e\u003e outerKeySelector, Func\u003cTInner, ValueTask\u003cTKey\u003e\u003e innerKeySelector, Func\u003cTOuter, TInner, ValueTask\u003cTResult\u003e\u003e resultSelector, IEqualityComparer\u003cTKey\u003e? comparer = null);\n    public static IAsyncEnumerable\u003cTResult\u003e AsyncLeftJoin\u003cTOuter, TInner, TKey, TResult\u003e(this IAsyncEnumerable\u003cTOuter\u003e outer, IAsyncEnumerable\u003cTInner\u003e inner, Func\u003cTOuter, ValueTask\u003cTKey\u003e\u003e outerKeySelector, Func\u003cTInner, ValueTask\u003cTKey\u003e\u003e innerKeySelector, Func\u003cTOuter, TInner?, ValueTask\u003cTResult\u003e\u003e resultSelector, IEqualityComparer\u003cTKey\u003e? comparer = null);\n    public static IOrderedAsyncEnumerable\u003cTSource\u003e AsyncOrderByDescending\u003cTSource, TKey\u003e(this IAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, ValueTask\u003cTKey\u003e\u003e keySelector, IComparer\u003cTKey\u003e? comparer = null);\n    public static IOrderedAsyncEnumerable\u003cTSource\u003e AsyncOrderBy\u003cTSource, TKey\u003e(this IAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, ValueTask\u003cTKey\u003e\u003e keySelector, IComparer\u003cTKey\u003e? comparer = null);\n    public static IAsyncEnumerable\u003cTResult\u003e AsyncRightJoin\u003cTOuter, TInner, TKey, TResult\u003e(this IAsyncEnumerable\u003cTOuter\u003e outer, IAsyncEnumerable\u003cTInner\u003e inner, Func\u003cTOuter, ValueTask\u003cTKey\u003e\u003e outerKeySelector, Func\u003cTInner, ValueTask\u003cTKey\u003e\u003e innerKeySelector, Func\u003cTOuter?, TInner, ValueTask\u003cTResult\u003e\u003e resultSelector, IEqualityComparer\u003cTKey\u003e? comparer = null);\n    public static IAsyncEnumerable\u003cTResult\u003e AsyncSelectMany\u003cTSource, TResult\u003e(this IAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, int, ValueTask\u003cIEnumerable\u003cTResult\u003e\u003e\u003e selector);\n    public static IAsyncEnumerable\u003cTResult\u003e AsyncSelectMany\u003cTSource, TResult\u003e(this IAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, ValueTask\u003cIEnumerable\u003cTResult\u003e\u003e\u003e selector);\n    public static IAsyncEnumerable\u003cTResult\u003e AsyncSelectMany\u003cTSource, TCollection, TResult\u003e(this IAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, int, ValueTask\u003cIEnumerable\u003cTCollection\u003e\u003e\u003e collectionSelector, Func\u003cTSource, TCollection, ValueTask\u003cTResult\u003e\u003e resultSelector);\n    public static IAsyncEnumerable\u003cTResult\u003e AsyncSelectMany\u003cTSource, TCollection, TResult\u003e(this IAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, ValueTask\u003cIEnumerable\u003cTCollection\u003e\u003e\u003e collectionSelector, Func\u003cTSource, TCollection, ValueTask\u003cTResult\u003e\u003e resultSelector);\n    public static IAsyncEnumerable\u003cTResult\u003e AsyncSelect\u003cTSource, TResult\u003e(this IAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, int, ValueTask\u003cTResult\u003e\u003e selector);\n    public static IAsyncEnumerable\u003cTResult\u003e AsyncSelect\u003cTSource, TResult\u003e(this IAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, ValueTask\u003cTResult\u003e\u003e selector);\n    public static IAsyncEnumerable\u003cTSource\u003e AsyncSkipWhile\u003cTSource\u003e(this IAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, int, ValueTask\u003cbool\u003e\u003e predicate);\n    public static IAsyncEnumerable\u003cTSource\u003e AsyncSkipWhile\u003cTSource\u003e(this IAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, ValueTask\u003cbool\u003e\u003e predicate);\n    public static IAsyncEnumerable\u003cTSource\u003e AsyncTakeWhile\u003cTSource\u003e(this IAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, int, ValueTask\u003cbool\u003e\u003e predicate);\n    public static IAsyncEnumerable\u003cTSource\u003e AsyncTakeWhile\u003cTSource\u003e(this IAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, ValueTask\u003cbool\u003e\u003e predicate);\n    public static IOrderedAsyncEnumerable\u003cTSource\u003e AsyncThenByDescending\u003cTSource, TKey\u003e(this IOrderedAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, ValueTask\u003cTKey\u003e\u003e keySelector, IComparer\u003cTKey\u003e? comparer = null);\n    public static IOrderedAsyncEnumerable\u003cTSource\u003e AsyncThenBy\u003cTSource, TKey\u003e(this IOrderedAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, ValueTask\u003cTKey\u003e\u003e keySelector, IComparer\u003cTKey\u003e? comparer = null);\n    public static IAsyncEnumerable\u003cTSource\u003e AsyncUnionBy\u003cTSource, TKey\u003e(this IAsyncEnumerable\u003cTSource\u003e first, IAsyncEnumerable\u003cTSource\u003e second, Func\u003cTSource, ValueTask\u003cTKey\u003e\u003e keySelector, IEqualityComparer\u003cTKey\u003e? comparer = null);\n    public static IAsyncEnumerable\u003cTSource\u003e AsyncWhere\u003cTSource\u003e(this IAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, int, ValueTask\u003cbool\u003e\u003e predicate);\n    public static IAsyncEnumerable\u003cTSource\u003e AsyncWhere\u003cTSource\u003e(this IAsyncEnumerable\u003cTSource\u003e source, Func\u003cTSource, ValueTask\u003cbool\u003e\u003e predicate);\n}\n```\n\n### API Usage\n\n#### The upshot\n\nThe benefit from all of this is enormous: Now we can use `IAsyncEnumerable` as the backbone for easy, flexible, and performant task pipelines. Consider the following code with the current LINQ operators:\n\n```csharp\n// 600ms\nvar results = await new[] { 300, 200, 100 }\n    .ToAsyncEnumerable()\n    .Select(async (x, _) =\u003e { await Task.Delay(x); return x; })\n    .ToListAsync();\n```\n\nHere the `Task.Delay` is mimicking a long-running operation. As it stands, this code will take 600ms to execute. Under this proposal, we can turn this into a pipeline with a single line of code:\n\n```csharp\n// 300ms\nvar results = await new[] { 300, 200, 100 }\n    .ToAsyncEnumerable()\n    .AsConcurrent(preserveOrder: false)\n    .AsyncSelect(async x =\u003e { await Task.Delay(x); return x; })\n    .ToListAsync();\n```\n\nNow, the async operators will run concurrently and this will finish in 300ms, the time of the longest-running item. And even better, we can chain operations, mix in normal synchronous LINQ operators, and items will move from one step of the pipeline to the next as soon as they are ready. The final list will be [100, 200, 300], and if we had called `FirstAsync()` it would have finished in only 100ms. \n\nThis will vastly simplify any code that deals with both collections and tasks, because `Task.WhenAll`, `List\u003cTask\u003cT\u003e\u003e`, and `Task\u003cIEnumerable\u003cT\u003e\u003e` will no longer be needed. \n\nThis proposal will greatly expand the usefulness of `IAsyncEnumerable`, and it will allow developers to easily manipulate tasks running on collections in a way that\u0027s not possible in .NET currently.\n\n### Alternative Designs\n\nOne thing that has to be decided is if we want to support schedulers for `ParallelOrdered` and `ParallelUnordered`. It\u0027s possible that the user would want to provide their own threadpool to run the async operators on, and if so then we will need a way to expose that. I\u0027m not sure if this is needed or worth the extra complexity however\n\n### Risks\n\nSince `System.Linq.AsyncEnumerable` hasn\u0027t shipped yet, there aren\u0027t risks to existing code. However this proposal will increase the complexity of all the operators which will have to be accounted for in testing",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOppmfgw==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc6masB_",
+                                           "createdAt":  "2025-04-10T08:44:22Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-system-linq\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2025-04-10T08:44:22Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6ma4JK",
+                                           "createdAt":  "2025-04-10T09:02:44Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "huoyaoyuan",
+                                           "body":  "PLINQ covers parallel execution of LINQ operators. Concurrency management is a non-trivial task.\n\nPLINQ already has some support for `IAsyncEnumerable` in `Parallel.ForEachAsync`. We can introduce counterpart for `ParallelQuery` and `ParallelEnumerable`, or just make `ParallelQuery` support `IAsyncEnumerable`.",
+                                           "updatedAt":  "2025-04-10T09:03:03Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6ma4uc",
+                                           "createdAt":  "2025-04-10T09:03:38Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-system-linq-parallel\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2025-04-10T09:03:38Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6mj0iY",
+                                           "createdAt":  "2025-04-10T16:16:43Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "joshwkearney",
+                                           "body":  "Totally agree concurrency management is non-trivial, that\u0027s why I\u0027m proposing this. \n\nI\u0027m not opposed to an async version of ParallelQuery as long as it handles operations like `AsyncSelect(Func\u003cT\u003e, ValueTask\u003cE\u003e)`. Right now ParallelQuery is designed for executing synchronous, CPU-bound operations on many threads, but what I\u0027m talking about is executing asynchronous, task-based operations at the same time. The tasks can run on the current thread or the thread pool but that\u0027s not important for the overall concept. Plus, with IO-bound tasks you only need concurrency, not parallelism ",
+                                           "updatedAt":  "2025-04-10T16:16:43Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6mmZ-D",
+                                           "createdAt":  "2025-04-10T20:27:34Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "timcassell",
+                                           "body":  "\u003e We can introduce counterpart for `ParallelQuery` and `ParallelEnumerable`, or just make `ParallelQuery` support `IAsyncEnumerable`.\n\nI don\u0027t see how `ParallelQuery` could support `IAsyncEnumerable`, but I think it would make sense to introduce a new `AsyncParallelQuery` type (or `ParallelAsyncQuery`, whichever you prefer).\n\nI have thought about introducing this type in my own library for a long time (https://github.com/timcassell/ProtoPromise/issues/392), but I haven\u0027t done it so far because it\u0027s a lot of work and needs to be very careful about thread safety (as you said, it\u0027s non-trivial).",
+                                           "updatedAt":  "2025-04-10T20:30:43Z"
+                                       }
+                                   ],
+                         "totalCount":  5
+                     },
+        "title":  "[API Proposal]: Extend System.Linq.AsyncEnumerable to allow concurrent operator execution",
+        "labels":  [
+                       "api-suggestion",
+                       "area-System.Linq.Parallel"
+                   ]
+    }
+]

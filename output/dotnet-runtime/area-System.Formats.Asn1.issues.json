@@ -1,0 +1,288 @@
+﻿[
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/66622",
+        "createdAt":  "2022-03-15T00:50:26Z",
+        "number":  66622,
+        "author":  "vcsjones",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2022-08-02T08:46:38Z",
+        "body":  "### Background and motivation\r\n\r\nCurrently, the System.Formats.Asn1 package does not have a straightforward way to say, “Given some `ReadOnlySpan\u003cbyte\u003e`, do all of the contents conform to a set of encoding rules?”, such as DER.\r\n\r\nThere is useful where we want to build APIs that accept ASN.1 and follows the encoding rules, but also don’t have context as to what the contents are actually supposed to be.\r\n\r\nDevelopers that wish for this functionality on their own would need to use `AsnDecoder` (or `AsnReader`) and peek each tag, read, and advance the reader.\r\n\r\nWe’ve loosely built this ourselves, though not complete:\r\n\r\nhttps://github.com/dotnet/runtime/blob/c6829b9841c9c96e3dd3e9b2b80e0017a8a3ce4b/src/libraries/System.Security.Cryptography/src/System/Security/Cryptography/Helpers.cs#L271\r\n\r\nAnother example where this would be useful was the `AddEncoded` API that was proposed in https://github.com/dotnet/runtime/issues/44738.\r\n\r\n### API Proposal\r\n\r\nA new overload to `ReadEncodedValue` that accepts a `bool validateInnerContents`. \r\n\r\n```C#\r\nnamespace System.Formats.Asn1\r\n{\r\n    public static class AsnDecoder\r\n    {\r\n        public static Asn1Tag ReadEncodedValue(\r\n            ReadOnlySpan\u003cbyte\u003e source,\r\n            AsnEncodingRules ruleSet,\r\n            bool validateInnerContents,\r\n            out int contentOffset,\r\n            out int contentLength,\r\n            out int bytesConsumed);\r\n    }\r\n}\r\n```\r\n\r\n\r\n### API Usage\r\n\r\nThe API usage is similar to `ReadEncodedValue`, with a new parameter that indicates if inner-content validation is performed. When `false`, it behaves exactly as `ReadEncodedValue`. When `true`, it performs document validation according to the encoding rules.\r\n\r\n### Alternative Designs\r\n\r\nWe could make this an entirely separate API:\r\n\r\n```C#\r\nnamespace System.Formats.Asn1\r\n{\r\n    public static class AsnDecoder\r\n    {\r\n        public static bool ContentsAreValid(\r\n            ReadOnlySpan\u003cbyte\u003e source,\r\n            AsnEncodingRules ruleSet);\r\n    }\r\n}\r\n```\r\n\r\nAfter thinking about it, I decided not to make this my initial proposal because I would envision still using `ReadEncodedValue` followed by an immediate call to `ValidateContents`. Rather than have something that does some work twice (reading the initial tag and such), I went with the overload.\r\n\r\n\r\n\r\n### Risks\r\n\r\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOP5_-jg==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc4_n_zE",
+                                           "createdAt":  "2022-03-15T00:50:29Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "I couldn\u0027t figure out the best area label to add to this issue. If you have write-permissions please help me learn by adding exactly one [area label](https://github.com/dotnet/runtime/blob/master/docs/area-owners.md).",
+                                           "updatedAt":  "2022-03-15T00:50:29Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc4_n_6O",
+                                           "createdAt":  "2022-03-15T00:51:25Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-system-formats-asn1\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Background and motivation\n\nCurrently, the System.Formats.Asn1 package does not have a straightforward way to say, “Given some `ReadOnlySpan\u003cbyte\u003e`, do all of the contents conform to a set of encoding rules?”, such as DER.\r\n\r\nThere is useful where we want to build APIs that accept ASN.1 and follows the encoding rules, but also don’t have context as to what the contents are actually supposed to be.\r\n\r\nDevelopers that wish for this functionality on their own would need to use `AsnDecoder` (or `AsnReader`) and peek each tag, read, and advance the reader.\r\n\r\nWe’ve loosely built this ourselves, though not complete:\r\n\r\nhttps://github.com/dotnet/runtime/blob/c6829b9841c9c96e3dd3e9b2b80e0017a8a3ce4b/src/libraries/System.Security.Cryptography/src/System/Security/Cryptography/Helpers.cs#L27\r\n\r\nAnother example where this would be useful was the `AddEncoded` API that was proposed in https://github.com/dotnet/runtime/issues/44738.\n\n### API Proposal\n\nA new overload to `ReadEncodedValue` that accepts a `bool validateInnerContents`. \r\n\r\n```C#\r\nnamespace System.Formats.Asn1\r\n{\r\n    public static class AsnDecoder\r\n    {\r\n        public static Asn1Tag ReadEncodedValue(\r\n            ReadOnlySpan\u003cbyte\u003e source,\r\n            AsnEncodingRules ruleSet,\r\n            bool validateInnerContents,\r\n            out int contentOffset,\r\n            out int contentLength,\r\n            out int bytesConsumed);\r\n    }\r\n}\r\n```\r\n\n\n### API Usage\n\nThe API usage is similar to `ReadEncodedValue`, with a new parameter that indicates if inner-content validation is performed. When `false`, it behaves exactly as `ReadEncodedValue`. When `true`, it performs document validation according to the encoding rules.\n\n### Alternative Designs\n\nWe could make this an entirely separate API:\r\n\r\n```C#\r\nnamespace System.Formats.Asn1\r\n{\r\n    public static class AsnDecoder\r\n    {\r\n        public static bool ValidateContents(\r\n            ReadOnlySpan\u003cbyte\u003e source,\r\n            AsnEncodingRules ruleSet);\r\n    }\r\n}\r\n```\r\n\r\nAfter thinking about it, I decided not to make this my initial proposal because I would envision still using `ReadEncodedValue` followed by an immediate call to `ValidateContents`. Rather than have something that does some work twice (reading the initial tag and such), I went with the overload.\r\n\r\n\n\n### Risks\n\n_No response_\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003evcsjones\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`api-suggestion`, `untriaged`, `area-System.Formats.Asn1`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2022-03-15T00:51:25Z"
+                                       }
+                                   ],
+                         "totalCount":  2
+                     },
+        "title":  "[API Proposal]: Content-validating AsnDecoder.ReadEncodedValue",
+        "labels":  [
+                       "api-suggestion",
+                       "area-System.Formats.Asn1"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/102031",
+        "createdAt":  "2024-05-08T21:37:32Z",
+        "number":  102031,
+        "author":  "edwardneal",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHOC30GvQ==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "PaulusParssinen",
+                                            "createdAt":  "2024-05-10T13:57:14Z"
+                                        }
+                                    ],
+                          "totalCount":  1
+                      },
+        "updatedAt":  "2024-07-16T14:05:50Z",
+        "body":  "### Background and motivation\n\nWe can use `AsnWriter` to generate BER, CER \u0026 DER requests, and #69573 allowed the initial capacity of the buffer to be specified. If the initial capacity is exceeded, the buffer is expanded in blocks of 1KB within `AsnWriter.EnsureWriteCapacity`.\r\n\r\nIn some scenarios (such as the generation of SNMP requests/responses) a 1KB rate of expansion can be overkill. I\u0027d like to be able to control this - either by explicitly setting the growth rate, or by changing the growth rate to a factor of the initial size.\n\n### API Proposal\n\n```diff\r\nnamespace System.Formats.Asn1;\r\n\r\npublic class AsnWriter\r\n{\r\n    public AsnWriter(AsnEncodingRules ruleSet);\r\n    public AsnWriter(AsnEncodingRules ruleSet, int initialCapacity);\r\n+   // growthRate is measured in bytes.\r\n+   public AsnWriter(AsnEncodingRules ruleSet, int initialCapacity, int growthRate);\r\n}\r\n```\n\n### API Usage\n\n```csharp\r\nstring[] oids = [\"1.3.6.1.2.1.1.4.0\", \"1.3.6.1.2.1.1.5.0\" /*, ... */];\r\nvar writer = new AsnWriter(AsnEncodingRules.BER, initialSize: 64, growthRate: 32);\r\nusing (var snmpSequence = writer.PushSequence())\r\n{\r\n    writer.WriteInteger(1);\r\n    writer.WriteOctetString(System.Text.Encoding.UTF8.GetBytes(\"public\"));\r\n\r\n    using (var pduSequence = writer.PushSequence(new Asn1Tag(TagClass.ContextSpecific, 0)))\r\n    {\r\n        writer.WriteInteger(1);\r\n        writer.WriteInteger(0);\r\n        writer.WriteInteger(0);\r\n\r\n        using (var varBindSequence = writer.PushSequence())\r\n        {\r\n            foreach (var oid in oids)\r\n            {\r\n                using (var oidSequence = writer.PushSequence())\r\n                {\r\n                    writer.WriteObjectIdentifier(oid);\r\n                    writer.WriteNull();\r\n                }\r\n            }\r\n        }\r\n    }\r\n}\r\n\r\nvar encodedPdu = writer.Encode();\r\n```\r\n\n\n### Alternative Designs\n\nUsers of the library could calculate the expected size of the resultant payload and set the AsnWriter\u0027s initial size. In the example of an SNMP GET, this is fairly trivial to do. It means that we\u0027ve got a slightly leakier abstraction (because callers now need to concern themselves with the details of ASN.1 encoding) but perhaps this library is low-level enough that callers should reasonably be expected to be able to understand those details anyway.\r\n\r\nThe existing `AsnWriter(AsnEncodingRules, int)` constructor could also be changed to set the growth rate to a factor of the initial capacity. This could be a reasonable thing to do at first glance, but I don\u0027t use the library in enough scenarios to suggest a factor - 50% might be a generic starting point, but the behaviour seems fairly brittle between use cases if it\u0027s the sole change made.\r\n\r\nI\u0027d appreciate a sanity-check on the name of the `growthRate` parameter. I avoided `blockSize` so that callers don\u0027t need to think about what a block entails with respect to AsnWriter. I\u0027ve got some reservations about calling it `growthRate` because it sounds a little like a growth factor though.\n\n### Risks\n\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOfXuYyg==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc59Q4yp",
+                                           "createdAt":  "2024-05-08T22:03:46Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-system-formats-asn1, @bartonjs, @vcsjones\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2024-05-08T22:03:46Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc59WssW",
+                                           "createdAt":  "2024-05-09T17:29:38Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODhav6Q==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "PaulusParssinen",
+                                                                               "createdAt":  "2024-05-10T13:57:19Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "vcsjones",
+                                           "body":  "I wonder if just giving total control over allocating the underlying buffer would help with most scenarios where advanced scenarios would make it easier to give control over the growth strategy. A strawperson idea:\r\n\r\n```C#\r\npublic class AsnWriter {\r\n    public AsnWriter(\r\n        AsnEncodingRules ruleSet,\r\n        Func\u003cint, int, byte[]\u003e allocator,\r\n        Action\u003cbyte[]\u003e deallocator = null);\r\n}\r\n```\r\n\r\nAnd the usage would be something like this:\r\n\r\n```C#\r\nstatic byte[] Allocator(int currentSize, int minimumSize) {\r\n    if (currentSize == 0) {\r\n        return Math.Max(minimumSize * 2, 1024);\r\n    }\r\n\r\n    return new byte[minimumSize * 2]; // Doubling strategy\r\n}\r\n\r\nAsnWriter writer = new(AsnEncodingRules.DER, Allocator);\r\n```\r\n\r\nThe `Deallocator` could be used for people that need to do something with the `byte[]` after the `AsnWriter` has copied from the old buffer to the new buffer. This could be clearing the array, or allow the allocator and deallocator to use some memory pooling strategy instead of creating a new byte array every time.\r\n\r\nThe upshot to this is it gives you total control over the allocation and growth strategy. The downside is that it is comes with some amount of risk. The Allocator would need to be documented that `AsnWriter` owns the byte array it returns, until it is given back in the Deallocator. Having the allocator may promote misuse, such as using it to get the encoded data instead of using the `Encode` API.\r\n\r\n-----\r\n\r\nAnother possible alternative is to implement an `AsnEncoder` static class that encodes ASN.1 primitives. That way someone could implement their own `AsnWriter` from scratch and have even more control. This is even more risky in my opinion, but the risk is obvious, whereas with an allocator pattern the risk is more subtle.",
+                                           "updatedAt":  "2024-05-09T17:29:38Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc59X5Gy",
+                                           "createdAt":  "2024-05-09T21:02:29Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "edwardneal",
+                                           "body":  "I see your point, but think that it might mix concerns a little. I could see the buffer being allocated from a few different places:\r\n* Builtin `byte[]` allocator\r\n* Normal ArrayPool\u003cbyte\u003e\r\n* A (notionally) separate pool, similar to [`System.Security.Cryptography.CryptoPool`](https://github.com/dotnet/runtime/blob/main/src/libraries/Common/src/System/Security/Cryptography/CryptoPool.cs)\r\n* A stackalloc\u0027d `Span\u003cbyte\u003e`\r\n\r\nThe third point is probably the most important one for cases where we\u0027re encoding private keys, but being able to write directly into the stackalloc\u0027d Span would be ideal (if it becomes possible at some stage.)\r\n\r\nSeparately to the buffer\u0027s allocator, there\u0027s value in controlling the allocation size. I think this would be overkill for the general case, but could understand why somebody might want more granular control of the growth rate to avoid continuously allocating new arrays - perhaps growing by `0.2 * initialCount` or 32 bytes for the first X instances, then `0.5 * initialCount` or 64 bytes for the next Y instances, then giving up and allocating in `Math.Max(initialCount, 1024)` blocks.\r\n\r\nTo doodle an idea, we could have something similar to:\r\n\r\n```csharp\r\npublic sealed class AsnWriter\r\n{\r\n    AsnWriter(AsnEncodingRules ruleSet,\r\n        AsnWriter.BufferAllocationOptions bufferAllocationOptions);\r\n\r\n    public readonly struct BufferAllocationOptions\r\n    {\r\n        // null if unpooled.\r\n        public ArrayPool\u003cbyte\u003e? SourcePool { get; }\r\n\r\n        public bool ClearBeforeDeallocation { get; }\r\n\r\n        // (initialSize, currentSize, requestedBytes)\r\n        public Func\u003cint, int, int, int\u003e DefaultAllocationSizeController { get; }\r\n\r\n        // Pooled with ArrayPool\u003cbyte\u003e.Shared. Array not cleared after return.\r\n        public static BufferAllocationOptions Default { get; }\r\n\r\n        // Uses a separate ArrayPool\u003cbyte\u003e and clears array after return.\r\n        public static BufferAllocationOptions Confidential { get; }\r\n\r\n        // Returns a new byte array every time, and performs a simple Array.Resize.\r\n        public static BufferAllocationOptions Unpooled { get; }\r\n\r\n        public static Func\u003cint, int, int, int\u003e ExpandBufferByFixedSize(int blockSize = 1024);\r\n    }\r\n}\r\n```\r\n",
+                                           "updatedAt":  "2024-05-09T21:02:29Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc59crBo",
+                                           "createdAt":  "2024-05-10T14:02:53Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "PaulusParssinen",
+                                           "body":  "\u003e Another possible alternative is to implement an `AsnEncoder` static class that encodes ASN.1 primitives. That way someone could implement their own `AsnWriter` from scratch and have even more control. This is even more risky in my opinion, but the risk is obvious, whereas with an allocator pattern the risk is more subtle.\r\n\r\n+1 for static encoder API to mirror the existing `AsnDecoder`. This would allow much more control and seems to have already be considered as future improvement (by quick search  https://github.com/dotnet/runtime/issues/69573#issuecomment-1133184185)\r\n\r\nI would allow the parts of the existing stateful writer to be implemented on top of it and it would have probably been useful in this [`DirectoryControl` PR\u0027s](https://github.com/dotnet/runtime/pull/101512) encoding logic.\r\n\r\n\u003csub\u003eAnd I have branchless BER length calculation tricks which would work well with static APIs 😋  \u003c/sub\u003e",
+                                           "updatedAt":  "2024-05-10T15:00:16Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc59e5jK",
+                                           "createdAt":  "2024-05-10T20:47:12Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "edwardneal",
+                                           "body":  "When I wrote that particular PR my first intuition was to reach for `AsnDecoder` and `AsnEncoder` classes - I ideally wanted to avoid allocating anything other than the resultant byte array, and allocating an instance of `AsnWriter` wasn\u0027t ideal.\r\n\r\nHow would we model the encoding of SEQUENCEs and SETs? The tag\u0027s length isn\u0027t currently written until the contents have been encoded (unless we take a leaf out of WinLDAP\u0027s book and hardcode the length field\u0027s length to 4-5 bytes.) When I try to model it in a way which is useful, I create a ref struct which functions a little like `AsnWriter.Scope` and implement WriteX methods on it. At that stage, it feels more like a slim version of AsnWriter than a static class though, similar to the below.\r\n\r\n```csharp\r\npublic ref struct Asn1Scope\r\n{\r\n    public Asn1Scope(Span\u003cbyte\u003e backingSpan);\r\n    public Asn1Scope(byte[] backingArray, bool allowResize);\r\n    public Asn1Scope(ArrayPool\u003cbyte\u003e backingPool);\r\n\r\n    public readonly bool CanResizeBackingStore { get; }\r\n    public readonly int OpenChildScopes { get; }\r\n\r\n    public Asn1Scope OpenSequence(Asn1Tag? tag);\r\n\r\n    public void WriteInteger(int value, Asn1Tag? tag = null);\r\n\r\n    public void Dispose();\r\n\r\n    public readonly ReadOnlySpan\u003cbyte\u003e EncodedValue { get; }\r\n}\r\n\r\nSpan\u003cbyte\u003e backingSpan = stackalloc byte[8];\r\nAsn1Scope rootScope = new(backingSpan); // Passed a Span\u003cbyte\u003e, throws exception if it\u0027d need to expand.\r\n\r\nusing (Asn1Scope sequence = rootScope.OpenSequence(tag: null))\r\n{\r\n    Debug.Assert(rootScope.OpenChildScopes == 1);\r\n    sequence.WriteInteger(0xFFFF_FFFF);\r\n} // Parent\u0027s OpenChildScopes is decremented upon child disposal\r\n\r\nDebug.Assert(rootScope.OpenChildScopes == 0);\r\nReadOnlySpan\u003cbyte\u003e results = rootScope.EncodedValue; // Throws exception if OpenChildScopes \u003e 0\r\n```",
+                                           "updatedAt":  "2024-05-10T20:47:12Z"
+                                       }
+                                   ],
+                         "totalCount":  5
+                     },
+        "title":  "[API Proposal]: Provide control over growth rate of AsnWriter",
+        "labels":  [
+                       "api-suggestion",
+                       "area-System.Formats.Asn1"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/109019",
+        "createdAt":  "2024-10-18T15:26:34Z",
+        "number":  109019,
+        "author":  "vcsjones",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHODAK26w==",
+                          "nodes":  [
+                                        {
+                                            "content":  "HEART",
+                                            "user":  "filipnavara",
+                                            "createdAt":  "2024-10-18T21:23:49Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "filipnavara",
+                                            "createdAt":  "2024-10-18T21:23:51Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "iSazonov",
+                                            "createdAt":  "2024-11-02T04:38:55Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "edwardneal",
+                                            "createdAt":  "2025-01-19T11:53:32Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "PaulusParssinen",
+                                            "createdAt":  "2025-03-17T13:59:51Z"
+                                        },
+                                        {
+                                            "content":  "HEART",
+                                            "user":  "PaulusParssinen",
+                                            "createdAt":  "2025-03-17T14:00:04Z"
+                                        }
+                                    ],
+                          "totalCount":  6
+                      },
+        "updatedAt":  "2025-07-08T19:59:53Z",
+        "body":  "### Background and motivation\n\nToday .NET has two ways to read ASN.1 encoded data.\n\n1. `AsnDecoder`, which is a stateless decoder that can read slices of data and tell you how much is read. It operates on `ReadOnlySpan\u003cbyte\u003e`.\n2. `AsnReader` which is a \"higher abstracted\", stateful reader. It operating on `ReadOnlyMemory\u003cbyte\u003e` and works on top of `AsnDecoder`.\n\nIf you want a stateful decoder that works on `ReadOnlySpan\u003cbyte\u003e`, you have to build it yourself on top of `AsnDecoder`.\n\nWithin .NET Libraries, that is exactly what we have done with the internal [`AsnValueReader`](https://github.com/dotnet/runtime/blob/main/src/libraries/Common/src/System/Security/Cryptography/Asn1Reader/AsnValueReader.cs).\n\nThis type is very useful as it makes working with `ReadOnlySpan\u003cbyte\u003e` of ASN.1 encoded data easier. Because our own public APIs want to accept `ReadOnlySpan\u003cbyte\u003e`, we need a way to read `ReadOnlySpan\u003cbyte\u003e` of ASN.1 data. Other library authors are in a similar situation. If they want to expose `ReadOnlySpan\u003cbyte\u003e` APIs and then interpret it as ASN.1, they are forced to use `AsnDecoder`, which is low level, or build their own abstraction.\n\nThe .NET Libraries in fact vastly prefer to use the internal `AsnValueReader` instead of the public `AsnReader`. This to me indicates there is a gap in the public API.\n\nI propose then that we expose an `AsnValueReader`. Its API shape is identical to `AsnReader`, save for the fact that it accepts and returns `ReadOnlySpan\u003cbyte\u003e` instead of `ReadOnlyMemory\u003cbyte\u003e`, does not need a `Clone`, and it returns `AsnValueReader` for child readers.\n\n### API Proposal\n\n```C#\nnamespace System.Formats.Asn1;\n\npublic partial ref struct AsnValueReader {\n    public AsnValueReader(ReadOnlySpan\u003cbyte\u003e data, AsnEncodingRules ruleSet, AsnReaderOptions options = default);\n    public readonly bool HasData { get; }\n    public readonly AsnEncodingRules RuleSet { get; }\n\n    // Clone is not needed since AsnValueReader is a struct and can be cloned with copy-by-value.\n    // We can have it for consistency sake, if we really want.\n    //public AsnValueReader Clone();\n\n    public readonly ReadOnlySpan\u003cbyte\u003e PeekContentBytes();\n    public readonly ReadOnlySpan\u003cbyte\u003e PeekEncodedValue();\n    public readonly Asn1Tag PeekTag();\n    public readonly void ThrowIfNotEmpty();\n\n    public byte[] ReadBitString(out int unusedBitCount, Asn1Tag? expectedTag = default);\n    public bool TryReadPrimitiveBitString(out int unusedBitCount, out ReadOnlySpan\u003cbyte\u003e value, Asn1Tag? expectedTag = default);\n    public bool TryReadBitString(Span\u003cbyte\u003e destination, out int unusedBitCount, out int bytesWritten, Asn1Tag? expectedTag = default);\n\n    public bool ReadBoolean(Asn1Tag? expectedTag = default);\n\n    public string ReadCharacterString(UniversalTagNumber encodingType, Asn1Tag? expectedTag = default);\n    public bool TryReadCharacterString(Span\u003cchar\u003e destination, UniversalTagNumber encodingType, out int charsWritten, Asn1Tag? expectedTag = default);\n    public bool TryReadCharacterStringBytes(Span\u003cbyte\u003e destination, Asn1Tag expectedTag, out int bytesWritten);\n    public bool TryReadPrimitiveCharacterStringBytes(Asn1Tag expectedTag, out ReadOnlySpan\u003cbyte\u003e contents);\n\n    public ReadOnlySpan\u003cbyte\u003e ReadEncodedValue();\n\n    public ReadOnlySpan\u003cbyte\u003e ReadEnumeratedBytes(Asn1Tag? expectedTag = default);\n    public Enum ReadEnumeratedValue(Type enumType, Asn1Tag? expectedTag = default);\n    public TEnum ReadEnumeratedValue\u003cTEnum\u003e(Asn1Tag? expectedTag = default) where TEnum : Enum;\n\n    public DateTimeOffset ReadGeneralizedTime(Asn1Tag? expectedTag = default);\n\n    public BigInteger ReadInteger(Asn1Tag? expectedTag = default);\n    public ReadOnlySpan\u003cbyte\u003e ReadIntegerBytes(Asn1Tag? expectedTag = default);\n    public bool TryReadInt32(out int value, Asn1Tag? expectedTag = default);\n    public bool TryReadInt64(out long value, Asn1Tag? expectedTag = default);\n    [CLSCompliantAttribute(false)]\n    public bool TryReadUInt32(out uint value, Asn1Tag? expectedTag = default);\n    [CLSCompliantAttribute(false)]\n    public bool TryReadUInt64(out ulong value, Asn1Tag? expectedTag = default);\n\n    public BitArray ReadNamedBitList(Asn1Tag? expectedTag = default);\n    public Enum ReadNamedBitListValue(Type flagsEnumType, Asn1Tag? expectedTag = default);\n    public TFlagsEnum ReadNamedBitListValue\u003cTFlagsEnum\u003e(Asn1Tag? expectedTag = default) where TFlagsEnum : Enum;\n    public void ReadNull(Asn1Tag? expectedTag = default);\n\n    public string ReadObjectIdentifier(Asn1Tag? expectedTag = default);\n\n    public byte[] ReadOctetString(Asn1Tag? expectedTag = default);\n    public bool TryReadOctetString(Span\u003cbyte\u003e destination, out int bytesWritten, Asn1Tag? expectedTag = default);\n    public bool TryReadPrimitiveOctetString(out ReadOnlySpan\u003cbyte\u003e contents, Asn1Tag? expectedTag = default);\n\n    public AsnValueReader ReadSequence(Asn1Tag? expectedTag = default);\n    public AsnValueReader ReadSetOf(bool skipSortOrderValidation, Asn1Tag? expectedTag = default);\n    public AsnValueReader ReadSetOf(Asn1Tag? expectedTag = default);\n    public DateTimeOffset ReadUtcTime(int twoDigitYearMax, Asn1Tag? expectedTag = default);\n    public DateTimeOffset ReadUtcTime(Asn1Tag? expectedTag = default);\n}\n```\n\n### API Usage\n\nIt will be used the same as `AsnReader`.\n\n### Alternative Designs\n\nI don\u0027t feel strongly about the name. We could call it `AsnValueReader`, `ValueAsnReader`, `AsnRefReader`, etc.\n\n-----\n\nIf we want to keep the \"reader\" APIs on `AsnReader`, we could instead introduce static APIs on it that accept a ref struct. Something like\n\n```C#\npublic ref struct AsnValue {\n    public AsnValue(ReadOnlySpan\u003cbyte\u003e data, AsnEncodingRules ruleSet, AsnReaderOptions options = default);\n    public bool HasData { get; }\n    public AsnEncodingRules RuleSet { get; }\n}\n\npublic partial class AsnReader { // Or on AsnDecoder\n    public static ReadOnlySpan\u003cbyte\u003e PeekContentBytes(ref readonly AsnValue asnValue); // Peek can be readonly\n    public static string ReadObjectIdentifier(ref AsnValue asnValue, Asn1Tag? expectedTag = default);\n\n    // Returns a new AsnValue which is a slice into the sequence\n    public static AsnValue ReadSequence(ref AsnValue value, Asn1Tag? expectedTag = default);\n}\n    // etc\n```\n\nI don\u0027t love this because it does not meaningfully improve the situation over `AsnDecoder`, and it would make the sub-readers like `ReadSequence` be a little awkward. We have instance methods for a reason, so we should use them.\n\n### Risks\n\nThe largest risk with this is that since it is a mutable struct, the ergonomics of this make it a tad easy to clone it unintentionally. Such example might be forgetting to pass it by `ref` to a method, or the method having an API shape that forces the compiler to make a hidden copy. For example:\n\n```C#\nAsnValueReader reader; // Set up the reader\nConsumeSequence(reader);\n// oops - reader is still unmodified by ConsumeSequence because we passed it by value\n\nstatic void ConsumeSequence(AsnValueReader reader)\n{\n    AsnValueReader seq = reader.ReadSequence();\n    // Do stuff\n}\n```\n\nI think this risk is acceptable.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOsBQDWQ==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc6QZ-_E",
+                                           "createdAt":  "2024-10-18T15:27:19Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-system-formats-asn1, @bartonjs, @vcsjones\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2024-10-18T15:27:19Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6i-kw4",
+                                           "createdAt":  "2025-03-18T18:19:31Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "bartonjs",
+                                           "body":  "[Video](https://www.youtube.com/watch?v=rXDXsAhvBDw\u0026t=1h5m11s)\n\n* Consider whether it really needs to be public (that is, if it has utility outside dotnet/runtime)\n* If it does need to be public, `Value` should be a prefix, not an infix.\n\n```C#\nnamespace System.Formats.Asn1;\n\npublic partial ref struct ValueAsnReader {\n    public ValueAsnReader(ReadOnlySpan\u003cbyte\u003e data, AsnEncodingRules ruleSet, AsnReaderOptions options = default);\n    public readonly bool HasData { get; }\n    public readonly AsnEncodingRules RuleSet { get; }\n\n    // Clone is not needed since AsnValueReader is a struct and can be cloned with copy-by-value.\n    // We can have it for consistency sake, if we really want.\n    //public AsnValueReader Clone();\n\n    public readonly ReadOnlySpan\u003cbyte\u003e PeekContentBytes();\n    public readonly ReadOnlySpan\u003cbyte\u003e PeekEncodedValue();\n    public readonly Asn1Tag PeekTag();\n    public readonly void ThrowIfNotEmpty();\n\n    public byte[] ReadBitString(out int unusedBitCount, Asn1Tag? expectedTag = default);\n    public bool TryReadPrimitiveBitString(out int unusedBitCount, out ReadOnlySpan\u003cbyte\u003e value, Asn1Tag? expectedTag = default);\n    public bool TryReadBitString(Span\u003cbyte\u003e destination, out int unusedBitCount, out int bytesWritten, Asn1Tag? expectedTag = default);\n\n    public bool ReadBoolean(Asn1Tag? expectedTag = default);\n\n    public string ReadCharacterString(UniversalTagNumber encodingType, Asn1Tag? expectedTag = default);\n    public bool TryReadCharacterString(Span\u003cchar\u003e destination, UniversalTagNumber encodingType, out int charsWritten, Asn1Tag? expectedTag = default);\n    public bool TryReadCharacterStringBytes(Span\u003cbyte\u003e destination, Asn1Tag expectedTag, out int bytesWritten);\n    public bool TryReadPrimitiveCharacterStringBytes(Asn1Tag expectedTag, out ReadOnlySpan\u003cbyte\u003e contents);\n\n    public ReadOnlySpan\u003cbyte\u003e ReadEncodedValue();\n\n    public ReadOnlySpan\u003cbyte\u003e ReadEnumeratedBytes(Asn1Tag? expectedTag = default);\n    public Enum ReadEnumeratedValue(Type enumType, Asn1Tag? expectedTag = default);\n    public TEnum ReadEnumeratedValue\u003cTEnum\u003e(Asn1Tag? expectedTag = default) where TEnum : Enum;\n\n    public DateTimeOffset ReadGeneralizedTime(Asn1Tag? expectedTag = default);\n\n    public BigInteger ReadInteger(Asn1Tag? expectedTag = default);\n    public ReadOnlySpan\u003cbyte\u003e ReadIntegerBytes(Asn1Tag? expectedTag = default);\n    public bool TryReadInt32(out int value, Asn1Tag? expectedTag = default);\n    public bool TryReadInt64(out long value, Asn1Tag? expectedTag = default);\n    [CLSCompliantAttribute(false)]\n    public bool TryReadUInt32(out uint value, Asn1Tag? expectedTag = default);\n    [CLSCompliantAttribute(false)]\n    public bool TryReadUInt64(out ulong value, Asn1Tag? expectedTag = default);\n\n    public BitArray ReadNamedBitList(Asn1Tag? expectedTag = default);\n    public Enum ReadNamedBitListValue(Type flagsEnumType, Asn1Tag? expectedTag = default);\n    public TFlagsEnum ReadNamedBitListValue\u003cTFlagsEnum\u003e(Asn1Tag? expectedTag = default) where TFlagsEnum : Enum;\n    public void ReadNull(Asn1Tag? expectedTag = default);\n\n    public string ReadObjectIdentifier(Asn1Tag? expectedTag = default);\n\n    public byte[] ReadOctetString(Asn1Tag? expectedTag = default);\n    public bool TryReadOctetString(Span\u003cbyte\u003e destination, out int bytesWritten, Asn1Tag? expectedTag = default);\n    public bool TryReadPrimitiveOctetString(out ReadOnlySpan\u003cbyte\u003e contents, Asn1Tag? expectedTag = default);\n\n    public ValueAsnReader ReadSequence(Asn1Tag? expectedTag = default);\n    public ValueAsnReader ReadSetOf(bool skipSortOrderValidation, Asn1Tag? expectedTag = default);\n    public ValueAsnReader ReadSetOf(Asn1Tag? expectedTag = default);\n    public DateTimeOffset ReadUtcTime(int twoDigitYearMax, Asn1Tag? expectedTag = default);\n    public DateTimeOffset ReadUtcTime(Asn1Tag? expectedTag = default);\n}\n```",
+                                           "updatedAt":  "2025-03-18T19:06:38Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6vM1XI",
+                                           "createdAt":  "2025-06-04T09:53:36Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "glatzert",
+                                           "body":  "Voting for it being public - I would else copy it from the runtime to read ASN1 encoded things from X509certs",
+                                           "updatedAt":  "2025-06-04T09:53:36Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6wFANZ",
+                                           "createdAt":  "2025-06-08T14:14:33Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "NinoFloris",
+                                           "body":  "\u003eIf it does need to be public, Value should be a prefix, not an infix.\n\nAsnSpanReader could be another option.",
+                                           "updatedAt":  "2025-06-08T14:14:33Z"
+                                       }
+                                   ],
+                         "totalCount":  4
+                     },
+        "title":  "[API Proposal]: System.Formats.Asn1.AsnValueReader",
+        "labels":  [
+                       "api-approved",
+                       "area-System.Formats.Asn1"
+                   ]
+    }
+]

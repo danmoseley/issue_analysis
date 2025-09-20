@@ -1,0 +1,768 @@
+﻿[
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/73779",
+        "createdAt":  "2022-08-11T15:54:19Z",
+        "number":  73779,
+        "author":  "TonyValenti",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2022-09-06T20:29:36Z",
+        "body":  "### Background and motivation\n\nWhen a duplicate key value interrupts a SQL command, you get a SqlException with a message like this:\r\n```\r\n ---\u003e Microsoft.Data.SqlClient.SqlException (0x80131904): Cannot insert duplicate key row in object \u0027dbo.__M_Matters\u0027 with unique index \u0027IX___M_Matters_Id\u0027. The duplicate key value is (SB2 --- Accounts Payable).\r\n```\r\n\r\nIt would be really nice if the duplicate key value was available as a property.\n\n### API Proposal\n\n```csharp\r\nnamespace Microsoft.Data.SqlClient;\r\n\r\npublic class DuplicateKeyException : SqlException\r\n{\r\n  public string Key {get; set;}\r\n}\r\n```\r\n\n\n### API Usage\n\nIt is a new exception that would be thrown.\n\n### Alternative Designs\n\n_No response_\n\n### Risks\n\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOSdO-8w==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5IQF-F",
+                                           "createdAt":  "2022-08-11T15:54:32Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @cheenamalhotra, @david-engel\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Background and motivation\n\nWhen a duplicate key value interrupts a SQL command, you get a SqlException with a message like this:\r\n```\r\n ---\u003e Microsoft.Data.SqlClient.SqlException (0x80131904): Cannot insert duplicate key row in object \u0027dbo.__M_Matters\u0027 with unique index \u0027IX___M_Matters_Id\u0027. The duplicate key value is (SB2 --- Accounts Payable).\r\n```\r\n\r\nIt would be really nice if the duplicate key value was available as a property.\n\n### API Proposal\n\n```csharp\r\nnamespace Microsoft.Data.SqlClient;\r\n\r\npublic class DuplicateKeyException : SqlException\r\n{\r\n  public string Key {get; set;}\r\n}\r\n```\r\n\n\n### API Usage\n\nIt is a new exception that would be thrown.\n\n### Alternative Designs\n\n_No response_\n\n### Risks\n\n_No response_\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003eTonyValenti\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`api-suggestion`, `area-System.Data.SqlClient`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2022-08-11T15:54:32Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5IRL3k",
+                                           "createdAt":  "2022-08-11T20:31:18Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Clockwork-Muse",
+                                           "body":  "The catch here is that almost certainly the drivers for the various RDBMSs have to be updated to take advantage of this.\r\nAnd I don\u0027t know that they all surface the duplicate key in their own messages.",
+                                           "updatedAt":  "2022-08-11T20:31:18Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5IXkXL",
+                                           "createdAt":  "2022-08-13T10:57:23Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Wraith2",
+                                           "body":  "The message comes from the sql server as an error message string meaning that the SqlClient driver would have to parse the message to extract it. this would not work with with localized messages.",
+                                           "updatedAt":  "2022-08-13T10:57:23Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5J077z",
+                                           "createdAt":  "2022-09-06T20:23:57Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "David-Engel",
+                                           "body":  "I don\u0027t see this happening any time soon. As Wraith2 said, this has some technical blockers in that the server doesn\u0027t surface the information in a guaranteed way that the client can rely on to implement it.",
+                                           "updatedAt":  "2022-09-06T20:23:57Z"
+                                       }
+                                   ],
+                         "totalCount":  4
+                     },
+        "title":  "[API Proposal]: Specialized Sql Exception Type for Duplicate Key Values",
+        "labels":  [
+                       "api-suggestion",
+                       "area-System.Data.SqlClient"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/82892",
+        "createdAt":  "2023-03-02T04:10:07Z",
+        "number":  82892,
+        "author":  "sandynayak",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHOCvDiQQ==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "134130",
+                                            "createdAt":  "2023-03-24T10:11:40Z"
+                                        }
+                                    ],
+                          "totalCount":  1
+                      },
+        "updatedAt":  "2023-06-05T15:37:13Z",
+        "body":  "Dotnet docker image 7.0 with Alpine 3.17 is not able to connect to an on-prem sql server. Shows an SSL error as `error occurred during the pre-login handshake`\r\n\r\n\r\nStep 1: run the container on the image `mcr.microsoft.com/dotnet/aspnet:7.0-alpine3.17`\r\nStep 2: Make the connection to sql server; Microsoft.Data.SqlClient\r\n\r\n\r\n\r\n\r\n### Other Information\r\n\r\nHere are the two errors I see while using Dotnet 7-Alpine 3.17 while connecting to a on-prem sql database from inside the container.\r\nWith dotnet v6, I had this issue as well, but it worked when I had replaced the cypher string on the container.\r\n\r\nIt works fine when I fallback to Dotnet 7-Alpine 3.16.\r\n\r\nAs per announcement [here](https://github.com/dotnet/dotnet-docker/discussions/4313), `OpenSSL has been upgraded from 1.1 to 3.0. This may cause breaking changes in your application.`. \r\n\r\nI have tried the work around to update the openssl.conf file mentioned on https://github.com/dotnet/dotnet-docker/issues/4332#issuecomment-1384196212.. but I am seeing the error still\r\n\r\n```\r\n2023-02-27 18:18:58.886 +00:00 ERR  - Error occured in GetData. Microsoft.Data.SqlClient.SqlException (0x80131904): A connection was successfully established with the server, but then an error occurred during the pre-login handshake. (provider: SSL Provider, error: \r\n31 - Encryption(ssl/tls) handshake failed)\r\n ---\u003e System.IO.IOException:  Received an unexpected EOF or 0 bytes from the transport stream.\r\n   at System.Net.Security.SslStream.ReceiveBlobAsync[TIOAdapter](CancellationToken cancellationToken)\r\n   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)\r\n   at System.Net.Security.SslStream.AuthenticateAsClient(SslClientAuthenticationOptions sslClientAuthenticationOptions)\r\n   at Microsoft.Data.SqlClient.SNI.SNITCPHandle.EnableSsl(UInt32 options)\r\n   at Microsoft.Data.SqlClient.SNI.TdsParserStateObjectManaged.EnableSsl(UInt32\u0026 info, Boolean tlsFirst)\r\n   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)  \r\n   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)\r\n   at Microsoft.Data.SqlClient.TdsParser.EnableSsl(UInt32 info, SqlConnectionEncryptOption encrypt, Boolean integratedSecurity)\r\n   at Microsoft.Data.SqlClient.TdsParser.ConsumePreLoginHandshake(SqlConnectionEncryptOption encrypt, Boolean trustServerCert, Boolean integratedSecurity, Boolean\u0026 marsCapable, Boolean\u0026 fedAuthRequired, Boolean tlsFirst)\r\n   at Microsoft.Data.SqlClient.TdsParser.Connect(ServerInfo serverInfo, SqlInternalConnectionTds connHandler, Boolean ignoreSniOpenTimeout, Int64 timerExpire, SqlConnectionString connectionOptions, Boolean withFailover)\r\n   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.AttemptOneLogin(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, Boolean ignoreSniOpenTimeout, TimeoutTimer timeout, Boolean withFailover)\r\n   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.LoginNoFailover(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString connectionOptions, SqlCredential credential, TimeoutTimer timeout)\r\n   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.OpenLoginEnlist(TimeoutTimer timeout, SqlConnectionString connectionOptions, SqlCredential credential, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance)\r\n   at Microsoft.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, Boolean applyTransientFaultHandling, String accessToken, DbConnectionPool pool)\r\n   at Microsoft.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, Object poolGroupProviderInfo, DbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)\r\n   at Microsoft.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(DbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)\r\n   at Microsoft.Data.ProviderBase.DbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)\r\n   at Microsoft.Data.ProviderBase.DbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)\r\n   at Microsoft.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal\u0026 connection)\r\n   at Microsoft.Data.ProviderBase.DbConnectionPool.WaitForPendingOpen()\r\n--- End of stack trace from previous location ---\r\n   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)\r\n   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)\r\n   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)    \r\n   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)\r\n   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()\r\n   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)\r\n   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)\r\n   at MyProcess.Infrastructure.MyDB.Repository.MyDBRepository.GetData(String systemName) in /app/MyProcess.Infrastructure/MyProcess.Infrastructure.MyDB.Repository/MyDBRepository.cs:line 28\r\n   at MyProcess.Infrastructure.MyDB.Repository.MyDBRepository.GetData(String systemName) in /app/MyProcess.Infrastructure/MyProcess.Infrastructure.MyDB.Repository/MyDBRepository.cs:line 38\r\n   at MyProcess.Application.CQRS.Queries.GetQueryHandler.Handle(GetQuery request, CancellationToken cancellationToken) in /app/MyProcess.Application/MyProcess.Application.CQRS/Queries/GetQuery.cs:line 31\r\nClientConnectionId:xxxxxxx\r\n\r\n\r\n\r\n2023-02-27 18:18:58.993 +00:00  ERR  - Error running MyMethod\r\n Message: A connection was successfully established with the server, but then an error occurred during the pre-login handshake. (provider: \r\nSSL Provider, error: 31 - Encryption(ssl/tls) handshake failed); Inner Exception: System.IO.IOException:  Received an unexpected EOF or 0 bytes from the transport stream.\r\n   at System.Net.Security.SslStream.ReceiveBlobAsync[TIOAdapter](CancellationToken cancellationToken)\r\n   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)\r\n   at System.Net.Security.SslStream.AuthenticateAsClient(SslClientAuthenticationOptions sslClientAuthenticationOptions)\r\n   at Microsoft.Data.SqlClient.SNI.SNITCPHandle.EnableSsl(UInt32 options)\r\n   at Microsoft.Data.SqlClient.SNI.TdsParserStateObjectManaged.EnableSsl(UInt32\u0026 info, Boolean tlsFirst); Stack Trace:    at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)\r\n   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)\r\n   at Microsoft.Data.SqlClient.TdsParser.EnableSsl(UInt32 info, SqlConnectionEncryptOption encrypt, Boolean integratedSecurity)\r\n   at Microsoft.Data.SqlClient.TdsParser.ConsumePreLoginHandshake(SqlConnectionEncryptOption encrypt, Boolean trustServerCert, Boolean integratedSecurity, Boolean\u0026 marsCapable, Boolean\u0026 fedAuthRequired, Boolean tlsFirst)\r\n   at Microsoft.Data.SqlClient.TdsParser.Connect(ServerInfo serverInfo, SqlInternalConnectionTds connHandler, Boolean ignoreSniOpenTimeout, Int64 timerExpire, SqlConnectionString connectionOptions, Boolean withFailover)\r\n   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.AttemptOneLogin(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, Boolean ignoreSniOpenTimeout, TimeoutTimer timeout, Boolean withFailover)\r\n   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.LoginNoFailover(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString connectionOptions, SqlCredential credential, TimeoutTimer timeout)\r\n   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.OpenLoginEnlist(TimeoutTimer timeout, SqlConnectionString connectionOptions, SqlCredential credential, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance)\r\n   at Microsoft.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, Boolean applyTransientFaultHandling, String accessToken, DbConnectionPool pool)\r\n   at Microsoft.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, Object poolGroupProviderInfo, DbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)\r\n   at Microsoft.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(DbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)\r\n   at Microsoft.Data.ProviderBase.DbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)\r\n   at Microsoft.Data.ProviderBase.DbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)\r\n   at Microsoft.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal\u0026 connection)\r\n   at Microsoft.Data.ProviderBase.DbConnectionPool.WaitForPendingOpen()\r\n--- End of stack trace from previous location ---\r\n   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)\r\n   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)\r\n   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)    \r\n   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)\r\n   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()\r\n   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)\r\n   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)\r\n   at MyProcess.Infrastructure.MyDB.Repository.MyDBRepository.GetData(String systemName) in /app/MyProcess.Infrastructure/MyProcess.Infrastructure.MyDB.Repository/MyDBRepository.cs:line 28\r\n   at MyProcess.Infrastructure.MyDB.Repository.MyDBRepository.GetData(String systemName) in /app/MyProcess.Infrastructure/MyProcess.Infrastructure.MyDB.Repository/MyDBRepository.cs:line 38\r\n   at MyProcess.Application.CQRS.Queries.GetQueryHandler.Handle(GetQuery request, CancellationToken cancellationToken) in /app/MyProcess.Application/MyProcess.Application.CQRS/Queries/GetQuery.cs:line 31\r\n   at MyProcess.Port.MyProcessManager.ProcessMy() in /app/MyProcess.Port/MyProcess.Port/MyProcessManager.cs:line 24\r\n   at MyProcess.Port.Worker.ExecuteAsync(CancellationToken stoppingToken) in /app/MyProcess.Port/MyProcess.Port/Worker.cs:line 31\r\n```\r\n\r\n### Output of `docker version`\r\n\r\nClient:\r\n Version:           20.10.7\r\n API version:       1.41\r\n Go version:        go1.13.8\r\n Git commit:        20.10.7-0ubuntu5~20.04.2\r\n Built:             Mon Nov  1 00:34:17 2021\r\n OS/Arch:           linux/amd64\r\n Context:           default\r\n Experimental:      true\r\n\r\nServer:\r\n Engine:\r\n  Version:          20.10.7\r\n  API version:      1.41 (minimum version 1.12)\r\n  Go version:       go1.13.8\r\n  Git commit:       20.10.7-0ubuntu5~20.04.2\r\n  Built:            Fri Oct 22 00:45:53 2021\r\n  OS/Arch:          linux/amd64\r\n  Experimental:     false\r\n containerd:\r\n  Version:          1.5.5-0ubuntu3~20.04.2\r\n  GitCommit:\r\n runc:\r\n  Version:          1.0.1-0ubuntu2~20.04.1\r\n  GitCommit:\r\n docker-init:\r\n  Version:          0.19.0\r\n  GitCommit:\r\n\r\n\r\n### Output of `docker info`\r\n\r\nClient:\r\n Context:    default\r\n Debug Mode: false\r\n\r\nServer:\r\n Containers: 0\r\n  Running: 0\r\n  Paused: 0\r\n  Stopped: 0\r\n Images: 899\r\n Server Version: 20.10.7\r\n Storage Driver: overlay2\r\n  Backing Filesystem: extfs\r\n  Supports d_type: true\r\n  Native Overlay Diff: true\r\n  userxattr: false\r\n Logging Driver: json-file\r\n Cgroup Driver: cgroupfs\r\n Cgroup Version: 1\r\n Plugins:\r\n  Volume: local\r\n  Network: bridge host ipvlan macvlan null overlay\r\n  Log: awslogs fluentd gcplogs gelf journald json-file local logentries splunk syslog\r\n Swarm: inactive\r\n Runtimes: runc io.containerd.runc.v2 io.containerd.runtime.v1.linux\r\n Default Runtime: runc\r\n Init Binary: docker-init\r\n containerd version:\r\n runc version:\r\n init version:\r\n Security Options:\r\n  seccomp\r\n   Profile: default\r\n Kernel Version: 5.10.102.1-microsoft-standard-WSL2\r\n Operating System: Ubuntu 20.04.4 LTS\r\n OSType: linux\r\n Architecture: x86_64\r\n CPUs: 8\r\n Total Memory: 12.36GiB\r\n Name: XXXXXXXXXXX\r\n ID: DQSW:2FZ7:JSKX:6LWR:YDO3:CEWF:WTYI:WF7U:RELF:ZI3I:X54T:EQKH\r\n Docker Root Dir: /var/lib/docker\r\n Debug Mode: false\r\n Registry: https://index.docker.io/v1/\r\n Labels:\r\n Experimental: false\r\n Insecure Registries:\r\n  127.0.0.0/8\r\n Live Restore Enabled: false\r\n\r\nWARNING: No blkio throttle.read_bps_device support\r\nWARNING: No blkio throttle.write_bps_device support\r\nWARNING: No blkio throttle.read_iops_device support\r\nWARNING: No blkio throttle.write_iops_device support\r\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOXf-gQQ==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5WimIA",
+                                           "createdAt":  "2023-03-02T14:00:22Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @davoudeshtehari, @david-engel, @jrahnama\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\nDotnet docker image 7.0 with Alpine 3.17 is not able to connect to an on-prem sql server. Shows an SSL error as `error occurred during the pre-login handshake`\r\n\r\n\r\nStep 1: run the container on the image `mcr.microsoft.com/dotnet/aspnet:7.0-alpine3.17`\r\nStep 2: Make the connection to sql server; Microsoft.Data.SqlClient\r\n\r\n\r\n\r\n\r\n### Other Information\r\n\r\nHere are the two errors I see while using Dotnet 7-Alpine 3.17 while connecting to a on-prem sql database from inside the container.\r\nWith dotnet v6, I had this issue as well, but it worked when I had replaced the cypher string on the container.\r\n\r\nIt works fine when I fallback to Dotnet 7-Alpine 3.16.\r\n\r\nAs per announcement [here](https://github.com/dotnet/dotnet-docker/discussions/4313), `OpenSSL has been upgraded from 1.1 to 3.0. This may cause breaking changes in your application.`. \r\n\r\nI have tried the work around to update the openssl.conf file mentioned on https://github.com/dotnet/dotnet-docker/issues/4332#issuecomment-1384196212.. but I am seeing the error still\r\n\r\n```\r\n2023-02-27 18:18:58.886 +00:00 ERR  - Error occured in GetData. Microsoft.Data.SqlClient.SqlException (0x80131904): A connection was successfully established with the server, but then an error occurred during the pre-login handshake. (provider: SSL Provider, error: \r\n31 - Encryption(ssl/tls) handshake failed)\r\n ---\u003e System.IO.IOException:  Received an unexpected EOF or 0 bytes from the transport stream.\r\n   at System.Net.Security.SslStream.ReceiveBlobAsync[TIOAdapter](CancellationToken cancellationToken)\r\n   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)\r\n   at System.Net.Security.SslStream.AuthenticateAsClient(SslClientAuthenticationOptions sslClientAuthenticationOptions)\r\n   at Microsoft.Data.SqlClient.SNI.SNITCPHandle.EnableSsl(UInt32 options)\r\n   at Microsoft.Data.SqlClient.SNI.TdsParserStateObjectManaged.EnableSsl(UInt32\u0026 info, Boolean tlsFirst)\r\n   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)  \r\n   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)\r\n   at Microsoft.Data.SqlClient.TdsParser.EnableSsl(UInt32 info, SqlConnectionEncryptOption encrypt, Boolean integratedSecurity)\r\n   at Microsoft.Data.SqlClient.TdsParser.ConsumePreLoginHandshake(SqlConnectionEncryptOption encrypt, Boolean trustServerCert, Boolean integratedSecurity, Boolean\u0026 marsCapable, Boolean\u0026 fedAuthRequired, Boolean tlsFirst)\r\n   at Microsoft.Data.SqlClient.TdsParser.Connect(ServerInfo serverInfo, SqlInternalConnectionTds connHandler, Boolean ignoreSniOpenTimeout, Int64 timerExpire, SqlConnectionString connectionOptions, Boolean withFailover)\r\n   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.AttemptOneLogin(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, Boolean ignoreSniOpenTimeout, TimeoutTimer timeout, Boolean withFailover)\r\n   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.LoginNoFailover(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString connectionOptions, SqlCredential credential, TimeoutTimer timeout)\r\n   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.OpenLoginEnlist(TimeoutTimer timeout, SqlConnectionString connectionOptions, SqlCredential credential, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance)\r\n   at Microsoft.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, Boolean applyTransientFaultHandling, String accessToken, DbConnectionPool pool)\r\n   at Microsoft.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, Object poolGroupProviderInfo, DbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)\r\n   at Microsoft.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(DbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)\r\n   at Microsoft.Data.ProviderBase.DbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)\r\n   at Microsoft.Data.ProviderBase.DbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)\r\n   at Microsoft.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal\u0026 connection)\r\n   at Microsoft.Data.ProviderBase.DbConnectionPool.WaitForPendingOpen()\r\n--- End of stack trace from previous location ---\r\n   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)\r\n   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)\r\n   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)    \r\n   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)\r\n   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()\r\n   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)\r\n   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)\r\n   at MyProcess.Infrastructure.MyDB.Repository.MyDBRepository.GetData(String systemName) in /app/MyProcess.Infrastructure/MyProcess.Infrastructure.MyDB.Repository/MyDBRepository.cs:line 28\r\n   at MyProcess.Infrastructure.MyDB.Repository.MyDBRepository.GetData(String systemName) in /app/MyProcess.Infrastructure/MyProcess.Infrastructure.MyDB.Repository/MyDBRepository.cs:line 38\r\n   at MyProcess.Application.CQRS.Queries.GetQueryHandler.Handle(GetQuery request, CancellationToken cancellationToken) in /app/MyProcess.Application/MyProcess.Application.CQRS/Queries/GetQuery.cs:line 31\r\nClientConnectionId:xxxxxxx\r\n\r\n\r\n\r\n2023-02-27 18:18:58.993 +00:00  ERR  - Error running MyMethod\r\n Message: A connection was successfully established with the server, but then an error occurred during the pre-login handshake. (provider: \r\nSSL Provider, error: 31 - Encryption(ssl/tls) handshake failed); Inner Exception: System.IO.IOException:  Received an unexpected EOF or 0 bytes from the transport stream.\r\n   at System.Net.Security.SslStream.ReceiveBlobAsync[TIOAdapter](CancellationToken cancellationToken)\r\n   at System.Net.Security.SslStream.ForceAuthenticationAsync[TIOAdapter](Boolean receiveFirst, Byte[] reAuthenticationData, CancellationToken cancellationToken)\r\n   at System.Net.Security.SslStream.AuthenticateAsClient(SslClientAuthenticationOptions sslClientAuthenticationOptions)\r\n   at Microsoft.Data.SqlClient.SNI.SNITCPHandle.EnableSsl(UInt32 options)\r\n   at Microsoft.Data.SqlClient.SNI.TdsParserStateObjectManaged.EnableSsl(UInt32\u0026 info, Boolean tlsFirst); Stack Trace:    at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)\r\n   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)\r\n   at Microsoft.Data.SqlClient.TdsParser.EnableSsl(UInt32 info, SqlConnectionEncryptOption encrypt, Boolean integratedSecurity)\r\n   at Microsoft.Data.SqlClient.TdsParser.ConsumePreLoginHandshake(SqlConnectionEncryptOption encrypt, Boolean trustServerCert, Boolean integratedSecurity, Boolean\u0026 marsCapable, Boolean\u0026 fedAuthRequired, Boolean tlsFirst)\r\n   at Microsoft.Data.SqlClient.TdsParser.Connect(ServerInfo serverInfo, SqlInternalConnectionTds connHandler, Boolean ignoreSniOpenTimeout, Int64 timerExpire, SqlConnectionString connectionOptions, Boolean withFailover)\r\n   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.AttemptOneLogin(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, Boolean ignoreSniOpenTimeout, TimeoutTimer timeout, Boolean withFailover)\r\n   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.LoginNoFailover(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString connectionOptions, SqlCredential credential, TimeoutTimer timeout)\r\n   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.OpenLoginEnlist(TimeoutTimer timeout, SqlConnectionString connectionOptions, SqlCredential credential, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance)\r\n   at Microsoft.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, Boolean applyTransientFaultHandling, String accessToken, DbConnectionPool pool)\r\n   at Microsoft.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, Object poolGroupProviderInfo, DbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)\r\n   at Microsoft.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(DbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)\r\n   at Microsoft.Data.ProviderBase.DbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)\r\n   at Microsoft.Data.ProviderBase.DbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)\r\n   at Microsoft.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal\u0026 connection)\r\n   at Microsoft.Data.ProviderBase.DbConnectionPool.WaitForPendingOpen()\r\n--- End of stack trace from previous location ---\r\n   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)\r\n   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)\r\n   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)    \r\n   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)\r\n   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)\r\n   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()\r\n   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)\r\n   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)\r\n   at MyProcess.Infrastructure.MyDB.Repository.MyDBRepository.GetData(String systemName) in /app/MyProcess.Infrastructure/MyProcess.Infrastructure.MyDB.Repository/MyDBRepository.cs:line 28\r\n   at MyProcess.Infrastructure.MyDB.Repository.MyDBRepository.GetData(String systemName) in /app/MyProcess.Infrastructure/MyProcess.Infrastructure.MyDB.Repository/MyDBRepository.cs:line 38\r\n   at MyProcess.Application.CQRS.Queries.GetQueryHandler.Handle(GetQuery request, CancellationToken cancellationToken) in /app/MyProcess.Application/MyProcess.Application.CQRS/Queries/GetQuery.cs:line 31\r\n   at MyProcess.Port.MyProcessManager.ProcessMy() in /app/MyProcess.Port/MyProcess.Port/MyProcessManager.cs:line 24\r\n   at MyProcess.Port.Worker.ExecuteAsync(CancellationToken stoppingToken) in /app/MyProcess.Port/MyProcess.Port/Worker.cs:line 31\r\n```\r\n\r\n### Output of `docker version`\r\n\r\nClient:\r\n Version:           20.10.7\r\n API version:       1.41\r\n Go version:        go1.13.8\r\n Git commit:        20.10.7-0ubuntu5~20.04.2\r\n Built:             Mon Nov  1 00:34:17 2021\r\n OS/Arch:           linux/amd64\r\n Context:           default\r\n Experimental:      true\r\n\r\nServer:\r\n Engine:\r\n  Version:          20.10.7\r\n  API version:      1.41 (minimum version 1.12)\r\n  Go version:       go1.13.8\r\n  Git commit:       20.10.7-0ubuntu5~20.04.2\r\n  Built:            Fri Oct 22 00:45:53 2021\r\n  OS/Arch:          linux/amd64\r\n  Experimental:     false\r\n containerd:\r\n  Version:          1.5.5-0ubuntu3~20.04.2\r\n  GitCommit:\r\n runc:\r\n  Version:          1.0.1-0ubuntu2~20.04.1\r\n  GitCommit:\r\n docker-init:\r\n  Version:          0.19.0\r\n  GitCommit:\r\n\r\n\r\n### Output of `docker info`\r\n\r\nClient:\r\n Context:    default\r\n Debug Mode: false\r\n\r\nServer:\r\n Containers: 0\r\n  Running: 0\r\n  Paused: 0\r\n  Stopped: 0\r\n Images: 899\r\n Server Version: 20.10.7\r\n Storage Driver: overlay2\r\n  Backing Filesystem: extfs\r\n  Supports d_type: true\r\n  Native Overlay Diff: true\r\n  userxattr: false\r\n Logging Driver: json-file\r\n Cgroup Driver: cgroupfs\r\n Cgroup Version: 1\r\n Plugins:\r\n  Volume: local\r\n  Network: bridge host ipvlan macvlan null overlay\r\n  Log: awslogs fluentd gcplogs gelf journald json-file local logentries splunk syslog\r\n Swarm: inactive\r\n Runtimes: runc io.containerd.runc.v2 io.containerd.runtime.v1.linux\r\n Default Runtime: runc\r\n Init Binary: docker-init\r\n containerd version:\r\n runc version:\r\n init version:\r\n Security Options:\r\n  seccomp\r\n   Profile: default\r\n Kernel Version: 5.10.102.1-microsoft-standard-WSL2\r\n Operating System: Ubuntu 20.04.4 LTS\r\n OSType: linux\r\n Architecture: x86_64\r\n CPUs: 8\r\n Total Memory: 12.36GiB\r\n Name: XXXXXXXXXXX\r\n ID: DQSW:2FZ7:JSKX:6LWR:YDO3:CEWF:WTYI:WF7U:RELF:ZI3I:X54T:EQKH\r\n Docker Root Dir: /var/lib/docker\r\n Debug Mode: false\r\n Registry: https://index.docker.io/v1/\r\n Labels:\r\n Experimental: false\r\n Insecure Registries:\r\n  127.0.0.0/8\r\n Live Restore Enabled: false\r\n\r\nWARNING: No blkio throttle.read_bps_device support\r\nWARNING: No blkio throttle.write_bps_device support\r\nWARNING: No blkio throttle.read_iops_device support\r\nWARNING: No blkio throttle.write_iops_device support\r\n\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003esandynayak\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`bug`, `area-System.Data.SqlClient`, `untriaged`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2023-03-02T14:00:22Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5WnkWw",
+                                           "createdAt":  "2023-03-03T09:15:38Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Wraith2",
+                                           "body":  "You need icu libs to use SqlClient, alpine doesn\u0027t have them by default. Try this https://blog.wraithware.org/2020/05/23/SqlClient-and-Globalization-Invariant-mode.html",
+                                           "updatedAt":  "2023-03-03T09:15:38Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5WqFiQ",
+                                           "createdAt":  "2023-03-03T17:38:08Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "sandynayak",
+                                           "body":  "Thanks @Wraith2. \r\n\r\nThis is what I had used to create the docker image. I had already used icu lib and a few other libraries.\r\n\r\nHere is aa snapshot of my docker file\u0027s `runtime` stage.\r\n```Dockerfile\r\nFROM run-env AS final\r\n\r\nRUN sed -i \u0027s/CipherString = DEFAULT@SECLEVEL=2/CipherString = ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA256/\u0027 /etc/ssl/openssl.cnf\r\n\r\n# OpenSSL 3.0 disables UnsafeLegacyRenegotiation by default, must re-enable it for some endpoints (see https://github.com/dotnet/runtime/issues/80641)\r\nRUN sed -i \u0027s/providers = provider_sect/providers = provider_sect\\n\\\r\nssl_conf = ssl_sect\\n\\\r\n\\n\\\r\n[ssl_sect]\\n\\\r\nsystem_default = system_default_sect\\n\\\r\n\\n\\\r\n[system_default_sect]\\n\\\r\nOptions = UnsafeLegacyRenegotiation/\u0027 /etc/ssl/openssl.cnf\r\n\r\nWORKDIR /app\r\n\r\n# Add packages - required for running dotnet container on alpine\r\nRUN apk update \u0026\u0026 apk upgrade --no-cache \u0026\u0026 apk add --no-cache icu-libs krb5-libs libgcc libintl libssl1.1 libstdc++ zlib\r\n\r\n# Set environment variables - required for running dotnet container on alpine\r\nENV DOTNET_RUNNING_IN_CONTAINER=true\r\nENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false\r\n\r\n# Copy the published output from build stage\r\nCOPY --from=build /out .\r\n\r\n# Create user and set ownership and permissions as required\r\nRUN addgroup -S appgroup \u0026\u0026 adduser -S appuser -G appgroup\r\nRUN chown appuser: /app\r\n\r\n# Tell docker that all future commands should run as appuser\r\nUSER appuser\r\n\r\nENTRYPOINT [\"dotnet\", \"MyApp.Port.dll\"]\r\n```",
+                                           "updatedAt":  "2023-03-03T17:38:08Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5d9j0Y",
+                                           "createdAt":  "2023-06-05T09:07:43Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "mschaefer-gresham",
+                                           "body":  "Any update on this issue? I have also tried the workaround [here](https://github.com/dotnet/dotnet-docker/issues/4332#issuecomment-1384196212), but I\u0027m still getting this error.\r\n\r\n@sandynayak my openssl.cnf file does not contain `CipherString`.",
+                                           "updatedAt":  "2023-06-05T09:08:12Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5d_hIF",
+                                           "createdAt":  "2023-06-05T14:39:52Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "134130",
+                                           "body":  "@mschaefer-gresham \nSince alpine 3.17, openssl3 will be installed instead of openssl1.1\n\nThe openssl3 deprecated some CiperSuites.\nI think you caught the error with above reason.",
+                                           "updatedAt":  "2023-06-05T14:39:52Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5d_rel",
+                                           "createdAt":  "2023-06-05T15:04:23Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "mschaefer-gresham",
+                                           "body":  "@134130 Thank you. Yes, I understood that much. The issue (as I currently understand it) is that my Windows server does not support TLS 1.3 and Alpine 3.17 does not support earlier versions by default. The workarounds I have provided are attempting to configure openssl to allow a handshake with an earlier TLS version. But the workarounds are not working for me. \r\n\r\nI see that [somone else](https://github.com/dotnet/runtime/issues/82892) is having the same issue, but the issue has been dormant for a while.\r\n\r\nI could use some guidance on how to troubleshoot this issue - either by modifying my Dockfile file to update openssl.cnf differently, or maybe it\u0027s a Windows configuration issue.",
+                                           "updatedAt":  "2023-06-05T15:04:23Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5d_vdl",
+                                           "createdAt":  "2023-06-05T15:12:22Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "134130",
+                                           "body":  "@sandynayak \nHave you tried adding this to `system_default_sect`?\n\n```\nMinProtocol = TLSv1.2\nCipherString = DEFAULT:@SECLEVEL=0\n```\n\nThis options will help your openssl3 can use not only tls1.3 but also tls1.2",
+                                           "updatedAt":  "2023-06-05T15:12:22Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5d_yPE",
+                                           "createdAt":  "2023-06-05T15:17:29Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "134130",
+                                           "body":  "Normally, This solution will resolve tls problem.\nBut when your problem persists, Check the CipherSuite and figure out if It is supported by openssl3.\nIf openssl3 does not contains the CiperSuite, You should consider upgrading your DB or Downgrade to openssl1.1",
+                                           "updatedAt":  "2023-06-05T15:17:29Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5d_z0c",
+                                           "createdAt":  "2023-06-05T15:20:42Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "mschaefer-gresham",
+                                           "body":  "@134130 thank you. I linked back to this ticket thinking you responded to the [issue](https://github.com/dotnet/runtime/issues/87123) I opened.\r\n\r\nI tried this:\r\n\r\n```\r\nRUN sed -i \u0027s/providers = provider_sect/providers = provider_sect\\n\\\r\nssl_conf = ssl_sect\\n\\\r\n\\n\\\r\n[ssl_sect]\\n\\\r\nsystem_default = system_default_sect\\n\\\r\n\\n\\\r\n[system_default_sect]\\n\\\r\nOptions = UnsafeLegacyRenegotiation/\u0027 /etc/ssl/openssl.cnf\r\n```\r\n\r\nand this (containing similar settings as you suggest):\r\n\r\n```\r\nRUN sed -i \u0027s/providers = provider_sect/providers = provider_sect\\n\\\r\nssl_conf = ssl_sect\\n\\\r\n\\n\\\r\n[ssl_sect]\\n\\\r\nsystem_default = system_default_sect\\n\\\r\n\\n\\\r\n[system_default_sect]\\n\\\r\nOptions = UnsafeLegacyRenegotiation\\n\\\r\nMinProtocol = TLSv1.1\\n\\\r\nCipherString = DEFAULT@SECLEVEL=1/\u0027 /etc/ssl/openssl.cnf\r\n```\r\n\r\nNeither worked.",
+                                           "updatedAt":  "2023-06-05T15:21:44Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5d_1uL",
+                                           "createdAt":  "2023-06-05T15:25:41Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "134130",
+                                           "body":  "Try with seclevel = 0\nThis value makes different.\nBut do not consider minprotocol\u0027s value. openssl3\u0027s min protocol is tls1.2\n\nI think you need to dump packet.\nActually, Our team had a same issue. But we only figured out the reason. not best solution yet",
+                                           "updatedAt":  "2023-06-05T15:26:55Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5d_4rE",
+                                           "createdAt":  "2023-06-05T15:33:42Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "134130",
+                                           "body":  "Also, this is not a bug of dotnet-runtime. At least, it\u0027s closer to dotnet/dotnet-docker.\n\nBut It is natural that obsolete security protocol is being deprecated, So this is not a bug",
+                                           "updatedAt":  "2023-06-05T15:33:42Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5d_5j_",
+                                           "createdAt":  "2023-06-05T15:36:10Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOC9KkGw==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "134130",
+                                                                               "createdAt":  "2023-06-05T15:36:42Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "HOORAY",
+                                                                               "user":  "134130",
+                                                                               "createdAt":  "2023-06-05T15:36:44Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  2
+                                                         },
+                                           "author":  "mschaefer-gresham",
+                                           "body":  "@134130 This appears to have worked!",
+                                           "updatedAt":  "2023-06-05T15:36:10Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5d_6BB",
+                                           "createdAt":  "2023-06-05T15:37:12Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "134130",
+                                           "body":  "SGTM :D",
+                                           "updatedAt":  "2023-06-05T15:37:12Z"
+                                       }
+                                   ],
+                         "totalCount":  13
+                     },
+        "title":  "Dotnet7-Alpine3.17 has an error during the pre-login handshake",
+        "labels":  [
+                       "bug",
+                       "area-System.Data.SqlClient",
+                       "untriaged"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/86661",
+        "createdAt":  "2023-05-23T20:36:18Z",
+        "number":  86661,
+        "author":  "mckennabarlow",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-08-31T15:03:35Z",
+        "body":  "As one of the top most installed NuGet packages, your System.Data.SqlClient package is extremely important to the developer ecosystem. The NuGet team has noticed that your package on NuGet.org is missing a README file. Please take a moment to add a README file to your package repository.\r\n\r\nOur customer research indicates that one of the top problems that package consumers face is insufficient package documentation such as README files. Adding a README file to your package will help users quickly understand what the package is and what it does. Since your README will be the first impression for users when they view your package on NuGet.org, it is crucial for authors to write and include high-quality READMEs for their packages.\r\n\r\nThere is no specific format or structure to a good README – instead it’s about effectively communicating the purpose and functionality of your package to potential users. If you are unsure of where to start, check out our [blog post](https://devblogs.microsoft.com/nuget/write-a-high-quality-readme-for-nuget-packages/) for some README best practices and a template file.\r\nIf you are new to NuGet README, learn more about [how to add a README to your NuGet Package](https://devblogs.microsoft.com/nuget/add-a-readme-to-your-nuget-package/).\r\n\r\nYour feedback is very important to us. If you experience any issue using READMEs or have ideas for improvements – please feel free to contact us by replying to this issue",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOYl48Rg==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5c_nSn",
+                                           "createdAt":  "2023-05-23T21:57:22Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @davoudeshtehari, @david-engel, @jrahnama\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\nAs one of the top most installed NuGet packages, your System.Data.SqlClient package is extremely important to the developer ecosystem. The NuGet team has noticed that your package on NuGet.org is missing a README file. Please take a moment to add a README file to your package repository.\r\n\r\nOur customer research indicates that one of the top problems that package consumers face is insufficient package documentation such as README files. Adding a README file to your package will help users quickly understand what the package is and what it does. Since your README will be the first impression for users when they view your package on NuGet.org, it is crucial for authors to write and include high-quality READMEs for their packages.\r\n\r\nThere is no specific format or structure to a good README – instead it’s about effectively communicating the purpose and functionality of your package to potential users. If you are unsure of where to start, check out our [blog post](https://devblogs.microsoft.com/nuget/write-a-high-quality-readme-for-nuget-packages/) for some README best practices and a template file.\r\nIf you are new to NuGet README, learn more about [how to add a README to your NuGet Package](https://devblogs.microsoft.com/nuget/add-a-readme-to-your-nuget-package/).\r\n\r\nYour feedback is very important to us. If you experience any issue using READMEs or have ideas for improvements – please feel free to contact us by replying to this issue\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003emckennabarlow\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-System.Data.SqlClient`, `untriaged`, `needs-area-label`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2023-05-23T21:57:22Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5c_n1y",
+                                           "createdAt":  "2023-05-23T21:59:46Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "filipnavara",
+                                           "body":  "cc @ericstj @ViktorHofer Not sure what\u0027s the correct area for this issue. The package is effectively replaced by [Microsoft.Data.SqlClient](https://github.com/dotnet/SqlClient) and I am not sure what\u0027s the official support status for the old System.Data.SqlClient one.",
+                                           "updatedAt":  "2023-05-23T21:59:46Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5c_u27",
+                                           "createdAt":  "2023-05-23T22:30:44Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOC8X77A==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "ViktorHofer",
+                                                                               "createdAt":  "2023-05-24T04:45:14Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "David-Engel",
+                                                                               "createdAt":  "2023-05-24T21:40:57Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  2
+                                                         },
+                                           "author":  "ericstj",
+                                           "body":  "Readme\u0027s can be added without updating the package.  The content can be added manually via\r\nhttps://www.nuget.org/packages/System.Data.SqlClient/4.8.5/Manage\r\n\r\n@dotnet/sqlclientdevteam if you wanted to provide a readme for the old SqlClient package we can help you make the change in Nuget.org.  The same change could be made to the package in the old servicing branches - should it ever need to be built again.",
+                                           "updatedAt":  "2023-05-23T22:30:44Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5iW-Bo",
+                                           "createdAt":  "2023-07-25T16:47:50Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "JonDouglas",
+                                           "body":  "@ericstj That might be referring to the old \"readme.txt\" experience. For the [new README.md experience](https://devblogs.microsoft.com/nuget/add-a-readme-to-your-nuget-package/), the readme is included with the package itself. **If a package cannot be updated/built we should just ignore them for now.**\r\n\r\nThe primary case here is to provide consumers with enough information to get started with these packages. Here is an example:\r\n\r\nhttps://www.nuget.org/profiles/dotnetframework\r\n\r\nTake System.Buffers for example:\r\n\r\n\u003cimg width=\"1865\" alt=\"image\" src=\"https://github.com/dotnet/runtime/assets/1288848/6e6441f0-e9bd-4150-b34e-e13511f6fde4\"\u003e (no readme is rendered as only a description is today)\r\n\r\nvs.\r\n\r\n\u003cimg width=\"1865\" alt=\"image\" src=\"https://github.com/dotnet/runtime/assets/1288848/6c234e6c-3359-4821-ac25-81a48ff6fbe4\"\u003e\r\n\r\nIn an upcoming Visual Studio and Visual Studio Code release, we will be showing READMEs in the NuGet package manager UI experience and thus would love to help developers get started with some of the most popular packages. Also given the visibility of .NET packages, this sets a positive example on the entire ecosystem to add READMEs organically (many OSS projects already do this today).\r\n\r\nOne goal for .NET 8 would be to rally around the most used and \"active\" packages to get READMEs included. If someone can help our team \u0026 the .NET release team with an inventory of what packages may be good candidates for READMEs, we can start to piece-meal some READMEs for them or get some documentation team help to do so. \r\n\r\ni.e. Each consumer-friendly package could [supplement README information](https://devblogs.microsoft.com/nuget/write-a-high-quality-readme-for-nuget-packages) from the respective official docs:\r\n\r\ni.e. https://learn.microsoft.com/en-us/dotnet/standard/io/buffers",
+                                           "updatedAt":  "2023-07-25T16:47:50Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5iXjxG",
+                                           "createdAt":  "2023-07-25T18:36:05Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ericstj",
+                                           "body":  "\u003e  If a package cannot be updated/built we should just ignore them for now.\r\n\r\nAre you saying that if we make changes in https://www.nuget.org/packages/System.Data.SqlClient/4.8.5/Manage to update the readme and discourage use of old packages that NuGet wouldn\u0027t present those changes to the user?",
+                                           "updatedAt":  "2023-07-25T18:36:05Z"
+                                       }
+                                   ],
+                         "totalCount":  5
+                     },
+        "title":  "System.Data.SqlClient is missing NuGet package README file",
+        "labels":  [
+                       "documentation",
+                       "area-System.Data.SqlClient"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/92676",
+        "createdAt":  "2023-09-26T08:27:08Z",
+        "number":  92676,
+        "author":  "msschl",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHOC18SHw==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "JanKotschenreuther",
+                                            "createdAt":  "2024-02-18T11:38:57Z"
+                                        }
+                                    ],
+                          "totalCount":  1
+                      },
+        "updatedAt":  "2023-11-15T16:41:52Z",
+        "body":  "### Description\n\nPublishing a dotnet maui app with a reference to `Microsoft.Data.SqlClient` version 5.1.1 either through `Miicrosoft.EntityFrameworkCore.SqlServer` or the `Microsoft.Data.SqlClient` package directly causes an error for Microsoft.Web. WebView2.Core.dll. NETSDK1152\n\n### Steps to Reproduce\n\n_No response_\n\n### Link to public reproduction project repository\n\n_No response_\n\n### Version with bug\n\n8.0.0-rc.1.9171\n\n### Is this a regression from previous behavior?\n\nYes, this used to work in .NET MAUI\n\n### Last version that worked well\n\nUnknown/Other\n\n### Affected platforms\n\nWindows\n\n### Affected platform versions\n\n_No response_\n\n### Did you find any workaround?\n\nDowngrading to a version that references `Microsoft.Data.SqlClient` version 4.1.1 fixes the issue.\r\nI.e., using `Microsoft.EntityFrameworkCore.SqlServer` version 6.0.22\n\n### Relevant log output\n\n```shell\nC:\\Program Files\\dotnet\\sdk\\8.0.100-rc.1.23463.5\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.ConflictResolution.targets(112,5): error NETSDK1152: Es wurden mehrere Ausgabedateien für die Veröffentlichung mit demselben relativen Pfad gef unden: W:\\src\\Tools\\Company\\src\\Company.XYZ.MAUI.Project\\obj\\Release\\net8.0-windows10.0.19041.0\\win10-x64\\MsixContent\\Microsoft.Web.WebView2.Core.dll, obj\\Release\\net8.0-windows10.0.19041.0\\win10-x64\\R2R\\Microsoft.Web. WebView2.Core.dll. [W:\\src\\Tools\\Company\\src\\Company.XYZ.MAUI.Project\\Company.XYZ.MAUI.Project::TargetFramework=net8.0-windows10.0.19041.0]\n```\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHObA508g==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5nsVTV",
+                                           "createdAt":  "2023-09-28T16:41:26Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @davoudeshtehari, @david-engel, @jrahnama\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Description\n\nPublishing a dotnet maui app with a reference to `Microsoft.Data.SqlClient` version 5.1.1 either through `Miicrosoft.EntityFrameworkCore.SqlServer` or the `Microsoft.Data.SqlClient` package directly causes an error for Microsoft.Web. WebView2.Core.dll. NETSDK1152\n\n### Steps to Reproduce\n\n_No response_\n\n### Link to public reproduction project repository\n\n_No response_\n\n### Version with bug\n\n8.0.0-rc.1.9171\n\n### Is this a regression from previous behavior?\n\nYes, this used to work in .NET MAUI\n\n### Last version that worked well\n\nUnknown/Other\n\n### Affected platforms\n\nWindows\n\n### Affected platform versions\n\n_No response_\n\n### Did you find any workaround?\n\nDowngrading to a version that references `Microsoft.Data.SqlClient` version 4.1.1 fixes the issue.\r\nI.e., using `Microsoft.EntityFrameworkCore.SqlServer` version 6.0.22\n\n### Relevant log output\n\n```shell\nC:\\Program Files\\dotnet\\sdk\\8.0.100-rc.1.23463.5\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.ConflictResolution.targets(112,5): error NETSDK1152: Es wurden mehrere Ausgabedateien für die Veröffentlichung mit demselben relativen Pfad gef unden: W:\\src\\Tools\\Company\\src\\Company.XYZ.MAUI.Project\\obj\\Release\\net8.0-windows10.0.19041.0\\win10-x64\\MsixContent\\Microsoft.Web.WebView2.Core.dll, obj\\Release\\net8.0-windows10.0.19041.0\\win10-x64\\R2R\\Microsoft.Web. WebView2.Core.dll. [W:\\src\\Tools\\Company\\src\\Company.XYZ.MAUI.Project\\Company.XYZ.MAUI.Project::TargetFramework=net8.0-windows10.0.19041.0]\n```\n\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003emsschl\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-System.Data.SqlClient`, `untriaged`, `needs-area-label`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2023-09-28T16:41:26Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5nywjH",
+                                           "createdAt":  "2023-09-29T19:04:12Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "David-Engel",
+                                           "body":  "Did this work in a previous version of .NET? Can you provide a sample project?",
+                                           "updatedAt":  "2023-09-29T19:04:12Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5sDlBh",
+                                           "createdAt":  "2023-11-15T16:36:36Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "msschl",
+                                           "body":  "Here is a sample project. https://github.com/msschl/bug_maui_efcore_92676\r\n\r\nIt just is a plain new .net maui blazor hybrid project with ef core 8.0 added. It is able to build and run. But publishing with `otnet publish -f net8.0-windows10.0.19041.0 -p:WindowsPackageType=None MauiApp1\\MauiApp1.csproj` will result in the error as described in this issue.",
+                                           "updatedAt":  "2023-11-15T16:36:36Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5sDnTy",
+                                           "createdAt":  "2023-11-15T16:41:52Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "msschl",
+                                           "body":  "Also still not working in the new net 8.0 release with maui 8.0.3",
+                                           "updatedAt":  "2023-11-15T16:41:52Z"
+                                       }
+                                   ],
+                         "totalCount":  4
+                     },
+        "title":  "dotnet publish with reference to `Microsoft.Data.SqlClient` 5.1.1 causes NETSDK1152 for Microsoft.Web. WebView2.Core.dll",
+        "labels":  [
+                       "area-System.Data.SqlClient",
+                       "untriaged"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/101484",
+        "createdAt":  "2024-04-24T10:55:14Z",
+        "number":  101484,
+        "author":  "vsfeedback",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-04-24T11:01:47Z",
+        "body":  "_This issue has been moved from [a ticket on Developer Community](https://developercommunity.visualstudio.com/t/net-maui-with-net8-has-sql-connection-/10604029)._\n\n---\n[severity:It\u0027s more difficult to complete my work]\nI have a .NET Maui app written in .net 8 which uses dapper to connect to a SQL Server database. When I debug my application, everything works great. My app retrieves and sends data to the database.\n\nHowever when I use the SQL Server Object Explorer (SSOE) in Visual Studio to browse my data while my application is running the SSOE doesn\u0027t show my server and databases anymore. This worked fine before and in other applications like ASP.NET MVC I have no issues like that.\n\nEven when I end debugging, my SSOE is still jammed up, even after refreshing.\n\nClosing VS doesn\u0027t help. I have to unlock the files of appData\\Local\\Microsoft\\MS SQL Server Local DB\\Instances\\MSSQLLocalDb with some file unlocker.\n\nSame thing happens otherwise. When I open my SSOE first or in an other program like Azure Data Studio to connect my server and database and debug or launch my application afterwards I get the message:\n\u003eMicrosoft.Data.SqlClient.SqlException\n\u003eHResult=0x80131904\n\u003e\n\u003eA network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not \u003eaccessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: SQL Network \u003eInterfaces, error: 50 - Local Database Runtime error occurred. Error occurred during LocalDB instance startup: SQL Server process failed to start.\n\u003e\n\u003eSource=Core Microsoft SqlClient Data Provider ...\n\nMy eventviewer shows errors like:\n\n\u003eWindows API call WaitForMultipleObjects returned error code: 575. Windows system error message is: {Application Error} The application was \u003eunable to start correctly (0x%lx). Click OK to close the application. Reported at line: 3714.\n\nSame solution works here. Unlocking the files with file unlocker gets my app back up and running.\n\nI use Dapper like this:\n\n```\npublic IEnumerable\u003cteam\u003e GetTeam()\n    {\n        string sql = @\"SELECT * FROM teams Order by name\";\n\nusing (IDbConnection db = new SqlConnection(ConnectionString))\n        {\n            var debugVar = db. Query\u003cTeam\u003e(sql). ToList();\n            return debugVar;\n        }\n    }\n```\nProblems began after upgrading to .NET 8. I got SQL Server Management Studio installed to access my localdb.\n\nDoes anyone have any idea how to solve this?\n\n---\n### Original Comments\n\n#### Feedback Bot on 2/29/2024, 03:29 AM: \n\n(private comment, text removed)\n\n---\n### Original Solutions\n(no solutions)",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOe6j6rw==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc57qPqv",
+                                           "createdAt":  "2024-04-24T10:55:36Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @davoudeshtehari, @david-engel, @jrahnama\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2024-04-24T10:55:36Z"
+                                       }
+                                   ],
+                         "totalCount":  1
+                     },
+        "title":  ".net maui with .net8 has sql-connection-issues when using dapper",
+        "labels":  [
+                       "area-System.Data.SqlClient",
+                       "untriaged"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/103662",
+        "createdAt":  "2024-06-12T14:10:45Z",
+        "number":  103662,
+        "author":  "xs2bharat",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-06-18T19:22:44Z",
+        "body":  "### Describe the bug\r\nError: System.PlatformNotSupportedException: Microsoft.Data.SqlClient is not supported on this platform.\r\n\r\n```\r\nException message:System.PlatformNotSupportedException: Microsoft.Data.SqlClient is not supported on this platform.\r\nStack trace: System.PlatformNotSupportedException: Microsoft.Data.SqlClient is not supported on this platform.\r\n   at Microsoft.Data.SqlClient.SqlConnectionStringBuilder..ctor(String connectionString)\r\n```\r\n\r\n### To reproduce\r\nUse Microsoft.Data.SqlClient\" Version=\"5.2.1\" in mcr.microsoft.com/dotnet/aspnet:6.0.28-alpine3.19 image\r\n\"ConnectionString\": \"Server=tcp:xxxxxxx.database.windows.net;Initial Catalog=XXXXXXX;Connection Timeout=50\"\r\n\r\n```c#\r\nvar sqlConnectionBuilder = new SqlConnectionStringBuilder(this.connectionString)\r\n{\r\n    UserID = this.settings.DatabaseUsername,\r\n    Password = this.databasePassword\r\n};\r\n```\r\n\r\n### Expected behavior\r\nSuccessful connection should be created\r\n\r\n### Further technical details\r\nMicrosoft.Data.SqlClient version: 5.2.1\r\n.NET target: net6.0\r\nSQL Server version: Azure SQL Database Managed Instance, Windows Server 2022 Datacenter (10.0)\r\nOperating system: Docker container - mcr.microsoft.com/dotnet/aspnet:6.0.28-alpine3.19\r\n\r\n**Additional context**\r\nAdd any other context about the problem here.\r\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOgb9b1A==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc6BvanN",
+                                           "createdAt":  "2024-06-12T16:13:33Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dauinsight",
+                                           "body":  "Can you confirm if this occurs on other versions of SqlClient?\r\n\r\nCan you also try explicitly setting the runtime id as discussed in this thread: https://github.com/dotnet/SqlClient/issues/2030#issuecomment-1946205214",
+                                           "updatedAt":  "2024-06-12T16:13:33Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6BvanV",
+                                           "createdAt":  "2024-06-12T17:21:39Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "xs2bharat",
+                                           "body":  "Issue is fixed when switched to docker image mcr.microsoft.com/dotnet/aspnet:6.0.28-alpine3.18",
+                                           "updatedAt":  "2024-06-12T17:21:39Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6Bvana",
+                                           "createdAt":  "2024-06-18T18:12:23Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "kf-gonzalez2",
+                                           "body":  "It might be an issue in the .Net platform detection logic not detecting alpine 3.19 as linux.",
+                                           "updatedAt":  "2024-06-18T18:12:23Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6Bvawa",
+                                           "createdAt":  "2024-06-18T18:13:24Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @davoudeshtehari, @david-engel, @jrahnama\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2024-06-18T18:13:24Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6Bv1vU",
+                                           "createdAt":  "2024-06-18T19:22:43Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ErikEJ",
+                                           "body":  "Maybe https://github.com/dotnet/dotnet-docker/issues/5243 is related?",
+                                           "updatedAt":  "2024-06-18T19:22:43Z"
+                                       }
+                                   ],
+                         "totalCount":  5
+                     },
+        "title":  "System.PlatformNotSupportedException: Microsoft.Data.SqlClient is not supported on this platform.",
+        "labels":  [
+                       "area-System.Data.SqlClient",
+                       "untriaged"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/105613",
+        "createdAt":  "2024-07-29T09:17:06Z",
+        "number":  105613,
+        "author":  "fviernau",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-07-30T07:26:23Z",
+        "body":  "I\u0027m trying to figure out the source code corresponding to this package.\r\nFor the release 4.8.5. it seems clear that it was released from the corefx repository.\r\nSo, I suppose that 4.8.6 also has been released from that repository.\r\n\r\nI\u0027ve been trying to figure out the revision for 4.8.6:\r\n- The `version.txt` file in the NuGet package states: `fa27c9f378dde822f9ebe5af1f0dfd22be1778b1`\r\n- The `.dll` files metadata hints: `AssemblyInformationalVersion: 3.1.39+fa27c9f378dde822f9ebe5af1f0dfd22be1778b1`\r\n\r\nBut it seems that the SHA1 is not in the repo, and there is also no tag 3.1.39.\r\n\r\nCan you help?\r\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOhn4YFg==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc6GcBTK",
+                                           "createdAt":  "2024-07-29T09:52:13Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "huoyaoyuan",
+                                           "body":  "`AssemblyInformationalVersion` has **no relationship** with nuget package version, or assembly version. https://github.com/dotnet/runtime/discussions/104712#discussioncomment-10018714\r\n\r\nThe version `3.1` suggests it being built from corefx repo. There was known version number discrepancies in .NET Core 2.x-3.x era, when nuget packages and assembly versions were using 4.x to make them higher than in-box version of .NET Framework.\r\n\r\nThe publish date of this particular version is after corefx being archived, and before [maintenance-packages](https://github.com/dotnet/maintenance-packages) was ready. Is it published from some internal source?\r\n\r\n/cc @dotnet/area-infrastructure-libraries ",
+                                           "updatedAt":  "2024-07-29T09:52:13Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6GfhgW",
+                                           "createdAt":  "2024-07-29T16:42:19Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @davoudeshtehari, @david-engel, @jrahnama\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2024-07-29T16:42:19Z"
+                                       }
+                                   ],
+                         "totalCount":  2
+                     },
+        "title":  "Wrong revision in metadata for the `System.Data.SqlClient` version 4.8.6 (NuGet)",
+        "labels":  [
+                       "area-System.Data.SqlClient",
+                       "untriaged"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/111395",
+        "createdAt":  "2025-01-14T09:21:26Z",
+        "number":  111395,
+        "author":  "matouskozak",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHOC-HkMA==",
+                          "nodes":  [
+                                        {
+                                            "content":  "ROCKET",
+                                            "user":  "ivanpovazan",
+                                            "createdAt":  "2025-01-14T09:59:51Z"
+                                        }
+                                    ],
+                          "totalCount":  1
+                      },
+        "updatedAt":  "2025-01-14T13:49:31Z",
+        "body":  "Some `SqlString` APIs are relying on LCID numbers to represent users\u0027 cultures, e.g., https://github.com/dotnet/runtime/blob/c290df149ee29f243e9db27355d26ecbbc81ad2a/src/libraries/System.Data.Common/src/System/Data/SQLTypes/SQLString.cs#L191\n\nThis can cause issues when user\u0027s culture is not part of https://github.com/dotnet/runtime/blob/main/src/libraries/System.Private.CoreLib/src/System/Globalization/IcuLocaleData.cs (e.g., `en-CZ`), causing the returned LCID to be 0x1000 (`LOCALE_CUSTOM_UNSPECIFIED`), that is not acceptable by some `CultureInfo` APIs, e.g., https://github.com/dotnet/runtime/blob/94c356d55a9f9d902f61708ee01e99d480597427/src/libraries/System.Private.CoreLib/src/System/Globalization/CultureInfo.cs#L993\n\n---\n\nThe use of LCID is not recommended:\n\n\u003e Note that LCIDs are being deprecated, and implementers are strongly encouraged to use newer versions of APIs that support BCP 47 locale names instead. Each LCID can be represented by a BCP 47 locale name, but the reverse is not true. The LCID range is restricted and unable to uniquely identify all the possible combinations of language and region.\n\n\nhttps://learn.microsoft.com/en-us/globalization/locale/other-locale-names#lcid and the use of culture names is preferred.\n\ncc: @tarekgh \n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  null,
+                         "nodes":  [
+
+                                   ],
+                         "totalCount":  0
+                     },
+        "title":  "Remove dependencies on culture LCID inside SqlString codebase",
+        "labels":  [
+                       "area-System.Data.SqlClient",
+                       "untriaged"
+                   ]
+    }
+]

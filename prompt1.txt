@@ -1,0 +1,17 @@
+Objective: Using MCP tools as appropriate I want you to analyze active issues in dotnet/aspire Github repo to perform a detailed analysis, categorization, scoring, frustration analysis. The categorization should be based on keyword matching, semantic understanding of the issue description, and comment analysis. The content of the issue bodies and comments should not be included in the output, aside from the metadata used for categorization. Use the MCP tool to do any per issue LLM based analysis such as sentiment analysis.
+
+Your output should be a CSV file with one issue per row and the following columns:
+
+URL - Issue URL
+Title - Issue title
+Sentiment - sentiment positivity of text comments on the issue. Score sentiment either "very positive" "positive" "neutral" or "negative" or "very negative"
+Reactions - Sentiment positivity of reactions on the issue. For example, thumbs up mean positive sentiment and more means more positive. Score sentiment either "very positive" "positive" "neutral" or "negative" or "very negative"
+Upvotes - total number of upvotes on the first post only. If none, value is 0
+Longevity - number of months between the first comment and the most recent comment
+Diversity - number of unique accounts among those commenting and reacting
+Comment_count - number of distinct comments on the issue
+Comment_recency - number of months from last comment to Sept 2025
+Age - number of months from date it was opened to Sept 2025
+Regression - An estimate of whether the issue represents a regression in the product, from 0 (definitely not regression) to 10 (definitely a regression) with 5 unsure.
+Feature - An estimate of whether the issue represents a bug, or a feature request, from 0 (definitely a bug) to 10 (definitely a feature request) with 5 unsure.
+Do this only for issues with the label "area-telemetry" in https://github.com/dotnet/aspire.

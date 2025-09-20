@@ -1,0 +1,259 @@
+﻿[
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/38176",
+        "createdAt":  "2020-06-19T23:26:24Z",
+        "number":  38176,
+        "author":  "KalleOlaviNiemitalo",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2022-06-01T17:05:59Z",
+        "body":  "\u003c!--This is just a template - feel free to delete any and all of it and replace as appropriate.--\u003e\r\n\r\n### Description\r\n\r\nThe Clone method of the Stack returned by CorrelationManager.LogicalOperationStack changed behavior between .NET Framework and .NET Core.\r\n\r\n* In .NET Framework 4.8, Clone returns a new Stack that initially contains the same items as the original, but otherwise works independently.\r\n  Output from the demo built for `net4.8`:\r\n  ```\r\n  Operations: inner,outer\r\n  Operations: inner,outer\r\n  ```\r\n* In .NET Core 2.1, Clone returns a new instance of a class derived from Stack, but if items are later pushed or popped in the original stack, then the clone also updates.\r\n  Output from the demo built for `netcoreapp2.1`:\r\n  ```\r\n  Operations: inner,outer\r\n  Operations:\r\n  ```\r\n\r\nSource code for the demo:\r\n\r\n```C#\r\nusing System;\r\nusing System.Collections;\r\nusing System.Diagnostics;\r\nusing System.Linq;\r\n\r\nnamespace ConsoleApp1\r\n{\r\n    class Program\r\n    {\r\n        static void Main(string[] args)\r\n        {\r\n            Trace.CorrelationManager.StartLogicalOperation(\"outer\");\r\n            Trace.CorrelationManager.StartLogicalOperation(\"inner\");\r\n\r\n            var clone = (Stack)Trace.CorrelationManager.LogicalOperationStack.Clone();\r\n            Console.WriteLine(\"Operations: {0}\", string.Join(\",\", clone.Cast\u003cobject\u003e()));\r\n\r\n            Trace.CorrelationManager.StopLogicalOperation();\r\n            Trace.CorrelationManager.StopLogicalOperation();\r\n\r\n            Console.WriteLine(\"Operations: {0}\", string.Join(\",\", clone.Cast\u003cobject\u003e()));\r\n        }\r\n    }\r\n}\r\n```\r\n\r\n### Configuration\r\n\r\n.NET Framework 4.8 vs. .NET Core 2.1.\r\nWindows 10 version 2004 x64.\r\n\r\n### Regression?\r\n\r\nA difference from .NET Framework, at least.\r\nIt is not causing any problem for me, but it is a surprise and does not seem to have been documented elsewhere.\r\n\r\n### Other information\r\n\r\nWorkaround: call ToArray instead of Clone. GetEnumerator on the array will yield the inmost logical operation first, just like with Clone. In contrast, `new Stack(Trace.CorrelationManager.LogicalOperationStack)` would reverse the order.\r\n\r\nThe Clone implementation came from \u003chttps://github.com/dotnet/corefx/pull/12527#discussion_r83333871\u003e.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOQ1GGOA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY0Njg5NTc3NQ==",
+                                           "createdAt":  "2020-06-19T23:26:28Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Dotnet-GitSync-Bot",
+                                           "body":  "I couldn\u0027t figure out the best area label to add to this issue. Please help me learn by adding exactly one [area label](https://github.com/dotnet/runtime/blob/master/docs/area-owners.md).",
+                                           "updatedAt":  "2020-06-19T23:26:28Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY0Njg5NjcxMA==",
+                                           "createdAt":  "2020-06-19T23:30:14Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "KalleOlaviNiemitalo",
+                                           "body":  "area-System.Diagnostics.Tracing seems right.",
+                                           "updatedAt":  "2020-06-19T23:30:14Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY0ODQ1OTYyNA==",
+                                           "createdAt":  "2020-06-23T22:23:20Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @tarekgh, @tommcdon, @pjanotti\nNotify danmosemsft if you want to be subscribed.",
+                                           "updatedAt":  "2020-06-23T22:23:20Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDg3OTQ1ODkxMA==",
+                                           "createdAt":  "2021-07-13T22:57:56Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "noahfalk",
+                                           "body":  "@Anipik - I think I must have assigned this to myself by mistake, though I don\u0027t even recall doing it. Very sorry about that. You would normally triage these right?",
+                                           "updatedAt":  "2021-07-13T22:57:56Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDg3OTQ2MzQyNw==",
+                                           "createdAt":  "2021-07-13T23:09:10Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "tarekgh",
+                                           "body":  "I marked as untriaged to ensure it show up in @Anipik and @ViktorHofer radar as area owners.",
+                                           "updatedAt":  "2021-07-13T23:09:10Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc41h4VC",
+                                           "createdAt":  "2021-08-13T01:01:15Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "hoyosjs",
+                                           "body":  "@Anipik is this a 6.0 issue?",
+                                           "updatedAt":  "2021-08-13T01:01:15Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc41ibyl",
+                                           "createdAt":  "2021-08-13T06:17:07Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "KalleOlaviNiemitalo",
+                                           "body":  "I think it is less likely to cause problems in production code than \u003chttps://github.com/dotnet/runtime/issues/50480\u003e in the same class.",
+                                           "updatedAt":  "2021-08-13T06:17:07Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc41rMr6",
+                                           "createdAt":  "2021-08-17T18:02:09Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Anipik",
+                                           "body":  "It doesnot meet the bar for 6.0",
+                                           "updatedAt":  "2021-08-17T18:02:09Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc45jfTZ",
+                                           "createdAt":  "2021-11-10T18:06:36Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @tarekgh, @tommcdon, @pjanotti\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n\u003c!--This is just a template - feel free to delete any and all of it and replace as appropriate.--\u003e\r\n\r\n### Description\r\n\r\nThe Clone method of the Stack returned by CorrelationManager.LogicalOperationStack changed behavior between .NET Framework and .NET Core.\r\n\r\n* In .NET Framework 4.8, Clone returns a new Stack that initially contains the same items as the original, but otherwise works independently.\r\n  Output from the demo built for `net4.8`:\r\n  ```\r\n  Operations: inner,outer\r\n  Operations: inner,outer\r\n  ```\r\n* In .NET Core 2.1, Clone returns a new instance of a class derived from Stack, but if items are later pushed or popped in the original stack, then the clone also updates.\r\n  Output from the demo built for `netcoreapp2.1`:\r\n  ```\r\n  Operations: inner,outer\r\n  Operations:\r\n  ```\r\n\r\nSource code for the demo:\r\n\r\n```C#\r\nusing System;\r\nusing System.Collections;\r\nusing System.Diagnostics;\r\nusing System.Linq;\r\n\r\nnamespace ConsoleApp1\r\n{\r\n    class Program\r\n    {\r\n        static void Main(string[] args)\r\n        {\r\n            Trace.CorrelationManager.StartLogicalOperation(\"outer\");\r\n            Trace.CorrelationManager.StartLogicalOperation(\"inner\");\r\n\r\n            var clone = (Stack)Trace.CorrelationManager.LogicalOperationStack.Clone();\r\n            Console.WriteLine(\"Operations: {0}\", string.Join(\",\", clone.Cast\u003cobject\u003e()));\r\n\r\n            Trace.CorrelationManager.StopLogicalOperation();\r\n            Trace.CorrelationManager.StopLogicalOperation();\r\n\r\n            Console.WriteLine(\"Operations: {0}\", string.Join(\",\", clone.Cast\u003cobject\u003e()));\r\n        }\r\n    }\r\n}\r\n```\r\n\r\n### Configuration\r\n\r\n.NET Framework 4.8 vs. .NET Core 2.1.\r\nWindows 10 version 2004 x64.\r\n\r\n### Regression?\r\n\r\nA difference from .NET Framework, at least.\r\nIt is not causing any problem for me, but it is a surprise and does not seem to have been documented elsewhere.\r\n\r\n### Other information\r\n\r\nWorkaround: call ToArray instead of Clone. GetEnumerator on the array will yield the inmost logical operation first, just like with Clone. In contrast, `new Stack(Trace.CorrelationManager.LogicalOperationStack)` would reverse the order.\r\n\r\nThe Clone implementation came from \u003chttps://github.com/dotnet/corefx/pull/12527#discussion_r83333871\u003e.\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003eKalleOlaviNiemitalo\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003eAnipik\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-System.Diagnostics.Tracing`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e7.0.0\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2021-11-10T18:06:36Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5DUYY4",
+                                           "createdAt":  "2022-05-17T23:29:10Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-system-diagnostics-tracesource\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n\u003c!--This is just a template - feel free to delete any and all of it and replace as appropriate.--\u003e\r\n\r\n### Description\r\n\r\nThe Clone method of the Stack returned by CorrelationManager.LogicalOperationStack changed behavior between .NET Framework and .NET Core.\r\n\r\n* In .NET Framework 4.8, Clone returns a new Stack that initially contains the same items as the original, but otherwise works independently.\r\n  Output from the demo built for `net4.8`:\r\n  ```\r\n  Operations: inner,outer\r\n  Operations: inner,outer\r\n  ```\r\n* In .NET Core 2.1, Clone returns a new instance of a class derived from Stack, but if items are later pushed or popped in the original stack, then the clone also updates.\r\n  Output from the demo built for `netcoreapp2.1`:\r\n  ```\r\n  Operations: inner,outer\r\n  Operations:\r\n  ```\r\n\r\nSource code for the demo:\r\n\r\n```C#\r\nusing System;\r\nusing System.Collections;\r\nusing System.Diagnostics;\r\nusing System.Linq;\r\n\r\nnamespace ConsoleApp1\r\n{\r\n    class Program\r\n    {\r\n        static void Main(string[] args)\r\n        {\r\n            Trace.CorrelationManager.StartLogicalOperation(\"outer\");\r\n            Trace.CorrelationManager.StartLogicalOperation(\"inner\");\r\n\r\n            var clone = (Stack)Trace.CorrelationManager.LogicalOperationStack.Clone();\r\n            Console.WriteLine(\"Operations: {0}\", string.Join(\",\", clone.Cast\u003cobject\u003e()));\r\n\r\n            Trace.CorrelationManager.StopLogicalOperation();\r\n            Trace.CorrelationManager.StopLogicalOperation();\r\n\r\n            Console.WriteLine(\"Operations: {0}\", string.Join(\",\", clone.Cast\u003cobject\u003e()));\r\n        }\r\n    }\r\n}\r\n```\r\n\r\n### Configuration\r\n\r\n.NET Framework 4.8 vs. .NET Core 2.1.\r\nWindows 10 version 2004 x64.\r\n\r\n### Regression?\r\n\r\nA difference from .NET Framework, at least.\r\nIt is not causing any problem for me, but it is a surprise and does not seem to have been documented elsewhere.\r\n\r\n### Other information\r\n\r\nWorkaround: call ToArray instead of Clone. GetEnumerator on the array will yield the inmost logical operation first, just like with Clone. In contrast, `new Stack(Trace.CorrelationManager.LogicalOperationStack)` would reverse the order.\r\n\r\nThe Clone implementation came from \u003chttps://github.com/dotnet/corefx/pull/12527#discussion_r83333871\u003e.\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003eKalleOlaviNiemitalo\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-System.Diagnostics.Tracing`, `area-System.Diagnostics.TraceSource`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e7.0.0\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2022-05-17T23:29:10Z"
+                                       }
+                                   ],
+                         "totalCount":  10
+                     },
+        "title":  "CorrelationManager.LogicalOperationStack.Clone() is shallower than in .NET Framework",
+        "labels":  [
+                       "documentation",
+                       "help wanted",
+                       "area-System.Diagnostics.TraceSource"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/74244",
+        "createdAt":  "2022-08-19T13:51:25Z",
+        "number":  74244,
+        "author":  "simonrozsival",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2023-08-08T04:30:37Z",
+        "body":  "Originally reported in #74076\r\nMost likely introduced in #73087\r\nSample test results: https://dev.azure.com/dnceng/public/_build/results?buildId=1948701\u0026view=results\r\n\r\nException which causes the failures:\r\n```\r\nSystem.UnauthorizedAccessException : Access to the path \u0027/private/var/containers/Bundle/Application/C051ED5D-1DCA-43F6-B41B-04A9592B3F5F/System.Diagnostics.TraceSource.Config.Tests.app/AppleTestRunner.dll.config\u0027 is denied.\r\n---- System.IO.IOException : Operation not permitted\r\n   at Interop.ThrowExceptionForIoErrno(ErrorInfo errorInfo, String path, Boolean isDirError)\r\n   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String path, OpenFlags flags, Int32 mode, Func`4 createOpenException)\r\n   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, UnixFileMode openPermissions, Int64\u0026 fileLength, UnixFileMode\u0026 filePermissions, Func`4 createOpenException)\r\n   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode, Func`4 createOpenException)\r\n   at System.IO.FileSystem.CopyFile(String sourceFullPath, String destFullPath, Boolean overwrite)\r\n   at System.IO.File.Copy(String sourceFileName, String destFileName, Boolean overwrite)\r\n   at System.Diagnostics.TraceSourceConfigTests.ConfigurationTests.CreateAndLoadConfigFile(String filename)\r\n   at System.Diagnostics.TraceSourceConfigTests.ConfigurationTests.Refresh_ChangeSwitch()\r\n   at System.Reflection.MethodInvoker.InterpretedInvoke(Object obj, Span`1 args, BindingFlags invokeAttr)\r\n----- Inner Stack Trace -----\r\n```",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOSMXF2w==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5IwoYx",
+                                           "createdAt":  "2022-08-19T13:51:37Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to \u0027os-tvos\u0027: @steveisok, @akoeplinger\nSee info in area-owners.md if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\nOriginally reported in #74076\r\nMost likely introduced in #73087\r\nSample test results: https://dev.azure.com/dnceng/public/_build/results?buildId=1948701\u0026view=results\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003esimonrozsival\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`disabled-test`, `os-tvos`, `area-System.Diagnostics.TraceSource`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2022-08-19T13:51:37Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5IwyXp",
+                                           "createdAt":  "2022-08-19T14:30:32Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOCq2ELw==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "simonrozsival",
+                                                                               "createdAt":  "2022-08-19T14:49:04Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "danmoseley",
+                                           "body":  "Test logs are deleted after not very long. It is best to paste in the useful parts into issues like this.",
+                                           "updatedAt":  "2022-08-19T14:30:32Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5IxcXb",
+                                           "createdAt":  "2022-08-19T17:31:36Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "akoeplinger",
+                                           "body":  "We can\u0027t write to the app location in tvOS, we\u0027ll need to use the temp path here.",
+                                           "updatedAt":  "2022-08-19T17:31:36Z"
+                                       }
+                                   ],
+                         "totalCount":  3
+                     },
+        "title":  "[tvOS] System.Diagnostics.TraceSource.Config.Tests failing",
+        "labels":  [
+                       "disabled-test",
+                       "os-tvos",
+                       "area-System.Diagnostics.TraceSource"
+                   ]
+    }
+]

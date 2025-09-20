@@ -1,0 +1,223 @@
+﻿{
+    "url":  "https://github.com/dotnet/runtime/issues/62021",
+    "createdAt":  "2021-11-24T18:32:51Z",
+    "number":  62021,
+    "author":  "tarekgh",
+    "reactions":  {
+                      "hasNextPage":  false,
+                      "endCursor":  null,
+                      "nodes":  [
+
+                                ],
+                      "totalCount":  0
+                  },
+    "updatedAt":  "2022-06-06T13:57:48Z",
+    "body":  "### Description\n\nhttps://dev.azure.com/dnceng/public/_build/results?buildId=1483932\u0026view=logs\u0026jobId=108d2c4a-8a62-5a58-8dad-8e1042acc93c\u0026j=108d2c4a-8a62-5a58-8dad-8e1042acc93c\u0026t=568f884b-cc12-5fd3-e7fe-790b5ac403f4\r\n\r\nhttps://helixre8s23ayyeko0k025g8.blob.core.windows.net/dotnet-runtime-refs-pull-61992-merge-7fb43d6a883f4488b6/System.Runtime.Extensions.Tests/1/console.767e6c7f.log?sv=2019-07-07\u0026se=2021-12-14T02%3A29%3A30Z\u0026sr=c\u0026sp=rl\u0026sig=z6v3ggZBbFYzzSs7RnkjjXGrSz8%2Fu01LaKM7xQ8zMAw%3D\r\n\r\n```\r\n[02:51:21] info: Incoming arguments: --run WasmTestRunner.dll System.Runtime.Extensions.Tests.dll -notrait category=IgnoreForCI -notrait category=OuterLoop -notrait category=failing\r\n[02:51:21] info: Application arguments: --run WasmTestRunner.dll System.Runtime.Extensions.Tests.dll -notrait category=IgnoreForCI -notrait category=OuterLoop -notrait category=failing\r\n[02:51:21] info: browser: Console websocket connected.\r\n[02:51:22] info: Initializing.....\r\n[02:51:23] info: Discovering: System.Runtime.Extensions.Tests.dll (method display = ClassAndMethod, method display options = None)\r\n[02:51:24] info: Discovered:  System.Runtime.Extensions.Tests.dll (found 912 of 1000 test cases)\r\n[02:51:24] info: Starting:    System.Runtime.Extensions.Tests.dll\r\n[02:51:25] fail: [FAIL] System.Diagnostics.Tests.StopwatchTests.GetTimestamp\r\n[02:51:25] info: Assert.NotEqual() Failure\r\n[02:51:25] info: Expected: Not 4485599999\r\n[02:51:25] info: Actual:   4485599999\r\n[02:51:25] info:    at System.Diagnostics.Tests.StopwatchTests.GetTimestamp()\r\n[02:51:25] info:    at System.Reflection.RuntimeMethodInfo.InvokeWorker(Object obj, BindingFlags invokeAttr, Span`1 parameters)\r\n[02:51:51] info: Finished:    System.Runtime.Extensions.Tests.dll\r\n```\n\n### Reproduction Steps\n\nCI run\n\n### Expected behavior\n\nNo failures\n\n### Actual behavior\n\nThe test fails\n\n### Regression?\n\n_No response_\n\n### Known Workarounds\n\n_No response_\n\n### Configuration\n\n_No response_\n\n### Other information\n\n_No response_",
+    "comments":  {
+                     "hasNextPage":  false,
+                     "endCursor":  "Y3Vyc29yOnYyOpHOOsdnwg==",
+                     "nodes":  [
+                                   {
+                                       "id":  "IC_kwDODI9FZc46TQ5c",
+                                       "createdAt":  "2021-11-24T18:32:57Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  null,
+                                       "body":  "Tagging subscribers to this area: @tommcdon\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Description\n\nhttps://dev.azure.com/dnceng/public/_build/results?buildId=1483932\u0026view=logs\u0026jobId=108d2c4a-8a62-5a58-8dad-8e1042acc93c\u0026j=108d2c4a-8a62-5a58-8dad-8e1042acc93c\u0026t=568f884b-cc12-5fd3-e7fe-790b5ac403f4\r\n\r\nhttps://helixre8s23ayyeko0k025g8.blob.core.windows.net/dotnet-runtime-refs-pull-61992-merge-7fb43d6a883f4488b6/System.Runtime.Extensions.Tests/1/console.767e6c7f.log?sv=2019-07-07\u0026se=2021-12-14T02%3A29%3A30Z\u0026sr=c\u0026sp=rl\u0026sig=z6v3ggZBbFYzzSs7RnkjjXGrSz8%2Fu01LaKM7xQ8zMAw%3D\r\n\r\n```\r\n[02:51:21] info: Incoming arguments: --run WasmTestRunner.dll System.Runtime.Extensions.Tests.dll -notrait category=IgnoreForCI -notrait category=OuterLoop -notrait category=failing\r\n[02:51:21] info: Application arguments: --run WasmTestRunner.dll System.Runtime.Extensions.Tests.dll -notrait category=IgnoreForCI -notrait category=OuterLoop -notrait category=failing\r\n[02:51:21] info: browser: Console websocket connected.\r\n[02:51:22] info: Initializing.....\r\n[02:51:23] info: Discovering: System.Runtime.Extensions.Tests.dll (method display = ClassAndMethod, method display options = None)\r\n[02:51:24] info: Discovered:  System.Runtime.Extensions.Tests.dll (found 912 of 1000 test cases)\r\n[02:51:24] info: Starting:    System.Runtime.Extensions.Tests.dll\r\n[02:51:25] fail: [FAIL] System.Diagnostics.Tests.StopwatchTests.GetTimestamp\r\n[02:51:25] info: Assert.NotEqual() Failure\r\n[02:51:25] info: Expected: Not 4485599999\r\n[02:51:25] info: Actual:   4485599999\r\n[02:51:25] info:    at System.Diagnostics.Tests.StopwatchTests.GetTimestamp()\r\n[02:51:25] info:    at System.Reflection.RuntimeMethodInfo.InvokeWorker(Object obj, BindingFlags invokeAttr, Span`1 parameters)\r\n[02:51:51] info: Finished:    System.Runtime.Extensions.Tests.dll\r\n```\n\n### Reproduction Steps\n\nCI run\n\n### Expected behavior\n\nNo failures\n\n### Actual behavior\n\nThe test fails\n\n### Regression?\n\n_No response_\n\n### Known Workarounds\n\n_No response_\n\n### Configuration\n\n_No response_\n\n### Other information\n\n_No response_\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003etarekgh\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-System.Diagnostics`, `untriaged`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                       "updatedAt":  "2021-11-24T18:32:57Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDODI9FZc46TRg2",
+                                       "createdAt":  "2021-11-24T18:37:01Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  null,
+                                       "body":  "Tagging subscribers to \u0027arch-wasm\u0027: @lewing\nSee info in area-owners.md if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Description\n\nhttps://dev.azure.com/dnceng/public/_build/results?buildId=1483932\u0026view=logs\u0026jobId=108d2c4a-8a62-5a58-8dad-8e1042acc93c\u0026j=108d2c4a-8a62-5a58-8dad-8e1042acc93c\u0026t=568f884b-cc12-5fd3-e7fe-790b5ac403f4\r\n\r\nhttps://helixre8s23ayyeko0k025g8.blob.core.windows.net/dotnet-runtime-refs-pull-61992-merge-7fb43d6a883f4488b6/System.Runtime.Extensions.Tests/1/console.767e6c7f.log?sv=2019-07-07\u0026se=2021-12-14T02%3A29%3A30Z\u0026sr=c\u0026sp=rl\u0026sig=z6v3ggZBbFYzzSs7RnkjjXGrSz8%2Fu01LaKM7xQ8zMAw%3D\r\n\r\n```\r\n[02:51:21] info: Incoming arguments: --run WasmTestRunner.dll System.Runtime.Extensions.Tests.dll -notrait category=IgnoreForCI -notrait category=OuterLoop -notrait category=failing\r\n[02:51:21] info: Application arguments: --run WasmTestRunner.dll System.Runtime.Extensions.Tests.dll -notrait category=IgnoreForCI -notrait category=OuterLoop -notrait category=failing\r\n[02:51:21] info: browser: Console websocket connected.\r\n[02:51:22] info: Initializing.....\r\n[02:51:23] info: Discovering: System.Runtime.Extensions.Tests.dll (method display = ClassAndMethod, method display options = None)\r\n[02:51:24] info: Discovered:  System.Runtime.Extensions.Tests.dll (found 912 of 1000 test cases)\r\n[02:51:24] info: Starting:    System.Runtime.Extensions.Tests.dll\r\n[02:51:25] fail: [FAIL] System.Diagnostics.Tests.StopwatchTests.GetTimestamp\r\n[02:51:25] info: Assert.NotEqual() Failure\r\n[02:51:25] info: Expected: Not 4485599999\r\n[02:51:25] info: Actual:   4485599999\r\n[02:51:25] info:    at System.Diagnostics.Tests.StopwatchTests.GetTimestamp()\r\n[02:51:25] info:    at System.Reflection.RuntimeMethodInfo.InvokeWorker(Object obj, BindingFlags invokeAttr, Span`1 parameters)\r\n[02:51:51] info: Finished:    System.Runtime.Extensions.Tests.dll\r\n```\n\n### Reproduction Steps\n\nCI run\n\n### Expected behavior\n\nNo failures\n\n### Actual behavior\n\nThe test fails\n\n### Regression?\n\n_No response_\n\n### Known Workarounds\n\n_No response_\n\n### Configuration\n\n_No response_\n\n### Other information\n\n_No response_\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003etarekgh\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`arch-wasm`, `area-System.Diagnostics`, `untriaged`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                       "updatedAt":  "2021-11-24T18:37:01Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDODI9FZc46cLoL",
+                                       "createdAt":  "2021-11-26T23:23:56Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  "danmoseley",
+                                       "body":  "same in #61768 \r\n```\r\n❌ System.Diagnostics.Tests.StopwatchTests.GetTimestamp [Details] [History] [Artifacts]\r\nException Message\r\nAssert.NotEqual() Failure\r\nExpected: Not 8873699999\r\nActual:   8873699999\r\nCallStack\r\n   at System.Diagnostics.Tests.StopwatchTests.GetTimestamp()\r\n   at System.Reflection.RuntimeMethodInfo.InvokeWorker(Object obj, BindingFlags invokeAttr, Span`1 parameters)\r\nPass Rate\r\nTest has failed 7 out of 37212 runs (0.02%)\r\nFailing Configuration\r\nnet7.0-Browser-Release-wasm-Mono_Release-wasmtestonbrowser-Ubuntu.1804.Amd64.Open\r\n```",
+                                       "updatedAt":  "2021-11-26T23:23:56Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDODI9FZc46cMNb",
+                                       "createdAt":  "2021-11-26T23:40:56Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  "danmoseley",
+                                       "body":  "This means that this is getting called twice in approx 1ms and returning the same result. @lewing does Wasm have a larger quantum, or jitter? If so we should make the test sleep longer.\r\n\r\nhttps://github.com/dotnet/runtime/blob/6f44dbe5e764972c29ef529ec3ee297b5e7a5a65/src/native/libs/System.Native/pal_time.c#L56\r\n\r\nhttps://github.com/dotnet/runtime/blob/6f44dbe5e764972c29ef529ec3ee297b5e7a5a65/src/libraries/System.Runtime.Extensions/tests/System/Diagnostics/Stopwatch.cs#L18",
+                                       "updatedAt":  "2021-11-26T23:42:20Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDODI9FZc46r53V",
+                                       "createdAt":  "2021-12-02T12:34:47Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  "akoeplinger",
+                                       "body":  "Also saw it in https://github.com/dotnet/runtime/pull/62244, I wonder though why this started failing recently since the test is untouched since 2020.",
+                                       "updatedAt":  "2021-12-02T12:34:47Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDODI9FZc46s6AN",
+                                       "createdAt":  "2021-12-02T17:40:14Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  "danmoseley",
+                                       "body":  "The test is untouched, my assumption is that clock_gettime (or clock_gettime_nsec_np) changed on Blazor (?)",
+                                       "updatedAt":  "2021-12-02T17:40:14Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDODI9FZc46s6Fi",
+                                       "createdAt":  "2021-12-02T17:40:39Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  "danmoseley",
+                                       "body":  "@lewing may know.",
+                                       "updatedAt":  "2021-12-02T17:40:39Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDODI9FZc46tIGv",
+                                       "createdAt":  "2021-12-02T18:56:56Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  "lewing",
+                                       "body":  "The browser definitely has lower resolution than desktop but I\u0027m also a bit unsure why it started failing recently. @pavelsavara any thoughts?",
+                                       "updatedAt":  "2021-12-02T18:56:56Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDODI9FZc46tJzv",
+                                       "createdAt":  "2021-12-02T19:05:24Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  "pavelsavara",
+                                       "body":  "We have new chrome, it may be the cause.\r\nhttps://developer.chrome.com/blog/cross-origin-isolated-hr-timers/",
+                                       "updatedAt":  "2021-12-02T19:05:24Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDODI9FZc46vQXV",
+                                       "createdAt":  "2021-12-03T12:06:38Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  "pavelsavara",
+                                       "body":  "@radical could we close this one ?",
+                                       "updatedAt":  "2021-12-03T12:06:38Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDODI9FZc46wEl8",
+                                       "createdAt":  "2021-12-03T17:01:41Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  "radical",
+                                       "body":  "If we are good with the workaround, and won\u0027t be fixing it, then feel free to close the issue.",
+                                       "updatedAt":  "2021-12-03T17:01:41Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDODI9FZc46wSCX",
+                                       "createdAt":  "2021-12-03T18:25:25Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  "pavelsavara",
+                                       "body":  "There is also CLOCK_MONOTONIC feature in emscripten. I don\u0027t  know much about it yet.\r\nhttps://github.com/emscripten-core/emscripten/pull/2761\r\n\r\nShould we explore this topic further @lewing ?",
+                                       "updatedAt":  "2021-12-03T18:25:25Z"
+                                   },
+                                   {
+                                       "id":  "IC_kwDODI9FZc46x2fC",
+                                       "createdAt":  "2021-12-05T01:18:22Z",
+                                       "reactions":  {
+                                                         "hasNextPage":  false,
+                                                         "endCursor":  null,
+                                                         "nodes":  [
+
+                                                                   ],
+                                                         "totalCount":  0
+                                                     },
+                                       "author":  "radical",
+                                       "body":  "Another failure due to the same reason, IIUC:\r\n\r\n```\r\n[00:32:41] fail: [FAIL] System.Diagnostics.Tests.StopwatchTests.StartNewAndReset\r\n[00:32:41] info: Assert.True() Failure\r\n[00:32:41] info: Expected: True\r\n[00:32:41] info: Actual:   False\r\n[00:32:41] info:    at System.Diagnostics.Tests.StopwatchTests.StartNewAndReset()\r\n[00:32:41] info:    at System.Reflection.RuntimeMethodInfo.InvokeWorker(Object obj, BindingFlags invokeAttr, Span`1 parameters)\r\n```\r\nhttps://helixre8s23ayyeko0k025g8.blob.core.windows.net/dotnet-runtime-refs-pull-62400-merge-731c7d739fe9436695/System.Runtime.Extensions.Tests/1/console.962c38b0.log?sv=2019-07-07\u0026se=2021-12-25T00%3A01%3A26Z\u0026sr=c\u0026sp=rl\u0026sig=63muZ%2BiSX5Pm0bcwz2%2Ba7oX5Rth1zzdcep6ib91CAI8%3D",
+                                       "updatedAt":  "2021-12-05T01:18:22Z"
+                                   }
+                               ],
+                     "totalCount":  13
+                 },
+    "title":  "System.Diagnostics.Tests.StopwatchTests.GetTimestamp test fails in the CI",
+    "labels":  [
+                   "arch-wasm",
+                   "area-System.Diagnostics-mono"
+               ]
+}

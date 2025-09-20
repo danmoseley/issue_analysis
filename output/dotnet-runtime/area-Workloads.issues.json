@@ -1,0 +1,566 @@
+﻿[
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/85067",
+        "createdAt":  "2022-07-11T10:07:23Z",
+        "number":  85067,
+        "author":  "vdanche",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-08-18T10:19:03Z",
+        "body":  ".NET 7 preview7 installed on locale OS(e.g DE)\r\n\r\nRepro:\r\nStep1:Install wasm-tools\r\n\r\ndotnet workload install wasm-tools --skip-manifest-update\r\n\r\n            Step3: New blazorWasm \r\n\r\n                            dotnet new blazorwasm \r\nStep2: dotnet publish with AOT enable\r\nAdding “true” to csproj file to use AOT compilation, like this\r\n\r\n`\u003cPropertyGroup\u003e \u003cTargetFramework\u003enet7.0\u003c/TargetFramework\u003e \u003cRunAOTCompilation\u003etrue\u003c/RunAOTCompilation\u003e\u003c/PropertyGroup\u003e`\r\n\r\nCheck if strings are localized well.\r\nExpected Result:\r\nStrings are localized well\r\n\r\nActual Result:\r\nStep1:\r\nSome strings are not localized well during installing workload\r\n\r\n![image](https://user-images.githubusercontent.com/65637796/178241075-3ab0c6c4-e793-4a44-83e5-da863def6c11.png)\r\n\r\n\r\nStep2;\r\nSome strings are not localized well during publishing\r\nE.g(DE)\r\n![image](https://user-images.githubusercontent.com/65637796/178239630-b20ab068-c283-44f2-8e3d-0cc04da36bc0.png)\r\n\r\n\r\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOsmnpNw==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5aUkB0",
+                                           "createdAt":  "2022-07-12T21:28:51Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "marcpopMSFT",
+                                           "body":  "I don\u0027t believe most localization for .net 7 has been done yet. At least for the SDK, we are enabling that for RC1.",
+                                           "updatedAt":  "2022-07-12T21:28:51Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5aUkB6",
+                                           "createdAt":  "2022-09-26T03:14:36Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "vdanche",
+                                           "body":  "Still repro on NET7 RC2 SDK(7.0.100-rc.2.22471.15)\r\ne.g TK\r\n![image](https://user-images.githubusercontent.com/65637796/192186874-8ea39fec-803c-4edf-a78c-0faa44800b88.png)\r\n",
+                                           "updatedAt":  "2022-09-26T03:14:36Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5aUkB_",
+                                           "createdAt":  "2022-09-26T21:32:05Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "marcpopMSFT",
+                                           "body":  "All the strings are fixed in rc1 except for download/done. We\u0027ll have to fix those in 7.0.2xx:\r\nhttps://github.com/dotnet/sdk/blob/release/7.0.1xx-rc1/src/Cli/dotnet/commands/dotnet-workload/install/NetSdkMsiInstallerClient.cs#L774\r\n\r\n@joeloff good workloads introduction bug for @nagilson?",
+                                           "updatedAt":  "2022-09-26T21:32:05Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5aUkCF",
+                                           "createdAt":  "2022-09-27T03:08:58Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "vdanche",
+                                           "body":  "\u003e All the strings are fixed in rc1 except for download/done. We\u0027ll have to fix those in 7.0.2xx: https://github.com/dotnet/sdk/blob/release/7.0.1xx-rc1/src/Cli/dotnet/commands/dotnet-workload/install/NetSdkMsiInstallerClient.cs#L774\r\n\u003e \r\n\u003e @joeloff good workloads introduction bug for @nagilson?\r\n\r\n@marcpopMSFT some strings during publish still unlocalized in NET7 RC2.\r\n![image](https://user-images.githubusercontent.com/65637796/192422787-ba0a8d5f-a5bf-442e-b274-c810687d200c.png)\r\n\r\n",
+                                           "updatedAt":  "2022-09-27T03:08:58Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5aUkCM",
+                                           "createdAt":  "2022-10-03T23:46:03Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "marcpopMSFT",
+                                           "body":  "@agocke the first three strings listed in the above screenshots come from runtime:\r\nhttps://github.com/dotnet/runtime/blob/main/src/mono/wasm/build/WasmApp.Native.targets#L323\r\n\r\nThat last one comes from the Blazor SDK @javiercn \r\nhttps://github.com/dotnet/sdk/blob/main/src/BlazorWasmSdk/Targets/Microsoft.NET.Sdk.BlazorWebAssembly.6_0.targets#L581",
+                                           "updatedAt":  "2022-10-03T23:46:03Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5aUkCW",
+                                           "createdAt":  "2022-10-27T08:26:20Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "vdanche",
+                                           "body":  "another strings \"stripping symbols from...\" also should be localized during publish\r\ne.g DE\r\n![image](https://user-images.githubusercontent.com/65637796/198231601-1c517c5b-8784-4c31-9b6d-1918f5d096e9.png)",
+                                           "updatedAt":  "2022-10-27T08:26:20Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5aUkCb",
+                                           "createdAt":  "2022-11-07T22:15:35Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "marcpopMSFT",
+                                           "body":  "I believe that last one is also part of the list from the runtime that @agocke would own.",
+                                           "updatedAt":  "2022-11-07T22:15:35Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5aUkCi",
+                                           "createdAt":  "2023-01-12T19:30:02Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "nagilson",
+                                           "body":  "Unassigning as it\u0027s up to those teams to translate their messages",
+                                           "updatedAt":  "2023-01-12T19:30:02Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5aUkE1",
+                                           "createdAt":  "2023-04-19T20:30:44Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "marcpopMSFT",
+                                           "body":  "Moving to runtime as the remaining strings come from here we believe.",
+                                           "updatedAt":  "2023-04-19T20:30:44Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5mz1hz",
+                                           "createdAt":  "2023-09-19T05:45:21Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "v-ainigao",
+                                           "body":  "Also repro on net8.0.100-rc.2.23466.1(runtime- 8.0.0-rc.2.23464.16).\r\ne.g JP:\r\n![2](https://github.com/dotnet/runtime/assets/106054229/46391135-4374-49de-a502-f21798a68556)\r\n![1](https://github.com/dotnet/runtime/assets/106054229/b8dc964a-27ff-45d9-b184-11507d6bc077)\r\n",
+                                           "updatedAt":  "2023-09-19T05:46:25Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc55AJYH",
+                                           "createdAt":  "2024-04-01T16:17:02Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "lewing",
+                                           "body":  "It looks like we are missing localizations for several of the messages in the workloads.\r\n\r\ncc @maraf @akoeplinger ",
+                                           "updatedAt":  "2024-04-01T16:17:02Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6yaek3",
+                                           "createdAt":  "2025-06-21T03:20:12Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "lewing",
+                                           "body":  "@akoeplinger ping",
+                                           "updatedAt":  "2025-06-21T03:20:12Z"
+                                       }
+                                   ],
+                         "totalCount":  12
+                     },
+        "title":  "[Loc]With .NET 7 preview7 installed on locale OS, some strings are unlocalized during installing workload and publish in CLI.",
+        "labels":  [
+                       "area-Workloads"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/101809",
+        "createdAt":  "2024-05-02T16:45:08Z",
+        "number":  101809,
+        "author":  "lewing",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-07-09T09:11:55Z",
+        "body":  "We should add a wbt that checks the workload downlevel runtime versions against the new installer and fails if they are lower than the properties in eng/Versions.props ",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOfLGuAA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc58rl3V",
+                                           "createdAt":  "2024-05-02T21:49:56Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "lewing",
+                                           "body":  "This will help but it will still be quite fragile because installer often doesn\u0027t update the downlevel versions until after we should have already changed ours.  We\u0027ll also need to do the same in emsdk to make sure that VS insertions go smoothly and we don\u0027t have the installer flow setup there (although we could add it)\r\n\r\ncc @marcpopMSFT @joeloff ",
+                                           "updatedAt":  "2024-05-02T21:50:32Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc58r2wO",
+                                           "createdAt":  "2024-05-02T22:47:48Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "marcpopMSFT",
+                                           "body":  "If you\u0027re going off of the implicit version, I\u0027m not sure this will work. Typically in VS main we\u0027ll have a .net preview that has N-1 implicit versions but N workloads. This is because VS added a package verification check that flags our workloads in main being behind their release branches. This check doesn\u0027t flag our implicit version/runtime.",
+                                           "updatedAt":  "2024-05-02T22:47:48Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc58sa4A",
+                                           "createdAt":  "2024-05-03T02:01:35Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "lewing",
+                                           "body":  "Yeah, we could do implicit+1 on preview branches😉. We need to know ahead of time the versions that will be inserted into VS for a given branch so I guess we need a mechanism that will allow that or we need to produce the downlevel manifests somewhere other than runtime.\r\n",
+                                           "updatedAt":  "2024-05-03T02:01:35Z"
+                                       }
+                                   ],
+                         "totalCount":  3
+                     },
+        "title":  "[workloads] add wbt that checks downlevel runtime versions.",
+        "labels":  [
+                       "area-Workloads"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/114723",
+        "createdAt":  "2025-04-15T00:51:53Z",
+        "number":  114723,
+        "author":  "Bonicgamer",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-06-21T02:42:00Z",
+        "body":  "### Is your feature request related to a problem? Please describe.\nI\u0027ve been trying to work on compiling [Opus](https://github.com/xiph/opus) and [SpeexDSP](https://github.com/xiph/speexdsp) to Wasm to be able to use it with a project called [VoiceCraft](https://github.com/AvionBlock/VoiceCraft), but it won\u0027t work because `wasm-opt` is getting passed `bulk-memory-opt` and `call-indirect-overlong` flags which support wasn\u0027t added for until v121 (The version that comes with the Emscripten SDK is v117). This is preventing me from continuing the work I\u0027ve started [here](https://github.com/AvionBlock/VoiceCraft/pull/137).\n\n### Describe the solution you\u0027d like\nPlease update the Binaryen tools used in the .NET emsdk to v121 or higher.\n\n### Additional context\nTo reproduce this you can simply compile [Opus](https://github.com/xiph/opus) by cloning the repo and doing:\n\n```\n./autogen.sh\nmkdir build \u0026\u0026 cd build\nemcmake cmake .. -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release -DOPUS_BUILD_PROGRAMS=OFF -DOPUS_STACK_PROTECTOR_HELP_STR=OFF -DOPUS_DISABLE_INTRINSICS_HELP_STR=ON -DCMAKE_C_FLAGS=-m32 -DCMAKE_CXX_FLAGS=-m32\nemmake make # and then this should produce a file called \"libopus.a\"\n```\n\nThen include it with in your .csproj file with `\u003cNativeFileReference Include=\"opus.a\" /\u003e`\n\nIf you need and extra help to reproduce this let me know!\n\n_P.S. Idk if this is the right place to ask this._",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOp1uwtg==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc6nW6q5",
+                                           "createdAt":  "2025-04-15T23:36:33Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "marcpopMSFT",
+                                           "body":  "@lewing I don\u0027t have permissions to transfer to the emsdk repo. Can you take a look?",
+                                           "updatedAt":  "2025-04-15T23:36:33Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6nW66v",
+                                           "createdAt":  "2025-04-15T23:58:53Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to \u0027arch-wasm\u0027: @lewing\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2025-04-15T23:58:53Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6nW7C2",
+                                           "createdAt":  "2025-04-15T23:59:26Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "lewing",
+                                           "body":  "\u003e [@lewing](https://github.com/lewing) I don\u0027t have permissions to transfer to the emsdk repo. Can you take a look?\n\nsince emsdk is a fork, runtime is the best place for this sort of thing",
+                                           "updatedAt":  "2025-04-15T23:59:26Z"
+                                       }
+                                   ],
+                         "totalCount":  3
+                     },
+        "title":  "Please update Binaryen in emsdk",
+        "labels":  [
+                       "arch-wasm",
+                       "area-Workloads",
+                       "os-browser"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/116451",
+        "createdAt":  "2025-06-09T22:59:27Z",
+        "number":  116451,
+        "author":  "jozkee",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-06-21T02:34:34Z",
+        "body":  "https://github.com/dotnet/runtime/pull/114676 hardcoded `SdkVersionForWorkloadTesting` to 9.0.105, this is not good because it will break as soon as codeflow bumps the global.json version. \n\nSee: https://github.com/dotnet/runtime/pull/115677#issuecomment-2957080374 and \narcade codeflow CI: https://dev.azure.com/dnceng-public/public/_build/results?buildId=1057438\u0026view=logs\u0026j=1fa93050-f528-55d3-a351-f8bf9ce5adbf\u0026t=d9dc6d3d-3442-5b70-1296-5b62e29ea209\u0026l=78\n\ncc @ericstj ",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOsmmTcA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc6wQ7yb",
+                                           "createdAt":  "2025-06-09T22:59:38Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to \u0027arch-wasm\u0027: @lewing\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2025-06-09T22:59:38Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6waatg",
+                                           "createdAt":  "2025-06-10T15:27:02Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jozkee",
+                                           "body":  "cc @akoeplinger, is there an alternative to updating `SdkVersionForWorkloadTesting` each time the global.json is updated? This is prone to errors, especially for folks unexperienced with codeflow.",
+                                           "updatedAt":  "2025-06-10T15:27:02Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6wayNf",
+                                           "createdAt":  "2025-06-10T15:56:20Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "akoeplinger",
+                                           "body":  "yeah I think we could add some logic to look at SdkVersionForWorkloadTesting and global.json and pick whatever version is higher",
+                                           "updatedAt":  "2025-06-10T15:56:28Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6wcC0r",
+                                           "createdAt":  "2025-06-10T17:49:54Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOEWFW1g==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "jozkee",
+                                                                               "createdAt":  "2025-06-10T17:51:16Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "ericstj",
+                                           "body":  "Why do we even have a different version for this?  Can it just use whatever SDK is configured for the repo?",
+                                           "updatedAt":  "2025-06-10T17:49:54Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6wdUE2",
+                                           "createdAt":  "2025-06-10T20:15:25Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "akoeplinger",
+                                           "body":  "No, the repo SDK is updated quite infrequently, the point of these tests is to test against the the latest SDK. At least that\u0027s how it works in main, for servicing it basically flips around since we usually don\u0027t have an sdk -\u003e runtime flow so the SDK in global.json moves ahead.",
+                                           "updatedAt":  "2025-06-10T20:15:25Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6xdzuM",
+                                           "createdAt":  "2025-06-16T17:03:22Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "lewing",
+                                           "body":  "We could update the logic to use https://github.com/dotnet/msbuild/commit/2013004e99daa2e0b50f3581abd90640b63d4fd5 and use the Max (sdk flow, global.json)",
+                                           "updatedAt":  "2025-06-16T17:03:22Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6yaZNw",
+                                           "createdAt":  "2025-06-21T02:34:29Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "lewing",
+                                           "body":  "\u003e We could update the logic to use [dotnet/msbuild@2013004](https://github.com/dotnet/msbuild/commit/2013004e99daa2e0b50f3581abd90640b63d4fd5) and use the Max (sdk flow, global.json)\n\nthis sounded easy until I remembered how fun it is to try to deal with prerelease versions in msbuild",
+                                           "updatedAt":  "2025-06-21T02:34:29Z"
+                                       }
+                                   ],
+                         "totalCount":  7
+                     },
+        "title":  "WASM: browser-wasm * Release WasmBuildTests don\u0027t use hardcoded SDK version",
+        "labels":  [
+                       "arch-wasm",
+                       "area-Workloads"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/119470",
+        "createdAt":  "2025-09-08T19:10:18Z",
+        "number":  119470,
+        "author":  "ericstj",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-09-20T23:04:43Z",
+        "body":  "## Build Information\nBuild: https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_build/results?buildId=1142088\nBuild error leg or test failing: NoFingerprint-ST-Wasm.Build.Tests.WorkItemExecution\nPull request: https://github.com/dotnet/runtime/pull/119379\n\u003c!-- Error message template  --\u003e\n## Error Message\n\nFill the error message using [step by step known issues guidance](https://github.com/dotnet/arcade/blob/main/Documentation/Projects/Build%20Analysis/KnownIssueJsonStepByStep.md).\n\n\u003c!-- Use ErrorMessage for String.Contains matches. Use ErrorPattern for regex matches (single line/no backtracking). Set BuildRetry to `true` to retry builds with this error. Set ExcludeConsoleLog to `true` to skip helix logs analysis. --\u003e\n\n```json\n{\n  \"ErrorMessage\": [\"Wasm.Build.Tests.WasmTemplateTests.RunWithDifferentAppBundleLocations\", \"Received signal 11 SI_KERNEL000000000000\"]\n  \"ErrorPattern\": \"\",\n  \"BuildRetry\": false,\n  \"ExcludeConsoleLog\": false\n}\n```\n\nLog https://helixr1107v0xdcypoyl9e7f.blob.core.windows.net/dotnet-runtime-refs-pull-119379-merge-995aa6b3463b428585/NoFingerprint-ST-Wasm.Build.Tests/1/console.cefade1f.log?helixlogtype=result\n\nDump https://helixr1107v0xdcypoyl9e7f.blob.core.windows.net/dotnet-runtime-refs-pull-119379-merge-995aa6b3463b428585/NoFingerprint-ST-Wasm.Build.Tests/1/core.1000.2505\r\n\u003c!--Known issue error report start --\u003e\r\n\r\n### Report\r\n#### Summary\r\n|24-Hour Hit Count|7-Day Hit Count|1-Month Count|\r\n|---|---|---|\r\n|0|0|0|\r\n\u003c!--Known issue error report end --\u003e",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOwsR0ww==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc7Cw8qG",
+                                           "createdAt":  "2025-09-08T19:13:32Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to \u0027arch-wasm\u0027: @lewing\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2025-09-08T19:13:32Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc7Cw9av",
+                                           "createdAt":  "2025-09-08T19:14:34Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "MihuBot",
+                                           "body":  "I\u0027m a bot. Here are possible related and/or duplicate issues (I may be wrong):\n- https://github.com/dotnet/runtime/issues/108107\n- https://github.com/dotnet/runtime/issues/108074",
+                                           "updatedAt":  "2025-09-08T19:14:34Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc7CxHTD",
+                                           "createdAt":  "2025-09-08T19:28:09Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "lewing",
+                                           "body":  "This is playwright crashing\n```\n\u003claunched\u003e pid=2505\n        - [pid=2505][err] [2505:2523:0908/161238.429395:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory\n        - [pid=2505][err] [2505:2523:0908/161238.429524:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory\n        - [pid=2505][err] [0908/161238.459402:WARNING:third_party/crashpad/crashpad/snapshot/linux/process_reader_linux.cc:146] no stack mapping\n        - [pid=2505][err] [0908/161238.486491:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq: No such file or directory (2)\n        - [pid=2505][err] [0908/161238.486522:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq: No such file or directory (2)\n        - [pid=2505][err] Received signal 11 SI_KERNEL000000000000\n        - [pid=2505][err]  Possibly a General Protection Fault, can be due to a non-canonical address dereference. See \"Intel 64 and IA-32 Architectures Software Developer’s Manual\", Volume 1, Section 3.3.7.1.\n        - [pid=2505][err] #0 0x5a8cdb80ea62 Received signal 11 SI_KERNEL000000000000\n        - [pid=2505][err]  Possibly a General Protection Fault, can be due to a non-canonical address dereference. See \"Intel 64 and IA-32 Architectures Software Developer’s Manual\", Volume 1, Section 3.3.7.1.\n        - [pid=2505][err] Received signal 11 SI_KERNEL000000000000\n        - [pid=2505][err]  Possibly a General Protection Fault, can be due to a non-canonical address dereference. See \"Intel 64 and IA-32 Architectures Software Developer’s Manual\", Volume 1, Section 3.3.7.1.\n        - [pid=2505][err] #0 0x5a8cdb80ea62 #0 0x5a8cdb80ea62 base::debug::CollectStackTrace()\n        - [pid=2505][err] #1 0x5a8cdb7fba6e base::debug::CollectStackTrace()\n        - [pid=2505][err] #1 0x5a8cdb7fba6e base::debug::CollectStackTrace()\n        - [pid=2505][err] #1 0x5a8cdb7fba6e base::debug::StackTrace::StackTrace()\n        - [pid=2505][err] #2 0x5a8cdb80e4d8 base::debug::StackTrace::StackTrace()base::debug::StackTrace::StackTrace()\n        - [pid=2505][err] #2 0x5a8cdb80e4d8 \n        - [pid=2505][err] #2 0x5a8cdb80e4d8 base::debug::(anonymous namespace)::StackDumpSignalHandler()\n        - [pid=2505][err] #3 0x7e9ae46ad520 base::debug::(anonymous namespace)::StackDumpSignalHandler()(/usr/lib/x86_64-linux-gnu/libc.so.6+0x4251f)\n        - [pid=2505][err] #3 0x7e9ae46ad520 (/usr/lib/x86_64-linux-gnu/libc.so.6+0x4251f)base::debug::(anonymous namespace)::StackDumpSignalHandler()\n        - [pid=2505][err] #3 0x7e9ae46ad520 (/usr/lib/x86_64-linux-gnu/libc.so.6+0x4251f)\n        - [pid=2505][err] #4 0x7e9ae46afc1d getenv\n        - [pid=2505][err] #5 0x7e9ae46a6adc (/usr/lib/x86_64-linux-gnu/libc.so.6+0x3badb)\n        - [pid=2505][err] #6 0x7e9ae471c6cf strerror_l\n        - [pid=2505][err] #7 0x7e9ae4ff13ed _dbus_strerror\n        - [pid=2505][err] #8 0x7e9ae4ff4ec8 (/usr/lib/x86_64-linux-gnu/libdbus-1.so.3.19.13+0x34ec7)\n        - [pid=2505][err] #9 0x7e9ae4ff667a (/usr/lib/x86_64-linux-gnu/libdbus-1.so.3.19.13+0x36679)\n        - [pid=2505][err] #10 0x7e9ae4fe7965 (/usr/lib/x86_64-linux-gnu/libdbus-1.so.3.19.13+0x27964)\n        - [pid=2505][err] #11 0x7e9ae4fd34ba (/usr/lib/x86_64-linux-gnu/libdbus-1.so.3.19.13+0x134b9)\n        - [pid=2505][err] #12 0x7e9ae4fd4901 (/usr/lib/x86_64-linux-gnu/libdbus-1.so.3.19.13+0x14900)\n        - [pid=2505][err] #13 0x5a8cdcd4e0c3 \n        - [pid=2505][err] #4 0x7e9ae46afc1d getenv\n        - [pid=2505][err] #5 0x5a8cdb738bf9 \n        - [pid=2505][err] #4 0x7e9ae46afc1d getenv\n        - [pid=2505][err] #5 0x7e9ae47b5806 (/usr/lib/x86_64-linux-gnu/libc.so.6+0x14a805)\n        - [pid=2505][err] #6 0x7e9ae4704ee8 (/usr/lib/x86_64-linux-gnu/libc.so.6+0x99ee7)\n        - [pid=2505][err] #7 0x7e9ae47b63d5 (/usr/lib/x86_64-linux-gnu/libc.so.6+0x14b3d4)\n        - [pid=2505][err] #8 0x7e9ae47bb85f (/usr/lib/x86_64-linux-gnu/libc.so.6+0x15085e)\n        - [pid=2505][err] #9 0x7e9ae47b6370 __res_ninit\n        - [pid=2505][err] #10 0x5a8cd645e6f9 net::ScopedResState::ScopedResState()\n        - [pid=2505][err] #11 0x5a8cd645e2cb net::ResolvReader::GetResState()\n        - [pid=2505][err] #12 0x5a8cd6444a4a net::internal::DnsConfigServiceLinux::ConfigReader::WorkItem::DoWork()\n        - [pid=2505][err] #13 0x5a8cd6440e8f net::(anonymous namespace)::DoWork()\n        - [pid=2505][err] #14 0x5a8cd644151b base::(anonymous namespace)::EnvironmentImpl::GetVar()\n        - [pid=2505][err] #6 0x5a8cdb8194f9 base::internal::ReturnAsParamAdapter\u003c\u003e()\n        - [pid=2505][err] #15 0x5a8cd6434ab0 base::internal::Invoker\u003c\u003e::RunOnce()\n        - [pid=2505][err] #16 0x5a8cdb7c07f4 base::nix::GetXDGDirectory()\n        - [pid=2505][err] #7 0x5a8cdb8132f7 base::internal::PostTaskAndReplyRelay::RunTaskAndPostReply()\n        - [pid=2505][err] #17 0x5a8cdb7c0925 base::PathProviderPosix()\n        - [pid=2505][err] #8 0x5a8cdb8000ba base::internal::Invoker\u003c\u003e::RunOnce()\n        - [pid=2505][err] #18 0x5a8cdb79ca19 base::PathService::Get()\n        - [pid=2505][err] #9 0x5a8cde28fb7c dbus::Bus::Connect()\n        - [pid=2505][err] #14 0x5a8cdcd5f4b9 base::TaskAnnotator::RunTaskImpl()\n        - [pid=2505][err] #19 0x5a8cdb7c3adb dbus::ObjectProxy::ConnectToNameOwnerChangedSignal()\n        - [pid=2505][err] #15 0x5a8cdcd5f361 base::internal::TaskTracker::RunTaskImpl()\n        - [pid=2505][err] #20 0x5a8cdb7c3a41 dbus::ObjectProxy::ConnectToSignalAndBlock()\n        - [pid=2505][err] #16 0x5a8cd7046344 base::internal::TaskTracker::RunContinueOnShutdown()\n        - [pid=2505][err] #21 0x5a8cdb7c34a7 chrome::GetUserCacheDirectory()\n        - [pid=2505][err] #10 0x5a8cdb255c7c base::internal::Invoker\u003c\u003e::RunOnce()\n        - [pid=2505][err] #17 0x5a8cd643889b base::internal::ReturnAsParamAdapter\u003c\u003e()\n        - [pid=2505][err] #18 0x5a8cd6434ab0 base::internal::Invoker\u003c\u003e::RunOnce()\n        - [pid=2505][err] #19 0x5a8cdb7c07f4 base::internal::TaskTracker::RunTask()\n        - [pid=2505][err] #22 0x5a8cdb7c2f30 ChromeContentBrowserClient::InitOnUIThread()\n        - [pid=2505][err] #11 0x5a8cd73dbc47 base::internal::PostTaskAndReplyRelay::RunTaskAndPostReply()\n        - [pid=2505][err] #20 0x5a8cdb7c0925 (anonymous namespace)::ReleaseCallbackImpl::Release()\n        - [pid=2505][err] #12 0x5a8cdb2529c9 base::internal::TaskTracker::RunAndPopNextTask()\n        - [pid=2505][err] #23 0x5a8cdb7d46a5 base::internal::Invoker\u003c\u003e::RunOnce()\n        - [pid=2505][err] #21 0x5a8cdb79ca19 ChromeBrowserMainParts::PostCreateThreads()\n        - [pid=2505][err] #13 0x5a8cd8d14cee base::internal::WorkerThread::RunWorker()\n        - [pid=2505][err] #24 0x5a8cdb7d433d base::TaskAnnotator::RunTaskImpl()\n        - [pid=2505][err] #22 0x5a8cdb7c3adb content::BrowserMainLoop::PostCreateThreads()\n        - [pid=2505][err] #14 0x5a8cd9457ee8 content::StartupTaskRunner::RunAllTasksNow()\n        - [pid=2505][err] #15 0x5a8cd8d149c7 base::internal::WorkerThread::RunPooledWorker()\n        - [pid=2505][err] #25 0x5a8cdb7d41f7 base::internal::TaskTracker::RunTaskImpl()\n        - [pid=2505][err] #23 0x5a8cdb7c3b71 content::BrowserMainLoop::CreateStartupTasks()\n        - [pid=2505][err] #16 0x5a8cd8d1766e base::internal::WorkerThread::ThreadMain()\n        - [pid=2505][err] #26 0x5a8cdb7f1e85 content::BrowserMainRunnerImpl::Initialize()\n        - [pid=2505][err] #17 0x5a8cd8d12d47 base::(anonymous namespace)::ThreadFunc()\n        - [pid=2505][err] #27 0x7e9ae46ffac3 (/usr/lib/x86_64-linux-gnu/libc.so.6+0x94ac2)\n        - [pid=2505][err] #28 0x7e9ae4791850 (/usr/lib/x86_64-linux-gnu/libc.so.6+0x12684f)\n        - [pid=2505][err]   r8: 00000000000000ca  r9: 0000000000000881 r10: 0000000000000000 r11: 0000000000000246\n        - [pid=2505][err]  r12: 009a0b0000000000 r13: 0000000000000010 r14: 000000000000000e r15: 00007e9ae4846ec7\n        - [pid=2505][err]   di: 00007e9ae4846ec5  si: 00007e9ae4704f90  bp: 0000000000004552  bx: 00000380000b4000\n        - [pid=2505][err]   dx: 00007e9adb7f1140  ax: 0000000000000010  cx: 000003840028a9dc  sp: 00007e9adb7f0f80\n        - [pid=2505][err]   ip: 00007e9ae46afc1d efl: 0000000000010206 cgf: 002b000000000033 erf: 0000000000000000\n        - [pid=2505][err]  trp: 000000000000000d msk: 0000000000000000 cr2: 0000000000000000\n        - [pid=2505][err] [end of stack trace]\n      Stack Trace:\n        /_/src/Playwright/Transport/Connection.cs(206,0): at Microsoft.Playwright.Transport.Connection.InnerSendMessageToServerAsync[T](ChannelOwner object, String method, Dictionary`2 dictionary, Boolean keepNulls)\n           at Microsoft.Playwright.Transport.Connection.WrapApiCallAsync[T](Func`1 action, Boolean isInternal)\n        /_/src/Playwright/Core/BrowserType.cs(56,0): at Microsoft.Playwright.Core.BrowserType.LaunchAsync(BrowserTypeLaunchOptions options)\n        /_/src/mono/wasm/Wasm.Build.Tests/BrowserRunner.cs(132,0): at Wasm.Build.Tests.BrowserRunner.SpawnBrowserAsync(String browserUrl, Boolean headless, Nullable`1 timeout, Int32 maxRetries, String locale)\n        /_/src/mono/wasm/Wasm.Build.Tests/BrowserRunner.cs(167,0): at Wasm.Build.Tests.BrowserRunner.RunAsync(ToolCommand cmd, String args, Boolean headless, String locale, Action`2 onConsoleMessage, Action`1 onServerMessage, Action`1 onError, Func`2 modifyBrowserUrl)\n        /_/src/mono/wasm/Wasm.Build.Tests/Templates/WasmTemplateTests.cs(113,0): at Wasm.Build.Tests.WasmTemplateTests.BrowserRunTwiceWithAndThenWithoutBuildAsync(Configuration config, String extraProperties, Boolean runOutsideProjectDirectory)\n        /_/src/mono/wasm/Wasm.Build.Tests/Templates/WasmTemplateTests.cs(115,0): at Wasm.Build.Tests.WasmTemplateTests.BrowserRunTwiceWithAndThenWithoutBuildAsync(Configuration config, String extraProperties, Boolean runOutsideProjectDirectory)\n        /_/src/mono/wasm/Wasm.Build.Tests/Templates/WasmTemplateTests.cs(76,0): at Wasm.Build.Tests.WasmTemplateTests.RunWithDifferentAppBundleLocations(Boolean runOutsideProjectDirectory, String extraProperties)\n        --- End of stack trace from previous location ---\n```",
+                                           "updatedAt":  "2025-09-08T19:28:27Z"
+                                       }
+                                   ],
+                         "totalCount":  3
+                     },
+        "title":  "Crash during RunWithDifferentAppBundleLocations",
+        "labels":  [
+                       "arch-wasm",
+                       "Known Build Error",
+                       "area-Workloads"
+                   ]
+    }
+]

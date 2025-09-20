@@ -1,0 +1,224 @@
+﻿[
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/24386",
+        "createdAt":  "2017-12-07T19:23:53Z",
+        "number":  24386,
+        "author":  "safern",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2021-07-19T13:42:42Z",
+        "body":  "We are currently testing internals in System.ComponentModel.Composition, we should consider removing those if they don\u0027t add much value/bring more interesting code coverage. Also if we can\u0027t test them from the public APIs maybe we have some dead code there :)\r\n\r\ncc: @weshaggard @maryamariyan @danmosemsft ",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOIqB-cA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDM2MjM5ODc1Ng==",
+                                           "createdAt":  "2018-02-01T20:55:15Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "safern",
+                                           "body":  "When this is fixed we should definitely add the placeholder configuration to the src project and add netfx to the tests. ",
+                                           "updatedAt":  "2018-02-01T20:55:15Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDM2ODEwNjA5OQ==",
+                                           "createdAt":  "2018-02-23T18:59:08Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "weshaggard",
+                                           "body":  "After PR https://github.com/dotnet/corefx/pull/27337 you will need to remove the \"_netfx\" configuration from the test project in order to get the tests working for netfx. ",
+                                           "updatedAt":  "2018-02-23T18:59:08Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDM3NTAzMTczOA==",
+                                           "createdAt":  "2018-03-21T17:37:16Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "danmoseley",
+                                           "body":  "This does not seem critical for 2.1? Or is there a reason it must be fixed?",
+                                           "updatedAt":  "2018-03-21T17:37:16Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDM3NTAzMjYyNg==",
+                                           "createdAt":  "2018-03-21T17:39:41Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "safern",
+                                           "body":  "Not critical. I must have added the 2.1.0 label automatically. Thanks @danmosemsft ",
+                                           "updatedAt":  "2018-03-21T17:39:41Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDM3NTA2MDMyMw==",
+                                           "createdAt":  "2018-03-21T19:03:38Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "weshaggard",
+                                           "body":  "I think that is fine but I do worry a little about the compatibility between core and .net framework.",
+                                           "updatedAt":  "2018-03-21T19:03:38Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDM3NTA2NDcyNw==",
+                                           "createdAt":  "2018-03-21T19:19:11Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "danmoseley",
+                                           "body":  "We do have the ability to reship this if necessary",
+                                           "updatedAt":  "2018-03-21T19:19:11Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDU4MDk0MzQ3Mg==",
+                                           "createdAt":  "2020-01-31T22:43:40Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ericstj",
+                                           "body":  "Would be nice to remove InternalsVisibleTo.  This came up recently in a discussion around build perf.",
+                                           "updatedAt":  "2020-01-31T22:43:40Z"
+                                       }
+                                   ],
+                         "totalCount":  7
+                     },
+        "title":  "System.ComponentModel.Composition has internals visible to",
+        "labels":  [
+                       "test-enhancement",
+                       "area-System.ComponentModel.Composition",
+                       "needs-further-triage"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/38500",
+        "createdAt":  "2020-06-28T10:24:02Z",
+        "number":  38500,
+        "author":  "programmersommer",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2021-10-08T16:41:46Z",
+        "body":  "Hi,\r\n\r\nI am trying two following simple examples:\r\n\r\n    [System.Composition.Import(\"ICalculator\")]\r\n    public ICalculator Calculator { get; set; }\r\n\r\n     var pluginAssemblies = Directory.GetFiles(Path.Combine(_env.ContentRootPath, \"plugins\"), \"*.dll\", SearchOption.TopDirectoryOnly)\r\n                    .Select(AssemblyLoadContext.Default.LoadFromAssemblyPath);\r\n    \r\n     var configuration = new ContainerConfiguration().WithAssemblies(pluginAssemblies);\r\n    \r\n     using (var container = configuration.CreateContainer())\r\n     {\r\n          CalculateVAT = container.GetExports\u003cICalculateVAT\u003e().FirstOrDefault();\r\n     }\r\n\r\nThis one is working. But not the next one:\r\n\r\n     var pluginsCatalog = new DirectoryCatalog(Path.Combine(_env.ContentRootPath, \"plugins\"));\r\n\r\n     var container = new CompositionContainer(pluginsCatalog);\r\n     container.ComposeParts(this);\r\n\r\nIs ComposeParts (System.ComponentModel.Composition) ported to .NET Core?",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOJyPGbA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY1MDczMDQ0MQ==",
+                                           "createdAt":  "2020-06-28T10:24:06Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @ViktorHofer\nNotify danmosemsft if you want to be subscribed.",
+                                           "updatedAt":  "2020-06-28T10:24:06Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY1NTkyNzU2Mw==",
+                                           "createdAt":  "2020-07-09T06:25:00Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @ViktorHofer\nNotify danmosemsft if you want to be subscribed.",
+                                           "updatedAt":  "2020-07-09T06:25:00Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY1NTkyODcyMQ==",
+                                           "createdAt":  "2020-07-09T06:28:29Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ericstj",
+                                           "body":  "Yes, ComposeParts is ported. https://github.com/dotnet/runtime/blob/54a09d24142864767d50c83c2a64c0e1e37a34c2/src/libraries/System.ComponentModel.Composition/src/System/ComponentModel/Composition/AttributedModelServices.cs#L149\r\n\r\nPlease provide specific information about the problem you are seeing, along with a repro project.  We need more information than \"This one is working. But not the next one\"",
+                                           "updatedAt":  "2020-07-09T06:28:29Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY1NjY1NTk4MA==",
+                                           "createdAt":  "2020-07-10T12:42:05Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "programmersommer",
+                                           "body":  "@ericstj, please check next one project [https://github.com/programmersommer/MEFApp](https://github.com/programmersommer/MEFApp)\r\n\r\nIn AccountantService I would like to use two folders/catalogs with libraries and set priority to one of them.\r\nI know that it could be possible with CompositionContainer. \r\nBut even when I try to use CompositionContainer in a simple way with one catalog - it does not working.",
+                                           "updatedAt":  "2020-08-02T06:39:50Z"
+                                       }
+                                   ],
+                         "totalCount":  4
+                     },
+        "title":  "MEF ComposeParts doesn\u0027t work in .NET Core",
+        "labels":  [
+                       "question",
+                       "area-System.ComponentModel.Composition"
+                   ]
+    }
+]

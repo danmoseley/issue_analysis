@@ -1,0 +1,322 @@
+﻿[
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/50572",
+        "createdAt":  "2021-04-01T15:37:52Z",
+        "number":  50572,
+        "author":  "mdh1418",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2023-07-28T16:30:49Z",
+        "body":  "Several tests from Microsoft.VisualBasic.Core.Tests fail on Android\r\n\r\n- [ ] Microsoft.VisualBasic.FileIO.Tests.FileSystemTests.CurrentDirectorySet\r\n- [ ] Microsoft.VisualBasic.Tests.FileSystemTests.ChDir\r\n- [ ] Microsoft.VisualBasic.Tests.FileSystemTests.CurDir\r\n- [ ] Microsoft.VisualBasic.Tests.InteractionTests.Command\r\n\r\nBased on CI Runs from https://github.com/dotnet/runtime/pull/50095",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHONB5liw==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDgxMTk5MjgzMg==",
+                                           "createdAt":  "2021-04-01T15:37:55Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @cston\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\nSeveral tests from Microsoft.VisualBasic.Core.Tests fail on Android\r\n\r\n- [ ] Microsoft.VisualBasic.FileIO.Tests.FileSystemTests.CurrentDirectorySet\r\n- [ ] Microsoft.VisualBasic.Tests.FileSystemTests.ChDir\r\n- [ ] Microsoft.VisualBasic.Tests.FileSystemTests.CurDir\r\n- [ ] Microsoft.VisualBasic.Tests.InteractionTests.Command\r\n\r\nBased on CI Runs from https://github.com/dotnet/runtime/pull/50095\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003emdh1418\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-Microsoft.VisualBasic`, `os-android`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e6.0.0\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2021-04-01T15:37:55Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDg3NDQwNzMwNw==",
+                                           "createdAt":  "2021-07-06T02:05:25Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "steveisok",
+                                           "body":  "May push this beyond 6",
+                                           "updatedAt":  "2021-07-06T02:05:25Z"
+                                       }
+                                   ],
+                         "totalCount":  2
+                     },
+        "title":  "Microsoft.VisualBasic.Core.Tests fail on Android",
+        "labels":  [
+                       "area-Microsoft.VisualBasic",
+                       "os-android"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/51834",
+        "createdAt":  "2021-04-25T07:24:38Z",
+        "number":  51834,
+        "author":  "radical",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-03-12T10:25:20Z",
+        "body":  "Failing tests:\r\n```\r\nMicrosoft.VisualBasic.CompilerServices.Tests.NewLateBindingTests.LateCall_OptionalValues(memberName: \"F2\", arguments: [1, -1], typeArguments: null, expectedValue: \"System.Int32, 1, -1\")\r\nMicrosoft.VisualBasic.CompilerServices.Tests.NewLateBindingTests.LateCall_OptionalValues(memberName: \"F3\", arguments: [1, 2, -1], typeArguments: null, expectedValue: \"System.Int32, 2, -1\")\r\nMicrosoft.VisualBasic.CompilerServices.Tests.NewLateBindingTests.LateCall_OptionalValues(memberName: \"F4\", arguments: [1, 2, 3, -1], typeArguments: null, expectedValue: \"System.Int32, 3, -1\")\r\nMicrosoft.VisualBasic.CompilerServices.Tests.NewLateBindingTests.LateCall_OptionalValues(memberName: \"F5\", arguments: [1, 2, 3, 4, -1], typeArguments: null, expectedValue: \"System.Int32, 4, -1\")\r\nMicrosoft.VisualBasic.CompilerServices.Tests.NewLateBindingTests.LateCall_OptionalValues(memberName: \"F6\", arguments: [1, 2, 3, 4, 5, ...], typeArguments: null, expectedValue: \"System.Int32, 5, -1\")\r\nMicrosoft.VisualBasic.CompilerServices.Tests.NewLateBindingTests.LateCall_OptionalValues(memberName: \"F7\", arguments: [1, 2, 3, 4, 5, ...], typeArguments: null, expectedValue: \"System.Int32, 6, -1\")\r\nMicrosoft.VisualBasic.CompilerServices.Tests.NewLateBindingTests.LateCall_OptionalValues(memberName: \"F8\", arguments: [1, 2, 3, 4, 5, ...], typeArguments: null, expectedValue: \"System.Int32, 7, -1\")\r\n```\r\n\r\n.. failing with errors like:\r\n\r\n```\r\n[10:34:43] fail: [FAIL] Microsoft.VisualBasic.CompilerServices.Tests.NewLateBindingTests.LateCall_OptionalValues(memberName: \"F2\", arguments: [1, -1], typeArguments: null, expectedValue: \"System.Int32, 1, -1\")\r\n[10:34:43] info: System.InvalidCastException : Overload resolution failed because no Public \u0027F2\u0027 can be called with these arguments:\r\n[10:34:43] info:     \u0027Public Function F2(Of Integer)([p1 As Integer = Nothing], [p2 As System.Nullable(Of Integer) = 2]) As System.Object\u0027:\r\n[10:34:43] info:         Argument matching parameter \u0027p2\u0027 cannot convert from \u0027Integer\u0027 to \u0027Nullable(Of Integer)\u0027.\r\n[10:34:43] info:    at Microsoft.VisualBasic.CompilerServices.OverloadResolution.ResolveOverloadedCall(String methodName, List`1 candidates, Object[] arguments, String[] argumentNames, Type[] typeArguments, BindingFlags lookupFlags, Boolean reportErrors, ResolutionFailure\u0026 failure)\r\n[10:34:43] info:    at Microsoft.VisualBasic.CompilerServices.OverloadResolution.ResolveOverloadedCall(String methodName, MemberInfo[] members, Object[] arguments, String[] argumentNames, Type[] typeArguments, BindingFlags lookupFlags, Boolean reportErrors, ResolutionFailure\u0026 failure, Container baseReference)\r\n[10:34:43] info:    at Microsoft.VisualBasic.CompilerServices.NewLateBinding.ResolveCall(Container baseReference, String methodName, MemberInfo[] members, Object[] arguments, String[] argumentNames, Type[] typeArguments, BindingFlags lookupFlags, Boolean reportErrors, ResolutionFailure\u0026 failure)\r\n[10:34:43] info:    at Microsoft.VisualBasic.CompilerServices.NewLateBinding.CallMethod(Container baseReference, String methodName, Object[] arguments, String[] argumentNames, Type[] typeArguments, Boolean[] copyBack, BindingFlags invocationFlags, Boolean reportErrors, ResolutionFailure\u0026 failure)\r\n[10:34:43] info:    at Microsoft.VisualBasic.CompilerServices.NewLateBinding.ObjectLateCall(Object instance, Type type, String memberName, Object[] arguments, String[] argumentNames, Type[] typeArguments, Boolean[] copyBack, Boolean ignoreReturn)\r\n[10:34:43] info:    at Microsoft.VisualBasic.CompilerServices.NewLateBinding.FallbackCall(Object Instance, String MemberName, Object[] Arguments, String[] ArgumentNames, Boolean IgnoreReturn)\r\n[10:34:43] info:    at Microsoft.VisualBasic.CompilerServices.IDOUtils.CreateRefCallSiteAndInvoke(CallSiteBinder action, Object instance, Object[] arguments)\r\n[10:34:43] info:    at Microsoft.VisualBasic.CompilerServices.IDOBinder.IDOCall(IDynamicMetaObjectProvider instance, String memberName, Object[] arguments, String[] argumentNames, Boolean[] copyBack, Boolean ignoreReturn)\r\n[10:34:43] info:    at Microsoft.VisualBasic.CompilerServices.NewLateBinding.LateCall(Object Instance, Type Type, String MemberName, Object[] Arguments, String[] ArgumentNames, Type[] TypeArguments, Boolean[] CopyBack, Boolean IgnoreReturn)\r\n[10:34:43] info:    at Microsoft.VisualBasic.CompilerServices.Tests.NewLateBindingTests.LateCall_OptionalValues(String memberName, Object[] arguments, Type[] typeArguments, String expectedValue)\r\n[10:34:43] info:    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)\r\n```\r\n\r\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOMT_ucw==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDgyNjI3MzM5NQ==",
+                                           "createdAt":  "2021-04-25T07:24:40Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to \u0027arch-wasm\u0027: @lewing\nSee info in area-owners.md if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n[Log](https://helixre8s23ayyeko0k025g8.blob.core.windows.net/dotnet-runtime-refs-pull-51697-merge-d7050d97e17f4af48c/Microsoft.VisualBasic.Core.Tests/console.7920b38b.log?sv=2019-07-07\u0026se=2021-05-14T10%3A12%3A51Z\u0026sr=c\u0026sp=rl\u0026sig=joFjNEgxpTnETLo%2BQpy0GG9W3JRhjUYwDz51sJW1Qcs%3D)\r\n\r\nFailing tests:\r\n```\r\nMicrosoft.VisualBasic.CompilerServices.Tests.NewLateBindingTests.LateCall_OptionalValues(memberName: \"F2\", arguments: [1, -1], typeArguments: null, expectedValue: \"System.Int32, 1, -1\")\r\nMicrosoft.VisualBasic.CompilerServices.Tests.NewLateBindingTests.LateCall_OptionalValues(memberName: \"F3\", arguments: [1, 2, -1], typeArguments: null, expectedValue: \"System.Int32, 2, -1\")\r\nMicrosoft.VisualBasic.CompilerServices.Tests.NewLateBindingTests.LateCall_OptionalValues(memberName: \"F4\", arguments: [1, 2, 3, -1], typeArguments: null, expectedValue: \"System.Int32, 3, -1\")\r\nMicrosoft.VisualBasic.CompilerServices.Tests.NewLateBindingTests.LateCall_OptionalValues(memberName: \"F5\", arguments: [1, 2, 3, 4, -1], typeArguments: null, expectedValue: \"System.Int32, 4, -1\")\r\nMicrosoft.VisualBasic.CompilerServices.Tests.NewLateBindingTests.LateCall_OptionalValues(memberName: \"F6\", arguments: [1, 2, 3, 4, 5, ...], typeArguments: null, expectedValue: \"System.Int32, 5, -1\")\r\nMicrosoft.VisualBasic.CompilerServices.Tests.NewLateBindingTests.LateCall_OptionalValues(memberName: \"F7\", arguments: [1, 2, 3, 4, 5, ...], typeArguments: null, expectedValue: \"System.Int32, 6, -1\")\r\nMicrosoft.VisualBasic.CompilerServices.Tests.NewLateBindingTests.LateCall_OptionalValues(memberName: \"F8\", arguments: [1, 2, 3, 4, 5, ...], typeArguments: null, expectedValue: \"System.Int32, 7, -1\")\r\n```\r\n\r\n.. failing with errors like:\r\n\r\n```\r\n[10:34:43] fail: [FAIL] Microsoft.VisualBasic.CompilerServices.Tests.NewLateBindingTests.LateCall_OptionalValues(memberName: \"F2\", arguments: [1, -1], typeArguments: null, expectedValue: \"System.Int32, 1, -1\")\r\n[10:34:43] info: System.InvalidCastException : Overload resolution failed because no Public \u0027F2\u0027 can be called with these arguments:\r\n[10:34:43] info:     \u0027Public Function F2(Of Integer)([p1 As Integer = Nothing], [p2 As System.Nullable(Of Integer) = 2]) As System.Object\u0027:\r\n[10:34:43] info:         Argument matching parameter \u0027p2\u0027 cannot convert from \u0027Integer\u0027 to \u0027Nullable(Of Integer)\u0027.\r\n[10:34:43] info:    at Microsoft.VisualBasic.CompilerServices.OverloadResolution.ResolveOverloadedCall(String methodName, List`1 candidates, Object[] arguments, String[] argumentNames, Type[] typeArguments, BindingFlags lookupFlags, Boolean reportErrors, ResolutionFailure\u0026 failure)\r\n[10:34:43] info:    at Microsoft.VisualBasic.CompilerServices.OverloadResolution.ResolveOverloadedCall(String methodName, MemberInfo[] members, Object[] arguments, String[] argumentNames, Type[] typeArguments, BindingFlags lookupFlags, Boolean reportErrors, ResolutionFailure\u0026 failure, Container baseReference)\r\n[10:34:43] info:    at Microsoft.VisualBasic.CompilerServices.NewLateBinding.ResolveCall(Container baseReference, String methodName, MemberInfo[] members, Object[] arguments, String[] argumentNames, Type[] typeArguments, BindingFlags lookupFlags, Boolean reportErrors, ResolutionFailure\u0026 failure)\r\n[10:34:43] info:    at Microsoft.VisualBasic.CompilerServices.NewLateBinding.CallMethod(Container baseReference, String methodName, Object[] arguments, String[] argumentNames, Type[] typeArguments, Boolean[] copyBack, BindingFlags invocationFlags, Boolean reportErrors, ResolutionFailure\u0026 failure)\r\n[10:34:43] info:    at Microsoft.VisualBasic.CompilerServices.NewLateBinding.ObjectLateCall(Object instance, Type type, String memberName, Object[] arguments, String[] argumentNames, Type[] typeArguments, Boolean[] copyBack, Boolean ignoreReturn)\r\n[10:34:43] info:    at Microsoft.VisualBasic.CompilerServices.NewLateBinding.FallbackCall(Object Instance, String MemberName, Object[] Arguments, String[] ArgumentNames, Boolean IgnoreReturn)\r\n[10:34:43] info:    at Microsoft.VisualBasic.CompilerServices.IDOUtils.CreateRefCallSiteAndInvoke(CallSiteBinder action, Object instance, Object[] arguments)\r\n[10:34:43] info:    at Microsoft.VisualBasic.CompilerServices.IDOBinder.IDOCall(IDynamicMetaObjectProvider instance, String memberName, Object[] arguments, String[] argumentNames, Boolean[] copyBack, Boolean ignoreReturn)\r\n[10:34:43] info:    at Microsoft.VisualBasic.CompilerServices.NewLateBinding.LateCall(Object Instance, Type Type, String MemberName, Object[] Arguments, String[] ArgumentNames, Type[] TypeArguments, Boolean[] CopyBack, Boolean IgnoreReturn)\r\n[10:34:43] info:    at Microsoft.VisualBasic.CompilerServices.Tests.NewLateBindingTests.LateCall_OptionalValues(String memberName, Object[] arguments, Type[] typeArguments, String expectedValue)\r\n[10:34:43] info:    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)\r\n```\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003eradical\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`arch-wasm`, `area-Microsoft.VisualBasic`, `trimming-for-aot`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2021-04-25T07:24:40Z"
+                                       }
+                                   ],
+                         "totalCount":  1
+                     },
+        "title":  "[trimming] Failing tests with trimming - Microsoft.VisualBasic.Core.Tests",
+        "labels":  [
+                       "arch-wasm",
+                       "area-Microsoft.VisualBasic",
+                       "disabled-test",
+                       "os-ios",
+                       "trimming-for-aot"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/59325",
+        "createdAt":  "2021-09-20T04:13:51Z",
+        "number":  59325,
+        "author":  "AlexRadch",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2021-09-20T18:16:30Z",
+        "body":  "### Description\r\n\r\nWhen the current culture is not English, then  Microsoft.VisualBasic.Tests.StringsTests.Asc_Chr_Invariant fail tests on net48 with next log:\r\n```\r\n Microsoft.VisualBasic.Tests.StringsTests.Asc_Chr_Invariant\r\n   Source: StringsTests.cs line 121\r\n\r\nTest has multiple result outcomes\r\n   3 Passed\r\n   1 Failed\r\n\r\nResults\r\n    4)   Microsoft.VisualBasic.Tests.StringsTests.Asc_Chr_Invariant(charCode: 255, expected: 255) \r\n      Duration: 19 ms\r\n\r\n      Message: \r\nAssert.Equal() Failure\r\nExpected: 255\r\nActual:   121\r\n\r\n      Stack Trace: \r\nStringsTests.Asc_Chr_Invariant(Int32 charCode, Int32 expected) line 127\r\n```\r\n\r\n`Strings.Asc()` returns 211 but 255 is expected. Unfortunately, I don\u0027t know how to debug inside it to make PR. \r\nCan anyone give me a link with help on how to compile tests with a possibility to debug inside library methods?\r\n\r\n### Configuration\r\n\r\nnet48 target\r\nWindows 10 (Russian)\r\nx64\r\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHONwZcIA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc42_iYS",
+                                           "createdAt":  "2021-09-20T04:13:57Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @tarekgh, @safern\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Description\r\n\r\nWhen the current culture is not English, then  Microsoft.VisualBasic.Tests.StringsTests.Asc_Chr_Invariant fail tests on net48 with next log:\r\n```\r\n Microsoft.VisualBasic.Tests.StringsTests.Asc_Chr_Invariant\r\n   Source: StringsTests.cs line 121\r\n\r\nTest has multiple result outcomes\r\n   3 Passed\r\n   1 Failed\r\n\r\nResults\r\n    4)   Microsoft.VisualBasic.Tests.StringsTests.Asc_Chr_Invariant(charCode: 255, expected: 255) \r\n      Duration: 19 ms\r\n\r\n      Message: \r\nAssert.Equal() Failure\r\nExpected: 255\r\nActual:   121\r\n\r\n      Stack Trace: \r\nStringsTests.Asc_Chr_Invariant(Int32 charCode, Int32 expected) line 127\r\n```\r\n\r\n`Strings.Asc()` returns 211 but 255 is expected. Unfortunately, I don\u0027t know how to debug inside it to make PR. \r\nCan anyone give me a link with help on how to compile tests with a possibility to debug inside library methods?\r\n\r\n### Configuration\r\n\r\nnet48 target\r\nWindows 10 (Russian)\r\nx64\r\n\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003eAlexRadch\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-System.Globalization`, `untriaged`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2021-09-20T04:13:57Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc43Beg3",
+                                           "createdAt":  "2021-09-20T17:33:24Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @cston\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Description\r\n\r\nWhen the current culture is not English, then  Microsoft.VisualBasic.Tests.StringsTests.Asc_Chr_Invariant fail tests on net48 with next log:\r\n```\r\n Microsoft.VisualBasic.Tests.StringsTests.Asc_Chr_Invariant\r\n   Source: StringsTests.cs line 121\r\n\r\nTest has multiple result outcomes\r\n   3 Passed\r\n   1 Failed\r\n\r\nResults\r\n    4)   Microsoft.VisualBasic.Tests.StringsTests.Asc_Chr_Invariant(charCode: 255, expected: 255) \r\n      Duration: 19 ms\r\n\r\n      Message: \r\nAssert.Equal() Failure\r\nExpected: 255\r\nActual:   121\r\n\r\n      Stack Trace: \r\nStringsTests.Asc_Chr_Invariant(Int32 charCode, Int32 expected) line 127\r\n```\r\n\r\n`Strings.Asc()` returns 211 but 255 is expected. Unfortunately, I don\u0027t know how to debug inside it to make PR. \r\nCan anyone give me a link with help on how to compile tests with a possibility to debug inside library methods?\r\n\r\n### Configuration\r\n\r\nnet48 target\r\nWindows 10 (Russian)\r\nx64\r\n\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003eAlexRadch\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-Microsoft.VisualBasic`, `area-System.Globalization`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003eFuture\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2021-09-20T17:33:24Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc43Bf6a",
+                                           "createdAt":  "2021-09-20T17:42:27Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "danmoseley",
+                                           "body":  "@AlexRadch I would expect it to just work. There are several ways to debug tests, eg.,\r\n* the console output says to pushd to a folder and then run a certain command line. You can set up your debugger to launch that command line in that folder and set a breakpoint.\r\n* or, you can add a `Debugger.Break()` command and then attach\r\n* or, it\u0027s supposed to work to start debugging the test from the Test Explorer but I have not tried this recently especially for .NET Framework 4.8 target\r\n\r\nFor such a simple test, it may be easier to paste the code into a standalone app targeting .NET Framework.  If you have disabled \"Just my Code\" and enabled \"Step into .NET Framework\" and \"Use Microsoft symbol server\" it should load the symbols for Microsoft.VisualBasic.dll and allow you to step into the code.\r\n\r\nIf this only repros for .NET Framework target and .NET Core another option is to use ILSPY and just compare the implementations of Strings.Asc and Strings.Chr. Or transliterate what you see in ILSPY into C# and debug that, etc etc.",
+                                           "updatedAt":  "2021-09-20T17:42:27Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc43BgSM",
+                                           "createdAt":  "2021-09-20T17:45:00Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "tarekgh",
+                                           "body":  "@AlexRadch I tried running with default culture as Russian culture but couldn\u0027t get this specific failure. Are you consistently getting this failure on your machine? For testing you may follow the instructions in the link https://github.com/dotnet/runtime/blob/main/docs/workflow/testing/visualstudio.md\r\n\r\nI got other failures though because the `NaN` symbol for this language is defined as `не число`. Here is an example of the failures:\r\n\r\n```\r\n      Microsoft.VisualBasic.Tests.ConversionsTests.ToString_IConvertible_ReturnsExpected(value: ?? ?????, expected: \"NaN\") [FAIL]\r\n        Assert.Equal() Failure\r\n        Expected: NaN\r\n        Actual:   ?? ?????\r\n        Stack Trace:\r\n          C:\\oss\\runtime\\src\\libraries\\Microsoft.VisualBasic.Core\\tests\\ConversionsTests.cs(2874,0): at Microsoft.VisualBasic.Tests.ConversionsTests.AssertEqual(Object expected, Object actual)\r\n          C:\\oss\\runtime\\src\\libraries\\Microsoft.VisualBasic.Core\\tests\\ConversionsTests.cs(2689,0): at Microsoft.VisualBasic.Tests.ConversionsTests.ToString_IConvertible_ReturnsExpected(IConvertible value, String expected)\r\n```\r\n\r\n\r\nCC @tannergooding \r\n\r\n",
+                                           "updatedAt":  "2021-09-20T17:45:00Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc43BjXo",
+                                           "createdAt":  "2021-09-20T18:02:59Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "tannergooding",
+                                           "body":  "@tarekgh I beleive that should be expected. We rely on `NumberFormatInfo.NaNSymbol`: https://github.com/dotnet/runtime/blob/78593b9e095f974305b2033b465455e458e30267/src/libraries/System.Private.CoreLib/src/System/Number.Parsing.cs#L1804-L1815\r\n\r\nIf you want just \"NaN\" to work, you\u0027d need to use the `InvariantCulture`.",
+                                           "updatedAt":  "2021-09-20T18:02:59Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc43Blwg",
+                                           "createdAt":  "2021-09-20T18:15:17Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "tarekgh",
+                                           "body":  "@tannergooding you are right. I just cc\u0027ed for awareness. The test needs to be fixed. \r\n\r\n\r\n@danmoseley @AlexRadch \r\n\r\nThe issue here is on NETFX 4.8, `Microsoft.VisualBasic.Strings.Asc()` calls the following:\r\n\r\n```C#\r\nEncoding fileIOEncoding = Utils.GetFileIOEncoding();\r\n```\r\n\r\nAnd `GetFileIOEncoding` implemented as follows:\r\n\r\n```C#\r\n// Microsoft.VisualBasic.CompilerServices.Utils\r\ninternal static Encoding GetFileIOEncoding()\r\n{\r\n\treturn Encoding.Default;\r\n}\r\n```\r\n\r\nThat will cause always use the system encoding regardless of the current culture.\r\n\r\n\r\nOn net core, `Microsoft.VisualBasic.Strings.Asc()` calls the following:\r\n\r\n```C#\r\nenc = GetAscChrEncoding()\r\n```\r\n\r\nand `GetAscChrEncoding` implemented as:\r\n\r\n```VB\r\n        Private Function GetAscChrEncoding() As Encoding\r\n            Return Encoding.GetEncoding(GetLocaleCodePage())\r\n        End Function\r\n\r\n        Friend Shared Function GetLocaleCodePage() As Integer\r\n            Return System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ANSICodePage\r\n        End Function\r\n```\r\n\r\nwhich return the encoding from the current culture and not the system one.\r\n\r\nThe test need to be fixed to support such case.\r\n ",
+                                           "updatedAt":  "2021-09-20T18:16:30Z"
+                                       }
+                                   ],
+                         "totalCount":  6
+                     },
+        "title":  "Asc_Chr_Invariant fail tests on net48 with current culture is not English",
+        "labels":  [
+                       "area-Microsoft.VisualBasic"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/91449",
+        "createdAt":  "2023-09-01T04:57:48Z",
+        "number":  91449,
+        "author":  "vsfeedback",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-08-14T05:32:50Z",
+        "body":  "_This issue has been moved from [a ticket on Developer Community](https://developercommunity.visualstudio.com/t/Visual-Studio-2022-Community-Shell-Funct/10410747)._\n\n---\n[severity:It\u0027s more difficult to complete my work]\nThe following code executes without error in Visual Studio 2019\n\n Shell(\"powershell c:\\SystemCommon\\Scripts\\CollectHistoricalVersionFolders.ps1\", AppWinStyle.Hide, True)\n\nIn VS 2022 Community, the step just blows right thru the line, returning powershell is not a valid program.\nThis happens with powershell.exe and with the full path specified.\n\nI added -command at the suggestion of another post (although I never needed it in 2019), resulting in the same error.\n\nIs there a path that I need to set up for my project\u0027s execution that differs from what \"path\" returns in cmd (powershell is in that)?\n\nIf so, how do I accomplish that?\n\nOr is it something else?\n\n---\n### Original Comments\n\n#### Feedback Bot on 7/9/2023, 07:29 PM: \n\n(private comment, text removed)\n#### Feedback Bot on 7/10/2023, 07:56 PM: \n\n(private comment, text removed)\n#### Stella Chen [MSFT] on 7/10/2023, 10:23 PM: \n\n(private comment, text removed)\n#### Joseph Helander on 7/12/2023, 02:31 PM: \n\n(private comment, text removed)\n#### Javier Enrique De la Garza Sanchez [MSFT] on 7/13/2023, 10:24 AM: \n\n(private comment, text removed)\n#### Feedback Bot on 7/13/2023, 10:32 AM: \n\n(private comment, text removed)\n#### Joseph Helander on 7/13/2023, 02:20 PM: \n\n(private comment, text removed)\n#### Joseph Helander on 7/21/2023, 09:57 PM: \n\n(private comment, text removed)\n\n---\n### Original Solutions\n(no solutions)",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOZXTj8A==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5ldOPw",
+                                           "createdAt":  "2023-09-01T04:59:11Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @cston\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n_This issue has been moved from [a ticket on Developer Community](https://developercommunity.visualstudio.com/t/Visual-Studio-2022-Community-Shell-Funct/10410747)._\n\n---\n[severity:It\u0027s more difficult to complete my work]\nThe following code executes without error in Visual Studio 2019\n\n Shell(\"powershell c:\\SystemCommon\\Scripts\\CollectHistoricalVersionFolders.ps1\", AppWinStyle.Hide, True)\n\nIn VS 2022 Community, the step just blows right thru the line, returning powershell is not a valid program.\nThis happens with powershell.exe and with the full path specified.\n\nI added -command at the suggestion of another post (although I never needed it in 2019), resulting in the same error.\n\nIs there a path that I need to set up for my project\u0027s execution that differs from what \"path\" returns in cmd (powershell is in that)?\n\nIf so, how do I accomplish that?\n\nOr is it something else?\n\n---\n### Original Comments\n\n#### Feedback Bot on 7/9/2023, 07:29 PM: \n\n(private comment, text removed)\n#### Feedback Bot on 7/10/2023, 07:56 PM: \n\n(private comment, text removed)\n#### Stella Chen [MSFT] on 7/10/2023, 10:23 PM: \n\n(private comment, text removed)\n#### Joseph Helander on 7/12/2023, 02:31 PM: \n\n(private comment, text removed)\n#### Javier Enrique De la Garza Sanchez [MSFT] on 7/13/2023, 10:24 AM: \n\n(private comment, text removed)\n#### Feedback Bot on 7/13/2023, 10:32 AM: \n\n(private comment, text removed)\n#### Joseph Helander on 7/13/2023, 02:20 PM: \n\n(private comment, text removed)\n#### Joseph Helander on 7/21/2023, 09:57 PM: \n\n(private comment, text removed)\n\n---\n### Original Solutions\n(no solutions)\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003evsfeedback\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-Microsoft.VisualBasic`, `untriaged`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2023-09-01T04:59:11Z"
+                                       }
+                                   ],
+                         "totalCount":  1
+                     },
+        "title":  "Visual Studio 2022 Community Shell Function runtime error",
+        "labels":  [
+                       "area-Microsoft.VisualBasic"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/95451",
+        "createdAt":  "2023-11-30T10:02:45Z",
+        "number":  95451,
+        "author":  "vsfeedback",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-07-24T18:34:15Z",
+        "body":  "_This issue has been moved from [a ticket on Developer Community](https://developercommunity.visualstudio.com/t/StrConvtextVbStrConvProperCase-cau/10519912)._\n\n---\n[severity:It bothers me. A fix would be nice]\nI converted my app from .net framework to .NET 6 which resulted in thousands of errors.\nI deleted all references to menus that elimated several problems. I\u0027m working a workaround for them as I was phasing them out anyway.\nI found a solution to 1 set and a workaround for another.\nThis one has me puzzled since I changed all my code that was using Chr() and Asc() that was previously causing an \u0027encoding 1252\u0027 error \n    to ChrW() and AscW() that doesn\u0027t cause an error on any of my lines of code.\n\nThe code that triggers the error now is \n\n        For Each name As String In Data_Text_string_array\n            If name.Length \u003e 1 Then\n                Try\n                    ListBox_Data.Items.Add(StrConv(Function_Name_Full_string(name), VbStrConv.ProperCase))  \u003c-- triggers the error\n                Catch\n                    MsgBox(Err.Description)\n                    ListBox_Data.Items.Add(Function_Name_Full_string(name))\n                End Try\n                count += 1\n                Names_Writers_string_array(count) = name\n            End If\n        Next\n\nThe MsgBox doesn\u0027t even appear, so my code can\u0027t catch it.\nI can\u0027t use similar coding for now.\n\nChanging the code as follows works, so I\u0027ll have to create a Function to replace it.\n\n        For Each name As String In Data_Text_string_array\n            If name.Length \u003e 1 Then\n                    ListBox_Data.Items.Add(Function_Name_Full_string(name))\n                count += 1\n                Names_Writers_string_array(count) = name\n            End If\n        Next\n\n\n---\n### Original Comments\n\n#### Feedback Bot on 11/20/2023, 03:00 AM: \n\n(private comment, text removed)\n#### John Qiao [MSFT] on 11/20/2023, 03:24 AM: \n\n(private comment, text removed)\n#### Tom Loewen on 11/20/2023, 05:38 AM: \n\n(private comment, text removed)\n#### Feedback Bot on 11/20/2023, 08:17 AM: \n\n(private comment, text removed)\n\n---\n### Original Solutions\n(no solutions)",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHObUg3kw==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5tSDV-",
+                                           "createdAt":  "2023-11-30T10:04:16Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "rzikm",
+                                           "body":  "The issue can be reproduce by a simple program\r\n\r\n\u003cimg width=\"900\" alt=\"image\" src=\"https://github.com/dotnet/runtime/assets/32671551/1010b082-2638-4afc-a311-22773b1dc407\"\u003e\r\n",
+                                           "updatedAt":  "2023-11-30T10:04:16Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5tSDeT",
+                                           "createdAt":  "2023-11-30T10:04:35Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @cston\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n_This issue has been moved from [a ticket on Developer Community](https://developercommunity.visualstudio.com/t/StrConvtextVbStrConvProperCase-cau/10519912)._\n\n---\n[severity:It bothers me. A fix would be nice]\nI converted my app from .net framework to .NET 6 which resulted in thousands of errors.\nI deleted all references to menus that elimated several problems. I\u0027m working a workaround for them as I was phasing them out anyway.\nI found a solution to 1 set and a workaround for another.\nThis one has me puzzled since I changed all my code that was using Chr() and Asc() that was previously causing an \u0027encoding 1252\u0027 error \n    to ChrW() and AscW() that doesn\u0027t cause an error on any of my lines of code.\n\nThe code that triggers the error now is \n\n        For Each name As String In Data_Text_string_array\n            If name.Length \u003e 1 Then\n                Try\n                    ListBox_Data.Items.Add(StrConv(Function_Name_Full_string(name), VbStrConv.ProperCase))  \u003c-- triggers the error\n                Catch\n                    MsgBox(Err.Description)\n                    ListBox_Data.Items.Add(Function_Name_Full_string(name))\n                End Try\n                count += 1\n                Names_Writers_string_array(count) = name\n            End If\n        Next\n\nThe MsgBox doesn\u0027t even appear, so my code can\u0027t catch it.\nI can\u0027t use similar coding for now.\n\nChanging the code as follows works, so I\u0027ll have to create a Function to replace it.\n\n        For Each name As String In Data_Text_string_array\n            If name.Length \u003e 1 Then\n                    ListBox_Data.Items.Add(Function_Name_Full_string(name))\n                count += 1\n                Names_Writers_string_array(count) = name\n            End If\n        Next\n\n\n---\n### Original Comments\n\n#### Feedback Bot on 11/20/2023, 03:00 AM: \n\n(private comment, text removed)\n#### John Qiao [MSFT] on 11/20/2023, 03:24 AM: \n\n(private comment, text removed)\n#### Tom Loewen on 11/20/2023, 05:38 AM: \n\n(private comment, text removed)\n#### Feedback Bot on 11/20/2023, 08:17 AM: \n\n(private comment, text removed)\n\n---\n### Original Solutions\n(no solutions)\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003evsfeedback\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-Microsoft.VisualBasic`, `untriaged`, `needs-area-label`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2023-11-30T10:04:35Z"
+                                       }
+                                   ],
+                         "totalCount":  2
+                     },
+        "title":  "StrConv(\"text\",VbStrConv.ProperCase) causes a confusing error error",
+        "labels":  [
+                       "area-Microsoft.VisualBasic"
+                   ]
+    }
+]

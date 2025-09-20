@@ -1,0 +1,147 @@
+﻿[
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/30638",
+        "createdAt":  "2019-08-20T19:06:22Z",
+        "number":  30638,
+        "author":  "rainersigwald",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2022-09-26T06:54:50Z",
+        "body":  "MSBuild uses CodeDOM with a user-defined language that might be wrong. If it is,\r\n\r\nCodeDOM throws a `ConfigurationErrorsException`, \r\n\r\nhttps://github.com/dotnet/corefx/blob/2fac89f63c644ab81d936d62c91e6003302e718d/src/System.CodeDom/src/System/CodeDom/Compiler/CodeDomProvider.cs#L84\r\n\r\nbut it is a private type distinct from the public `ConfigurationErrorsException`.\r\n\r\nhttps://github.com/dotnet/corefx/blob/2fac89f63c644ab81d936d62c91e6003302e718d/src/System.CodeDom/src/System/CodeDom/Compiler/CodeDomProvider.cs#L215-L222\r\n\r\nThis makes it difficult to filter between \"expected\" errors in CodeDOM, for which we\u0027d like to present a cleaner error, and unknown bugs where we\u0027d like to dump the stack.\r\n\r\nCould `ConfigurationErrorsException` be pushed down and thrown in this case?\r\n\r\nPossibly relevant: dotnet/corefx#12868 describes the current state.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  null,
+                         "nodes":  [
+
+                                   ],
+                         "totalCount":  0
+                     },
+        "title":  "Exception thrown when CodeDOM is given a bad language isn\u0027t specific",
+        "labels":  [
+                       "api-needs-work",
+                       "area-System.CodeDom"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/58351",
+        "createdAt":  "2021-08-30T10:00:10Z",
+        "number":  58351,
+        "author":  "FlaviusHouk",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2021-09-01T23:02:46Z",
+        "body":  "### Background and motivation\n\nAs a user I would like to have possibility to define and use type derived from System.CodeDom.CodeExpression and System.CodeDom.CodeStatement in existing code generators. For example there is not expression for checking is object of type (obj is Type). Currently it is not possible to extend available classes for generation (CSharpCodeGenerator defined as sealed class with no virtual methods or VBCodeGenerator defined sealed but with plenty of overridden method from base class CodeGenerator). In case if class is unknown to the generator it will throw the exception. This behavior forces user to either reimplement everything from scratch or create composite class which encapsulates current code generator to use such user defined types.\n\n### API Proposal\n\n```C#\r\npublic class CSharpCodeGenerator :  : ICodeCompiler, ICodeGenerator\r\n{\r\n    protected TextWriter Output =\u003e _output; //changed from private to protected\r\n\r\n     //return value indicates if passed object was successfully processed. \r\n    protected virtual bool GenerateExpressionOverride(CodeExpression e) =\u003e false;\r\n    protected virtual bool GenerateStatementOverride(CodeStatement s) =\u003e false;\r\n\r\n    //existing method\r\n    private void GenerateExpression(CodeExpression e)\r\n    {\r\n         ...\r\n        else if(!GenerateExpressionOverride(e)) //last condition after all other options was checked\r\n        {\r\n              throw new ArgumentException(SR.Format(SR.InvalidElementType, e.GetType().FullName), nameof(e));\r\n        }\r\n    }\r\n```     \r\n\n\n### API Usage\n\n```C#\r\ninternal class MyCodeGenerator : CSharpCodeGenerator\r\n{\r\n     protected override bool GenerateExpressionOverride(CodeExpression e)\r\n     {\r\n           switch (e)\r\n           {\r\n                  case CodeIsExpression isExpr:\r\n                        ProcessIsExpr(isExpr);\r\n                        return true;\r\n                  case CodeAsExpression asExpr:\r\n                        ProcessAsExpr(asExpr);\r\n                        return true;\r\n           }\r\n\r\n           return false;\r\n     }\r\n}\r\n```     \r\n\n\n### Risks\n\nThe behavior of current generators won\u0027t be affected by introducing these methods. User defined generators, that extend available classes might mess with TextWriter Output object and generate wrong code. I assume that in this case base class will not be affected. ",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHONiSmXw==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc42Ii_3",
+                                           "createdAt":  "2021-08-30T10:00:13Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "I couldn\u0027t figure out the best area label to add to this issue. If you have write-permissions please help me learn by adding exactly one [area label](https://github.com/dotnet/runtime/blob/master/docs/area-owners.md).",
+                                           "updatedAt":  "2021-08-30T10:00:13Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc42JKZf",
+                                           "createdAt":  "2021-08-30T14:05:15Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @buyaa-n, @krwq\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Background and motivation\n\nAs a user I would like to have possibility to define and use type derived from System.CodeDom.CodeExpression and System.CodeDom.CodeStatement in existing code generators. For example there is not expression for checking is object of type (obj is Type). Currently it is not possible to extend available classes for generation (CSharpCodeGenerator defined as sealed class with no virtual methods or VBCodeGenerator defined sealed but with plenty of overridden method from base class CodeGenerator). In case if class is unknown to the generator it will throw the exception. This behavior forces user to either reimplement everything from scratch or create composite class which encapsulates current code generator to use such user defined types.\n\n### API Proposal\n\n```C#\r\npublic class CSharpCodeGenerator :  : ICodeCompiler, ICodeGenerator\r\n{\r\n    protected TextWriter Output =\u003e _output; //changed from private to protected\r\n\r\n     //return value indicates if passed object was successfully processed. \r\n    protected virtual bool GenerateExpressionOverride(CodeExpression e) =\u003e false;\r\n    protected virtual bool GenerateStatementOverride(CodeStatement s) =\u003e false;\r\n\r\n    //existing method\r\n    private void GenerateExpression(CodeExpression e)\r\n    {\r\n         ...\r\n        else if(!GenerateExpressionOverride(e)) //last condition after all other options was checked\r\n        {\r\n              throw new ArgumentException(SR.Format(SR.InvalidElementType, e.GetType().FullName), nameof(e));\r\n        }\r\n    }\r\n```     \r\n\n\n### API Usage\n\n```C#\r\ninternal class MyCodeGenerator : CSharpCodeGenerator\r\n{\r\n     protected override bool GenerateExpressionOverride(CodeExpression e)\r\n     {\r\n           switch (e)\r\n           {\r\n                  case CodeIsExpression isExpr:\r\n                        ProcessIsExpr(isExpr);\r\n                        return true;\r\n                  case CodeAsExpression asExpr:\r\n                        ProcessAsExpr(asExpr);\r\n                        return true;\r\n           }\r\n\r\n           return false;\r\n     }\r\n}\r\n```     \r\n\n\n### Risks\n\nThe behavior of current generators won\u0027t be affected by introducing these methods. User defined generators, that extend available classes might mess with TextWriter Output object and generate wrong code. I assume that in this case base class will not be affected. \n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003eFlaviusHouk\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`api-suggestion`, `area-System.CodeDom`, `untriaged`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2021-08-30T14:05:15Z"
+                                       }
+                                   ],
+                         "totalCount":  2
+                     },
+        "title":  "[API Proposal]: Allow user to handle custom System.CodeDom.CodeExpression and System.CodeDom.CodeStatement.",
+        "labels":  [
+                       "api-suggestion",
+                       "area-System.CodeDom"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/68726",
+        "createdAt":  "2022-04-29T21:51:22Z",
+        "number":  68726,
+        "author":  "JasonBock",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2022-05-17T05:50:45Z",
+        "body":  "### Background and motivation\n\nI\u0027ve been working with [`IndentedTextWriter`](https://source.dot.net/#System.Private.CoreLib/IndentedTextWriter.cs) for a while now, especially as it pertains to C# source generators. I\u0027d like to be able to read what the indentation value is that the user specified, either by calling the constructor that defaults to the `DefaultTabString` constant value, or by passing in a `tabString` value. Currently, this is stored in a private `string` field called `_tabString`, so I can\u0027t read this later on in code; I have to remember what I did to create the `IndentedTextWriter`.\n\n### API Proposal\n\n```csharp\r\nnamespace System.CodeDom.Compiler;\r\n\r\npublic class IndentedTextWriter : TextWriter\r\n{\r\n  public string TabString =\u003e _tabString;\r\n}\r\n```\r\n\n\n### API Usage\n\n```csharp\r\nusing var textWriter = new StringWriter();\r\nvar writer = new IndentedTextWriter(textWriter, \"\\t\");\r\nvar tabString = writer.TabString;\r\n```\r\n\n\n### Alternative Designs\n\n_No response_\n\n### Risks\n\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOQmMIDw==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5CYvOP",
+                                           "createdAt":  "2022-04-29T21:51:25Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "I couldn\u0027t figure out the best area label to add to this issue. If you have write-permissions please help me learn by adding exactly one [area label](https://github.com/dotnet/runtime/blob/master/docs/area-owners.md).",
+                                           "updatedAt":  "2022-04-29T21:51:25Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5CYwgP",
+                                           "createdAt":  "2022-04-29T21:57:42Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-system-codedom\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Background and motivation\n\nI\u0027ve been working with [`IndentedTextWriter`](https://source.dot.net/#System.Private.CoreLib/IndentedTextWriter.cs) for a while now, especially as it pertains to C# source generators. I\u0027d like to be able to read what the indentation value is that the user specified, either by calling the constructor that defaults to the `DefaultTabString` constant value, or by passing in a `tabString` value. Currently, this is stored in a private `string` field called `_tabString`, so I can\u0027t read this later on in code; I have to remember what I did to create the `IndentedTextWriter`.\n\n### API Proposal\n\n```csharp\r\nnamespace System.CodeDom.Compiler;\r\n\r\npublic class IndentedTextWriter : TextWriter\r\n{\r\n  public string TabString =\u003e _tabString;\r\n}\r\n```\r\n\n\n### API Usage\n\n```csharp\r\nusing var textWriter = new StringWriter();\r\nvar writer = new IndentedTextWriter(textWriter, \"\\t\");\r\nvar tabString = writer.TabString;\r\n```\r\n\n\n### Alternative Designs\n\n_No response_\n\n### Risks\n\n_No response_\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003eJasonBock\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`api-suggestion`, `area-System.CodeDom`, `untriaged`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2022-04-29T21:57:42Z"
+                                       }
+                                   ],
+                         "totalCount":  2
+                     },
+        "title":  "[API Proposal]: Surface the `_tabString` Field in `IndentedTextWriter`",
+        "labels":  [
+                       "api-suggestion",
+                       "area-System.CodeDom"
+                   ]
+    }
+]

@@ -1,0 +1,832 @@
+﻿[
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/26614",
+        "createdAt":  "2018-06-26T13:29:02Z",
+        "number":  26614,
+        "author":  "OmarTawfik",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-01-06T08:47:27Z",
+        "body":  "Copied from: https://github.com/dotnet/roslyn/issues/28019\r\n\r\nI have accidently stumbled upon an issue which might be a bug in the C# compiler. Apparently the `dynamic` keyword does not handle well methods / operators with `in` parameters. Here is a small sample program to reproduce the problem:\r\n```\r\nclass Program\r\n{\r\n    static void Main(string[] args)\r\n    {\r\n        var vectors = new Vector[1000];\r\n        var result = Sum(vectors);\r\n    }\r\n\r\n    static T Sum\u003cT\u003e(params T[] items)\r\n    {\r\n        T result = default;\r\n\r\n        foreach (var item in items)\r\n        {\r\n            result += (dynamic)item;\r\n        }\r\n\r\n        return result;\r\n    }\r\n\r\n    readonly struct Vector\r\n    {\r\n        public readonly float X;\r\n        public readonly float Y;\r\n        public readonly float Z;\r\n        public readonly float W;\r\n\r\n        public Vector(float x, float y, float z, float w)\r\n        {\r\n            this.X = x;\r\n            this.Y = y;\r\n            this.Z = z;\r\n            this.W = w;\r\n        }\r\n\r\n        public static Vector operator+(in Vector left, in Vector right)\r\n        {\r\n            return new Vector(left.X + right.X,\r\n                                left.Y + right.Y,\r\n                                left.Z + right.Z,\r\n                                left.W + right.W);\r\n        }\r\n    }\r\n}\r\n```\r\nThe above program produces the following exception at runtime:\r\n```\r\nUnhandled Exception: Microsoft.CSharp.RuntimeBinder.RuntimeBinderException: Operator \u0027+=\u0027 cannot be applied to operands of type \u0027ConsoleApp.Program.Vector\u0027 and \u0027ConsoleApp.Program.Vector\u0027\r\n   at CallSite.Target(Closure , CallSite , Vector , Object )\r\n   at System.Dynamic.UpdateDelegates.UpdateAndExecute2[T0,T1,TRet](CallSite site, T0 arg0, T1 arg1)\r\n   at ConsoleApp.Program.Sum[T](T[] items) in D:\\Work\\ConsoleApp\\ConsoleApp\\Program.cs:line 44\r\n   at ConsoleApp.Program.Main(String[] args) in D:\\Work\\ConsoleApp\\ConsoleApp\\Program.cs:line 12\r\n```\r\nRemoving the `in` keyword from the parameters in the operator overload fixes the exception. However, the program works correctly with the `in` parameters and a non-generic `Sum` method without the `dynamic` keyword:\r\n```\r\nstatic Vector Sum(params Vector[] vectors)\r\n{\r\n    Vector result = default;\r\n\r\n    foreach (var vector in vectors)\r\n    {\r\n        result += vector;\r\n    }\r\n\r\n    return result;\r\n}\r\n```\r\nPlease, keep in mind the above example is artificial, just to demonstrate the problem. I am well aware there is a better `Vector\u003cT\u003e` implementation utilizing SIMD in `System.Numerics.Vectors`.\r\n\r\ncc @vanka78bg",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOmVa5EA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQwMDMwOTM5Nw==",
+                                           "createdAt":  "2018-06-26T13:31:27Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "OmarTawfik",
+                                           "body":  "The binder needs some work to be able to support `in` parameters correctly. Same issue would happen with `in` extension methods, etc..",
+                                           "updatedAt":  "2018-06-26T13:31:27Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6ZVrkQ",
+                                           "createdAt":  "2025-01-06T08:47:16Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "KalleOlaviNiemitalo",
+                                           "body":  "Could perhaps be considered a duplicate of \u003chttps://github.com/dotnet/runtime/issues/86118\u003e",
+                                           "updatedAt":  "2025-01-06T08:47:16Z"
+                                       }
+                                   ],
+                         "totalCount":  2
+                     },
+        "title":  "Support for \u0027in\u0027 parameters for dynamic binder",
+        "labels":  [
+                       "area-Microsoft.CSharp"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/33626",
+        "createdAt":  "2020-03-16T14:50:42Z",
+        "number":  33626,
+        "author":  "vitek-karas",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2021-08-12T12:19:32Z",
+        "body":  "The code in [`Microsoft.CSharp.RuntimeBinder.Semantics.TypeManager.InternalsVisibleTo`](https://github.com/dotnet/runtime/blob/8f9920832f07ed2cceb766b44f593b1ba2417036/src/libraries/Microsoft.CSharp/src/Microsoft/CSharp/RuntimeBinder/Semantics/Types/TypeManager.cs#L759-L762) calls `Assembly.GetCustomAttributes` to get all attributes on an assembly and then filters it by attribute type (`InternalsVisibleToAttribute`). This makes it harder for the linker as it would mean to keep all attributes on the assembly as linker can\u0027t figure out that the code is only looking for one of them.\r\n\r\nA better code would be to call `GetCustomAttributes(typeof(InternalVisibleToAttribute))` which is a pattern linker can recognize (https://github.com/mono/linker/issues/952).",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOMB9Pkw==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDU5OTU3OTEzNg==",
+                                           "createdAt":  "2020-03-16T14:50:59Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "vitek-karas",
+                                           "body":  "/cc @eerhardt ",
+                                           "updatedAt":  "2020-03-16T14:50:59Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDgwNzMxMDk4MQ==",
+                                           "createdAt":  "2021-03-25T19:13:48Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "eerhardt",
+                                           "body":  "@krwq - can you look into this and see if you can address it while you are in the Microsoft.CSharp library?",
+                                           "updatedAt":  "2021-03-25T19:13:48Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDgwNzM1ODM1NQ==",
+                                           "createdAt":  "2021-03-25T19:44:11Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "vitek-karas",
+                                           "body":  "It would be nice to change this, but it\u0027s not absolutely necessary - linker currently doesn\u0027t remove attribute (unless instructed to do so through XMLs), so this should not be a correctness problem right now.",
+                                           "updatedAt":  "2021-03-25T19:44:11Z"
+                                       }
+                                   ],
+                         "totalCount":  3
+                     },
+        "title":  "TypeManager in CSharp enumerates all attribute on an assembly - unfriendly to linker",
+        "labels":  [
+                       "area-Microsoft.CSharp",
+                       "linkable-framework"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/59494",
+        "createdAt":  "2021-09-21T22:56:22Z",
+        "number":  59494,
+        "author":  "pranavkm",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHOCvVx9g==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "ascott18",
+                                            "createdAt":  "2021-12-02T23:12:35Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "metoule",
+                                            "createdAt":  "2022-02-01T13:42:12Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "komdil",
+                                            "createdAt":  "2022-03-25T05:55:55Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "ShreyasJejurkar",
+                                            "createdAt":  "2022-04-19T14:27:38Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "trottierm",
+                                            "createdAt":  "2022-07-27T14:01:12Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "ianeuman",
+                                            "createdAt":  "2023-04-07T02:16:36Z"
+                                        }
+                                    ],
+                          "totalCount":  6
+                      },
+        "updatedAt":  "2024-12-10T21:13:26Z",
+        "body":  "**Version Used**: 6.0-rc2 SDK\r\n\r\n**Steps to Reproduce**:\r\n\r\n1. Create a new Console App\r\n1. Update the contents to look like this:\r\n```C#\r\nwhile (true)\r\n{\r\n    var value = new { Message = \"Hello\" };\r\n    Foo(value);\r\n    Console.ReadLine();\r\n}\r\n\r\n\r\nstatic void Foo(dynamic obj)\r\n{\r\n    Console.WriteLine(obj.Message);\r\n}\r\n```\r\n1. Run the app\r\n1. Change the `Message` property to a different value in both places it occurs e.g.\r\n\r\n```diff\r\n- var value = new { Message = \"Hello\" };\r\n+ var value = new { Message2 = \"Hello\" };\r\n\r\n- Console.WriteLine(obj.Message);\r\n+ Console.WriteLine(obj.Message2);\r\n```\r\n1. Click the apply update button.\r\n1. Press Enter in the console\r\n\r\nThis results in an exception:\r\n\r\n```C#\r\nUnhandled exception. Microsoft.CSharp.RuntimeBinder.RuntimeBinderException: \u0027\u003c\u003ef__AnonymousType0\u003cstring\u003e\u0027 does not contain a definition for \u0027Message2\u0027\r\n   at CallSite.Target(Closure , CallSite , Object )\r\n   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)\r\n   at Program.\u003c\u003cMain\u003e$\u003eg__Foo|0_0(Object obj)\r\n   at Program.\u003cMain\u003e$(String[] args)\r\n```\r\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHONzXiag==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc43JY0P",
+                                           "createdAt":  "2021-09-22T18:52:08Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @cston\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n**Version Used**: 6.0-rc2 SDK\r\n\r\n**Steps to Reproduce**:\r\n\r\n1. Create a new Console App\r\n1. Update the contents to look like this:\r\n```C#\r\nwhile (true)\r\n{\r\n    var value = new { Message = \"Hello\" };\r\n    Foo(value);\r\n    Console.ReadLine();\r\n}\r\n\r\n\r\nstatic void Foo(dynamic obj)\r\n{\r\n    Console.WriteLine(obj.Message);\r\n}\r\n```\r\n1. Run the app\r\n1. Change the `Message` property to a different value in both places it occurs e.g.\r\n\r\n```diff\r\n- var value = new { Message = \"Hello\" };\r\n+ var value = new { Message2 = \"Hello\" };\r\n\r\n- Console.WriteLine(obj.Message);\r\n+ Console.WriteLine(obj.Message2);\r\n```\r\n1. Click the apply update button.\r\n1. Press Enter in the console\r\n\r\nThis results in an exception:\r\n\r\n```C#\r\nUnhandled exception. Microsoft.CSharp.RuntimeBinder.RuntimeBinderException: \u0027\u003c\u003ef__AnonymousType0\u003cstring\u003e\u0027 does not contain a definition for \u0027Message2\u0027\r\n   at CallSite.Target(Closure , CallSite , Object )\r\n   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)\r\n   at Program.\u003c\u003cMain\u003e$\u003eg__Foo|0_0(Object obj)\r\n   at Program.\u003cMain\u003e$(String[] args)\r\n```\r\n\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003epranavkm\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003etmat\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-Microsoft.CSharp`, `untriaged`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2021-09-22T18:52:08Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc43JZCQ",
+                                           "createdAt":  "2021-09-22T18:52:33Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @cston\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n**Version Used**: 6.0-rc2 SDK\r\n\r\n**Steps to Reproduce**:\r\n\r\n1. Create a new Console App\r\n1. Update the contents to look like this:\r\n```C#\r\nwhile (true)\r\n{\r\n    var value = new { Message = \"Hello\" };\r\n    Foo(value);\r\n    Console.ReadLine();\r\n}\r\n\r\n\r\nstatic void Foo(dynamic obj)\r\n{\r\n    Console.WriteLine(obj.Message);\r\n}\r\n```\r\n1. Run the app\r\n1. Change the `Message` property to a different value in both places it occurs e.g.\r\n\r\n```diff\r\n- var value = new { Message = \"Hello\" };\r\n+ var value = new { Message2 = \"Hello\" };\r\n\r\n- Console.WriteLine(obj.Message);\r\n+ Console.WriteLine(obj.Message2);\r\n```\r\n1. Click the apply update button.\r\n1. Press Enter in the console\r\n\r\nThis results in an exception:\r\n\r\n```C#\r\nUnhandled exception. Microsoft.CSharp.RuntimeBinder.RuntimeBinderException: \u0027\u003c\u003ef__AnonymousType0\u003cstring\u003e\u0027 does not contain a definition for \u0027Message2\u0027\r\n   at CallSite.Target(Closure , CallSite , Object )\r\n   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)\r\n   at Program.\u003c\u003cMain\u003e$\u003eg__Foo|0_0(Object obj)\r\n   at Program.\u003cMain\u003e$(String[] args)\r\n```\r\n\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003epranavkm\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003etmat\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-Microsoft.CSharp`, `area-System.Dynamic.Runtime`, `untriaged`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2021-09-22T18:52:33Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc43JZRm",
+                                           "createdAt":  "2021-09-22T18:53:12Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "tmat",
+                                           "body":  "I\u0027m guessing the call site caches need to be invalidated on Hot Reload.",
+                                           "updatedAt":  "2021-09-22T18:53:12Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc43Jdct",
+                                           "createdAt":  "2021-09-22T19:05:52Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "stephentoub",
+                                           "body":  "\u003e I\u0027m guessing the call site caches need to be invalidated on Hot Reload.\r\n\r\nIt seems like all of that caching is effectively performed by the compiler:\r\nhttps://sharplab.io/#v2:EYLgtghglgdgPgAQEwEYCwAoBBmABM3AYVwG9NcL88EAWXAWQAoBKcysjSr3AdwAsoAGwCmuRgBcATgFdhrTtwodFigG4RJudYNm4AvLhjCepBsIDO5iAHNRBgEQAJYYMEB7e7gC+AbjYrKADE3N0ZtWWY/BQCKQjcYczcRADoAJWEIABMAGVhhFiiAr0x/bgQUADZ8OmDQzIBPGAgwKABjXDdgACt5AOUYinKATkZOruT6CytbSNKuYujvTC8gA\r\n\r\nGiven that code gen, what here can be hooked by the runtime to clear said caches?  Wouldn\u0027t Roslyn need to regenerate that code?",
+                                           "updatedAt":  "2021-09-22T19:07:20Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc43JnIn",
+                                           "createdAt":  "2021-09-22T19:38:13Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "tmat",
+                                           "body":  "@stephentoub I misspoke, the problem isn\u0027t in the call sites themselves, but rather in the runtime binders referenced by the call sites.\r\nWe do not reuse the same static field for the call site cache when emitting updated IL/metadata deltas - see test\r\nhttps://sourceroslyn.io/#Microsoft.CodeAnalysis.CSharp.Emit.UnitTests/Emit/EditAndContinue/EditAndContinueTests.cs,7986\r\n\r\nI am not familiar with the C# runtime binder implementation but I\u0027d guess C# symbols might be cached and shared across runtime binder instances (that would make sense from perf perspective).",
+                                           "updatedAt":  "2021-09-22T19:38:29Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc43JolQ",
+                                           "createdAt":  "2021-09-22T19:43:40Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "tmat",
+                                           "body":  "Here: https://github.com/dotnet/runtime/blob/2d80343c0f0d8c800045b55fe00b37cbe1279dcd/src/libraries/Microsoft.CSharp/src/Microsoft/CSharp/RuntimeBinder/SymbolTable.cs#L20-L21\r\nhttps://github.com/dotnet/runtime/blob/2d80343c0f0d8c800045b55fe00b37cbe1279dcd/src/libraries/Microsoft.CSharp/src/Microsoft/CSharp/RuntimeBinder/Semantics/Symbols/SymbolStore.cs#L18",
+                                           "updatedAt":  "2021-09-22T19:45:10Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc43Jz6y",
+                                           "createdAt":  "2021-09-22T20:48:53Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "stephentoub",
+                                           "body":  "Thanks. Looking...",
+                                           "updatedAt":  "2021-09-22T20:48:53Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc43KbYZ",
+                                           "createdAt":  "2021-09-23T03:25:31Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "stephentoub",
+                                           "body":  "One question on the repro:\r\nThe call site that\u0027s constructing the new instance is part of a loop.  That method is never being executed and re-executed.  Wouldn\u0027t we expect the new code for the method containing that loop to not be used then?  Which would presumably mean it\u0027s still creating an instance of the old anonymous type that legitimately lacks the Message2 member that the Foo function then looks for?",
+                                           "updatedAt":  "2021-09-23T03:31:34Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc43KwQV",
+                                           "createdAt":  "2021-09-23T07:27:27Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "pranavkm",
+                                           "body":  "The repro might not the best example of the actual scenario which involves a controller method and a View communicating using a ViewBag. https://docs.microsoft.com/en-us/aspnet/core/mvc/views/overview?view=aspnetcore-5.0#passing-data-to-views. Both of these are executed from scratch on a HTTP request.\r\n\r\nEffectively there’s another outer loop to this code.",
+                                           "updatedAt":  "2021-09-23T07:27:27Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc43LUS9",
+                                           "createdAt":  "2021-09-23T11:08:42Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "stephentoub",
+                                           "body":  "Can you construct a console example that emulates it?  Your previous example involved changing the name of a property on an anonymous type; if that method is recompiled, won\u0027t it produce an entirely different anonymous type?  Putting an outer loop around this code (moving the body of the loop into its own function) makes it \"just work\" today.",
+                                           "updatedAt":  "2021-09-23T11:09:53Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc43Lmxt",
+                                           "createdAt":  "2021-09-23T12:53:50Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "stephentoub",
+                                           "body":  "(My motivation for asking: I have a change that clears a bunch of caches, but this is an extremely complicated and sprawling library that basically no one really understands anymore... I\u0027d like to validate the changes actually fix what you want fixed :-)",
+                                           "updatedAt":  "2021-09-23T12:53:50Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc43Mm_j",
+                                           "createdAt":  "2021-09-23T18:25:18Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "pranavkm",
+                                           "body":  "Here you go: https://github.com/pranavkm/DynamicRepro/tree/main-mvc. ",
+                                           "updatedAt":  "2021-09-23T18:25:18Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc43NeJq",
+                                           "createdAt":  "2021-09-24T01:31:25Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "stephentoub",
+                                           "body":  "Thanks.  Seems like this is specific to dynamic with a DynamicObject?\r\n\r\nI\u0027ve tried clearing all the caches, but I don\u0027t think these static caches are the issue here.  There appears to be state associated with either the CallSite or the DynamicObject itself that are getting in the way, but someone with more knowledge about Microsoft.CSharp and System.Linq.Expressions would need to investigate I think... unfortunately such people are few and far between these days.\r\n\r\nFor reference, here\u0027s my commit I was playing with for clearing dynamic state:\r\nhttps://github.com/stephentoub/runtime/commit/b96c2c4ec553a25f8160c40a31225512a1e0ef35\r\n\r\ncc: @jaredpar, @VSadov, @cston",
+                                           "updatedAt":  "2021-09-24T01:31:25Z"
+                                       }
+                                   ],
+                         "totalCount":  13
+                     },
+        "title":  "Hot Reload causes runtime exception when attempting to apply delta for dynamic types",
+        "labels":  [
+                       "area-Microsoft.CSharp"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/71629",
+        "createdAt":  "2022-07-05T11:43:00Z",
+        "number":  71629,
+        "author":  "stg609",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2023-11-16T18:09:03Z",
+        "body":  "### Description\r\n\r\nThere\u0027s an assembly with below code :\r\n```c#\r\n   dynamic eo = new ExpandoObject();\r\n   eo.abc = 123; // this line will cause the issue\r\n```\r\nIf I load the assembly in the `AssemblyLoadContext` with `isCollectible = true`, than this load context will never get unloaded via below methods:\r\n```c#\r\nloadContext.Unload();\r\nGC.Collect();\r\nGC.WaitForPendingFinalizers();\r\nGC.Collect();\r\n```\r\n\r\nI think there\u0027re some dynamic generated objects still reference the load context. But I can\u0027t find anyway to release them.\r\n\r\n### Reproduction Steps\r\n\r\nJust put the below code in a console app (.Net 5 or 6), and add `microsoft.codeanalysis.csharp.scripting` package will re-produce the issue.    \r\nThen you can find the output of the count always increase.\r\n\r\n```c#\r\nusing System;\r\nusing System.IO;\r\nusing System.Reflection;\r\nusing System.Runtime.Loader;\r\nusing System.Threading.Tasks;\r\nusing Microsoft.CodeAnalysis.CSharp.Scripting;\r\nusing Microsoft.CodeAnalysis.Scripting;\r\n\r\npublic class Program\r\n{\r\n    public static async Task Main(string[] args)\r\n    {\r\n       // ==== prepare the assembly ====\r\n        string code = @\"dynamic eo = new ExpandoObject(); \r\n                        eo.abc = 123; // comment out this line will fix the issue\r\n                        Console.WriteLine(System.AppDomain.CurrentDomain.GetAssemblies().Count());\";\r\n        ScriptOptions so = ScriptOptions.Default\r\n            .AddImports(\"System\", \"System.Linq\", \"System.Dynamic\")\r\n            .AddReferences(\"System\", \"System.Core\", \"Microsoft.CSharp\");\r\n\r\n        var cs = CSharpScript.Create(code, so);\r\n        var compilation = cs.GetCompilation();\r\n        using MemoryStream ms = new MemoryStream();\r\n        var rslt = compilation.Emit(ms);\r\n        // ==== finish preparing ====\r\n\r\n        while (true)\r\n        {\r\n            ms.Seek(0, SeekOrigin.Begin);\r\n\r\n            AssemblyLoadContext lc = new AssemblyLoadContext(\"test\", isCollectible: true);\r\n            var ass = lc.LoadFromStream(ms);\r\n\r\n            var typ = ass.GetType(\"Submission#0\");\r\n            var mem = typ.GetMethod(\"\u003cFactory\u003e\", BindingFlags.Static | BindingFlags.Public);\r\n\r\n            var retTask = mem.Invoke(null, new object[] { new object[2] }) as Task\u003cobject\u003e;\r\n            var rsltTsk = await retTask;\r\n\r\n            lc.Unload();\r\n\r\n            GC.Collect();\r\n            GC.WaitForPendingFinalizers();\r\n            GC.Collect();\r\n\r\n            await Task.Delay(200);\r\n        }\r\n    }\r\n}\r\n```\r\n\r\n### Expected behavior\r\n\r\nThe output of the count will only increase once for the first time.\r\n\r\n### Actual behavior\r\n\r\nThe output of the count always increase.\r\n\r\n### Regression?\r\n\r\n_No response_\r\n\r\n### Known Workarounds\r\n\r\n_No response_\r\n\r\n### Configuration\r\n\r\n**Which version of .NET is the code running on?**\r\n.Net 5、.Net 6\r\n\r\n**What OS and version, and what distro if applicable?**\r\nOnly Tested in Win 10 Pro.\r\n\r\n**What is the architecture (x64, x86, ARM, ARM64)?**\r\nx64\r\n\r\n**Do you know whether it is specific to that configuration?**\r\nNo\r\n\r\n\r\n### Other information\r\n\r\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHObC5sfA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5GCIRl",
+                                           "createdAt":  "2022-07-05T11:43:06Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "I couldn\u0027t figure out the best area label to add to this issue. If you have write-permissions please help me learn by adding exactly one [area label](https://github.com/dotnet/runtime/blob/master/docs/area-owners.md).",
+                                           "updatedAt":  "2022-07-05T11:43:06Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5GCQnI",
+                                           "createdAt":  "2022-07-05T12:23:27Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @vitek-karas, @agocke, @vsadov\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Description\r\n\r\nThere\u0027s an assembly with below code :\r\n```c#\r\n   dynamic eo = new ExpandoObject();\r\n   eo.abc = 123; // this line will cause the issue\r\n```\r\nIf I load the assembly in the `AssemblyLoadContext` with `isCollectible = true`, than this load context will never get unloaded via below methods:\r\n```c#\r\nloadContext.Unload();\r\nGC.Collect();\r\nGC.WaitForPendingFinalizers();\r\nGC.Collect();\r\n```\r\n\r\nI think there\u0027re some dynamic generated objects still reference the load context. But I can\u0027t find anyway to release them.\r\n\r\n### Reproduction Steps\r\n\r\nJust put the below code in a console app (.Net 5 or 6), and add `microsoft.codeanalysis.csharp.scripting` package will re-produce the issue.    \r\nThen you can find the output of the count always increase.\r\n\r\n```c#\r\nusing System;\r\nusing System.IO;\r\nusing System.Reflection;\r\nusing System.Runtime.Loader;\r\nusing System.Threading.Tasks;\r\nusing Microsoft.CodeAnalysis.CSharp.Scripting;\r\nusing Microsoft.CodeAnalysis.Scripting;\r\n\r\npublic class Program\r\n{\r\n    public static async Task Main(string[] args)\r\n    {\r\n       // ==== prepare the assembly ====\r\n        string code = @\"dynamic eo = new ExpandoObject(); \r\n                        eo.abc = 123; // comment out this line will fix the issue\r\n                        Console.WriteLine(System.AppDomain.CurrentDomain.GetAssemblies().Count());\";\r\n        ScriptOptions so = ScriptOptions.Default\r\n            .AddImports(\"System\", \"System.Linq\", \"System.Dynamic\")\r\n            .AddReferences(\"System\", \"System.Core\", \"Microsoft.CSharp\");\r\n\r\n        var cs = CSharpScript.Create(code, so);\r\n        var compilation = cs.GetCompilation();\r\n        using MemoryStream ms = new MemoryStream();\r\n        var rslt = compilation.Emit(ms);\r\n        // ==== finish preparing ====\r\n\r\n        while (true)\r\n        {\r\n            ms.Seek(0, SeekOrigin.Begin);\r\n\r\n            AssemblyLoadContext lc = new AssemblyLoadContext(\"test\", isCollectible: true);\r\n            var ass = lc.LoadFromStream(ms);\r\n\r\n            var typ = ass.GetType(\"Submission#0\");\r\n            var mem = typ.GetMethod(\"\u003cFactory\u003e\", BindingFlags.Static | BindingFlags.Public);\r\n\r\n            var retTask = mem.Invoke(null, new object[] { new object[2] }) as Task\u003cobject\u003e;\r\n            var rsltTsk = await retTask;\r\n\r\n            lc.Unload();\r\n\r\n            GC.Collect();\r\n            GC.WaitForPendingFinalizers();\r\n            GC.Collect();\r\n\r\n            await Task.Delay(200);\r\n        }\r\n    }\r\n}\r\n```\r\n\r\n### Expected behavior\r\n\r\nThe output of the count will only increase once for the first time.\r\n\r\n### Actual behavior\r\n\r\nThe output of the count always increase.\r\n\r\n### Regression?\r\n\r\n_No response_\r\n\r\n### Known Workarounds\r\n\r\n_No response_\r\n\r\n### Configuration\r\n\r\n**Which version of .NET is the code running on?**\r\n.Net 5、.Net 6\r\n\r\n**What OS and version, and what distro if applicable?**\r\nOnly Tested in Win 10 Pro.\r\n\r\n**What is the architecture (x64, x86, ARM, ARM64)?**\r\nx64\r\n\r\n**Do you know whether it is specific to that configuration?**\r\nNo\r\n\r\n\r\n### Other information\r\n\r\n_No response_\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003estg609\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-AssemblyLoader-coreclr`, `untriaged`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2022-07-05T12:23:27Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5GCTmV",
+                                           "createdAt":  "2022-07-05T12:36:36Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "teo-tsirpanis",
+                                           "body":  "I think I found the source of the rooting, it\u0027s in a cache in `Microsoft.CSharp.RuntimeBinder`.\r\n\r\nhttps://github.com/dotnet/runtime/blob/c30866d60c49a19e66e8edcc3a0876585fe760fc/src/libraries/Microsoft.CSharp/src/Microsoft/CSharp/RuntimeBinder/BinderEquivalence.cs#L32-L33\r\n\r\nI\u0027m not sure whether it will be fixed; this is an archived component.",
+                                           "updatedAt":  "2022-07-05T12:36:36Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5GCTpA",
+                                           "createdAt":  "2022-07-05T12:36:48Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @cston\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Description\r\n\r\nThere\u0027s an assembly with below code :\r\n```c#\r\n   dynamic eo = new ExpandoObject();\r\n   eo.abc = 123; // this line will cause the issue\r\n```\r\nIf I load the assembly in the `AssemblyLoadContext` with `isCollectible = true`, than this load context will never get unloaded via below methods:\r\n```c#\r\nloadContext.Unload();\r\nGC.Collect();\r\nGC.WaitForPendingFinalizers();\r\nGC.Collect();\r\n```\r\n\r\nI think there\u0027re some dynamic generated objects still reference the load context. But I can\u0027t find anyway to release them.\r\n\r\n### Reproduction Steps\r\n\r\nJust put the below code in a console app (.Net 5 or 6), and add `microsoft.codeanalysis.csharp.scripting` package will re-produce the issue.    \r\nThen you can find the output of the count always increase.\r\n\r\n```c#\r\nusing System;\r\nusing System.IO;\r\nusing System.Reflection;\r\nusing System.Runtime.Loader;\r\nusing System.Threading.Tasks;\r\nusing Microsoft.CodeAnalysis.CSharp.Scripting;\r\nusing Microsoft.CodeAnalysis.Scripting;\r\n\r\npublic class Program\r\n{\r\n    public static async Task Main(string[] args)\r\n    {\r\n       // ==== prepare the assembly ====\r\n        string code = @\"dynamic eo = new ExpandoObject(); \r\n                        eo.abc = 123; // comment out this line will fix the issue\r\n                        Console.WriteLine(System.AppDomain.CurrentDomain.GetAssemblies().Count());\";\r\n        ScriptOptions so = ScriptOptions.Default\r\n            .AddImports(\"System\", \"System.Linq\", \"System.Dynamic\")\r\n            .AddReferences(\"System\", \"System.Core\", \"Microsoft.CSharp\");\r\n\r\n        var cs = CSharpScript.Create(code, so);\r\n        var compilation = cs.GetCompilation();\r\n        using MemoryStream ms = new MemoryStream();\r\n        var rslt = compilation.Emit(ms);\r\n        // ==== finish preparing ====\r\n\r\n        while (true)\r\n        {\r\n            ms.Seek(0, SeekOrigin.Begin);\r\n\r\n            AssemblyLoadContext lc = new AssemblyLoadContext(\"test\", isCollectible: true);\r\n            var ass = lc.LoadFromStream(ms);\r\n\r\n            var typ = ass.GetType(\"Submission#0\");\r\n            var mem = typ.GetMethod(\"\u003cFactory\u003e\", BindingFlags.Static | BindingFlags.Public);\r\n\r\n            var retTask = mem.Invoke(null, new object[] { new object[2] }) as Task\u003cobject\u003e;\r\n            var rsltTsk = await retTask;\r\n\r\n            lc.Unload();\r\n\r\n            GC.Collect();\r\n            GC.WaitForPendingFinalizers();\r\n            GC.Collect();\r\n\r\n            await Task.Delay(200);\r\n        }\r\n    }\r\n}\r\n```\r\n\r\n### Expected behavior\r\n\r\nThe output of the count will only increase once for the first time.\r\n\r\n### Actual behavior\r\n\r\nThe output of the count always increase.\r\n\r\n### Regression?\r\n\r\n_No response_\r\n\r\n### Known Workarounds\r\n\r\n_No response_\r\n\r\n### Configuration\r\n\r\n**Which version of .NET is the code running on?**\r\n.Net 5、.Net 6\r\n\r\n**What OS and version, and what distro if applicable?**\r\nOnly Tested in Win 10 Pro.\r\n\r\n**What is the architecture (x64, x86, ARM, ARM64)?**\r\nx64\r\n\r\n**Do you know whether it is specific to that configuration?**\r\nNo\r\n\r\n\r\n### Other information\r\n\r\n_No response_\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003estg609\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-Microsoft.CSharp`, `untriaged`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2022-07-05T12:36:48Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5GCU96",
+                                           "createdAt":  "2022-07-05T12:42:40Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "teo-tsirpanis",
+                                           "body":  "Here\u0027s a simpler repro that does not involve Roslyn:\r\n\r\n``` csharp\r\nusing System;\r\nusing System.Dynamic;\r\nusing System.IO;\r\nusing System.Reflection;\r\nusing System.Runtime.Loader;\r\nusing System.Threading;\r\n\r\npublic class Program\r\n{\r\n    public static void DoIt()\r\n    {\r\n        dynamic eo = new ExpandoObject();\r\n        eo.abc = 123; // comment out this line will fix the issue\r\n        Console.WriteLine(System.AppDomain.CurrentDomain.GetAssemblies().Count());\r\n    }\r\n\r\n    public static void Main()\r\n    {\r\n        while (true)\r\n        {\r\n            AssemblyLoadContext lc = new AssemblyLoadContext(\"test\", isCollectible: true);\r\n            var ass = lc.LoadFromAssemblyPath(typeof(Program).Assembly.Location);\r\n\r\n            var typ = ass.GetType(nameof(Program))!;\r\n            var mem = typ.GetMethod(nameof(DoIt), BindingFlags.Static | BindingFlags.Public)!;\r\n\r\n            mem.Invoke(null, Array.Empty\u003cobject\u003e());\r\n\r\n            lc.Unload();\r\n\r\n            GC.Collect();\r\n            GC.WaitForPendingFinalizers();\r\n            GC.Collect();\r\n\r\n            Thread.Sleep(200);\r\n        }\r\n    }\r\n}\r\n```",
+                                           "updatedAt":  "2022-07-05T12:46:05Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5LyI8N",
+                                           "createdAt":  "2022-10-07T10:51:32Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "stg609",
+                                           "body":  "Any progress? We need to use dynamic keyword in our scenario, but currently the AssemblyLoadContext will not release the assembly which lead to the memory leak.",
+                                           "updatedAt":  "2022-10-07T10:51:32Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5MsqXp",
+                                           "createdAt":  "2022-10-21T10:38:38Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "nickeeex",
+                                           "body":  "I think we had this same issue and it was fixed by loading Microsoft.CSharp.dll into the plugin AssemblyLoadContext instead of the Default AsseblyLoadContext",
+                                           "updatedAt":  "2022-10-21T10:38:38Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5M6ESn",
+                                           "createdAt":  "2022-10-25T09:55:02Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "stg609",
+                                           "body":  "\u003e I think we had this same issue and it was fixed by loading Microsoft.CSharp.dll into the plugin AssemblyLoadContext instead of the Default AsseblyLoadContext\r\n\r\nWhat did you mean by loading Microsoft.CSharp.dll into the plugin AssemblyLoadContext? Could you share some code? Thanks in advanced.",
+                                           "updatedAt":  "2022-10-25T09:55:50Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5M6HGy",
+                                           "createdAt":  "2022-10-25T10:05:20Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "nickeeex",
+                                           "body":  "`\r\n        var charpDllLocation = typeof(Microsoft.CSharp.RuntimeBinder.Binder).Assembly.Location;\r\n        var microsoftCSharpAssemblyPath = Path.Combine(Path.GetDirectoryName(charpDllLocation ), \"Microsoft.CSharp.dll\");\r\n        lc.LoadFromAssemblyPath(microsoftCSharpAssemblyPath); \r\n`\r\nafter creating your load context",
+                                           "updatedAt":  "2022-10-25T10:05:41Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5M6L_7",
+                                           "createdAt":  "2022-10-25T10:22:50Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "stg609",
+                                           "body":  "Thanks, I\u0027ll give it a try.",
+                                           "updatedAt":  "2022-10-25T10:22:50Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5M6PnU",
+                                           "createdAt":  "2022-10-25T10:35:24Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "stg609",
+                                           "body":  "Amazing, it does prevent the the total number of the assemblies from increasing. And do you happen to know the reason behind the scene?",
+                                           "updatedAt":  "2022-10-25T10:36:03Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5M6SLN",
+                                           "createdAt":  "2022-10-25T10:45:13Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOCuettA==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "stg609",
+                                                                               "createdAt":  "2022-10-25T23:29:57Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "nickeeex",
+                                           "body":  "\u003e I think I found the source of the rooting, it\u0027s in a cache in `Microsoft.CSharp.RuntimeBinder`.\r\n\u003e \r\n\u003e https://github.com/dotnet/runtime/blob/c30866d60c49a19e66e8edcc3a0876585fe760fc/src/libraries/Microsoft.CSharp/src/Microsoft/CSharp/RuntimeBinder/BinderEquivalence.cs#L32-L33\r\n\u003e \r\n\u003e I\u0027m not sure whether it will be fixed; this is an archived component. \r\n\r\n\r\nIf you don\u0027t load the Microsoft.CSharp.dll into your plugin ALC there will be something keeping the references alive as it will use the assembly loaded into the Default ALC \r\nMost likely a similar reason to this:\r\nhttps://github.com/dotnet/runtime/issues/13283\r\n\r\nSo there is a small memory hit here as each plugin will load the assembly separately instead of sharing.",
+                                           "updatedAt":  "2022-10-25T10:45:50Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5PS9QB",
+                                           "createdAt":  "2022-11-29T09:57:06Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOC6rRRw==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "CONFUSED",
+                                                                               "user":  "nickeeex",
+                                                                               "createdAt":  "2022-12-05T06:47:55Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "dingsongjie",
+                                                                               "createdAt":  "2023-04-27T01:27:41Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  2
+                                                         },
+                                           "author":  "dingsongjie",
+                                           "body":  "\u003e \u003e I think I found the source of the rooting, it\u0027s in a cache in `Microsoft.CSharp.RuntimeBinder`.\r\n\u003e \u003e https://github.com/dotnet/runtime/blob/c30866d60c49a19e66e8edcc3a0876585fe760fc/src/libraries/Microsoft.CSharp/src/Microsoft/CSharp/RuntimeBinder/BinderEquivalence.cs#L32-L33\r\n\u003e \u003e \r\n\u003e \u003e I\u0027m not sure whether it will be fixed; this is an archived component.\r\n\u003e \r\n\u003e If you don\u0027t load the Microsoft.CSharp.dll into your plugin ALC there will be something keeping the references alive as it will use the assembly loaded into the Default ALC Most likely a similar reason to this: #13283\r\n\u003e \r\n\u003e So there is a small memory hit here as each plugin will load the assembly separately instead of sharing.\r\n\r\nDoing so can have a noticeable performance impact, jit time increased significantly。\r\n",
+                                           "updatedAt":  "2022-11-29T09:57:06Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5iY_m5",
+                                           "createdAt":  "2023-07-25T23:54:02Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODB03vQ==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "nickeeex",
+                                                                               "createdAt":  "2023-07-26T08:29:00Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "teo-tsirpanis",
+                                           "body":  "I will work on this soon.",
+                                           "updatedAt":  "2023-07-25T23:54:02Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5sLmx8",
+                                           "createdAt":  "2023-11-16T18:09:01Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "teo-tsirpanis",
+                                           "body":  "My PR turned out to be more complicated than originally anticipated; there are more roots that are harder to eliminate, and this component is in maintenance mode.\n\n@nickeeex\u0027s solution is a workaround. The performance hit of loading MS.CS twice is unfortunate but unavoidable.",
+                                           "updatedAt":  "2023-11-16T18:09:01Z"
+                                       }
+                                   ],
+                         "totalCount":  15
+                     },
+        "title":  "AssemblyLoadContext never get unloaded if there\u0027s a dynamic operation",
+        "labels":  [
+                       "area-Microsoft.CSharp"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/72799",
+        "createdAt":  "2022-07-25T17:22:16Z",
+        "number":  72799,
+        "author":  "IS4Code",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHOC2UhuQ==",
+                          "nodes":  [
+                                        {
+                                            "content":  "EYES",
+                                            "user":  "SupinePandora43",
+                                            "createdAt":  "2022-07-26T09:05:44Z"
+                                        },
+                                        {
+                                            "content":  "EYES",
+                                            "user":  "Rekkonnect",
+                                            "createdAt":  "2024-03-05T19:07:16Z"
+                                        }
+                                    ],
+                          "totalCount":  2
+                      },
+        "updatedAt":  "2025-07-29T23:20:02Z",
+        "body":  "### Description\r\n\r\nWhen a method is called with a `dynamic` argument, the `unmanaged` constraint (and likely other new constraints) is not taken into account when the overload is being picked.\r\n\r\n### Reproduction Steps\r\n\r\nCreate a method like `N\u003cT\u003e(T value) where T : unmanaged` and call it with a `dynamic`-typed instance of a non-unmanaged type. For example:\r\n```cs\r\npublic static void Main(string[] args)\r\n{\r\n    M\u003cint\u003e(); // True\r\n    M\u003cstring\u003e(); // False\r\n    M\u003cValueTuple\u003cstring\u003e\u003e(); // True\r\n}\r\n\r\nstatic void M\u003cT\u003e()\r\n{\r\n    Console.WriteLine(N((dynamic)default(T)));\r\n}\r\n\r\nstatic bool N\u003cT\u003e(T value) where T : unmanaged =\u003e true;\r\n\r\nstatic bool N(object value) =\u003e false;\r\n```\r\n\r\n### Expected behavior\r\n\r\nThe overload with `where T : unmanaged` should not be picked, as it violates the constraint and is inconsistent with C#.\r\n\r\n### Actual behavior\r\n\r\n`where T : unmanaged` is treated as `where T : struct` in the DLR, and is picked even for a non-unmanaged type.\r\n\r\n### Regression?\r\n\r\n_No response_\r\n\r\n### Known Workarounds\r\n\r\n_No response_\r\n\r\n### Configuration\r\n\r\nTested on .NET 8, 6, and 5.\r\n\r\n### Other information\r\n\r\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOdfw8-Q==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5HMM78",
+                                           "createdAt":  "2022-07-25T17:22:20Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "I couldn\u0027t figure out the best area label to add to this issue. If you have write-permissions please help me learn by adding exactly one [area label](https://github.com/dotnet/runtime/blob/master/docs/area-owners.md).",
+                                           "updatedAt":  "2022-07-25T17:22:20Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5HMlwb",
+                                           "createdAt":  "2022-07-25T18:55:14Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @cston\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Description\n\nWhen a method is called with a `dynamic` argument, the `unmanaged` constraint (and likely other new constraints) is not taken into account when the overload is being picked.\n\n### Reproduction Steps\n\nCreate a method like `N\u003cT\u003e(T value) where T : unmanaged` and call it with a `dynamic`-typed instance of a non-unmanaged type. For example:\r\n```cs\r\npublic static void Main(string[] args)\r\n{\r\n    M\u003cint\u003e(); // True\r\n    M\u003cstring\u003e(); // False\r\n    M\u003cValueTuple\u003cstring\u003e\u003e(); // True\r\n}\r\n\r\nstatic void M\u003cT\u003e()\r\n{\r\n    Console.WriteLine(N((dynamic)default(T)));\r\n}\r\n\r\nstatic bool N\u003cT\u003e(T value) where T : unmanaged =\u003e true;\r\n\r\nstatic bool N(object value) =\u003e false;\r\n```\n\n### Expected behavior\n\nThe overload with `where T : unmanaged` should not be picked, as it violates the constraint and is inconsistent with C#.\n\n### Actual behavior\n\n`where T : unmanaged` is treated as `where T : struct` in the DLR, and is picked even for a non-unmanaged type.\n\n### Regression?\n\n_No response_\n\n### Known Workarounds\n\n_No response_\n\n### Configuration\n\nTested on .NET 6 and 5.\n\n### Other information\n\n_No response_\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003eIllidanS4\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-Microsoft.CSharp`, `untriaged`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2022-07-25T18:55:14Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc51_Dz5",
+                                           "createdAt":  "2024-03-05T19:13:20Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "IS4Code",
+                                           "body":  "Issue still exists on .NET 8.",
+                                           "updatedAt":  "2024-03-05T19:13:20Z"
+                                       }
+                                   ],
+                         "totalCount":  3
+                     },
+        "title":  "DLR ignores unmanaged constraint when picking overload",
+        "labels":  [
+                       "area-Microsoft.CSharp"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/106469",
+        "createdAt":  "2024-08-15T15:01:30Z",
+        "number":  106469,
+        "author":  "StefH",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-07-29T23:19:38Z",
+        "body":  "### Description\n\nWhen a type is dynamically created using System.Reflection.Emit code, accessing a field or property throws InvalidOperationException.\n\n### Reproduction Steps\n\nCreate a .NET 8 WASM Blazor project.\r\n\r\nInclude System.Linq.Dynamic.Core\r\n\r\nAdd this code to the default Counter.cs code which creates dynamically a type and a instance of that type:\r\n``` c#\r\nvar props = new DynamicProperty[] { new(\"Name\", typeof(string)), new(\"Birthday\", typeof(DateTime)) };\r\nvar type = DynamicClassFactory.CreateType(props);\r\nvar dynamicClass = (DynamicClass)Activator.CreateInstance(type, false)!;\r\ndynamicClass.SetDynamicPropertyValue(\"Name\", \"Albert\");\r\ndynamicClass.SetDynamicPropertyValue(\"Birthday\", new DateTime(1879, 3, 14));\r\n```\r\n\r\nNow when casting this to `dynamic` and accessing the \"Name\" property throws exception:\r\n``` c#\r\nConsole.WriteLine(((dynamic)dynamicClass).Name);\r\n```\r\n\r\nNot that accessing the properties using reflection works fine:\r\n``` c#\r\nvar nameReflection = dynamicClass.GetType().GetProperty(\"Name\")!.GetValue(dynamicClass);\r\nConsole.WriteLine(\"Reflection = \" + nameReflection);\r\n```\r\n\r\nSee this issue + fully working example project to show this error:\r\nhttps://github.com/zzzprojects/System.Linq.Dynamic.Core/issues/836\n\n### Expected behavior\n\nThe \"Name\" property should be accessible.\n\n### Actual behavior\n\n```\r\ncrit: Microsoft.AspNetCore.Components.WebAssembly.Rendering.WebAssemblyRenderer[100]\r\n      Unhandled exception rendering component: Operation is not valid due to the current state of the object.\r\nSystem.InvalidOperationException: Operation is not valid due to the current state of the object.\r\n   at System.Reflection.Emit.RuntimeGenericTypeParameterBuilder.GetGenericParameterConstraints()\r\n   at Microsoft.CSharp.RuntimeBinder.SymbolTable.AddAggregateToSymbolTable(NamespaceOrAggregateSymbol parent, Type type)\r\n   at Microsoft.CSharp.RuntimeBinder.SymbolTable.LoadSymbolsFromType(Type type)\r\n   at Microsoft.CSharp.RuntimeBinder.SymbolTable.GetCTypeFromType(Type type)\r\n   at Microsoft.CSharp.RuntimeBinder.RuntimeBinder.GetArgumentType(ICSharpBinder p, CSharpArgumentInfo argInfo, Expression param, DynamicMetaObject arg, Int32 index)\r\n   at Microsoft.CSharp.RuntimeBinder.RuntimeBinder.CreateArgumentArray(ICSharpBinder payload, Expression[] parameters, DynamicMetaObject[] args)\r\n   at Microsoft.CSharp.RuntimeBinder.RuntimeBinder.BindCore(ICSharpBinder payload, Expression[] parameters, DynamicMetaObject[] args, DynamicMetaObject\u0026 deferredBinding)\r\n   at Microsoft.CSharp.RuntimeBinder.RuntimeBinder.Bind(ICSharpBinder payload, Expression[] parameters, DynamicMetaObject[] args, DynamicMetaObject\u0026 deferredBinding)\r\n   at Microsoft.CSharp.RuntimeBinder.BinderHelper.Bind(ICSharpBinder action, RuntimeBinder binder, DynamicMetaObject[] args, IEnumerable`1 arginfos, DynamicMetaObject onBindingError)\r\n   at Microsoft.CSharp.RuntimeBinder.CSharpGetMemberBinder.FallbackGetMember(DynamicMetaObject target, DynamicMetaObject errorSuggestion)\r\n   at System.Dynamic.GetMemberBinder.FallbackGetMember(DynamicMetaObject target)\r\n   at System.Dynamic.DynamicMetaObject.BindGetMember(GetMemberBinder binder)\r\n   at System.Dynamic.GetMemberBinder.Bind(DynamicMetaObject target, DynamicMetaObject[] args)\r\n   at System.Dynamic.DynamicMetaObjectBinder.Bind(Object[] args, ReadOnlyCollection`1 parameters, LabelTarget returnLabel)\r\n   at System.Runtime.CompilerServices.CallSiteBinder.BindCore[Func`3](CallSite`1 site, Object[] args)\r\n   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[Object,Object](CallSite site, Object arg0)\r\n   at WasmDynamicLinq.Pages.Home.OnInitialized() in C:\\Dev\\GitHub\\System.Linq.Dynamic.Core\\src-blazor\\WasmDynamicLinq\\Pages\\Home.razor.cs:line 142\r\n   at Microsoft.AspNetCore.Components.ComponentBase.RunInitAndSetParametersAsync()\r\nDt @ blazor.webassembly.js:1\r\n(anonymous) @ invoke-js.ts:176\r\nTl @ invoke-js.ts:276\r\n$func349 @ 00b21cf6:0x1fafb\r\n$func245 @ 00b21cf6:0x1bf9f\r\n$func238 @ 00b21cf6:0xf16c\r\n$func272 @ 00b21cf6:0x1d1bd\r\n$func3185 @ 00b21cf6:0xe8756\r\n$func2505 @ 00b21cf6:0xbe4ac\r\n$func2511 @ 00b21cf6:0xbecd0\r\n$func2535 @ 00b21cf6:0xc1327\r\n$mono_wasm_invoke_method_bound @ 00b21cf6:0xa4fa\r\nModule._mono_wasm_invoke_method_bound @ dotnet.native.8.0.7.37dkch2d2y.js:8\r\nkr @ invoke-cs.ts:273\r\nl.javaScriptExports.complete_task @ managed-exports.ts:142\r\n(anonymous) @ marshal-to-cs.ts:335\r\nPromise.then\r\nmo @ marshal-to-cs.ts:329\r\n(anonymous) @ marshal-to-cs.ts:83\r\n(anonymous) @ invoke-js.ts:177\r\nTl @ invoke-js.ts:276\r\n$func349 @ 00b21cf6:0x1fafb\r\n$func245 @ 00b21cf6:0x1bf9f\r\n$func238 @ 00b21cf6:0xf16c\r\n$func272 @ 00b21cf6:0x1d1bd\r\n$func3185 @ 00b21cf6:0xe8756\r\n$func2505 @ 00b21cf6:0xbe4ac\r\n$func2504 @ 00b21cf6:0xbe43c\r\n$func1874 @ 00b21cf6:0x9a502\r\n$func349 @ 00b21cf6:0x1fb7f\r\n$func245 @ 00b21cf6:0x1bf9f\r\n$func238 @ 00b21cf6:0xf16c\r\n$func272 @ 00b21cf6:0x1d1bd\r\n$func3185 @ 00b21cf6:0xe8756\r\n$func2505 @ 00b21cf6:0xbe4ac\r\n$func2511 @ 00b21cf6:0xbecd0\r\n$func2535 @ 00b21cf6:0xc1327\r\n$mono_wasm_invoke_method_bound @ 00b21cf6:0xa4fa\r\nModule._mono_wasm_invoke_method_bound @ dotnet.native.8.0.7.37dkch2d2y.js:8\r\nkr @ invoke-cs.ts:273\r\nl.javaScriptExports.call_entry_point @ managed-exports.ts:60\r\nOc @ run.ts:44\r\ncallEntryPoint @ blazor.webassembly.js:1\r\nmn @ blazor.webassembly.js:1\r\nawait in mn\r\nfn @ blazor.webassembly.js:1\r\nAn @ blazor.webassembly.js:1\r\n(anonymous) @ blazor.webassembly.js:1\r\n(anonymous) @ blazor.webassembly.js:1\r\n```\n\n### Regression?\n\n_No response_\n\n### Known Workarounds\n\n_No response_\n\n### Configuration\n\n.NET 8\r\n\r\nBlazor WAM\r\n\r\n``` xml\r\n\u003cProject Sdk=\"Microsoft.NET.Sdk.BlazorWebAssembly\"\u003e\r\n```\n\n### Other information\n\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOiMfmqw==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc6IlSmj",
+                                           "createdAt":  "2024-08-15T15:01:58Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @cston\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2024-08-15T15:01:58Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6Ix-ar",
+                                           "createdAt":  "2024-08-17T09:07:04Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "StefH",
+                                           "body":  "@cston \r\nI was able to trim down the issue to the part when I make the type a **generic type**:\r\n\r\n### This code works:\r\n``` c#\r\n// Define a dynamic assembly and module\r\nAssemblyName assemblyName = new AssemblyName(\"DynamicAssembly\");\r\nAssemblyBuilder assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.RunAndCollect);\r\nModuleBuilder moduleBuilder = assemblyBuilder.DefineDynamicModule(\"DynamicModule\");\r\n\r\n// Define a public class named \"DynamicType\"\r\nTypeBuilder typeBuilder = moduleBuilder.DefineType(\"DynamicType\", TypeAttributes.Public);\r\n\r\n// Define a public field of type string named \"MyField\"\r\ntypeBuilder.DefineField(\"MyField\", typeof(string), FieldAttributes.Public);\r\n\r\n// Create the type\r\nType dynamicType = typeBuilder.CreateType();\r\n\r\n// Create an instance of the dynamic type\r\ndynamic dynamicObject = Activator.CreateInstance(dynamicType)!;\r\n\r\n// Set the value of the field using reflection\r\nFieldInfo fieldInfo = dynamicType.GetField(\"MyField\", BindingFlags.Public | BindingFlags.Instance)!;\r\nfieldInfo.SetValue(dynamicObject, \"Hello, World!\");\r\n\r\n// Output the value\r\nConsole.WriteLine(\"Test Field Value: \" + (string)fieldInfo.GetValue(dynamicObject));\r\nConsole.WriteLine(\"Test Field Value Dynamic: \" + dynamicObject.MyField);\r\n```\r\n\r\n### This code does `not` work\r\n``` c#\r\n// Define a dynamic assembly and module\r\nAssemblyName assemblyName = new AssemblyName(\"DynamicAssembly\");\r\nAssemblyBuilder assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.RunAndCollect);\r\nModuleBuilder moduleBuilder = assemblyBuilder.DefineDynamicModule(\"DynamicModule\");\r\n\r\n// Define a public class named \"DynamicType\"\r\nTypeBuilder typeBuilder = moduleBuilder.DefineType(\"DynamicType\", TypeAttributes.Public);\r\n\r\n// Define a public field of type string named \"MyField\"\r\ntypeBuilder.DefineField(\"MyField\", typeof(string), FieldAttributes.Public);\r\n\r\n// ▶️ Define Generic Parameter\r\ntypeBuilder.DefineGenericParameters(\"T0\");\r\n\r\n// Create the type\r\nType dynamicType = typeBuilder.CreateType();\r\n\r\n// ▶️ Make it generic\r\ndynamicType = dynamicType.MakeGenericType(typeof(string));\r\n\r\n// Create an instance of the dynamic type\r\ndynamic dynamicObject = Activator.CreateInstance(dynamicType)!;\r\n\r\n// Set the value of the field using reflection\r\nFieldInfo fieldInfo = dynamicType.GetField(\"MyField\", BindingFlags.Public | BindingFlags.Instance)!;\r\nfieldInfo.SetValue(dynamicObject, \"Hello, World!\"); // ▶️ this throws exception\r\n\r\n// Output the value\r\nConsole.WriteLine(\"Test Field Value: \" + (string)fieldInfo.GetValue(dynamicObject));\r\nConsole.WriteLine(\"Test Field Value Dynamic: \" + dynamicObject.MyField);\r\n```\r\n\r\nCan you explain this?",
+                                           "updatedAt":  "2024-08-17T09:07:04Z"
+                                       }
+                                   ],
+                         "totalCount":  2
+                     },
+        "title":  "InvalidOperationException when accessing property from dynamically generated class-type in Blazor WASM .NET 8",
+        "labels":  [
+                       "area-Microsoft.CSharp"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/113470",
+        "createdAt":  "2025-03-13T12:21:46Z",
+        "number":  113470,
+        "author":  "akordowski",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-07-31T16:49:15Z",
+        "body":  "I have noticed that across the code base there are a lot of occurrences with two or more blank spaces between words in the code documentation,\n\nlike here:\n\nhttps://github.com/dotnet/runtime/blob/5ff417fd7fbff9bbd3c66f35a1721ddaa37840eb/src/libraries/Microsoft.CSharp/src/Microsoft/CSharp/RuntimeBinder/ComInterop/IDispatchComObject.cs#L35\n\nor here:\n\nhttps://github.com/dotnet/runtime/blob/5ff417fd7fbff9bbd3c66f35a1721ddaa37840eb/src/libraries/Microsoft.CSharp/src/Microsoft/CSharp/RuntimeBinder/ComInterop/IDispatchComObject.cs#L69\n\nI suppose this is not very noticeable in the rendered documentation, but I would like to provide a PR which fixes the issue.\nThank you for considering.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOojBOOQ==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc6iME45",
+                                           "createdAt":  "2025-03-13T12:22:17Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @cston\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2025-03-13T12:22:17Z"
+                                       }
+                                   ],
+                         "totalCount":  1
+                     },
+        "title":  "Multiple blank spaces between words in code documentation",
+        "labels":  [
+                       "area-Microsoft.CSharp"
+                   ]
+    }
+]

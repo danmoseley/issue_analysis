@@ -1,0 +1,353 @@
+﻿[
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/40617",
+        "createdAt":  "2020-08-10T15:38:34Z",
+        "number":  40617,
+        "author":  "SteveSandersonMS",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHOBSD8dA==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "srxqds",
+                                            "createdAt":  "2020-09-30T23:53:33Z"
+                                        }
+                                    ],
+                          "totalCount":  1
+                      },
+        "updatedAt":  "2023-08-08T04:40:19Z",
+        "body":  "This is somewhat related to https://github.com/dotnet/runtime/issues/40609 but I want to be more specific about the interpreter and how this could be done.\r\n\r\nTo guide the Blazor WebAssembly optimization efforts, I\u0027ve been using [a modified version of the interpreter into which I patched support for capturing an execution trace](https://github.com/dotnet/runtime/tree/stevesa/hierarchical-profile). This emits a file that can be loaded into Chromium\u0027s graphical profile explorer, providing detailed per-method breakdowns of what happened and how long (in instruction counts) everything took.\r\n\r\nThis issue is to open the question about whether that sort of feature could be included in the interpreter for real.\r\n\r\n## Why?\r\n\r\nSo we don\u0027t lose the capability to capture profiling data once I stop maintaining my branch, and to make this available to all interpreter users not just the Blazor team.\r\n\r\n## Prototype mechanism\r\n\r\nIn my implementation, as you can see in [this diff](https://github.com/dotnet/runtime/compare/stevesa/hierarchical-profile), I\u0027m simply emitting a line of JSON to a file each time we enter/exit a method whose name matches a given filter pattern. The file format matches what Chromium understands, so it\u0027s possible to use the profile inspector tool. Instead of wallclock times, it uses synthetic timings derived from the instruction counter - each opcode is counted as one microsecond (that\u0027s massively longer than the real execution time, but it\u0027s not important since for optimization, we\u0027re only interested in identifying expensive code relative to other code).\r\n\r\n![profile](https://user-images.githubusercontent.com/1101362/89800803-2b9ae380-db27-11ea-8542-b3ae1dc1433a.png)\r\n\r\n## Real mechanism\r\n\r\nIf this was to be done for real, there would be various design options:\r\n\r\n * Should it capture instruction counts, or clock times? Or both?\r\n * Could this be made to work on WebAssembly too, not just the desktop interpreter? TBH I don\u0027t see why not, though on wasm there\u0027s a stronger reason to use instruction counts not clock times, since reading the clock is comparatively expensive.\r\n * Should it stream the data to disk, as in my PoC, or should it capture in memory before dumping to disk at the end?\r\n    * Presumably to avoid making execution vastly slower, it would only capture traces when explicitly enabled, and wouldn\u0027t capture it in Chromium\u0027s JSON-text format, but instead would capture in a more compact binary format. For example, a list of `(methodId, entryOrExitFlag, timeOrInstructionCount)` triplets. This could later be converted to Chromium\u0027s format for inspection.\r\n    * It would be nice if there was some .NET-controllable mechanism for starting and stopping the capture. For example, some `InternalCall` methods that control it and get the resulting data. Then in Blazor we could build an arbitrary developer experience on top of it, such as hotkeys for starting/stopping capture and exporting the data (e.g., via JS APIs to the real disk, not to the simulated Emscripten filesystem).\r\n * Could this capability be baked into the runtime as standard, or do we need a separate \"profile enabled\" build of it?\r\n    * I understand that even checking a flag (`if (profilingEnabled) { ... }`) might be prohibitively expensive if we did it at the entry/exit point of every .NET method call. Maybe @BrzVlad can think of ways to make this cheap enough. If not perhaps it would only be viable via a special instrumented build of the runtime.\r\n\r\nIf it\u0027s something that seems viable, it might be worth trying to get a really cut-down version of it into the 5.0 release, even without any real configurability. Perhaps even without WebAssembly support. Just because then we wouldn\u0027t lose the ability to get profiling data when running benchmarks on the desktop interpreter. However @BrzVlad is the real expert on whether this makes sense to consider doing.\r\n\r\ncc @lewing @danroth27 just in case you\u0027re interested.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHONTUIAQ==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY3MTQyOTk2NA==",
+                                           "createdAt":  "2020-08-10T15:38:38Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @tommcdon\nSee info in area-owners.md if you want to be subscribed.",
+                                           "updatedAt":  "2020-08-10T15:38:38Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY3MTU2MzI5OA==",
+                                           "createdAt":  "2020-08-10T20:09:34Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "BrzVlad",
+                                           "body":  "This should be easy to do from the interpreter side. There is no need for having a different runtime that has this profiling enabled. When doing this tracking, I would expect a method to be about twice as slow in execution, not including slowness from the logged data with each method entry/exit. While it doesn\u0027t sound impossible to enable this profiling while application is running, I\u0027m not sure it would just work without issues. I think it would be better to simply enable this at runtime initialization, before executing any managed code. Given the standard way of just writing down the data to a file seems out of the question on wasm, I would just need a proposed api / expected way to consume this and implementing on the interpreter side should be rather quick. ",
+                                           "updatedAt":  "2020-08-10T20:09:34Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY3Mjk1NTU3Mg==",
+                                           "createdAt":  "2020-08-12T15:48:13Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "SteveSandersonMS",
+                                           "body":  "Glad to hear that @BrzVlad!\r\n\r\n@lewing mentioned he thinks there is already some profile trace exporting feature and maybe that can be adapted to our needs, if not just used directly. Larry, could you clarify what that existing feature is? Is it in the interpreter already? How does one tell it to capture a trace and access the resulting data?",
+                                           "updatedAt":  "2020-08-12T15:48:13Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc41NQgB",
+                                           "createdAt":  "2021-08-04T13:40:31Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "SamMonoRT",
+                                           "body":  "@lewing @BrzVlad  - do we need any more work here for .NET6 ?",
+                                           "updatedAt":  "2021-08-04T13:40:31Z"
+                                       }
+                                   ],
+                         "totalCount":  4
+                     },
+        "title":  "Consider adding profile trace export to Mono interpreter",
+        "labels":  [
+                       "area-Tracing-mono"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/65181",
+        "createdAt":  "2022-02-11T08:21:31Z",
+        "number":  65181,
+        "author":  "stefan-sf-ibm",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2022-02-21T11:31:50Z",
+        "body":  "### Description\r\n\r\nThe document [Performance Tracing on Linux](https://github.com/dotnet/runtime/blob/3933fc68cf43e36720dbdabdcfb2efb4033de097/docs/project/linux-performance-tracing.md) speaks only about CoreCLR when it comes to LTTng. Thus, I\u0027m wondering whether LTTng is supported while using the Mono runtime.\r\n\r\nWhat makes me curios is that while building the .NET6 SDK with Mono as its primary runtime flavor I see that genLttngProvider.py is executed and code for the LTTng event provider is generated. However, a trace, for example generated via [perfcollect](https://docs.microsoft.com/en-us/dotnet/core/diagnostics/trace-perfcollect-lttng) does not include any user space event. In contrast if the same example is run with a .NET6 SDK utilizing CoreCLR, then user space events are recorded.\r\n\r\nCan someone shed some light on whether LTTng is supported for Mono runtime?\r\n\r\n### Reproduction Steps\r\n\r\nRun `perfcollect collect foobar` and use a .NET6 SDK with Mono as its primary runtime flavor:\r\n\r\n```\r\ndotnet new console\r\nexport DOTNET_PerfMapEnabled=1\r\nexport DOTNET_EnableEventLog=1\r\ndotnet run\r\n```\r\n\r\nAfterwards inspect the trace file via babeltrace:\r\n\r\n```\r\nperfcollect view foobar.trace.zip -viewer lttng\r\n```\r\n\r\n### Expected behavior\r\n\r\nThousands of user space events.\r\n\r\n### Actual behavior\r\n\r\nNot a single event is shown.\r\n\r\n### Regression?\r\n\r\n_No response_\r\n\r\n### Known Workarounds\r\n\r\n_No response_\r\n\r\n### Configuration\r\n\r\n- Ubuntu 20.04\r\n- LTTng packages from http://ppa.launchpad.net/lttng/ppa/ubuntu\r\n- x64\r\n- .NET SDK 6.0.100 (commit 9e8b04bbff) build against CoreCLR as primary runtime flavor as well as Mono\r\n\r\n### Other information\r\n\r\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOPmSaRw==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc4-Af4x",
+                                           "createdAt":  "2022-02-15T14:09:35Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "uweigand",
+                                           "body":  "FYI @steveisok @directhex @leecow - this is the LTTng Mono problem we had been discussing recently ...",
+                                           "updatedAt":  "2022-02-15T14:09:35Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc4-AnGL",
+                                           "createdAt":  "2022-02-15T14:36:07Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "steveisok",
+                                           "body":  "/cc @lambdageek @lateralusX ",
+                                           "updatedAt":  "2022-02-15T14:36:07Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc4-KqUj",
+                                           "createdAt":  "2022-02-17T14:03:11Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "lambdageek",
+                                           "body":  "\u003e  whether LTTng is supported for Mono runtime\r\n\r\nThere is no LTTng support for Mono in .NET 6",
+                                           "updatedAt":  "2022-02-17T14:03:11Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc4-ZJpH",
+                                           "createdAt":  "2022-02-21T11:31:50Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "lateralusX",
+                                           "body":  "LTTng support was not included in .NET 6 since main focus was hooking up regular EventPipe events (to be included in nettrace) as well as targeting mobile platforms. Since we share most of the code with CoreCLR, most of the infrastructure is currently in place and enabling LTTng for the runtime events currently emitted by Mono (a subset of runtime events emitted by CoreCLR) should be able to leverage most of that code, but we would still need to hook up, enable and test Mono LTTng support, so something that would need to go onto the backlog.",
+                                           "updatedAt":  "2022-02-21T11:31:50Z"
+                                       }
+                                   ],
+                         "totalCount":  4
+                     },
+        "title":  "LTTng support for Mono runtime",
+        "labels":  [
+                       "area-Tracing-mono"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/89629",
+        "createdAt":  "2023-07-28T12:14:31Z",
+        "number":  89629,
+        "author":  "lateralusX",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2023-08-02T07:22:15Z",
+        "body":  "Currently EventPipe/DiagnosticServer shutdown won\u0027t clean up some resources, like default listeners IPC channel and won\u0027t stop diagnostic server thread, instead it relies on OS cleanup of resources on process exit. This works in the case where runtime lifetime == process lifetime, but in cases where runtime could be restarted (mono embedding scenarios), this will cause resource leaks, and potentially prevent the runtime to re-initialize.\r\n\r\nhttps://github.com/dotnet/runtime/blob/main/src/native/eventpipe/ds-ipc-pal-namedpipe.c#L538\r\nhttps://github.com/dotnet/runtime/blob/main/src/native/eventpipe/ds-ipc-pal-socket.c#L1303\r\n\r\nMain reason why we can\u0027t close down the IPC channels during shutdown is because the shutdown does little efforts to orchestrate with threads currently using the IPC channels. The fix would include better orchestration between the diagnostic server thread that handles the IPC ports and the shutdown thread. Currently shutdown thread flags diagnostic server that a shutdown is in progress https://github.com/dotnet/runtime/blob/main/src/native/eventpipe/ds-server.c#L128, but if diagnostic server thread is blocked in `ds_ipc_stream_factory_get_next_available_stream`, shutdown thread wont wait and since there is no coordination around shared resource usage, shutdown can\u0027t close down the IPC ports.\r\n\r\nThere is also an old issue around EventPipe shutdown race condition, https://github.com/dotnet/runtime/blob/main/src/native/eventpipe/ep.c#L1456 that should be investigated in order to be able to free up even more resources during EventPipe shutdown.\r\n\r\nAnother thing that probably increase chances to hit runtime races is that we shutdown EventPipe before shutting down Diagnostic Server (https://github.com/dotnet/runtime/blob/main/src/coreclr/vm/ceemain.cpp#L1138), it should probably be done in reverse order, making sure no new IPC channel requests comes in while shutting down EventPipe sessions and resources.\r\n\r\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  null,
+                         "nodes":  [
+
+                                   ],
+                         "totalCount":  0
+                     },
+        "title":  "Improve cleanup of EventPipe/DiagnosticServer resources during shutdown.",
+        "labels":  [
+                       "enhancement",
+                       "area-Tracing-coreclr",
+                       "area-Tracing-mono"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/90605",
+        "createdAt":  "2023-08-15T16:02:45Z",
+        "number":  90605,
+        "author":  "ericstj",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-09-20T23:00:31Z",
+        "body":  "## Build Information\r\nBuild: https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_build/results?buildId=374041\r\nBuild error leg or test failing: tracing/runtimeeventsource/nativeruntimeeventsource/nativeruntimeeventsource.sh\r\nPull request: https://github.com/dotnet/runtime/pull/90553\r\n\u003c!-- Error message template  --\u003e\r\n## Error Message\r\n\r\nFill the error message using [step by step known issues guidance](https://github.com/dotnet/arcade/blob/main/Documentation/Projects/Build%20Analysis/KnownIssues.md#how-to-fill-out-a-known-issue-error-section).\r\n\r\n\u003c!-- Use ErrorMessage for String.Contains matches. Use ErrorPattern for regex matches (single line/no backtracking). Set BuildRetry to `true` to retry builds with this error. Set ExcludeConsoleLog to `true` to skip helix logs analysis. --\u003e\r\n\r\n```json\r\n{\r\n  \"ErrorMessage\": \"System.Exception: Condition \u0027listener.EventCount \u003e 0\u0027 is not true\",\r\n  \"ErrorPattern\": \"\",\r\n  \"BuildRetry\": false,\r\n  \"ExcludeConsoleLog\": false\r\n}\r\n```\r\n\r\nFailure:\r\n```\r\nUnhandled Exception:\r\n      System.Exception: Condition \u0027listener.EventCount \u003e 0\u0027 is not true\r\n         at Tracing.Tests.NativeRuntimeEventSourceTest.Assert2.True(String name, Boolean condition)\r\n         at Tracing.Tests.NativeRuntimeEventSourceTest.Main()\r\n      [ERROR] FATAL UNHANDLED EXCEPTION: System.Exception: Condition \u0027listener.EventCount \u003e 0\u0027 is not true\r\n         at Tracing.Tests.NativeRuntimeEventSourceTest.Assert2.True(String name, Boolean condition)\r\n         at Tracing.Tests.NativeRuntimeEventSourceTest.Main()\r\n      \r\n      Return code:      1\r\n      Raw output file:      /root/helix/work/workitem/uploads/Reports/tracing.runtimeeventsource/nativeruntimeeventsource/nativeruntimeeventsource.output.txt\r\n      Raw output:\r\n      BEGIN EXECUTION\r\n      /root/helix/work/correlation/corerun -p System.Reflection.Metadata.MetadataUpdater.IsSupported=false -p System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization=true nativeruntimeeventsource.dll \u0027\u0027\r\n```\r\n\r\nhttps://[helixre8s23ayyeko0k025g8.blob.core.windows.net/dotnet-runtime-refs-pull-90553-merge-02a796bd6a9f40108e/PayloadGroup0/1/console.cd59d68c.log?helixlogtype=result](https://helixre8s23ayyeko0k025g8.blob.core.windows.net/dotnet-runtime-refs-pull-90553-merge-02a796bd6a9f40108e/PayloadGroup0/1/console.cd59d68c.log?helixlogtype=result)\r\n\u003c!-- Known issue validation start --\u003e\r\n ### Known issue validation\r\n**Build: :mag_right:** https://dev.azure.com/dnceng-public/public/_build/results?buildId=374041\r\n**Error message validated:** `System.Exception: Condition \u0027listener.EventCount \u003e 0\u0027 is not true`\r\n**Result validation: :white_check_mark:** Known issue matched with the provided build.\r\n**Validation performed at:** 8/15/2023 4:15:41 PM UTC\r\n\u003c!-- Known issue validation end --\u003e\r\n\u003c!--Known issue error report start --\u003e\r\n\r\n### Report\r\n\r\n|Build|Definition|Test|Pull Request|\r\n|---|---|---|---|\r\n|[1153980](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1153980)|dotnet/runtime|[PayloadGroup0.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1153980\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=31879092\u0026resultId=100156)||\r\n|[1153985](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1153985)|dotnet/runtime|[PayloadGroup0.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1153985\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=31879124\u0026resultId=100158)||\r\n|[1153780](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1153780)|dotnet/runtime|[PayloadGroup0.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1153780\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=31870486\u0026resultId=100158)||\r\n|[1152778](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1152778)|dotnet/runtime|[PayloadGroup0.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1152778\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=31845802\u0026resultId=100158)||\r\n|[1148535](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1148535)|dotnet/runtime|[PayloadGroup0.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1148535\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=31717908\u0026resultId=100158)||\r\n|[1148555](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1148555)|dotnet/runtime|[tracing\\runtimeeventsource\\nativeruntimeeventsource\\nativeruntimeeventsource.cmd](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1148555\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=31719006\u0026resultId=117054)|dotnet/runtime#119599|\r\n|[1148169](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1148169)|dotnet/runtime|[PayloadGroup0.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1148169\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=31704854\u0026resultId=100158)||\r\n|[1146546](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1146546)|dotnet/runtime|[PayloadGroup0.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1146546\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=31640496\u0026resultId=100156)||\r\n|[1145614](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1145614)|dotnet/runtime|[PayloadGroup0.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1145614\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=31607764\u0026resultId=100158)||\r\n|[1144732](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1144732)|dotnet/runtime|[PayloadGroup0.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1144732\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=31583304\u0026resultId=100156)||\r\n|[1142964](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1142964)|dotnet/runtime|[PayloadGroup0.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1142964\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=31512766\u0026resultId=100156)||\r\n|[1140894](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1140894)|dotnet/runtime|[PayloadGroup0.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1140894\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=31436852\u0026resultId=100156)||\r\n|[1140676](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1140676)|dotnet/runtime|[PayloadGroup0.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1140676\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=31429612\u0026resultId=100156)||\r\n|[1133049](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1133049)|dotnet/runtime|[PayloadGroup0.WorkItemExecution](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1133049\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=31183454\u0026resultId=100156)||\r\n|[1132501](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1132501)|dotnet/runtime|[tracing\\runtimeeventsource\\nativeruntimeeventsource\\nativeruntimeeventsource.cmd](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1132501\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=31162146\u0026resultId=116787)|dotnet/runtime#119017|\r\n|[1129297](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1129297)|dotnet/runtime|[tracing/runtimeeventsource/nativeruntimeeventsource/nativeruntimeeventsource.cmd](https://dev.azure.com/dnceng-public/public/_build/results?buildId=1129297\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=31060680\u0026resultId=123330)||\r\n#### Summary\r\n|24-Hour Hit Count|7-Day Hit Count|1-Month Count|\r\n|---|---|---|\r\n|3|7|16|\r\n\u003c!--Known issue error report end --\u003e",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOv4spHg==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5ka_Kj",
+                                           "createdAt":  "2023-08-19T04:26:18Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "AaronRobinsonMSFT",
+                                           "body":  "This is actually failing in mono, not coreclr. The leg is\r\n\r\n\u003e mono linux arm64 Release @ (Ubuntu.1804.Arm64.Open)Ubuntu.1804.Armarch.Open@mcr.microsoft.com/dotnet-buildtools/prereqs:ubuntu-18.04-helix-arm64v8\r\n",
+                                           "updatedAt":  "2023-08-19T04:26:18Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5ka_OI",
+                                           "createdAt":  "2023-08-19T04:27:49Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "AaronRobinsonMSFT",
+                                           "body":  "@tommcdon Since this looks like a mono issue I am marking it untriaged and removing @davmason. Apologies if I have overstepped.",
+                                           "updatedAt":  "2023-08-19T04:27:49Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5kbEBA",
+                                           "createdAt":  "2023-08-19T04:59:09Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "AaronRobinsonMSFT",
+                                           "body":  "/cc @marek-safar @lambdageek ",
+                                           "updatedAt":  "2023-08-19T04:59:09Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5kiHKl",
+                                           "createdAt":  "2023-08-21T16:39:01Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODESz1Q==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "AaronRobinsonMSFT",
+                                                                               "createdAt":  "2023-08-21T16:43:13Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "carlossanlop",
+                                           "body":  "This failure is pretty impactful in the release/8.0-rc1 and release/8.0 branches.\r\n\r\nNote that the 8.0-rc1 branch is closed now, so if there is a fix, it will have to go to RC2 (release/8.0 branch).",
+                                           "updatedAt":  "2023-08-21T16:39:01Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5kw6fe",
+                                           "createdAt":  "2023-08-23T19:48:19Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "carlossanlop",
+                                           "body":  "Another hit in release/8.0:\r\n\r\n- Affected PR: https://github.com/dotnet/runtime/pull/90816\r\n- Queue: `linux-arm64 Release AllSubsets_Mono_Minijit_RuntimeTests minijit`\r\n- Build: https://dev.azure.com/dnceng-public/public/_build/results?buildId=383187\u0026view=logs\u0026j=f979b8ec-ebd4-511f-1076-61f8eccd76f8\u0026t=492e1b7b-2815-5b61-9ca1-e91e53779a38\u0026l=28\r\n- Log: https://helixre8s23ayyeko0k025g8.blob.core.windows.net/dotnet-runtime-refs-pull-90816-merge-88f063107fd94ee2a9/PayloadGroup0/1/console.0088424c.log?helixlogtype=result\r\n- Output:\r\n```\r\n Starting:    tracing.runtimeeventsource.XUnitWrapper (parallel test collections = on, max threads = 2)\r\n    tracing/runtimeeventsource/nativeruntimeeventsource/nativeruntimeeventsource.sh [FAIL]\r\n      \r\n      Unhandled Exception:\r\n      System.Exception: Condition \u0027listener.EventCount \u003e 0\u0027 is not true\r\n         at Tracing.Tests.NativeRuntimeEventSourceTest.Assert2.True(String name, Boolean condition)\r\n         at Tracing.Tests.NativeRuntimeEventSourceTest.Main()\r\n      [ERROR] FATAL UNHANDLED EXCEPTION: System.Exception: Condition \u0027listener.EventCount \u003e 0\u0027 is not true\r\n         at Tracing.Tests.NativeRuntimeEventSourceTest.Assert2.True(String name, Boolean condition)\r\n         at Tracing.Tests.NativeRuntimeEventSourceTest.Main()\r\n      \r\n      Return code:      1\r\n      Raw output file:      /root/helix/work/workitem/uploads/Reports/tracing.runtimeeventsource/nativeruntimeeventsource/nativeruntimeeventsource.output.txt\r\n      Raw output:\r\n      BEGIN EXECUTION\r\n      /root/helix/work/correlation/corerun -p System.Reflection.Metadata.MetadataUpdater.IsSupported=false -p System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization=true nativeruntimeeventsource.dll \u0027\u0027\r\n      buffer length=16\r\n      (Listener) [63, (Failed to listen, Was not heard or didn\u0027t fire)]\r\n      (Listener) [64, (Failed to listen, Was not heard or didn\u0027t fire)]\r\n      (Listener) [65, (Failed to listen, Was not heard or didn\u0027t fire)]\r\n      \r\n\r\n      Expected: 100\r\n      Actual: 1\r\n      END EXECUTION - FAILED\r\n      Test failed. Trying to see if dump file was created in /home/helixbot/dotnetbuild/dumps since 8/23/2023 5:36:48 AM\r\n      Test Harness Exitcode is : 1\r\n      To run the test:\r\n      \u003e set CORE_ROOT=/root/helix/work/correlation\r\n      \u003e /root/helix/work/workitem/e/tracing/runtimeeventsource/nativeruntimeeventsource/nativeruntimeeventsource.sh\r\n      Expected: True\r\n      Actual:   False\r\n      Stack Trace:\r\n           at tracing_runtimeeventsource._nativeruntimeeventsource_nativeruntimeeventsource_._nativeruntimeeventsource_nativeruntimeeventsource_sh()\r\n           at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)\r\n           at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)\r\n      Output:\r\n        \r\n        Unhandled Exception:\r\n        System.Exception: Condition \u0027listener.EventCount \u003e 0\u0027 is not true\r\n           at Tracing.Tests.NativeRuntimeEventSourceTest.Assert2.True(String name, Boolean condition)\r\n           at Tracing.Tests.NativeRuntimeEventSourceTest.Main()\r\n        [ERROR] FATAL UNHANDLED EXCEPTION: System.Exception: Condition \u0027listener.EventCount \u003e 0\u0027 is not true\r\n           at Tracing.Tests.NativeRuntimeEventSourceTest.Assert2.True(String name, Boolean condition)\r\n           at Tracing.Tests.NativeRuntimeEventSourceTest.Main()\r\n        \r\n        Return code:      1\r\n        Raw output file:      /root/helix/work/workitem/uploads/Reports/tracing.runtimeeventsource/nativeruntimeeventsource/nativeruntimeeventsource.output.txt\r\n        Raw output:\r\n        BEGIN EXECUTION\r\n        /root/helix/work/correlation/corerun -p System.Reflection.Metadata.MetadataUpdater.IsSupported=false -p System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization=true nativeruntimeeventsource.dll \u0027\u0027\r\n        buffer length=16\r\n        (Listener) [63, (Failed to listen, Was not heard or didn\u0027t fire)]\r\n        (Listener) [64, (Failed to listen, Was not heard or didn\u0027t fire)]\r\n        (Listener) [65, (Failed to listen, Was not heard or didn\u0027t fire)]\r\n        \r\n\r\n        Expected: 100\r\n        Actual: 1\r\n        END EXECUTION - FAILED\r\n        Test failed. Trying to see if dump file was created in /home/helixbot/dotnetbuild/dumps since 8/23/2023 5:36:48 AM\r\n        Test Harness Exitcode is : 1\r\n```",
+                                           "updatedAt":  "2023-08-23T19:48:19Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5lGZ4d",
+                                           "createdAt":  "2023-08-28T18:43:28Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODFCUgQ==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "steveisok",
+                                                                               "createdAt":  "2023-08-28T18:51:44Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "SamMonoRT",
+                                           "body":  "@steveisok -  @fanyang-mono brought this to my attention. A PR to disable the test in main and release\\8.0 will be stood up soon to enable cleaner CI, and we can work on identifying the root cause of the failures.",
+                                           "updatedAt":  "2023-08-28T18:43:28Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6_iyke",
+                                           "createdAt":  "2025-08-22T08:39:45Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "SakeTao",
+                                           "body":  "**Failed in:** [runtime-coreclr outerloop 20250821.7](https://dev.azure.com/dnceng-public/cbb18261-c48f-4abb-8651-8cdcb5474649/_build/results?buildId=1129297)\n\n**Failed tests:**\n```\ncoreclr windows arm64 Checked no_tiered_compilation @ Windows.11.Arm64.Open\n    - tracing/runtimeeventsource/nativeruntimeeventsource/nativeruntimeeventsource.cmd\n```\n\n**Error message:**\n```\n\nReturn code:      1\nRaw output file:      C:hwB48309A5wA8BC0998uploads\nuntimeeventsource\nativeruntimeeventsourceoutput.txt\nRaw output:\nBEGIN EXECUTION\n \"C:hwB48309A5pcorerun.exe\" -p \"System.Reflection.Metadata.MetadataUpdater.IsSupported=false\" -p \"System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization=true\"  nativeruntimeeventsource.dll \nbuffer length=16\nDOOVERLAPPEDIO\n(Listener) [63, (Failed to listen, Was not heard or didn\u0027t fire)]\n(Listener) [64, (Failed to listen, Was not heard or didn\u0027t fire)]\n(Listener) [65, (Failed to listen, Was not heard or didn\u0027t fire)]\n\n\n\n\nSystem.Exception: Condition \u0027listener.EventCount \u003e 0\u0027 is not true\n   at Tracing.Tests.NativeRuntimeEventSourceTest.Assert2.True(String name, Boolean condition)\n   at Tracing.Tests.NativeRuntimeEventSourceTest.TestEntryPoint()\n   at __GeneratedMainWrapper.Main()\nExpected: 100\nActual: 101\nEND EXECUTION - FAILED\nFAILED\nTest failed. Trying to see if dump file was created in C:cores since 8/22/2025 2:44:26 AM\nTest Harness Exitcode is : 1\nTo run the test:\nSet up CORE_ROOT and run.\n\u003e C:hwB48309A5wA8BC0998e\tracing\tracing../runtimeeventsource/nativeruntimeeventsource/nativeruntimeeventsource.cmd\n```\n\n**Stack trace:**\n```\n   at Xunit.Assert.True(Nullable`1 condition, String userMessage) in /_/src/arcade/src/Microsoft.DotNet.XUnitAssert/src/BooleanAsserts.cs:line 141\n   at Program.\u003c\u003cMain\u003e$\u003eg__TestExecutor35|0_36(StreamWriter tempLogSw, StreamWriter statsCsvSw, \u003c\u003ec__DisplayClass0_0\u0026)\n```",
+                                           "updatedAt":  "2025-08-22T08:39:45Z"
+                                       }
+                                   ],
+                         "totalCount":  7
+                     },
+        "title":  "tracing/runtimeeventsource/nativeruntimeeventsource/nativeruntimeeventsource failing in CI",
+        "labels":  [
+                       "disabled-test",
+                       "blocking-clean-ci",
+                       "area-Tracing-mono",
+                       "Known Build Error"
+                   ]
+    }
+]

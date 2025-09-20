@@ -1,0 +1,195 @@
+﻿[
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/1392",
+        "createdAt":  "2019-04-02T15:31:31Z",
+        "number":  1392,
+        "author":  "bergner",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHOCvxLXw==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "anhadi2",
+                                            "createdAt":  "2023-04-28T04:13:11Z"
+                                        }
+                                    ],
+                          "totalCount":  1
+                      },
+        "updatedAt":  "2023-04-28T04:12:12Z",
+        "body":  "At https://github.com/bergner/netcore-bugs/ I\u0027ve provided a webapi example that reproduces this problem. It uses netcoreapp2.1.\r\n\r\n```sh\r\n$ git clone https://github.com/bergner/netcore-bugs.git\r\n$ cd netcore-bugs/RequestBuffering\r\n$ dotnet build\r\n$ dotnet run RequestBuffering\r\n```\r\n\r\nThis starts a service with POST and PUT support on /api/Values/. The POST endpoint uses [FromBody] SyndicationItem and the PUT endpoint uses [FromBody] XmlElement. **In Startup.cs context.Request.EnableBuffering() is called** (before app.UseMvc()). The request buffering is a key component to the issue here.\r\n\r\n```c#\r\napp.Use(next =\u003e context =\u003e {\r\n    Console.WriteLine(\"BODY IS OF TYPE: {0}\", context.Request.Body.GetType());\r\n    context.Request.EnableBuffering();\r\n    //(new StreamReader(context.Request.Body)).ReadToEnd();\r\n    //context.Request.Body.Position = 0;\r\n    Console.WriteLine(\"BODY IS OF TYPE: {0}\", context.Request.Body.GetType());\r\n    return next(context);\r\n});\r\n```\r\n\r\nThis causes ASP.NET Core to switch the context.Request.Body from a Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpRequestStream object to a Microsoft.AspNetCore.WebUtilities.FileBufferingReadStream object.\r\n\r\nThe service has a AtomEntryInputFormatter class which is used to parse the incoming HTTP request into a SyndicationItem object (using XmlReader, see below). It is also using an XmlSerializerInputFormatter to support the PUT requests (which are used for comparison here).\r\n\r\n```c#\r\nusing System;\r\nusing System.IO;\r\nusing System.Reflection;\r\nusing System.ServiceModel.Syndication;\r\nusing System.Text;\r\nusing System.Threading.Tasks;\r\nusing System.Xml;\r\nusing System.Xml.Serialization;\r\nusing Microsoft.AspNetCore.Mvc;\r\nusing Microsoft.AspNetCore.Mvc.Formatters;\r\n\r\nnamespace RequestBuffering\r\n{\r\n    public class AtomEntryInputFormatter : XmlSerializerInputFormatter\r\n    {\r\n        public AtomEntryInputFormatter(MvcOptions options) : base(options)\r\n        {\r\n            SupportedMediaTypes.Clear();\r\n            SupportedMediaTypes.Add(\"application/atom+xml;type=entry\");\r\n        }\r\n\r\n        protected override bool CanReadType(Type dataType)\r\n        {\r\n            Console.WriteLine(\"CAN READ TYPE? {0} --\u003e {1}\", dataType, typeof(SyndicationItem).IsAssignableFrom(dataType));\r\n            return typeof(SyndicationItem).IsAssignableFrom(dataType);\r\n        }\r\n\r\n        public override async Task\u003cInputFormatterResult\u003e ReadRequestBodyAsync(InputFormatterContext context,\r\n            Encoding encoding)\r\n        {\r\n            try {\r\n                Console.WriteLine(\"PARSING STREAM {0}\", context.HttpContext.Request.Body.GetType());\r\n                using (XmlReader reader = XmlReader.Create(context.HttpContext.Request.Body))\r\n                {\r\n                    SyndicationItem item = SyndicationItem.Load(reader);\r\n                    Console.WriteLine(\"SUCCESSFULLY PARSED: {0}\", item.Title.Text);\r\n                    return await InputFormatterResult.SuccessAsync(item);\r\n                }\r\n            } catch (Exception e) {\r\n                Console.WriteLine(\"CAUGHT EXCEPTION WHILE PARSING: {0}\", e.Message);\r\n                throw e;\r\n            }\r\n        }\r\n    }\r\n}\r\n```\r\n\r\nA sample input xml below:\r\n\r\n```\r\n$ cat /tmp/entry.xml\r\n\u003c?xml version=\"1.0\" encoding=\"UTF-8\"?\u003e\r\n\u003centry xmlns=\"http://www.w3.org/2005/Atom\"\u003e\u003ctitle\u003etest\u003c/title\u003e\u003c/entry\u003e\r\n```\r\n\r\nUsing PUT to the XmlElement endpoint works ok. I get a 200 response and the controller gets the expected data (which can be seen in Console.WriteLine output from the server).\r\n\r\n```\r\n$ curl -X PUT -k -H \"Content-Type: application/atom+xml\" --data-binary @/tmp/entry.xml https://localhost:5001/api/Values/\r\n```\r\n\r\n**The POST request fails with a 400 Bad request**:\r\n\r\n```\r\n$ curl -X POST -k -H \"Content-Type: application/atom+xml\" --data-binary @/tmp/entry.xml https://localhost:5001/api/Values/\r\n```\r\n\r\nAnd the log shows an exception:\r\n\r\n```\r\ninfo: Microsoft.AspNetCore.Hosting.Internal.WebHost[1]\r\n      Request starting HTTP/1.1 POST https://localhost:5001/api/Values/ application/atom+xml;type=entry 110\r\nBODY IS OF TYPE: Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpRequestStream\r\nBODY IS OF TYPE: Microsoft.AspNetCore.WebUtilities.FileBufferingReadStream\r\ninfo: Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker[1]\r\n      Route matched with {action = \"Post\", controller = \"Values\"}. Executing action RequestBuffering.Controllers.ValuesController.Post (RequestBuffering)\r\nCAN READ TYPE? System.ServiceModel.Syndication.SyndicationItem --\u003e True\r\nPARSING STREAM Microsoft.AspNetCore.WebUtilities.FileBufferingReadStream\r\nCAUGHT EXCEPTION WHILE PARSING: Root element is missing.\r\ninfo: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]\r\n      Executing ObjectResult, writing value of type \u0027Microsoft.AspNetCore.Mvc.SerializableError\u0027.\r\ninfo: Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker[2]\r\n      Executed action RequestBuffering.Controllers.ValuesController.Post (RequestBuffering) in 48.2919ms\r\nfail: Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware[1]\r\n      An unhandled exception has occurred while executing the request.\r\nSystem.InvalidOperationException: There was an error generating the XML document. ---\u003e System.ArgumentException: The empty string \u0027\u0027 is not a valid local name.\r\n   at System.Xml.XmlWellFormedWriter.WriteStartElement(String prefix, String localName, String ns)\r\n   at System.Xml.XmlWriter.WriteStartElement(String localName)\r\n   at Microsoft.AspNetCore.Mvc.Formatters.Xml.SerializableErrorWrapper.WriteXml(XmlWriter writer)\r\n   at System.Xml.Serialization.XmlSerializationWriter.WriteSerializable(IXmlSerializable serializable, String name, String ns, Boolean isNullable, Boolean wrapped)\r\n   --- End of inner exception stack trace ---\r\n   at System.Xml.Serialization.XmlSerializer.Serialize(XmlWriter xmlWriter, Object o, XmlSerializerNamespaces namespaces, String encodingStyle, String id)\r\n   at System.Xml.Serialization.XmlSerializer.Serialize(XmlWriter xmlWriter, Object o)\r\n   at Microsoft.AspNetCore.Mvc.Formatters.XmlSerializerOutputFormatter.Serialize(XmlSerializer xmlSerializer, XmlWriter xmlWriter, Object value)\r\n   at Microsoft.AspNetCore.Mvc.Formatters.XmlSerializerOutputFormatter.WriteResponseBodyAsync(OutputFormatterWriteContext context, Encoding selectedEncoding)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.InvokeResultAsync(IActionResult result)\r\n   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.InvokeResultFilters()\r\n   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.InvokeFilterPipelineAsync()\r\n   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.InvokeAsync()\r\n   at Microsoft.AspNetCore.Builder.RouterMiddleware.Invoke(HttpContext httpContext)\r\n   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)\r\n```\r\n\r\n## Workaround\r\n\r\nI have found 2 workarounds for this problem:\r\n\r\n1. Don\u0027t call `XmlReader reader = XmlReader.Create(context.HttpContext.Request.Body)` directly in preparation for `SyndicationItem.Load(reader)`. Instead wrap the body stream with `new StreamReader(context.HttpContext.Request.Body)` then use that with XmlReader.Create.\r\n2. Make sure that the request body has been read at least once BEFORE you get to the XmlReader / input formatter. Commenting out the two lines in Startup.cs above makes the problem go away.\r\n\r\nRemoving EnableBuffering() also makes the problem go away but there are many circumstances where you want/need to have request buffering enabled so it is not a viable workaround.\r\n\r\n## Expected result\r\n\r\nThe reading / parsing from context.HttpContext.Request.Body should have the same behavior regardless if EnableBuffering is used or not, and when buffering is used it should not matter it the body has been read prior to reaching SyndicationItem.Load.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOWwOV7g==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDUyNTA2OTIwNw==",
+                                           "createdAt":  "2019-08-26T23:16:13Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "StephenBonikowsky",
+                                           "body":  "@imcarolwang \r\nWe need to compare the raw soap body content of the PUT and POST calls and see what the difference is.\r\nPlease use the example provided to create a repro in order to get this info.",
+                                           "updatedAt":  "2019-08-26T23:16:13Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5bA5Xu",
+                                           "createdAt":  "2023-04-28T04:12:11Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "anhadi2",
+                                           "body":  "We are building a CoreWCF service and faced this issue when we enabled request buffering. \r\n\r\nSteps:\r\n1. In middleware, call `HttpContext.Request.EnableBuffering();`\r\n2. Get request stream via `HttpContext.Request.InputStream`, it returns stream of type `FileBufferingReadStream `\r\n3. Create a XmlReader via `XmlReader xmlReader = XmlReader.Create(stream)`.\r\n4. Invoking `XmlReader.Read()` throws exception \"Root element is missing\"",
+                                           "updatedAt":  "2023-04-28T04:12:11Z"
+                                       }
+                                   ],
+                         "totalCount":  2
+                     },
+        "title":  "SyndicationItem.Load + FileBufferingReadStream (via Request.EnableBuffering()) fails with \"Root element is missing\" exception",
+        "labels":  [
+                       "bug",
+                       "area-System.ServiceModel.Syndication"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/65218",
+        "createdAt":  "2022-02-11T21:31:29Z",
+        "number":  65218,
+        "author":  "pkar70",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-07-31T18:44:08Z",
+        "body":  "### Description\n\nI got:\r\n```\r\nSystem.Reflection.MissingRuntimeArtifactException\r\n  HResult=0x8013151A\r\n  Message=Cannot retrieve a MethodInfo for this delegate because the method it targeted (System.ServiceModel.Syndication.SyndicationFeedFormatter.DefaultUriParser(XmlUriData, Uri\u0026)) was not enabled for metadata using the Dynamic attribute. For more information, please visit http://go.microsoft.com/fwlink/?LinkID=616868\r\n  Source=\u003cCannot evaluate the exception source\u003e\r\n  StackTrace:\r\n\u003cCannot evaluate the exception stack trace\u003e\r\n```\r\n\r\non Load:\r\n```\r\n            Using oReader As Xml.XmlReader = Xml.XmlReader.Create(New IO.StringReader(sPage))\r\n                oRssFeed = ServiceModel.Syndication.SyndicationFeed.Load(oReader)\r\n            End Using\r\n```\r\n\r\nI tried it with nuget 4.5.0, 5.0.0, 6,0,0,, and 6.0.2-mauipre.1.22054.8.\r\nIt happens only when building as Release, doesn\u0027t happen in Debug build.\r\nInitially, this Load was in Class Library .Net Standard 2,0; as it has errors, I moved it into normal UWP app. But error persist.\r\nI also tried to switch off \"Enable optimizations\" in project options, \"Compile\", \"Advanced Compile Options\".\n\n### Reproduction Steps\n\nSee above.\n\n### Expected behavior\n\nAbility to build Release version.\n\n### Actual behavior\n\nSee above.\n\n### Regression?\n\n_No response_\n\n### Known Workarounds\n\nUsing RSS from UWP, but I want to use RSS in Class Library, and reuse it in both Platform Uno and MAUI project\n\n### Configuration\n\nBoth in Class Library .Net Standard 2.0 and in standard UWP app.\r\nMicrosoft Windows [Version 10.0.19044.1526]\r\nArchitecture x86\n\n### Other information\n\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  null,
+                         "nodes":  [
+
+                                   ],
+                         "totalCount":  0
+                     },
+        "title":  "MissingRuntimeArtifactException on ServiceModel.Syndication.SyndicationFeed.Load",
+        "labels":  [
+                       "area-System.ServiceModel.Syndication",
+                       "in-pr"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/96973",
+        "createdAt":  "2024-01-15T08:41:47Z",
+        "number":  96973,
+        "author":  "kaylumah",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-07-21T17:02:25Z",
+        "body":  "### Background and motivation\n\nFor programatically creating RSS/Atom feeds we have the System.ServiceModel.Syndication nuget package.\r\n\r\nFor Sitemaps, and for larger sites Sitemaps index file no such API exist as far I as can tell.\r\nIt would be nice to have a similar API surface for the creation of sitemaps.\r\n\r\n- The DTO classes (i.e. SyndicationFeed)\r\n- The xml namespace consants (i.e. Atom10Constants)\r\n- The formatters (i.e. Atom10FeedFormatter)\n\n### API Proposal\n\n-\n\n### API Usage\n\n-\n\n### Alternative Designs\n\n_No response_\n\n### Risks\n\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  null,
+                         "nodes":  [
+
+                                   ],
+                         "totalCount":  0
+                     },
+        "title":  "[API Proposal]: System.ServiceModel.Syndication equivalent for SiteMap and SiteMapIndex files",
+        "labels":  [
+                       "api-suggestion",
+                       "area-System.ServiceModel.Syndication"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/113990",
+        "createdAt":  "2025-03-27T23:41:11Z",
+        "number":  113990,
+        "author":  "Sella-GH",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-07-21T18:12:16Z",
+        "body":  "### Description\n\nWhen publishing an app with System.ServiceModel.Syndication added and used inside it (loading a simple feed is enough) it will trigger the IL2067 trim warning.\n\n### Reproduction Steps\n\n```cs\nusing System.ServiceModel.Syndication;\nusing System.Xml;\n\nnamespace TestApp;\n\npublic sealed class RssFeedService\n{\n    public void GetFeeds()\n    {\n        using XmlReader reader = XmlReader.Create(\"someRssFeed\");\n        SyndicationFeed feed = SyndicationFeed.Load(reader);\n    }\n}\n```\n\n### Expected behavior\n\nNo Trim Warning visible when publishing the app.\n\n### Actual behavior\n\nILC: Trim analysis warning IL2067:\nSystem.ServiceModel.Syndication.SyndicationFeedFormatter.CreateFeedInstance(Type): \u0027type\u0027 argument does not satisfy \u0027DynamicallyAccessedMemberTypes.PublicParameterlessConstructor\u0027 in call to \u0027System.Activator.CreateInstance(Type)\u0027.\nThe parameter \u0027feedType\u0027 of method \u0027System.ServiceModel.Syndication.SyndicationFeedFormatter.CreateFeedInstance(Type)\u0027 does not have matching annotations. The source value must declare at least the same requirements as those declared on the target location it is assigned to.\n\n### Regression?\n\n_No response_\n\n### Known Workarounds\n\n_No response_\n\n### Configuration\n\n.NET Version: 9.0.3 with SDK 9.0.201\nOS: Windows 11 Pro 26120.3585\nArch: x64\nOnly occurs when trimming is active (aka published with NAOT)\n\n### Other information\n\nPossibly related to https://github.com/dotnet/runtime/issues/75480",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOpIYLag==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc6khaxk",
+                                           "createdAt":  "2025-03-28T05:23:54Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to \u0027linkable-framework\u0027: @eerhardt, @vitek-karas, @LakshanF, @sbomer, @joperezr, @marek-safar\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2025-03-28T05:23:54Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6khgtq",
+                                           "createdAt":  "2025-03-28T05:43:26Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOEL71VA==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "HEART",
+                                                                               "user":  "MichalStrehovsky",
+                                                                               "createdAt":  "2025-03-28T13:49:21Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "HEART",
+                                                                               "user":  "sbomer",
+                                                                               "createdAt":  "2025-03-28T15:52:33Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "HEART",
+                                                                               "user":  "Sella-GH",
+                                                                               "createdAt":  "2025-03-28T19:05:10Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  3
+                                                         },
+                                           "author":  "reflectronic",
+                                           "body":  "The method is safe for trimming, but this library is not currently annotated for trimming, causing this false-positive warning.\n\nI will post a pull request which annotates this library.",
+                                           "updatedAt":  "2025-03-28T05:43:26Z"
+                                       }
+                                   ],
+                         "totalCount":  2
+                     },
+        "title":  "IL2067 shown when publishing NativeAOT app with System.ServiceModel.Syndication in use",
+        "labels":  [
+                       "area-System.ServiceModel.Syndication",
+                       "linkable-framework",
+                       "in-pr"
+                   ]
+    }
+]

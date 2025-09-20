@@ -1,0 +1,1144 @@
+﻿[
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/78063",
+        "createdAt":  "2022-11-08T20:21:30Z",
+        "number":  78063,
+        "author":  "medo64",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHODB7wXQ==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "afroz429",
+                                            "createdAt":  "2025-03-25T19:01:17Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "dscpinheiro",
+                                            "createdAt":  "2025-03-26T15:19:48Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "davisnw",
+                                            "createdAt":  "2025-04-09T16:38:16Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "austindrenski",
+                                            "createdAt":  "2025-05-01T16:32:48Z"
+                                        }
+                                    ],
+                          "totalCount":  4
+                      },
+        "updatedAt":  "2025-07-11T18:12:31Z",
+        "body":  "### Background and motivation\r\n\r\nThere are many variants of CRC32 algorithm that differ only in polynomials used. The current implementation only supports IEEE 802.3 polynomial externally. It would be ideal if class would allow for defining custom polynomial thus supporting other CRC-32 variants (e.g. ISCSI, MPEG-2, etc.)\r\n\r\nLooking at source, there is a `Generate` method in [Crc32ReflectedTable](https://source.dot.net/System.IO.Hashing/R/3e99e17f65099669.html) so basic plumbing for custom polynomials seems to be there already.\r\n\r\nAs different polynomials use different initial and output XOR values, that would need to be added.\r\n\r\n### API Proposal\r\n\r\n```csharp\r\nnamespace namespace System.IO.Hashing\r\n\r\npublic sealed partial class Crc32 : NonCryptographicHashAlgorithm\r\n{\r\n    public Crc32(ReadOnlySpan\u003cbyte\u003e reflectedPolynomial);\r\n    public Crc32(ReadOnlySpan\u003cbyte\u003e reflectedPolynomial,\r\n                 ReadOnlySpan\u003cbyte\u003e initialValue,\r\n                 ReadOnlySpan\u003cbyte\u003e xorValue,\r\n                 bool reflectIn,\r\n                 bool reflectOut);\r\n}\r\n```\r\n\r\n\r\n### API Usage\r\n\r\n```csharp\r\nvar crc = new Crc32(new byte[] { 0x8F, 0x6E, 0x37, 0xA0 });\r\ncrc.Append(Encoding.ASCII.GetBytes(\"123456789\"));\r\nvar result = crc.GetCurrentHash();\r\n```\r\n\r\n### Alternative Designs\r\n\r\n_No response_\r\n\r\n### Risks\r\n\r\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOpGtnMg==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5N8ysL",
+                                           "createdAt":  "2022-11-08T20:21:33Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "I couldn\u0027t figure out the best area label to add to this issue. If you have write-permissions please help me learn by adding exactly one [area label](https://github.com/dotnet/runtime/blob/master/docs/area-owners.md).",
+                                           "updatedAt":  "2022-11-08T20:21:33Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5N85dw",
+                                           "createdAt":  "2022-11-08T20:50:35Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "teo-tsirpanis",
+                                           "body":  "The polynomial values should be integers, not spans.",
+                                           "updatedAt":  "2022-11-08T20:50:35Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5N97_A",
+                                           "createdAt":  "2022-11-09T01:44:18Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "medo64",
+                                           "body":  "\u003e The polynomial values should be integers, not spans.\r\n\r\nI tend to agree with you but I proposed it to be spans for the following two reasons:\r\n\r\n1. I believe the proper type would be uint and unsigned integers used to be frowned upon in the public API\r\n\r\n2. Most of functions that output hash (e.g. GetCurrentHash or GetHashAndReset) actually use spans for hash value. One function that doesn\u0027t follow that rule is GetCurrentHash that returns bytes. Since existing class/interface already uses spans for hash outputs, it seemed appropriate to accept polynomial in the same venue. \r\n",
+                                           "updatedAt":  "2022-11-09T01:44:58Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5OAG5o",
+                                           "createdAt":  "2022-11-09T12:05:29Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOCwII2g==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "LeaFrock",
+                                                                               "createdAt":  "2022-11-24T08:28:35Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "teo-tsirpanis",
+                                           "body":  "\u003e unsigned integers used to be frowned upon in the public API\r\n\r\nUsed to be. Not anymore. You might think of CLS compliance, which is a concept no longer relevant.\r\n\r\nThe disadvantage of accepting spans is that it falsely communicates to the user that they can pass a span of any length, while only spans of four or eight bytes are allowed.",
+                                           "updatedAt":  "2022-11-09T12:05:29Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6hnXn1",
+                                           "createdAt":  "2025-03-10T18:19:35Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOENkv7A==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "afroz429",
+                                                                               "createdAt":  "2025-03-25T19:01:31Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "davisnw",
+                                                                               "createdAt":  "2025-04-09T16:38:27Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  2
+                                                         },
+                                           "author":  "normj",
+                                           "body":  "Amazon S3 recently added new data integrity checks with CRC64 NVME being the default. https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html\n\nAs maintainers of the AWS .NET SDK we don\u0027t have a good option for supporting this. I believe if this feature request is done to support for custom polynomial we could add this support.\n\nSorry for double posting. I started a discussion here but seems to have fallen off the radar: https://github.com/dotnet/runtime/discussions/112771\n",
+                                           "updatedAt":  "2025-03-10T18:19:35Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6jP2rC",
+                                           "createdAt":  "2025-03-20T01:51:28Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "stephentoub",
+                                           "body":  "@bartonjs, opinions on this?",
+                                           "updatedAt":  "2025-03-20T01:51:28Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6jaaRi",
+                                           "createdAt":  "2025-03-20T20:39:23Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "bartonjs",
+                                           "body":  "Conceptually, it seems fine.  I don\u0027t know offhand if there are characteristics of a polynomial that should be tested for and rejected if they meet/don\u0027t (e.g. the 0 polynomial is probably bad?).\n\nSince it is instantiable it is theoretically something someone might pass around, and I wonder if confusion would happen when you\u0027re expecting CRC-32 and get CRC-32C or some other variant... but that would just be \"maybe it should be in a new type named `CustomCrc32`, or something\", not opposition.  And I\u0027m not sure if it\u0027s an actual concern I have, or just a answer to \"what could go wrong?\"",
+                                           "updatedAt":  "2025-03-20T20:39:23Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6kB_Iq",
+                                           "createdAt":  "2025-03-25T17:14:15Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "normj",
+                                           "body":  "Is there anything I can do to bump up the priority for this? I would love if this could part of .NET 10.",
+                                           "updatedAt":  "2025-03-25T17:15:20Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6kCH3p",
+                                           "createdAt":  "2025-03-25T17:27:50Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "filipnavara",
+                                           "body":  "We already have a need for this internally in the ILC compiler:\nhttps://github.com/dotnet/runtime/blob/12fc2d2ff39e7ccc79a7d76c43cb476f4a77ec4c/src/coreclr/tools/aot/ILCompiler.Compiler/Compiler/ObjectWriter/CoffObjectWriter.cs#L1059-L1129\n\nThis would be a good opportunity to clean that up.",
+                                           "updatedAt":  "2025-03-25T17:27:50Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6kPwJP",
+                                           "createdAt":  "2025-03-26T19:48:39Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "IDisposable",
+                                           "body":  "Given that the current framework in [/src/libraries/System.Private.CoreLib/src/System/Numerics/BitOperations.cs](https://github.com/dotnet/runtime/blob/379af99ab7dacd5daa924f6b7df9907af3bf93d9/src/libraries/System.Private.CoreLib/src/System/Numerics/BitOperations.cs#L766-L961) exposes Crc32/Crc32C by calling to enabled intrinsic for `Sse42.Crc32C` or `Crc32.ComputeCrc32C` or `Crc32.Arm64.ComputeCrc32C` or to a private `Crc32Fallback` class, **this is not a trivial change**.\n\nCRC-32C (Catagnoli) which is used for  SSE4.1 crc \n\nPolynomial representations [ref](https://en.wikipedia.org/wiki/Cyclic_redundancy_check#CRC-32_algorithm)\n\nName | Normal | Reversed | Reciprocal | Reversed reciprocal | SSE4.2 | ARM | \n-- | -- | -- | -- | -- | -- | --\nCRC-32  | 0x04C11DB7 | 0xEDB88320 | 0xDB710641 | 0x82608EDB |  | [CRC32B, CRC32H, CRC32W, CRC32X (A64)](https://developer.arm.com/documentation/dui0801/l/A64-General-Instructions/CRC32B--CRC32H--CRC32W--CRC32X--A64-?lang=en)\nCRC-32C (Castagnoli) | 0x1EDC6F41 | 0x82F63B78 | 0x05EC76F1 | 0x8F6E37A0 | CRC32 | [CRC32CB, CRC32CH, CRC32CW, CRC32CX (A64)](https://developer.arm.com/documentation/dui0801/l/A64-General-Instructions/CRC32CB--CRC32CH--CRC32CW--CRC32CX--A64-?lang=en)\nCRC-32K (Koopman) | 0x741B8CD7 | 0xEB31D82E | 0xD663B05D | 0xBA0DC66B | | ",
+                                           "updatedAt":  "2025-03-26T19:48:39Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6ka2cy",
+                                           "createdAt":  "2025-03-27T15:36:43Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "bartonjs",
+                                           "body":  "Late thoughts from the back of my mind: For the API shape, aside from the \"do we want a different class here?\" I remember from when I first was looking into CRC that there\u0027s a .... residue?  I feel like the residue requires knowing if any particular polynomial requires a Big- or Little- Endian output encoding... at least because I think our CRC-32 is LE and our CRC-64 is BE to make them work out.\n\nWe could, of course, just try it both ways in the ctor.  But having the ctor check that all the arguments are sound feels... expensive.  For \"const generics\" it could be done once per process.  Though I guess with ctor parameters it could be once per process too, just needs to use the parameter-set as a lookup into a dictionary.\n\nEdit:\nOr, the parameter set could be its own type, and you are expected to just keep reusing it.\n\n```C#\npublic class Crc32ParameterSet\n{\n    public static Crc32ParameterSet Castagnoli { get; }\n\n    // Confirms that the input values represent a valid CRC parameter set and returns the validated set.\n    // Or throws that they made no sense.\n    public static CrcParameterSet Create(reflectedPolynomial, initialValue, xorValue, reflectIn, reflectOut, bigEndian);\n\n    // May as well expose them as properties.\n}\n\npublic class Crc32(OrWhatever)\n{\n    public Crc32(Crc32ParameterSet parameterSet);\n}\n```",
+                                           "updatedAt":  "2025-03-27T15:40:44Z"
+                                       }
+                                   ],
+                         "totalCount":  11
+                     },
+        "title":  "[API Proposal]: Add custom polynomial support for Crc32 and Crc64 class",
+        "labels":  [
+                       "api-suggestion",
+                       "area-System.IO.Hashing"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/85222",
+        "createdAt":  "2023-04-23T15:25:17Z",
+        "number":  85222,
+        "author":  "brantburnett",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHOCzX2Aw==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "Wraith2",
+                                            "createdAt":  "2023-04-23T18:12:58Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "PaulusParssinen",
+                                            "createdAt":  "2023-04-23T20:40:05Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "Zintom",
+                                            "createdAt":  "2023-04-24T13:42:28Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "Tornhoof",
+                                            "createdAt":  "2023-04-24T16:49:14Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "viktor-svub",
+                                            "createdAt":  "2023-05-19T12:27:06Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "MineCake147E",
+                                            "createdAt":  "2023-08-18T02:26:17Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "nitinag",
+                                            "createdAt":  "2023-09-14T03:22:59Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "Ilchert",
+                                            "createdAt":  "2023-09-20T20:43:28Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "hrrrrustic",
+                                            "createdAt":  "2023-09-20T20:44:03Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "neon-sunset",
+                                            "createdAt":  "2023-09-20T20:44:34Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "Lanayx",
+                                            "createdAt":  "2023-09-20T20:50:13Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "karb0f0s",
+                                            "createdAt":  "2023-09-27T17:20:50Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "nsentinel",
+                                            "createdAt":  "2023-09-27T19:01:20Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "EgorBo",
+                                            "createdAt":  "2023-09-27T19:01:56Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "krwq",
+                                            "createdAt":  "2023-10-18T10:52:50Z"
+                                        }
+                                    ],
+                          "totalCount":  15
+                      },
+        "updatedAt":  "2024-06-27T19:58:51Z",
+        "body":  "### Background and motivation\n\n#24328 and subsequent changes have added support for CRC-32, CRC-64, XxHash32, XxHash64, and XxHash128 non-cryptographic hash algorithms to the System.IO.Hashing library. The CRC-32 implementation follows the ITU-T V.42 and IEEE 802.3 specifications.\r\n\r\nHowever, another common CRC-32 implementation is CRC-32C (Castagnoli), which uses a different polynomial. This algorithm is used by iSCSI, SCTP, G.hn payload, Btrfs, ext4, Ceph, and Snappy. It is also supported by hardware intrinsics on both ARM and Intel processors (with recently added support in BitConverter to simplify use of the intrinsics #61558).\r\n\r\nAdding high-performance built-in support for this variant could be beneficial to library and application authors. For example, [this case](https://github.com/brantburnett/Snappier/blob/main/Snappier/Internal/Crc32CAlgorithm.cs) in the Snappier implementation of Snappy compression could benefit from a higher performance implementation being generally available.\r\n\r\nThe implementation of the algorithm should make use of vectorization and intrinsics (when available) to gain the best possible performance.\n\n### API Proposal\n\n```csharp\r\nnamespace System.IO.Hashing;\r\n\r\npublic sealed class Crc32C : NonCryptographicHashAlgorithm\r\n{\r\n    public Crc32C() : base(32) { }\r\n    public override void Append(ReadOnlySpan\u003cbyte\u003e source) { }\r\n    public override void Reset() { }\r\n    protected override GetCurrentHashCore(Span\u003cbyte\u003e destination) { }\r\n    protected override void GetHashAndResetCore(Span\u003cbyte\u003e destination) { }\r\n    [CLSCompliant(false)] public uint GetCurrentHashAsUInt32() =\u003e throw null;\r\n\r\n    public static byte[] Hash(byte[] source) =\u003e throw null;\r\n    public static byte[] Hash(ReadOnlySpan\u003cbyte\u003e source) =\u003e throw null;\r\n    public static bool TryHash(ReadOnlySpan\u003cbyte\u003e source, Span\u003cbyte\u003e destination, out int bytesWritten) =\u003e throw null;\r\n    public static int Hash(ReadOnlySpan\u003cbyte\u003e source, Span\u003cbyte\u003e destination) =\u003e throw null;\r\n}\r\n```\r\n\n\n### API Usage\n\n```csharp\r\n// Compute a CRC-32C\r\nvar crc32c = new Crc32C();\r\ncrc32c.Append(sourceBytes);\r\nConsole.WriteLine(crc32c.GetcurrenthashAsUInt32());\r\n\r\n// Compute and output to span\r\nSpan\u003cbyte\u003e dest = stackalloc byte[4];\r\nvar bytesWritten = Crc32C.Hash(sourceBytes, dest);\r\n```\r\n\n\n### Alternative Designs\n\nAn alternative design is to unseal Crc32 and inherit from it to gain some code reuse. However, this could reduce the performance of Crc32 and was previously dismissed in another discussion: https://github.com/dotnet/runtime/issues/24328#issuecomment-808785558\n\n### Risks\n\nThe only risk I see is adding more code to be maintained.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHObmJ1VQ==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5ai4Ot",
+                                           "createdAt":  "2023-04-23T15:25:25Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-system-security, @bartonjs, @vcsjones\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Background and motivation\n\n#24328 and subsequent changes have added support for CRC-32, CRC-64, XxHash32, XxHash64, and XxHash128 non-cryptographic hash algorithms to the System.IO.Hashing library. The CRC-32 implementation follows the ITU-T V.42 and IEEE 802.3 specifications.\r\n\r\nHowever, another common CRC-32 implementation is CRC-32C (Castagnoli), which uses a different polynomial. This algorithm is used by iSCSI, SCTP, G.hn payload, Btrfs, ext4, Ceph, and Snappy. It is also supported by hardware intrinsics on both ARM and Intel processors (with recently added support in BitConverter to simplify use of the intrinsics #61558).\r\n\r\nAdding high-performance built-in support for this variant could be beneficial to library and application authors. For example, [this case](https://github.com/brantburnett/Snappier/blob/main/Snappier/Internal/Crc32CAlgorithm.cs) in the Snappier implementation of Snappy compression could benefit from a higher performance implementation being generally available.\r\n\r\nThe implementation of the algorithm should make use of vectorization and intrinsics (when available) to gain the best possible performance.\n\n### API Proposal\n\n```csharp\r\nnamespace System.IO.Hashing;\r\n\r\npublic sealed class Crc32C : NonCryptographicHashAlgorithm\r\n{\r\n    public Crc32C() : base(32) { }\r\n    public override void Append(ReadOnlySpan\u003cbyte\u003e source) { }\r\n    public override void Reset() { }\r\n    protected override GetCurrentHashCore(Span\u003cbyte\u003e destination) { }\r\n    protected override void GetHashAndResetCore(Span\u003cbyte\u003e destination) { }\r\n    [CLSCompliant(false)] public uint GetCurrentHashAsUInt32() =\u003e throw null;\r\n\r\n    public static byte[] Hash(byte[] source) =\u003e throw null;\r\n    public static byte[] Hash(ReadOnlySpan\u003cbyte\u003e source) =\u003e throw null;\r\n    public static bool TryHash(ReadOnlySpan\u003cbyte\u003e source, Span\u003cbyte\u003e destination, out int bytesWritten) =\u003e throw null;\r\n    public static int Hash(ReadOnlySpan\u003cbyte\u003e source, Span\u003cbyte\u003e destination) =\u003e throw null;\r\n}\r\n```\r\n\n\n### API Usage\n\n```csharp\r\n// Compute a CRC-32C\r\nvar crc32c = new Crc32C();\r\ncrc32c.Append(sourceBytes);\r\nConsole.WriteLine(crc32c.GetcurrenthashAsUInt32());\r\n\r\n// Compute and output to span\r\nSpan\u003cbyte\u003e dest = stackalloc byte[4];\r\nvar bytesWritten = Crc32C.Hash(sourceBytes, dest);\r\n```\r\n\n\n### Alternative Designs\n\nAn alternative design is to unseal Crc32 and inherit from it to gain some code reuse. However, this could reduce the performance of Crc32 and was previously dismissed in another discussion: https://github.com/dotnet/runtime/issues/24328#issuecomment-808785558\n\n### Risks\n\nThe only risk I see is adding more code to be maintained.\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003ebrantburnett\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`api-suggestion`, `area-System.Security`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2023-04-23T15:25:25Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5ai_6h",
+                                           "createdAt":  "2023-04-23T18:11:11Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-system-io-hashing, @bartonjs, @vcsjones\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Background and motivation\n\n#24328 and subsequent changes have added support for CRC-32, CRC-64, XxHash32, XxHash64, and XxHash128 non-cryptographic hash algorithms to the System.IO.Hashing library. The CRC-32 implementation follows the ITU-T V.42 and IEEE 802.3 specifications.\r\n\r\nHowever, another common CRC-32 implementation is CRC-32C (Castagnoli), which uses a different polynomial. This algorithm is used by iSCSI, SCTP, G.hn payload, Btrfs, ext4, Ceph, and Snappy. It is also supported by hardware intrinsics on both ARM and Intel processors (with recently added support in BitConverter to simplify use of the intrinsics #61558).\r\n\r\nAdding high-performance built-in support for this variant could be beneficial to library and application authors. For example, [this case](https://github.com/brantburnett/Snappier/blob/main/Snappier/Internal/Crc32CAlgorithm.cs) in the Snappier implementation of Snappy compression could benefit from a higher performance implementation being generally available.\r\n\r\nThe implementation of the algorithm should make use of vectorization and intrinsics (when available) to gain the best possible performance.\n\n### API Proposal\n\n```csharp\r\nnamespace System.IO.Hashing;\r\n\r\npublic sealed class Crc32C : NonCryptographicHashAlgorithm\r\n{\r\n    public Crc32C() : base(32) { }\r\n    public override void Append(ReadOnlySpan\u003cbyte\u003e source) { }\r\n    public override void Reset() { }\r\n    protected override GetCurrentHashCore(Span\u003cbyte\u003e destination) { }\r\n    protected override void GetHashAndResetCore(Span\u003cbyte\u003e destination) { }\r\n    [CLSCompliant(false)] public uint GetCurrentHashAsUInt32() =\u003e throw null;\r\n\r\n    public static byte[] Hash(byte[] source) =\u003e throw null;\r\n    public static byte[] Hash(ReadOnlySpan\u003cbyte\u003e source) =\u003e throw null;\r\n    public static bool TryHash(ReadOnlySpan\u003cbyte\u003e source, Span\u003cbyte\u003e destination, out int bytesWritten) =\u003e throw null;\r\n    public static int Hash(ReadOnlySpan\u003cbyte\u003e source, Span\u003cbyte\u003e destination) =\u003e throw null;\r\n}\r\n```\r\n\n\n### API Usage\n\n```csharp\r\n// Compute a CRC-32C\r\nvar crc32c = new Crc32C();\r\ncrc32c.Append(sourceBytes);\r\nConsole.WriteLine(crc32c.GetcurrenthashAsUInt32());\r\n\r\n// Compute and output to span\r\nSpan\u003cbyte\u003e dest = stackalloc byte[4];\r\nvar bytesWritten = Crc32C.Hash(sourceBytes, dest);\r\n```\r\n\n\n### Alternative Designs\n\nAn alternative design is to unseal Crc32 and inherit from it to gain some code reuse. However, this could reduce the performance of Crc32 and was previously dismissed in another discussion: https://github.com/dotnet/runtime/issues/24328#issuecomment-808785558\n\n### Risks\n\nThe only risk I see is adding more code to be maintained.\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003ebrantburnett\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`api-suggestion`, `untriaged`, `area-System.IO.Hashing`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2023-04-23T18:11:11Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5cpsRB",
+                                           "createdAt":  "2023-05-19T11:25:48Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "adamsitnik",
+                                           "body":  "@stephentoub @bartonjs @vcsjones what is your opinion on that? It LGTM but I don\u0027t know what is our strategy on adding new hash algorithms APIs",
+                                           "updatedAt":  "2023-05-19T11:25:48Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5cq0_E",
+                                           "createdAt":  "2023-05-19T15:08:01Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "vcsjones",
+                                           "body":  "A possible alternative solution is to consider a more general solution of allowing custom polynomials to be used. This likely has steeper use but it might be worth considering some variation of that instead of introducing a new type every time there is a good case for a new CRC polynomial. https://github.com/dotnet/runtime/issues/78063 has proposed such an idea.",
+                                           "updatedAt":  "2023-05-19T15:08:01Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5cq1ak",
+                                           "createdAt":  "2023-05-19T15:09:21Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "MichalPetryka",
+                                           "body":  "\u003e A possible alternative solution is to consider a more general solution of allowing custom polynomials to be used.\r\n\r\nCRC32C is special cased and hardware accelerated on both XArch and Arm64.",
+                                           "updatedAt":  "2023-05-19T15:09:21Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5cq3GO",
+                                           "createdAt":  "2023-05-19T15:14:50Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "brantburnett",
+                                           "body":  "\u003e A possible alternative solution is to consider a more general solution of allowing custom polynomials to be used. This likely has steeper use but it might be worth considering some variation of that instead of introducing a new type every time there is a good case for a new CRC polynomial. #78063 has proposed such an idea.\r\n\r\nTruly implementing custom polynomials is also much more complex than just a different polynomial value. Different CRC algorithms also involve other details such as input bit reflection, output bit reflection, initial values, and XOR values for the final output, even for the same size. You can see a lot of the different variants here: http://www.sunshine2k.de/coding/javascript/crc/crc_js.html",
+                                           "updatedAt":  "2023-05-19T15:14:50Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5iHFyl",
+                                           "createdAt":  "2023-07-21T17:27:23Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODH_Ajw==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "karb0f0s",
+                                                                               "createdAt":  "2023-09-27T17:22:01Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "nsentinel",
+                                                                               "createdAt":  "2023-09-27T19:02:00Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  2
+                                                         },
+                                           "author":  "brantburnett",
+                                           "body":  "@adamsitnik Any further thoughts on this? I\u0027d love to get it in before .NET 8 gets frozen for release candidates.",
+                                           "updatedAt":  "2023-07-21T17:27:23Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5nBWsj",
+                                           "createdAt":  "2023-09-20T20:51:21Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODH_AiA==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "karb0f0s",
+                                                                               "createdAt":  "2023-09-27T17:21:59Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "nsentinel",
+                                                                               "createdAt":  "2023-09-27T19:01:50Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  2
+                                                         },
+                                           "author":  "Lanayx",
+                                           "body":  "Apache Pulsar also uses CRC32C, so this will be beneficial for it\u0027s client\r\n\u003cimg width=\"826\" alt=\"image\" src=\"https://github.com/dotnet/runtime/assets/3329606/b577d71c-5cd5-47b8-babe-f79cf624fa23\"\u003e\r\n",
+                                           "updatedAt":  "2023-09-27T22:18:24Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5nlrbU",
+                                           "createdAt":  "2023-09-27T19:03:35Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "EgorBo",
+                                           "body":  "SIMDified version in Chromium https://chromium.googlesource.com/chromium/src/+/HEAD/third_party/zlib/crc32_simd.c\r\n",
+                                           "updatedAt":  "2023-09-27T19:03:35Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5nnCee",
+                                           "createdAt":  "2023-09-28T00:42:17Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "stephentoub",
+                                           "body":  "\u003e SIMDified version in Chromium https://chromium.googlesource.com/chromium/src/+/HEAD/third_party/zlib/crc32_simd.c\r\n\r\n.NET 8\u0027s implementation of crc32 (this issue is about crc32c) is also vectorized:\r\nhttps://github.com/dotnet/runtime/blob/main/src/libraries/System.IO.Hashing/src/System/IO/Hashing/Crc32.Vectorized.cs\r\n\r\n.NET 8 also includes BitOperations.Crc32c that uses SSE4\u0027s _mm_crc32_u8/16/32/64 and arm\u0027s __crc32cb/h/w/d when available.",
+                                           "updatedAt":  "2023-09-28T00:43:10Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5uYnVV",
+                                           "createdAt":  "2023-12-12T12:30:54Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "PaulusParssinen",
+                                           "body":  "We can go even faster: https://github.com/corsix/fast-crc32",
+                                           "updatedAt":  "2023-12-12T12:30:54Z"
+                                       }
+                                   ],
+                         "totalCount":  11
+                     },
+        "title":  "[API Proposal]: CRC-32C non-cryptographic hashing API",
+        "labels":  [
+                       "api-suggestion",
+                       "area-System.IO.Hashing"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/90191",
+        "createdAt":  "2023-08-08T20:43:40Z",
+        "number":  90191,
+        "author":  "jkoritzinsky",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHODRNpGg==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "Wraith2",
+                                            "createdAt":  "2023-08-09T00:09:44Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "JimBobSquarePants",
+                                            "createdAt":  "2023-12-09T09:33:51Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "0xfeeddeadbeef",
+                                            "createdAt":  "2025-03-27T22:52:15Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "xPaw",
+                                            "createdAt":  "2025-09-17T09:44:04Z"
+                                        }
+                                    ],
+                          "totalCount":  4
+                      },
+        "updatedAt":  "2025-03-18T21:22:00Z",
+        "body":  "### Background and motivation\n\nThe Adler32 checksum algorithm is used in many popular compression formats, like the ZLib envelope format around DEFLATE data. It is faster than CRC32, albeit less reliable on shorter messages. The algorithm is specified in [RFC1950](https://datatracker.ietf.org/doc/html/rfc1950)\n\n\n### API Proposal\n\n```csharp\nnamespace System.IO.Hashing;\n\n    public sealed partial class Adler32 : System.IO.Hashing.NonCryptographicHashAlgorithm\n    {\n        public Adler32();\n        public override void Append(System.ReadOnlySpan\u003cbyte\u003e source);\n        public Adler32 Clone();\n        public uint GetCurrentHashAsUInt32();\n        protected override void GetCurrentHashCore(System.Span\u003cbyte\u003e destination);\n        protected override void GetHashAndResetCore(System.Span\u003cbyte\u003e destination);\n        public static byte[] Hash(byte[] source);\n        public static byte[] Hash(System.ReadOnlySpan\u003cbyte\u003e source);\n        public static int Hash(System.ReadOnlySpan\u003cbyte\u003e source, System.Span\u003cbyte\u003e destination);\n        public static uint HashToUInt32(System.ReadOnlySpan\u003cbyte\u003e source);\n        public override void Reset();\n        public static bool TryHash(System.ReadOnlySpan\u003cbyte\u003e source, System.Span\u003cbyte\u003e destination, out int bytesWritten);\n    }\n```\n\n\n### API Usage\n\n```csharp\nsealed class MyZlibStream : Stream\n{\n    private Stream innerStream;\n    private Adler32 rollingHash = new();\n\tprivate DeflateStream compressor = new DeflateStream(innerStream);\n\n    public MyZlibStream(Stream innerStream)\n    {\n           this.innerStream = innerStream;\n           compressor = new DeflateStream(innerStream);\n           // Write ZLib header.\n    }\n\n\tpublic override void Write (byte[] buffer, int offset, int count)\n    {\n           compressor.Write(buffer, offset, count);\n           rollingHash.Append(buffer.AsSpan().Slice(offset, count));\n    }\n\n    protected override void Dispose(bool disposing)\n    {\n        try\n        {\n            if (disposing \u0026\u0026 _stream != null)\n            {\n                try\n                {\n                    Flush();\n                    innerStream.Write(rollingHash.GetCurrentHash());\n                }\n                finally\n                {\n                    _stream.Dispose();\n                }\n            }\n        }\n        finally\n        {\n            _stream = null;\n            _buffer = null;\n            _writePos = 0; // WriteByte hot path relies on this\n\n            // Call base.Dispose(bool) to cleanup async IO resources\n            base.Dispose(disposing);\n        }\n    }\n}\n```\n\n\n### Alternative Designs\n\n_No response_\n\n### Risks\n\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOowEoMw==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5jjnvT",
+                                           "createdAt":  "2023-08-08T20:43:49Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-system-io-hashing, @bartonjs, @vcsjones\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Background and motivation\n\nThe Adler32 checksum algorithm is used in many popular compression formats, like the ZLib envelope format around DEFLATE data. It is faster than CRC32, albeit less reliable on shorter messages. The algorithm is specified in [RFC1950](https://datatracker.ietf.org/doc/html/rfc1950)\r\n\n\n### API Proposal\n\n```csharp\r\nnamespace System.IO.Hashing;\r\n\r\n    public sealed partial class Adler32 : System.IO.Hashing.NonCryptographicHashAlgorithm\r\n    {\r\n        public Adler32();\r\n        public override void Append(System.ReadOnlySpan\u003cbyte\u003e source);\r\n        public uint GetCurrentHashAsUInt32();\r\n        protected override void GetCurrentHashCore(System.Span\u003cbyte\u003e destination);\r\n        protected override void GetHashAndResetCore(System.Span\u003cbyte\u003e destination);\r\n        public static byte[] Hash(byte[] source);\r\n        public static byte[] Hash(System.ReadOnlySpan\u003cbyte\u003e source);\r\n        public static int Hash(System.ReadOnlySpan\u003cbyte\u003e source, System.Span\u003cbyte\u003e destination);\r\n        public static uint HashToUInt32(System.ReadOnlySpan\u003cbyte\u003e source);\r\n        public override void Reset();\r\n        public static bool TryHash(System.ReadOnlySpan\u003cbyte\u003e source, System.Span\u003cbyte\u003e destination, out int bytesWritten);\r\n    }\r\n```\r\n\n\n### API Usage\n\n```csharp\r\nsealed class MyZlibStream : Stream\r\n{\r\n    private Stream innerStream;\r\n    private Adler32 rollingHash = new();\r\n\tprivate DeflateStream compressor = new DeflateStream(innerStream);\r\n\r\n    public MyZlibStream(Stream innerStream)\r\n    {\r\n           this.innerStream = innerStream;\r\n           compressor = new DeflateStream(innerStream);\r\n           // Write ZLib header.\r\n    }\r\n\r\n\tpublic override void Write (byte[] buffer, int offset, int count)\r\n    {\r\n           compressor.Write(buffer, offset, count);\r\n           rollingHash.Append(buffer.AsSpan().Slice(offset, count));\r\n    }\r\n\r\n    protected override void Dispose(bool disposing)\r\n    {\r\n        try\r\n        {\r\n            if (disposing \u0026\u0026 _stream != null)\r\n            {\r\n                try\r\n                {\r\n                    Flush();\r\n                    uint checksum = rollingHash.GetCurrentHashAsUInt32();\r\n                    innerStream.Write(MemoryMarshal.AsBytes(new Span\u003cuint\u003e(ref checksum)));\r\n                }\r\n                finally\r\n                {\r\n                    _stream.Dispose();\r\n                }\r\n            }\r\n        }\r\n        finally\r\n        {\r\n            _stream = null;\r\n            _buffer = null;\r\n            _writePos = 0; // WriteByte hot path relies on this\r\n\r\n            // Call base.Dispose(bool) to cleanup async IO resources\r\n            base.Dispose(disposing);\r\n        }\r\n    }\r\n}\r\n```\r\n\n\n### Alternative Designs\n\n_No response_\n\n### Risks\n\n_No response_\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003ejkoritzinsky\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`api-suggestion`, `area-System.IO.Hashing`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2023-08-08T20:43:49Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6duePy",
+                                           "createdAt":  "2025-02-09T12:20:17Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOEFwqFw==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "JimBobSquarePants",
+                                                                               "createdAt":  "2025-02-09T23:26:13Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "jeffhandley",
+                                           "body":  "The proposal looks reasonable to me. Marking as https://github.com/dotnet/runtime/labels/api-ready-for-review. @jkoritzinsky, would you be able to speak to it during the API Review meeting?",
+                                           "updatedAt":  "2025-02-09T12:20:17Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6dvTpf",
+                                           "createdAt":  "2025-02-09T17:20:47Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jkoritzinsky",
+                                           "body":  "Yeah I can speak to it.",
+                                           "updatedAt":  "2025-02-09T17:20:47Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6eBSv2",
+                                           "createdAt":  "2025-02-11T15:20:48Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "vcsjones",
+                                           "body":  "We approved a `Clone` to all of the other `NonCryptographicHashAlgorithm` implementations with https://github.com/dotnet/runtime/issues/111908. Should that be part of the proposed API here?",
+                                           "updatedAt":  "2025-02-11T15:20:48Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6eEW2Z",
+                                           "createdAt":  "2025-02-11T20:00:23Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOEJ8nTg==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "markusschaber",
+                                                                               "createdAt":  "2025-03-14T12:20:11Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "jkoritzinsky",
+                                           "body":  "I\u0027ll update the proposal with the `Clone` API.",
+                                           "updatedAt":  "2025-02-11T20:00:23Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6i-tUb",
+                                           "createdAt":  "2025-03-18T18:34:57Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "bartonjs",
+                                           "body":  "[Video](https://www.youtube.com/watch?v=rXDXsAhvBDw\u0026t=1h8m7s)\n\n* The API shape looks good as proposed.\n* As a feature review, we should get a commitment/intent from someone (e.g. ImageSharp) to use our version once it exists.  We shouldn\u0027t do it in a vacuum.\n\n```C#\nnamespace System.IO.Hashing;\n\n    public sealed partial class Adler32 : System.IO.Hashing.NonCryptographicHashAlgorithm\n    {\n        public Adler32();\n        public override void Append(System.ReadOnlySpan\u003cbyte\u003e source);\n        public Adler32 Clone();\n        public uint GetCurrentHashAsUInt32();\n        protected override void GetCurrentHashCore(System.Span\u003cbyte\u003e destination);\n        protected override void GetHashAndResetCore(System.Span\u003cbyte\u003e destination);\n        public static byte[] Hash(byte[] source);\n        public static byte[] Hash(System.ReadOnlySpan\u003cbyte\u003e source);\n        public static int Hash(System.ReadOnlySpan\u003cbyte\u003e source, System.Span\u003cbyte\u003e destination);\n        public static uint HashToUInt32(System.ReadOnlySpan\u003cbyte\u003e source);\n        public override void Reset();\n        public static bool TryHash(System.ReadOnlySpan\u003cbyte\u003e source, System.Span\u003cbyte\u003e destination, out int bytesWritten);\n    }\n```",
+                                           "updatedAt":  "2025-03-18T19:06:39Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6jASgz",
+                                           "createdAt":  "2025-03-18T21:21:59Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "JimBobSquarePants",
+                                           "body":  "\u003e As a feature review, we should get a commitment/intent from someone (e.g. ImageSharp) to use our version once it exists.\n\nDeal! ",
+                                           "updatedAt":  "2025-03-18T21:21:59Z"
+                                       }
+                                   ],
+                         "totalCount":  7
+                     },
+        "title":  "[API Proposal]: System.IO.Hashing.Adler32 class for computing Adler32 checksums",
+        "labels":  [
+                       "api-approved",
+                       "area-System.IO.Hashing"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/102005",
+        "createdAt":  "2024-05-07T23:47:35Z",
+        "number":  102005,
+        "author":  "blowdart",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-05-14T16:06:00Z",
+        "body":  "Original [non-cryptographic hash issue](https://github.com/dotnet/runtime/issues/24328)\r\n\r\nMurmur came a couple of times in the discussion and there\u0027s some use internally in other products. There\u0027s even an unmanaged version [buried deep](https://github.com/dotnet/runtime/blob/0fb0188a137f3d53a2ebd719d7a684327938609a/src/native/containers/dn-simdhash-utils.h#L32) inside some native code.\r\n\r\nThis is to log the suggestion for inclusion next time we look at the non-cryptographic hash package.\r\n\r\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOfSOcEw==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc59I5wT",
+                                           "createdAt":  "2024-05-07T23:47:57Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-system-io-hashing, @bartonjs, @vcsjones\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2024-05-07T23:47:57Z"
+                                       }
+                                   ],
+                         "totalCount":  1
+                     },
+        "title":  "Consider murmur non-cryptographic hash support",
+        "labels":  [
+                       "area-System.IO.Hashing"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/115880",
+        "createdAt":  "2025-05-22T07:56:33Z",
+        "number":  115880,
+        "author":  "jaffa-bw",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-06-04T04:01:54Z",
+        "body":  "i create the following powershell script to calculate the MD5 and SHA512. i use chunks to use the loop for multiple algorithms and for speed.\n\n```\n$path = \"C:\\MyLocalFolder\\somefile.iso\"\n$stream = [IO.File]::Open($Path, [IO.FileMode]::Open, [IO.FileAccess]::Read, [IO.FileShare]::Read)\n$buffer = [Byte[]]::new(10MB)\n$readCount = [int] 0\n\n$a1 = [Security.Cryptography.HashAlgorithmName]::MD5\n$a2 = [Security.Cryptography.HashAlgorithmName]::SHA512\n$algorithm1 = [Security.Cryptography.HashAlgorithm]::Create($a1)\n$algorithm2 = [Security.Cryptography.HashAlgorithm]::Create($a2)\n\nwhile (($readCount = $stream.Read($buffer, 0, $buffer.Length)) -ne 0)\n{\n    $null = $algorithm1.TransformBlock($buffer, 0, $readCount, $null, 0)\n    $null = $algorithm2.TransformBlock($buffer, 0, $readCount, $null, 0)\n}\n\n$null = $algorithm1.TransformFinalBlock($buffer, 0,0)\n$null = $algorithm2.TransformFinalBlock($buffer, 0,0)\n[BitConverter]::ToString($algorithm1.Hash).Replace(\u0027-\u0027,\u0027\u0027)\n[BitConverter]::ToString($algorithm2.Hash).Replace(\u0027-\u0027,\u0027\u0027)\n```\n\nbut, i need **CRC32** additionally, which is available at **System.IO.Hashing**. this namespace is not available at powershell like Security.Cryptography.HashAlgorithm.\n[https://learn.microsoft.com/en-us/dotnet/api/system.io.hashing?view=net-9.0-pp](url)\n\nthe dll is available at nuget, but import module is not working (error with \"Could not load file or assembly \u0027System.Memory, Version=4.0.1.2, Culture=neutral\").\n[https://www.nuget.org/packages/System.IO.Hashing/](url)\n\nbriefly summarized: please make namespace System.IO.Hashing usable with powershell.\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOryQfkw==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc6s3_Dq",
+                                           "createdAt":  "2025-05-22T08:28:43Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "huoyaoyuan",
+                                           "body":  "\u003e i create the following powershell script to calculate the MD5 and SHA512.\n\nNote: PowerShell has built-in cmdlet for this, `Get-FileHash -Algorithm MD5` etc.\n\nIf you are targeting PowerShell 7 instead of Windows PowerShell 5, you can also use the direct methods like `[System.Security.Cryptography.MD5]::HashData`.\n\n\u003e the dll is available at nuget, but import module is not working (error with \"Could not load file or assembly \u0027System.Memory, Version=4.0.1.2, Culture=neutral\").\n\nYou need to bring dlls from dependent packages, shown at [dependency](https://www.nuget.org/packages/System.IO.Hashing/#dependencies-body-tab) on nuget.org.\n\nIt\u0027s also unclear about which PowerShell version you are targeting. For PowerShell 7, the correct dll to use is `lib\\net8.0\\System.IO.Hashing.dll` or `lib\\net9.0\\System.IO.Hashing.dll`, which doesn\u0027t have additional dependency.",
+                                           "updatedAt":  "2025-05-22T08:28:43Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6s4PtX",
+                                           "createdAt":  "2025-05-22T08:53:20Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jaffa-bw",
+                                           "body":  "i dont understand the note to the cmdlet Get-FileHash. with the mentioned cmdlet is not possible to perform TransformBlock.\nthe _[System.Security.Cryptography.MD5]::HashData_ is only for the complete file, not for chunks from buffer.\n\n1. import-module C:\\dotnet-sdk-9.0.300-win-x64\\shared\\Microsoft.NETCore.App\\9.0.5\\System.Buffers.dll\n_no error_\n2. import-module C:\\dotnet-sdk-9.0.300-win-x64\\shared\\Microsoft.NETCore.App\\9.0.5\\System.Memory.dll\n```\nimport-module : Could not load type \u0027System.Object\u0027 from assembly \u0027System.Private.CoreLib, Version=9.0.0.0,\nCulture=neutral, PublicKeyToken=7cec85d7bea7798e\u0027 because the parent does not exist.\nAt line:1 char:1\n+ import-module C:\\xxx\\xxx\\Downloads\\dotnet-sdk-9.0.300-win-x64\\ ...\n+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n    + CategoryInfo          : NotSpecified: (:) [Import-Module], TypeLoadException\n    + FullyQualifiedErrorId : System.TypeLoadException,Microsoft.PowerShell.Commands.ImportModuleCommand\n```\n3. import-module C:\\dotnet-sdk-9.0.300-win-x64\\shared\\Microsoft.NETCore.App\\9.0.5\\System.Private.CoreLib.dll\n```\nimport-module : Could not load type \u0027System.Object\u0027 from assembly \u0027System.Private.CoreLib, Version=9.0.0.0,\nCulture=neutral, PublicKeyToken=7cec85d7bea7798e\u0027 because the parent does not exist.\nAt line:1 char:1\n+ import-module C:\\xxx\\xxx\\Downloads\\dotnet-sdk-9.0.300-win-x64\\ ...\n+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n    + CategoryInfo          : NotSpecified: (:) [Import-Module], TypeLoadException\n    + FullyQualifiedErrorId : System.TypeLoadException,Microsoft.PowerShell.Commands.ImportModuleCommand\n```\n\nthe import of the System.IO.Hashing.dll is not possible, due to dependencies.\n",
+                                           "updatedAt":  "2025-05-22T08:53:20Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6s4ios",
+                                           "createdAt":  "2025-05-22T09:21:19Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "huoyaoyuan",
+                                           "body":  "\u003e i dont understand the note to the cmdlet Get-FileHash. with the mentioned cmdlet is not possible to perform TransformBlock.\n\u003e the _[System.Security.Cryptography.MD5]::HashData_ is only for the complete file, not for chunks from buffer.\n\nIt\u0027s just a choice of implementation to manually manage the blocks. What\u0027s the purpose of your code? If you are calculating the hash of independent files, not combination of multiple files, then `Get-FileHash` is sufficient.\n\n\u003e 1. import-module C:\\dotnet-sdk-9.0.300-win-x64\\shared\\Microsoft.NETCore.App\\9.0.5\\System.Buffers.dll\n\nYou should not import any thing from shared .NET SDK. They are the .NET Core version, present at `C:\\Program Files\\WindowsApps\\Microsoft.PowerShell_7.5.1.0_x64__8wekyb3d8bbwe\\System.Buffers.dll` and always loaded by PowerShell 7.\nIf you are targeting Windows PowerShell which uses .NET Framework, you must use the corresponding dll from the nuget package `System.Buffers` and `System.Memory` and their dependent packages, under the path `lib\\net462`. The files with the same name are very different things.",
+                                           "updatedAt":  "2025-05-22T09:22:28Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6s4_fd",
+                                           "createdAt":  "2025-05-22T09:58:31Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jaffa-bw",
+                                           "body":  "\u003e It\u0027s just a choice of implementation to manually manage the blocks. What\u0027s the purpose of your code? If you are calculating the hash of independent files, not combination of multiple files, then `Get-FileHash` is sufficient.\n\nmy goal is to read part of the file into RAM, here 10MB, then calculate the hash CRC32, MD5, SHA512 and BLAKE3. i run this already with `Get-FileHash -InputStream` with `System.IO.BufferedStream` read file method which is slower and i cannot use multiple algorithms, only one by one. \n`[System.IO.MemoryMappedFiles.MemoryMappedFile]` to load the complete file into RAM is not possible in my case, because i have big files 50-100GB each.\n\ni run the import module with PS7 (7.3.7). not possible.\n\n```\nimport-module C:\\xxx\\xxx\\Downloads\\system.io.hashing.9.0.5\\lib\\net9.0\\System.IO.Hashing.dll\nImport-Module: Could not load file or assembly \u0027System.Runtime, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a\u0027. The system cannot find the file specified.\n```\n",
+                                           "updatedAt":  "2025-05-22T09:58:31Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6s5pk1",
+                                           "createdAt":  "2025-05-22T10:58:17Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "huoyaoyuan",
+                                           "body":  "\u003e i run the import module with PS7 (7.3.7). not possible.\n\nPowerShell 7.3.x targets .NET 7. You need to use .NET 7 compatible version of library.\n\nSystem.IO.Hashing 9.0.5 has ended support for .NET 7. The latest version supporting .NET 7 is System.IO.Hashing 8.0.0.",
+                                           "updatedAt":  "2025-05-22T10:58:17Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6tT44J",
+                                           "createdAt":  "2025-05-25T07:47:50Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jaffa-bw",
+                                           "body":  "`$PSVersionTable`\n\n```\nName                           Value\n----                           -----\nPSVersion                      5.1.26100.4061\nPSEdition                      Desktop\nPSCompatibleVersions           {1.0, 2.0, 3.0, 4.0...}\nBuildVersion                   10.0.26100.4061\nCLRVersion                     4.0.30319.42000\nWSManStackVersion              3.0\nPSRemotingProtocolVersion      2.3\nSerializationVersion           1.1.0.1\n```\n\nSystem.IO.Hashing Version=9.0.5, i checked the dependencies from .net 4.6.2 and i used the dll from folder `lib\\net462`\n\n```\nImport-Module C:\\MyFolder\\1605\\bin\\System.Buffers.dll\nImport-Module C:\\MyFolder\\1605\\bin\\System.Numerics.Vectors.dll\nImport-Module C:\\MyFolder\\1605\\bin\\System.Runtime.CompilerServices.Unsafe.dll\nImport-Module C:\\MyFolder\\1605\\bin\\System.Memory.dll\nImport-Module C:\\MyFolder\\1605\\bin\\System.IO.Hashing.dll\n```\n\nbut still error\n\n```\nImport-Module : Die Datei oder Assembly \"System.Memory, Version=4.0.1.2, Culture=neutral,\nPublicKeyToken=cc7b13ffcd2ddd51\" oder eine Abhängigkeit davon wurde nicht gefunden. Das System kann die angegebene\nDatei nicht finden.\nIn Zeile:1 Zeichen:1\n+ Import-Module C:\\MyFolder\\1605\\bin\\System.IO.Hashing.dll\n+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n    + CategoryInfo          : NotSpecified: (:) [Import-Module], FileNotFoundException\n    + FullyQualifiedErrorId : System.IO.FileNotFoundException,Microsoft.PowerShell.Commands.ImportModuleCommand\n\n```",
+                                           "updatedAt":  "2025-05-25T07:47:50Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6tZBUj",
+                                           "createdAt":  "2025-05-26T09:04:38Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "huoyaoyuan",
+                                           "body":  "You are still getting binary from the wrong version of `System.Memory` package. .NET Framework is more sensitive about assembly version, and doesn\u0027t roll over to higher version by default.\n\nI manually extracted binaries from the following package versions:\n- System.IO.Hashing 8.0.0\n- System.Buffers 4.5.1\n- System.Memory 4.5.5\n- System.Numerics.Vectors 4.5.0\n- System.Runtime.CompilerServices.Unsafe 4.5.3\n\nPutting them under the same folder, and PowerShell 5.1 successfully load them. The correct files are having following modification time:\n\n![Image](https://github.com/user-attachments/assets/54fa4aee-e4e7-48c4-80ec-3376c30d5ca8)\n\nYou can create an empty C# **Exe** project targeting `net462`, install the `System.IO.Hashing` package, build the application, then find the resolved dlls under output folder. NuGet will resolves the correct binaries for you, and what I was saying is doing the process manually.\n\nFor `System.IO.Hashing` 8.0.0, this approach works fine. However if [binding redirect](https://learn.microsoft.com/en-us/dotnet/framework/configure-apps/redirect-assembly-versions) is involved, I\u0027m not sure whether it can work seamlessly. It\u0027s a known pain for .NET Framework.",
+                                           "updatedAt":  "2025-05-26T09:04:38Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6tZEQk",
+                                           "createdAt":  "2025-05-26T09:12:43Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "huoyaoyuan",
+                                           "body":  "For PowerShell 7.3.x, you can follow a similar process: first using `\"\".GetType().Assembly.FullName` to get the framework that PowerShell is compiled with (.NET 7 in this case), then create a new .NET 7 console project, install the package and let NuGet resolves the correct files for you. On PowerShell Core the confidence is higher since .NET Core is more permissive about assembly versioning.",
+                                           "updatedAt":  "2025-05-26T09:12:43Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6tv0Nd",
+                                           "createdAt":  "2025-05-28T05:34:14Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jaffa-bw",
+                                           "body":  "thanks to huoyaoyuan to show me the correct way, using the proper version. but this means at the same time, at nuget \u0027bigger or equal\u0027 at the dependencies is not correct ?\n\n![Image](https://github.com/user-attachments/assets/3fe2e576-e671-4387-b1eb-6dacd75d399e)",
+                                           "updatedAt":  "2025-05-28T05:34:14Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6tv3ST",
+                                           "createdAt":  "2025-05-28T05:39:06Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "huoyaoyuan",
+                                           "body":  "It is correct, but it requires more work to do by the .NET SDK. The SDK needs to (automatically) setup [binding redirect](https://learn.microsoft.com/en-us/dotnet/framework/configure-apps/redirect-assembly-versions) when building applications. However, there isn\u0027t such integration for PowerShell.\n\nIn the .NET Core/PowerShell Core world this complexity should have gone, any higher version will simply work without requiring binding redirects.",
+                                           "updatedAt":  "2025-05-28T05:39:06Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6uTmEc",
+                                           "createdAt":  "2025-05-31T05:37:41Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jaffa-bw",
+                                           "body":  "the method `Append `needs the byte as **System.ReadOnlySpan**,\ni tried with `[MemoryExtensions]::AsMemory($readCount)`, `[System.MemoryExtensions]::AsSpan($readCount)`, `[System.Span`1].$readCount`, without success. as i understand, span is not possible with powershell.\n\n```\nTypeName   : System.IO.Hashing.Crc32\nName       : Append\nMemberType : Method\nDefinition : void Append(System.ReadOnlySpan`1[[System.Byte, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]],\n             System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51 source), void Append(byte[] source), void\n             Append(System.IO.Stream stream)\n```\n\n```\n$path = \"C:\\MyLocalFolder\\somefile.iso\"\n$stream = [IO.File]::Open($Path, [IO.FileMode]::Open, [IO.FileAccess]::Read, [IO.FileShare]::Read)\n$buffer = [Byte[]]::new(10MB)\n$readCount = [int] 0\n\nImport-Module C:\\MyFolder\\1605\\dotnet2\\System.Buffers.dll\nImport-Module C:\\MyFolder\\1605\\dotnet2\\System.Numerics.Vectors.dll\nImport-Module C:\\MyFolder\\1605\\dotnet2\\System.Runtime.CompilerServices.Unsafe.dll\nImport-Module C:\\MyFolder\\1605\\dotnet2\\System.Memory.dll\nImport-Module C:\\MyFolder\\1605\\dotnet2\\System.IO.Hashing.dll\n\n$crc = New-Object System.IO.Hashing.Crc32\n\nwhile (($readCount = $stream.Read($buffer, 0, $buffer.Length)) -ne 0)\n{\n  $crc.append($readCount)\n}\n```\n",
+                                           "updatedAt":  "2025-05-31T05:37:41Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6uWoI1",
+                                           "createdAt":  "2025-05-31T13:11:28Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "huoyaoyuan",
+                                           "body":  "Span is not supported in PowerShell. However, there is `Append(Stream)` overload available.",
+                                           "updatedAt":  "2025-05-31T13:11:28Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6uXTuj",
+                                           "createdAt":  "2025-05-31T15:41:30Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jaffa-bw",
+                                           "body":  "yeah, this was my first try, i use `$stream.Read` to read 10MB of the file. but, the method expect the stream as byte and i my case Int32?\n\n`$readCount.GetType()`\n\n```\nIsPublic IsSerial Name                                     BaseType\n-------- -------- ----                                     --------\nTrue     True     Int32                                    System.ValueType\n```\n\n`$crc1.append($readCount)`\n\n```\nDas Argument \"source\" mit dem Wert  \"10485760\" für \"Append\" kann nicht in den Typ \"System.Byte[]\" konvertiert werden:\n\"Der Wert \"10485760\" kann nicht in den Typ \"System.Byte[]\" konvertiert werden. Fehler: \"Der Wert \"10485760\" kann nicht\nin den Typ \"System.Byte\" konvertiert werden. Fehler: \"Der Wert für ein unsigniertes Byte war zu groß oder zu klein.\"\"\"\nIn C:\\MyFolder\\1605\\t4.ps1:35 Zeichen:5\n+     $crc1.append($readCount)\n+     ~~~~~~~~~~~~~~~~~~~~~~~~\n    + CategoryInfo          : NotSpecified: (:) [], MethodException\n    + FullyQualifiedErrorId : MethodArgumentConversionInvalidCastArgument\n```\n\n`$crc1.append([byte]$readCount)`\n\n```\nDer Wert \"10485760\" kann nicht in den Typ \"System.Byte\" konvertiert werden. Fehler: \"Der Wert für ein unsigniertes\nByte war zu groß oder zu klein.\"\nIn C:\\MyFolder\\1605\\t4.ps1:35 Zeichen:5\n+     $crc1.append([byte]$readCount)\n+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n    + CategoryInfo          : InvalidArgument: (:) [], RuntimeException\n    + FullyQualifiedErrorId : InvalidCastIConvertible\n```\n\n\n",
+                                           "updatedAt":  "2025-05-31T15:41:30Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6umWUe",
+                                           "createdAt":  "2025-06-02T07:54:36Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "huoyaoyuan",
+                                           "body":  "Actually there\u0027s no direct way to append an array read from Stream to Crc32.\n\n\u003e `$crc1.append($readCount)`\n\n\u003e `$crc1.append([byte]$readCount)`\n\n\u003e but, the method expect the stream as byte and i my case Int32?\n\n`readCount` is a number describing how much bytes has been read. The `Append` method expects a *byte array*, not byte, so you need to do `Append($buffer)`. **However, it\u0027s a common mistake to do `Append($buffer)` directly.** This is because `Read` doesn\u0027t always fulfill the buffer. To correctly append it in PowerShell, you need to do the following:\n\n```ps\n$realBuffer = [Byte[]]::new($readCount)\n[System.Array]::Copy($buffer, $realBuffer, $readCount)\n$crc1.append($realBuffer)\n```\n\nThus, it\u0027s much, much recommended to do `$crc1.Append($stream)` to make the library handles this for you.\n\nIt\u0027s also suggested to write down the code in C# (or even VB because it bans span), then transcode it into PowerShell.",
+                                           "updatedAt":  "2025-06-02T07:54:54Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6u2E2y",
+                                           "createdAt":  "2025-06-03T04:45:00Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jaffa-bw",
+                                           "body":  "1. **$stream**\n`$crc1.Append($stream)` it reads to the end, not only the chunk of the file. in my while loop it starts at 10MB and reads to the end and the loop is finished with one turn. you can check this behaviour with `$stream.position`\n2. **$buffer**\n`$crc1.append($buffer)` no error but not the expected value at the end with `[BitConverter]::ToString($crc1.GetHashAndReset()).Replace(\u0027-\u0027,\u0027\u0027)` as already stated from you.\n3. **$realBuffer**\ni add the above code inside the loop. at the end i get an different value as $buffer, but not the expected one.",
+                                           "updatedAt":  "2025-06-03T04:45:00Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6u_bFk",
+                                           "createdAt":  "2025-06-03T15:09:49Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "huoyaoyuan",
+                                           "body":  "The following C# code does produce the same result:\n\n```csharp\n            var crc1 = new Crc32();\n            using (var fs1 = File.OpenRead(@\"C:\\Windows\\explorer.exe\"))\n            {\n                crc1.Append(fs1);\n            }\n            Console.WriteLine(Convert.ToHexString(crc1.GetHashAndReset()));\n\n            var buffer = new byte[1234];\n            int readCount = 0;\n            var crc2 = new Crc32();\n            using (var fs2 = File.OpenRead(@\"C:\\Windows\\explorer.exe\"))\n            {\n                while ((readCount = fs2.Read(buffer, 0, buffer.Length)) \u003e 0)\n                {\n                    var realBuffer = new byte[readCount];\n                    Array.Copy(buffer, realBuffer, readCount);\n                    crc2.Append(realBuffer);\n                }\n            }\n            Console.WriteLine(Convert.ToHexString(crc2.GetHashAndReset()));\n```\n\nDo you accidentally reuse the instances?",
+                                           "updatedAt":  "2025-06-03T15:09:49Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6vJB-T",
+                                           "createdAt":  "2025-06-04T04:01:53Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jaffa-bw",
+                                           "body":  "[https://github.com/dotnet/runtime/issues/76720#issuecomment-1270608729](url)\n\nthe crc32 value was in different order. `[array]::reverse($crcvalue)` is necessary to get the proper value.",
+                                           "updatedAt":  "2025-06-04T04:01:53Z"
+                                       }
+                                   ],
+                         "totalCount":  17
+                     },
+        "title":  "Namespace System.IO.Hashing usage with Powershell",
+        "labels":  [
+                       "question",
+                       "area-System.IO.Hashing"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/117078",
+        "createdAt":  "2025-06-27T08:37:31Z",
+        "number":  117078,
+        "author":  "Zeruxky",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHODIJKqg==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "Wraith2",
+                                            "createdAt":  "2025-06-29T21:35:20Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "jeffhandley",
+                                            "createdAt":  "2025-07-23T06:41:24Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "elgonzo",
+                                            "createdAt":  "2025-07-23T10:41:50Z"
+                                        }
+                                    ],
+                          "totalCount":  3
+                      },
+        "updatedAt":  "2025-07-23T16:39:38Z",
+        "body":  "### Background and motivation\n\nThe NuGet package [System.IO.Hashing](https://github.com/dotnet/dotnet/blob/ddf39a1b4690fbe23aea79c78da67004a5c31094/src/runtime/src/libraries/System.IO.Hashing/src/PACKAGE.md) implements a variety of hash code algorithms, for example CRC-32, CRC64 and so on. For a current task, I need to hash data with CRC-32 and CRC-8, with the first already implemented by System.IO.Hashing. For CRC-8 I had to create an own implementation of the algorithm, which currently is only available in my employer\u0027s git repository.\n\nTo avoid reimplementing the CRC-8 algorithm, I would like to propose a new class within the System.IO.Hashing namespace, which follows the patterns and structures laid out by the [CRC32 class](https://github.com/dotnet/dotnet/blob/ddf39a1b4690fbe23aea79c78da67004a5c31094/src/runtime/src/libraries/System.IO.Hashing/src/System/IO/Hashing/Crc32.cs). So the CRC-8 implementation becomes a part of the System.IO.Hashing package and is available to all users of this package.\n\nWith the base class [NonCryptographicHashAlgorithm](https://github.com/dotnet/dotnet/blob/ddf39a1b4690fbe23aea79c78da67004a5c31094/src/runtime/src/libraries/System.IO.Hashing/src/System/IO/Hashing/NonCryptographicHashAlgorithm.cs) System.IO.Hashing provides already a skeleton to implement such algorithm in a standardized way. So the new class CRC8 will also be implementing this base class and its functionalities.\n\nThis proposal enhances the capability of the System.IO.Hashing package and provides an out-of-the-box implementation of the missing CRC-8 algorithm, which benefits all users of the System.IO.Hashing NuGet package.\n\nI\u0027m willing to implement the CRC-8 algorithm by submitting a Pull-Request to the dotnet runtime repo. If other algorithms as CRC-16 are also requested, I would also implement these algorithms in separate Pull-Requests and Issues.\n\n### API Proposal\n\n```csharp\nnamespace System.IO.Hashing \n{\n    public class Crc8 : NonCryptographicHashAlgorithm\n    {\n        private const int SIZE = 1;\n        private const byte ZERO = 0x00;\n\n        private readonly byte[] lookupTable;\n        private byte crc;\n\n        public Crc8()\n            : this(GenerateTable(0xD5, ZERO) // Generates the table for the DVB-S2 polynom.\n        {\n        }\n\n        private Crc8(IEnumerable\u003cbyte\u003e lookupTable, byte initialState)\n            : base(SIZE)\n        {\n            this.lookupTable = lookupTable.ToArray();\n            this.InitialState = initialState;\n            this.crc = this.InitialState;\n        }\n\n        /// \u003csummary\u003e\n        /// Creates a new instance of the \u003csee cref=\"Crc8\"/\u003e class with a specified polynomial\n        /// and an optional initial state.\n        /// \u003c/summary\u003e\n        /// \u003cparam name=\"polynomial\"\u003eThe polynomial used to generate the CRC-8 lookup table.\u003c/param\u003e\n        /// \u003creturns\u003eA new instance of the \u003csee cref=\"Crc8\"/\u003e class configured with the specified polynomial.\u003c/returns\u003e\n        public static Crc8 Create(byte polynomial) =\u003e Create(polynomial, ZERO);\n\n        /// \u003csummary\u003e\n        /// Creates an instance of the \u003csee cref=\"Crc8\"/\u003e class using a specified polynomial and an initial state.\n        /// \u003c/summary\u003e\n        /// \u003cparam name=\"polynomial\"\u003eThe polynomial to be used for the CRC-8 calculation.\u003c/param\u003e\n        /// \u003cparam name=\"initialState\"\u003eThe initial state value for the CRC-8 calculation.\u003c/param\u003e\n        /// \u003creturns\u003eA new instance of the \u003csee cref=\"Crc8\"/\u003e class configured with the specified polynomial and initial state.\u003c/returns\u003e\n        public static Crc8 Create(byte polynomial, byte initialState) =\u003e new(GenerateTable(polynomial), initialState);\n\n        /// \u003csummary\u003e\n        /// Generates a CRC-8 lookup table based on the specified polynomial.\n        /// \u003c/summary\u003e\n        /// \u003cparam name=\"polynomial\"\u003eThe polynomial value used in the computation of the lookup table.\u003c/param\u003e\n        /// \u003creturns\u003eAn array of bytes representing the CRC-8 lookup table generated using the provided polynomial.\u003c/returns\u003e\n        public static byte[] GenerateTable(byte polynomial)\n        {\n            const int tableSize = 256;\n            const int bitsPerByte = 8;\n            const byte highestBitMask = 0x80;\n\n            var table = new byte[tableSize];\n            for (var i = 0; i \u003c table.Length; i++)\n            {\n                var crc = (byte)i;\n                for (var bitPosition = 0; bitPosition \u003c bitsPerByte; bitPosition++)\n                {\n                    if ((crc \u0026 highestBitMask) != 0)\n                    {\n                        crc = (byte)((crc \u003c\u003c 1) ^ polynomial);\n                    }\n                    else\n                    {\n                        crc \u003c\u003c= 1;\n                    }\n                }\n\n                table[i] = crc;\n            }\n\n            return table;\n        }\n\n        /// \u003cinheritdoc /\u003e\n        public override void Append(ReadOnlySpan\u003cbyte\u003e source)\n        {\n            foreach (var item in source)\n            {\n                this.crc = this.lookupTable[this.crc ^ item];\n            }\n        }\n\n        /// \u003cinheritdoc /\u003e\n        public override void Reset() =\u003e this.crc = this.InitialState;\n\n        /// \u003cinheritdoc /\u003e\n        protected override void GetCurrentHashCore(Span\u003cbyte\u003e destination) =\u003e destination[0] = this.crc;\n    }\n```\n\n\n### API Usage\n\n```csharp\nvar text = \"Hello World! :)\";\nvar bytes = Encoding.UTF8.GetBytes(text); // byte[] { 0x48 0x65 0x6C 0x6C 0x6F 0x20 0x57 0x6F 0x72 0x6C 0x64 0x21 0x20 0x3A 0x29 }\nvar crc8 = new Crc8(); // DVB-S2 polynom\ncrc8.Append(bytes);\nvar hash = crc8.GetCurrentHash(); // 0x76\n\n// Create instance of Crc8 with generated lookup table for CRC-8/AUTOSAR.\ncrc8 = Crc8.Create(0x2F, 0x00);\ncrc8.Append(bytes);\nhash = crc8.GetCurrentHash(); // 0x40\n```\n\n\n### Alternative Designs\n\nNone, because this adds a new class and algorithm to the System.IO.Hashing namespace which is currently not implemented.\n\n### Risks\n\nNone, because the implementation follows the structure of the CRC32 class, and also computes the lookup table upfront to avoid bitwise calculation.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOuVU4NQ==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc6zjJqv",
+                                           "createdAt":  "2025-06-27T09:26:22Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "elgonzo",
+                                           "body":  "_EDIT: Scratch my former comment. While there doesn\u0027t appear no clear favourite among the CRC-8 variants, the static Create methods proposed here should cover most, if not all of them..._",
+                                           "updatedAt":  "2025-06-27T09:50:10Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6zmPwe",
+                                           "createdAt":  "2025-06-27T13:46:41Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-system-io-hashing, @bartonjs, @vcsjones\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2025-06-27T13:46:41Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6zmp0P",
+                                           "createdAt":  "2025-06-27T14:22:25Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "danmoseley",
+                                           "body":  "How widespread is usage of this algorithm?",
+                                           "updatedAt":  "2025-06-27T14:22:25Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6zo2C9",
+                                           "createdAt":  "2025-06-27T17:10:47Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Tornhoof",
+                                           "body":  "Fairly common in automotive, atleast one of the OBD2 protocols uses it, but I don\u0027t know which generator polynomial.",
+                                           "updatedAt":  "2025-06-27T17:10:47Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6zt3v0",
+                                           "createdAt":  "2025-06-28T09:41:16Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Zeruxky",
+                                           "body":  "We are currently working on implementing a standardized workflow for the communication between so-called flexibility service providers (FSPs) and power grid operators in Austria. In one of these workflows, a CRC-8 computation is required with the polynomial used for DVB-S2, which is used for Digital Video Broadcasting via satellite. This polynomial should also be the standard CRC-8 polynomial, if I read [this table by Wikipedia](https://en.wikipedia.org/wiki/Cyclic_redundancy_check#Polynomial_representations) correctly?\n\nBut also, as @elgonzo stated correctly, the static Create methods as proposed should cover the most cases for generating the lookup tables for all CRC-8 algorithm.",
+                                           "updatedAt":  "2025-06-28T09:41:16Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc65IuCx",
+                                           "createdAt":  "2025-07-23T06:43:37Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jeffhandley",
+                                           "body":  "@bartonjs / @GrabYourPitchforks / @vcsjones -- Do you have any concerns or hesitation about this? It looks reasonable to me and the scenarios cited are compelling. If you are supportive of this, we could mark it as https://github.com/dotnet/runtime/labels/api-ready-for-review and https://github.com/dotnet/runtime/labels/help%20wanted.",
+                                           "updatedAt":  "2025-07-23T06:43:37Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc65VTg1",
+                                           "createdAt":  "2025-07-23T16:39:38Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "bartonjs",
+                                           "body":  "Right now I/we are thinking about what the shape should be for parameterized CRC-32/CRC-64; this is probably downstream of that effort (see the static Create methods).\n\n`public static byte[] GenerateTable` probably shouldn\u0027t be public.  There are other static members from the general NonCryptographicHashAlgorithm shape that are missing here.\n\nSo, it\u0027s not really actionable at this point... until I (or someone else) figures out the good pattern for parameterized CRC-32 (dealing with endianness/CRC-residue/etc) to then know what it would look like for CRC-64, CRC-16, etc, we won\u0027t know how to feel about it when we shrink down even further to CRC-8.",
+                                           "updatedAt":  "2025-07-23T16:39:38Z"
+                                       }
+                                   ],
+                         "totalCount":  7
+                     },
+        "title":  "[API Proposal]: Add CRC-8 implementation to System.IO.Hashing",
+        "labels":  [
+                       "api-suggestion",
+                       "area-System.IO.Hashing"
+                   ]
+    }
+]

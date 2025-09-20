@@ -1,0 +1,1246 @@
+﻿[
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/25920",
+        "createdAt":  "2018-04-17T22:47:37Z",
+        "number":  25920,
+        "author":  "ericstj",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-01-08T19:15:15Z",
+        "body":  "From @BruceForstall in https://github.com/dotnet/coreclr/issues/17582\r\n\r\nMany arm32 Windows corefx jobs in the CI are hanging, apparently on Microsoft.Win32.SystemEvents.Tests, e.g.:\r\n\r\nhttps://ci.dot.net/job/dotnet_coreclr/job/master/view/arm/job/jitstress/job/arm_cross_checked_windows_nt_corefx_baseline_tst/11/console\r\nhttps://ci.dot.net/job/dotnet_coreclr/job/master/view/arm/job/jitstress/job/arm_cross_checked_windows_nt_corefx_jitstress1_tst/11/console\r\nhttps://ci.dot.net/job/dotnet_coreclr/job/master/job/jitstress/job/arm_cross_checked_windows_nt_corefx_jitstressregs2_tst/9/console\r\nhttps://ci.dot.net/job/dotnet_coreclr/job/master/view/arm/job/jitstress/job/arm_cross_checked_windows_nt_corefx_jitstressregs0x1000_tst/10/console\r\n\r\nThey also show failures before the hang.\r\n\r\nSample output:\r\n```\r\n22:52:06 Running: C:\\Users\\robox\\j\\workspace\\arm_cross_che---eb7b805d\\_\\fx\\bin\\tests\\Microsoft.Win32.SystemEvents.Tests\\netcoreapp-Windows_NT-Release-arm\\RunTests.cmd C:\\Users\\robox\\j\\workspace\\arm_cross_che---eb7b805d\\_\\fx\\bin\\testhost\\netcoreapp-Windows_NT-Release-arm\r\n22:52:06 Using C:\\Users\\robox\\j\\workspace\\arm_cross_che---eb7b805d\\_\\fx\\bin\\testhost\\netcoreapp-Windows_NT-Release-arm as the test runtime folder.\r\n22:52:06 Executing in C:\\Users\\robox\\j\\workspace\\arm_cross_che---eb7b805d\\_\\fx\\bin\\tests\\Microsoft.Win32.SystemEvents.Tests\\netcoreapp-Windows_NT-Release-arm\\ \r\n22:52:06 ----- start 22:52:08.17 ===============  To repro directly: ===================================================== \r\n22:52:06 pushd C:\\Users\\robox\\j\\workspace\\arm_cross_che---eb7b805d\\_\\fx\\bin\\tests\\Microsoft.Win32.SystemEvents.Tests\\netcoreapp-Windows_NT-Release-arm\\\r\n22:52:06 call C:\\Users\\robox\\j\\workspace\\arm_cross_che---eb7b805d\\_\\fx\\bin\\testhost\\netcoreapp-Windows_NT-Release-arm\\dotnet.exe xunit.console.netcore.exe Microsoft.Win32.SystemEvents.Tests.dll  -xml testResults.xml -notrait Benchmark=true -notrait category=nonnetcoreapptests -notrait category=nonwindowstests  -notrait category=IgnoreForCI -notrait category=OuterLoop -notrait category=failing\r\n22:52:06 popd\r\n22:52:06 ===========================================================================================================\r\n22:52:06 \r\n22:52:06 C:\\Users\\robox\\j\\workspace\\arm_cross_che---eb7b805d\\_\\fx\\bin\\tests\\Microsoft.Win32.SystemEvents.Tests\\netcoreapp-Windows_NT-Release-arm\u003ecall C:\\Users\\robox\\j\\workspace\\arm_cross_che---eb7b805d\\_\\fx\\bin\\testhost\\netcoreapp-Windows_NT-Release-arm\\dotnet.exe xunit.console.netcore.exe Microsoft.Win32.SystemEvents.Tests.dll  -xml testResults.xml -notrait Benchmark=true -notrait category=nonnetcoreapptests -notrait category=nonwindowstests  -notrait category=IgnoreForCI -notrait category=OuterLoop -notrait category=failing \r\n22:52:07 xUnit.net console test runner (32-bit .NET Core)\r\n22:52:07 Copyright (C) 2014 Outercurve Foundation.\r\n22:52:07 \r\n22:52:07 Discovering: Microsoft.Win32.SystemEvents.Tests\r\n22:52:09 Discovered:  Microsoft.Win32.SystemEvents.Tests\r\n22:52:10 Starting:    Microsoft.Win32.SystemEvents.Tests\r\n22:52:23 \r\n   Microsoft.Win32.SystemEventsTests.LowMemoryTests.SignalsEventsAsynchronouslyOnMessage [FAIL]\r\n22:52:23       Assert.True() Failure\r\n22:52:23       Expected: True\r\n22:52:23       Actual:   False\r\n22:52:23       Stack Trace:\r\n22:52:24             at Microsoft.Win32.SystemEventsTests.GenericEventTests.SignalsEventsAsynchronouslyOnMessage()\r\n22:52:33    Microsoft.Win32.SystemEventsTests.CreateTimerTests.TimerElapsedSignaled [FAIL]\r\n22:52:33       Assert.True() Failure\r\n22:52:33       Expected: True\r\n22:52:33       Actual:   False\r\n22:52:33       Stack Trace:\r\n22:52:33          D:\\j\\workspace\\arm_cross_che---99792267\\_\\fx\\src\\Microsoft.Win32.SystemEvents\\tests\\SystemEvents.CreateTimer.cs(58,0): at Microsoft.Win32.SystemEventsTests.CreateTimerTests.TimerElapsedSignaled()\r\n22:52:43    Microsoft.Win32.SystemEventsTests.CreateTimerTests.ConcurrentTimers [FAIL]\r\n22:52:43       Assert.True() Failure\r\n22:52:43       Expected: True\r\n22:52:43       Actual:   False\r\n22:52:43       Stack Trace:\r\n22:52:43          D:\\j\\workspace\\arm_cross_che---99792267\\_\\fx\\src\\Microsoft.Win32.SystemEvents\\tests\\SystemEvents.CreateTimer.cs(113,0): at Microsoft.Win32.SystemEventsTests.CreateTimerTests.ConcurrentTimers()\r\n22:52:53    Microsoft.Win32.SystemEventsTests.DisplaySettingsTests.SignalsDisplayEventsAsynchronouslyOnDISPLAYCHANGE [FAIL]\r\n22:52:53       Assert.True() Failure\r\n22:52:53       Expected: True\r\n22:52:53       Actual:   False\r\n22:52:53       Stack Trace:\r\n22:52:53          D:\\j\\workspace\\arm_cross_che---99792267\\_\\fx\\src\\Microsoft.Win32.SystemEvents\\tests\\SystemEvents.DisplaySettings.cs(37,0): at Microsoft.Win32.SystemEventsTests.DisplaySettingsTests.SignalsDisplayEventsAsynchronouslyOnDISPLAYCHANGE()\r\n22:53:03    Microsoft.Win32.SystemEventsTests.InvokeOnEventsThreadTests.InvokeOnEventsThreadRunsOnSameThreadAsOtherEvents [FAIL]\r\n22:53:03       Assert.True() Failure\r\n22:53:03       Expected: True\r\n22:53:03       Actual:   False\r\n22:53:03       Stack Trace:\r\n22:53:03             at Microsoft.Win32.SystemEventsTests.InvokeOnEventsThreadTests.InvokeOnEventsThreadRunsOnSameThreadAsOtherEvents()\r\n22:53:13    Microsoft.Win32.SystemEventsTests.InvokeOnEventsThreadTests.InvokeOnEventsThreadRunsAsynchronously [FAIL]\r\n22:53:13       Assert.True() Failure\r\n22:53:13       Expected: True\r\n22:53:13       Actual:   False\r\n22:53:13       Stack Trace:\r\n22:53:13          D:\\j\\workspace\\arm_cross_che---99792267\\_\\fx\\src\\Microsoft.Win32.SystemEvents\\tests\\SystemEvents.InvokeOnEventsThread.cs(22,0): at Microsoft.Win32.SystemEventsTests.InvokeOnEventsThreadTests.InvokeOnEventsThreadRunsAsynchronously()\r\n06:44:16 \r\nBuild timed out (after 480 minutes). Marking the build as aborted.\r\n06:44:16 \r\n```\r\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOma_PYg==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQ4OTIwMDg1OQ==",
+                                           "createdAt":  "2019-05-03T18:46:54Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ViktorHofer",
+                                           "body":  "Just hit this on `Windows.81.Amd64.Open-x64:Debug`. I\u0027m going to disable `Microsoft.Win32.SystemEventsTests.CreateTimerTests.ConcurrentTimers`.\r\n\r\n```\r\nC:\\dotnetbuild\\work\\688d3729-d9a3-4600-99ca-8a7ecb1f3dae\\Work\\b7fe115e-6de6-4093-a46d-53c70eecebca\\Exec\u003e\"C:\\dotnetbuild\\work\\688d3729-d9a3-4600-99ca-8a7ecb1f3dae\\Payload\\dotnet.exe\" xunit.console.dll Microsoft.Win32.SystemEvents.Tests.dll -xml testResults.xml -nologo -nocolor -notrait category=nonnetcoreapptests -notrait category=nonwindowstests -notrait category=IgnoreForCI -notrait category=failing -notrait category=OuterLoop  \r\n  Discovering: Microsoft.Win32.SystemEvents.Tests (method display = ClassAndMethod, method display options = None)\r\n  Discovered:  Microsoft.Win32.SystemEvents.Tests (found 26 of 27 test cases)\r\n  Starting:    Microsoft.Win32.SystemEvents.Tests (parallel test collections = on, max threads = 2)\r\n   Microsoft.Win32.SystemEvents.Tests: [Long Running Test] \u0027Microsoft.Win32.SystemEventsTests.CreateTimerTests.ConcurrentTimers\u0027, Elapsed: 00:02:11\r\n   Microsoft.Win32.SystemEvents.Tests: [Long Running Test] \u0027Microsoft.Win32.SystemEventsTests.CreateTimerTests.ConcurrentTimers\u0027, Elapsed: 00:04:11\r\n   Microsoft.Win32.SystemEvents.Tests: [Long Running Test] \u0027Microsoft.Win32.SystemEventsTests.CreateTimerTests.ConcurrentTimers\u0027, Elapsed: 00:06:11\r\n   Microsoft.Win32.SystemEvents.Tests: [Long Running Test] \u0027Microsoft.Win32.SystemEventsTests.CreateTimerTests.ConcurrentTimers\u0027, Elapsed: 00:08:11\r\n   Microsoft.Win32.SystemEvents.Tests: [Long Running Test] \u0027Microsoft.Win32.SystemEventsTests.CreateTimerTests.ConcurrentTimers\u0027, Elapsed: 00:10:11\r\n   Microsoft.Win32.SystemEvents.Tests: [Long Running Test] \u0027Microsoft.Win32.SystemEventsTests.CreateTimerTests.ConcurrentTimers\u0027, Elapsed: 00:12:12\r\n   Microsoft.Win32.SystemEvents.Tests: [Long Running Test] \u0027Microsoft.Win32.SystemEventsTests.CreateTimerTests.ConcurrentTimers\u0027, Elapsed: 00:14:12\r\n```\r\n\r\nhttps://mc.dot.net/#/user/dotnet-bot/pr~2Fdotnet~2Fcorefx~2Frefs~2Fpull~2F37414~2Fmerge/test~2Ffunctional~2Fcli~2F/20190503.23/workItem/Microsoft.Win32.SystemEvents.Tests/wilogs",
+                                           "updatedAt":  "2019-05-03T18:48:35Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQ4OTIwMTIzMA==",
+                                           "createdAt":  "2019-05-03T18:48:10Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ViktorHofer",
+                                           "body":  "@maryamariyan @ericstj are we concerned about these hangs and want to fix them for 3.0? Currently the milestone is set to Future.",
+                                           "updatedAt":  "2019-05-03T18:48:10Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQ4OTIxOTg5NA==",
+                                           "createdAt":  "2019-05-03T19:53:07Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOAoBfIw==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "ViktorHofer",
+                                                                               "createdAt":  "2019-05-03T20:12:26Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "BruceForstall",
+                                           "body":  "fyi, https://github.com/dotnet/coreclr/issues/22442 tracks timing out Win32.SystemEvents tests, and https://github.com/dotnet/coreclr/pull/24201 disabled some of these.",
+                                           "updatedAt":  "2019-05-03T19:53:07Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDUwMTg4NTMyMA==",
+                                           "createdAt":  "2019-06-13T21:27:17Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "stephentoub",
+                                           "body":  "Another failure here, on netfx:\r\nhttps://mc.dot.net/#/user/dotnet-bot/pr~2Fdotnet~2Fcorefx~2Frefs~2Fpull~2F38506~2Fmerge/test~2Ffunctional~2Fcli~2Finnerloop~2F/20190613.12/workItem/Microsoft.Win32.SystemEvents.Tests/wilogs\r\n```\r\nC:\\dotnetbuild\\work\\09d4c5c7-d4ad-418a-bad6-86ef34d25081\\Work\\20c28d9f-1c93-44e0-932c-019ca6eb169d\\Exec\u003exunit.console.exe Microsoft.Win32.SystemEvents.Tests.dll -xml testResults.xml -nologo -nocolor -notrait category=nonnetfxtests -notrait category=nonwindowstests -notrait category=IgnoreForCI -notrait category=OuterLoop -notrait category=failing  \r\n  Discovering: Microsoft.Win32.SystemEvents.Tests (app domain = on [no shadow copy], method display = ClassAndMethod, method display options = None)\r\n  Discovered:  Microsoft.Win32.SystemEvents.Tests (found 26 of 27 test cases)\r\n  Starting:    Microsoft.Win32.SystemEvents.Tests (parallel test collections = on, max threads = 2)\r\n   Microsoft.Win32.SystemEvents.Tests: [Long Running Test] \u0027Microsoft.Win32.SystemEventsTests.InvokeOnEventsThreadTests.InvokeOnEventsThreadRunsAsynchronously\u0027, Elapsed: 00:02:11\r\n   Microsoft.Win32.SystemEvents.Tests: [Long Running Test] \u0027Microsoft.Win32.SystemEventsTests.InvokeOnEventsThreadTests.InvokeOnEventsThreadRunsAsynchronously\u0027, Elapsed: 00:04:12\r\n   Microsoft.Win32.SystemEvents.Tests: [Long Running Test] \u0027Microsoft.Win32.SystemEventsTests.InvokeOnEventsThreadTests.InvokeOnEventsThreadRunsAsynchronously\u0027, Elapsed: 00:06:12\r\n   Microsoft.Win32.SystemEvents.Tests: [Long Running Test] \u0027Microsoft.Win32.SystemEventsTests.InvokeOnEventsThreadTests.InvokeOnEventsThreadRunsAsynchronously\u0027, Elapsed: 00:08:12\r\n   Microsoft.Win32.SystemEvents.Tests: [Long Running Test] \u0027Microsoft.Win32.SystemEventsTests.InvokeOnEventsThreadTests.InvokeOnEventsThreadRunsAsynchronously\u0027, Elapsed: 00:10:12\r\n   Microsoft.Win32.SystemEvents.Tests: [Long Running Test] \u0027Microsoft.Win32.SystemEventsTests.InvokeOnEventsThreadTests.InvokeOnEventsThreadRunsAsynchronously\u0027, Elapsed: 00:12:12\r\n   Microsoft.Win32.SystemEvents.Tests: [Long Running Test] \u0027Microsoft.Win32.SystemEventsTests.InvokeOnEventsThreadTests.InvokeOnEventsThreadRunsAsynchronously\u0027, Elapsed: 00:14:12\r\n```",
+                                           "updatedAt":  "2019-06-13T21:27:17Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDUyNzA1MTc2MA==",
+                                           "createdAt":  "2019-09-02T08:21:16Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ViktorHofer",
+                                           "body":  "Another failure on `netcoreapp-Windows_NT-Release-x64-Windows.7.Amd64.Open`: https://dnceng.visualstudio.com/public/_build/results?buildId=334246\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=9827812\u0026paneView=debug\r\n\r\n```\r\nMicrosoft.Win32.SystemEventsTests.CreateTimerTests.TimerElapsedSignaled\r\n\r\nAssert.False() Failure\\r\\nExpected: False\\r\\nActual: True\r\n   at Microsoft.Win32.SystemEventsTests.CreateTimerTests.TimerElapsedSignaled() in /_/src/Microsoft.Win32.SystemEvents/tests/SystemEvents.CreateTimer.cs:line 70\r\n```\r\n\r\nWill send a PR to disable the test.",
+                                           "updatedAt":  "2019-09-02T08:21:45Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6Zr89i",
+                                           "createdAt":  "2025-01-08T19:15:03Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jkotas",
+                                           "body":  "Tests are disabled against this issue. The tests should be either fixed or deleted.",
+                                           "updatedAt":  "2025-01-08T19:15:03Z"
+                                       }
+                                   ],
+                         "totalCount":  6
+                     },
+        "title":  "SystemEvents tests are failing (and hanging)",
+        "labels":  [
+                       "bug",
+                       "area-Microsoft.Win32",
+                       "disabled-test"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/34888",
+        "createdAt":  "2020-04-13T08:21:19Z",
+        "number":  34888,
+        "author":  "v-haren",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2021-08-13T13:55:07Z",
+        "body":  "failed in job: [runtime-libraries outerloop 20200412.1](https://dev.azure.com/dnceng/public/_build/results?buildId=597835\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=18830130\u0026paneView=debug\u0026resultId=102059)\r\n\r\n\r\nError message\r\n~~~\r\nTimer should fire less than -10% before and less than 50% after expected interval 500, actual: 1849, difference: 269.8%\r\nExpected: True\r\nActual: False\r\n\r\n\r\nStack trace\r\n   at Microsoft.Win32.SystemEventsTests.CreateTimerTests.TimerElapsedIsRoughlyEquivalentToInterval(Int32 interval) in /_/src/libraries/Microsoft.Win32.SystemEvents/tests/SystemEvents.CreateTimer.cs:line 165\r\n~~~",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOKA8GyQ==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDYxMzAzNDg5Mw==",
+                                           "createdAt":  "2020-04-13T18:41:24Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "danmoseley",
+                                           "body":  "This kind of test is inherently flaky (at least at the upper end). ",
+                                           "updatedAt":  "2020-04-13T18:41:24Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDYzMTg0NDU2Mw==",
+                                           "createdAt":  "2020-05-21T02:41:27Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "v-haren",
+                                           "body":  "failed again in job: [runtime-libraries outerloop 20200520.3 ](https://dev.azure.com/dnceng/public/_build/results?buildId=653190\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=20277522\u0026resultId=102529\u0026paneView=debug)\r\n\r\nfailed test: Microsoft.Win32.SystemEventsTests.CreateTimerTests.TimerElapsedIsRoughlyEquivalentToInterval(interval: 500)\r\n\r\n\r\nError message\r\n~~~\r\nTimer should fire less than -10% before and less than 50% after expected interval 500, actual: 872, difference: 74.4%\r\nExpected: True\r\nActual: False\r\n\r\n\r\nStack trace\r\n   at Microsoft.Win32.SystemEventsTests.CreateTimerTests.TimerElapsedIsRoughlyEquivalentToInterval(Int32 interval) in /_/src/libraries/Microsoft.Win32.SystemEvents/tests/SystemEvents.CreateTimer.cs:line 165\r\n~~~",
+                                           "updatedAt":  "2020-05-21T02:41:27Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDYzMTg2MDI4NA==",
+                                           "createdAt":  "2020-05-21T03:40:15Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "danmoseley",
+                                           "body":  "Sometimes the test machine is just overloaded. Until we have the ability to try again on another machine there\u0027s not much we can do. @maryamariyan since you own this area -- how about we change this from -10% to 50% to something like -10% to 500%. It\u0027s not ideal but at least we would be testing that it didn\u0027t fire any sooner than expected. And that it actually fired at all.",
+                                           "updatedAt":  "2020-05-21T03:40:15Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY1NTk0NDA1MQ==",
+                                           "createdAt":  "2020-07-09T07:07:28Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ericstj",
+                                           "body":  "Test is inherently flaky which is why it is in outerloop.",
+                                           "updatedAt":  "2020-07-09T07:07:28Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY3MTc2MzkyNQ==",
+                                           "createdAt":  "2020-08-11T06:51:58Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "v-haren",
+                                           "body":  "failed again in job: [runtime-libraries outerloop 20200810.2 ](https://dev.azure.com/dnceng/public/_build/results?buildId=763270\u0026view=ms.vss-test-web.build-test-results-tab\u0026runId=23713554\u0026resultId=103049\u0026paneView=debug)\r\n\r\nfailed test: Microsoft.Win32.SystemEventsTests.CreateTimerTests.TimerElapsedIsRoughlyEquivalentToInterval(interval: 500)\r\n\r\n\r\nError message\r\n~~~\r\nTimer should fire less than -10% before and less than 50% after expected interval 500, actual: 2345, difference: 369%\r\nExpected: True\r\nActual:   False\r\n\r\n\r\nStack trace\r\n   at Microsoft.Win32.SystemEventsTests.CreateTimerTests.TimerElapsedIsRoughlyEquivalentToInterval(Int32 interval) in /_/src/libraries/Microsoft.Win32.SystemEvents/tests/SystemEvents.CreateTimer.cs:line 164\r\n~~~",
+                                           "updatedAt":  "2020-08-11T06:51:58Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY3MjA3MzQxNw==",
+                                           "createdAt":  "2020-08-11T16:32:18Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "maryamariyan",
+                                           "body":  "Opened https://github.com/dotnet/runtime/pull/40673.",
+                                           "updatedAt":  "2020-08-11T17:59:42Z"
+                                       }
+                                   ],
+                         "totalCount":  6
+                     },
+        "title":  "test failure: Microsoft.Win32.SystemEventsTests.CreateTimerTests.TimerElapsedIsRoughlyEquivalentToInterval",
+        "labels":  [
+                       "area-Microsoft.Win32",
+                       "os-windows",
+                       "arch-x64"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/46209",
+        "createdAt":  "2020-12-18T03:37:03Z",
+        "number":  46209,
+        "author":  "danmoseley",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2021-07-19T21:02:07Z",
+        "body":  "We [ship a runtime-only copy on Unix ](https://github.com/dotnet/runtime/blob/75f83464af09e441a1a52cf4f6fe8251477273c9/src/libraries/NetCoreAppLibrary.props#L149) that has part of the code, but ultimately throws when you try to open a key.\r\n\r\nIt seems like this is only needed by Microsoft.VisualBasic.Interaction. Making a partial class for that for Unix that just throws directly would allow us to remove the Unix config of M.W32.Registry. It\u0027s only 60KB though.\r\n\r\nThis just popped out when using ILSPY to see what in a Linux published app has SupportedOSPlatformAttribute or UnsupportedOSPlatformAttribute applied.\r\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOLQVkug==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDc0ODI5MzQ1Mg==",
+                                           "createdAt":  "2020-12-18T20:03:21Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "danmoseley",
+                                           "body":  "This removes the dependency \r\n\r\nhttps://github.com/dotnet/runtime/compare/master...danmosemsft:vb.registry?expand=1\r\n\r\nBut I\u0027m not sure of the rest. The Microsoft.Win32.Registry on non-Windows is wierd - it has much of the code, but will eventually throw PNSE when it ends up accessing the registry. My guess this is in anticipation of having a file system implementation, hence there\u0027s RegistryKey.FileSystem.cs, but it\u0027s just PNSE too.\r\n\r\nCan registry be hollowed out in its non-Windows configurations to pure Not Supported assembly?\r\n\r\nAlso, do we still need to include Microsoft.Win32.Registry.dll in Unix? If I create a simple Hello World and publish it for linux-x64, I see Microsoft.Win32.Registry.dll. Can we remove it, and if so where do I edit?\r\n\r\n@ericstj for when he\u0027s back",
+                                           "updatedAt":  "2020-12-18T20:03:21Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDc1NDQyOTY0Mg==",
+                                           "createdAt":  "2021-01-05T06:28:06Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ericstj",
+                                           "body":  "\u003e Also, do we still need to include Microsoft.Win32.Registry.dll in Unix?\r\n\r\nYes, at least given how we build today.  Assumptions are made by the SDK that we have the same set of assemblies on all runtimes.  This lets the SDK know when it needs to include an assembly in a framework dependent app or not.  We wouldn\u0027t want a runtime agnostic app to depend on registry and get a FNFE instead of PNSE on Unix.  We could lie about registry being in the framework, but then apps would carry it even on Windows.  We could ask the SDK to have RID-specific file lists, but then we\u0027d still be in a place where a RID-agnostic app carried the assembly (since it might run on Unix).  For this reason we make sure that all frameworks carry the same set of assemblies.\r\n\r\n\u003e  The Microsoft.Win32.Registry on non-Windows is wierd - it has much of the code, but will eventually throw PNSE when it ends up accessing the registry. My guess this is in anticipation of having a file system implementation, hence there\u0027s RegistryKey.FileSystem.cs, but it\u0027s just PNSE too.\r\n\r\nI\u0027ve wondered this too.  My assumption was that it was done for mono-compat.  Looks like @stephentoub did it explicitly here: https://github.com/dotnet/corefx/pull/9456",
+                                           "updatedAt":  "2021-01-05T06:28:06Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDc1NTA2MzY3NA==",
+                                           "createdAt":  "2021-01-06T04:02:55Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "danmoseley",
+                                           "body":  "Is my change linked above worthwhile? Seems cleanup.",
+                                           "updatedAt":  "2021-01-06T04:02:55Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDc1NTEwNTEwMA==",
+                                           "createdAt":  "2021-01-06T06:13:15Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ericstj",
+                                           "body":  "I don’t think it’s worthwhile to remove the dependency.  I do think it’s worthwhile to simplify registry to be a full PNSE assembly if we don’t need it to work.",
+                                           "updatedAt":  "2021-01-06T06:13:15Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDc1NTMyODE4Ng==",
+                                           "createdAt":  "2021-01-06T14:25:18Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "stephentoub",
+                                           "body":  "We added that set of stubs when we thought that a) we would need it for mono compat and b) it would be a good project for an intern to implement.  That was several years ago, though.  If @marek-safar says it\u0027s not needed, I agree we should just delete the stubs.",
+                                           "updatedAt":  "2021-01-06T14:25:18Z"
+                                       }
+                                   ],
+                         "totalCount":  5
+                     },
+        "title":  "Remove Unix config of Microsoft.Win32.Registry",
+        "labels":  [
+                       "area-Microsoft.Win32",
+                       "help wanted"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/46829",
+        "createdAt":  "2021-01-11T20:58:23Z",
+        "number":  46829,
+        "author":  "jhudsoncedaron",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2021-07-19T21:10:42Z",
+        "body":  "### Description\r\n\r\n`(new System.ComponentModel.Win32Exception(0x50)).HResult.ToString(\"X\")` output `0x80004005`. From the documentation of `Exception.HResult`: we get \"The HRESULT value\" and \"Gets or sets HRESULT, a coded numerical value that is assigned to a specific exception.\"\r\n\r\nSpent some time debugging this before managing to reduce it to Win32Exception. The expected value this would have had from the documentation is `80070050` but it got `80004005`. Either the documentation is wrong or the code is wrong. Bug has probably always existed. I can currently trace it as far back as existing in .NET Framework 4.0. Bug still exists in .NET 5.\r\n\r\n### Configuration\r\n\r\nAll .NET Versions. All OSes.\r\n\r\n### Regression?\r\n\r\nNo\r\n\r\n### Other information\r\n\r\nIf the code is throwing Win32Exception, this is a workaround (note that the code will differ on .NET Framework):\r\n\r\n````\r\nusing System.Runtime.InteropServices;\r\nclass PlatformException : System.ComponentModel.Win32Exception\r\n{\r\n    public PlatformException() : PlatformException(Marshal.GetLastWin32ErrorCode()) {}\r\n\r\n    public PlatformException(int n) : base(n)\r\n    {\r\n        HResult = (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? (n | 0x80070000) : n;\r\n    }\r\n}\r\n````\r\n\r\nIf the code is catching Win32Exception, this is a workaround:\r\n\r\n    (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? (ex.NativeErrorCode | 0x80070000) : ex.NativeErrorCode\r\n\r\nif the code is catching Exception, workaround requires a dynamic downcast\r\n\r\n    (ex is System.ComponentModel.Win32Exception wex) ? ((RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? (wex.NativeErrorCode | 0x80070000) : wex.NativeErrorCode)) : ex.HResult",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOLXFpcQ==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDc1ODIxOTA5NQ==",
+                                           "createdAt":  "2021-01-11T20:58:25Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Dotnet-GitSync-Bot",
+                                           "body":  "I couldn\u0027t figure out the best area label to add to this issue. If you have write-permissions please help me learn by adding exactly one [area label](https://github.com/dotnet/runtime/blob/master/docs/area-owners.md).",
+                                           "updatedAt":  "2021-01-11T20:58:25Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDc1ODQxMjEwNQ==",
+                                           "createdAt":  "2021-01-12T05:27:45Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @safern\nSee info in area-owners.md if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Description\r\n\r\n`(new System.ComponentModel.Win32Exception(0x50)).HResult.ToString(\"X\")` output `0x80004005`. From the documentation of `Exception.HResult`: we get \"The HRESULT value\" and \"Gets or sets HRESULT, a coded numerical value that is assigned to a specific exception.\"\r\n\r\nSpent some time debugging this before managing to reduce it to Win32Exception. The expected value this would have had from the documentation is `80070050` but it got `80004005`. Either the documentation is wrong or the code is wrong. Bug has probably always existed. I can currently trace it as far back as existing in .NET Framework 4.0. Bug still exists in .NET 5.\r\n\r\n### Configuration\r\n\r\nAll .NET Versions. All OSes.\r\n\r\n### Regression?\r\n\r\nNo\r\n\r\n### Other information\r\n\r\nIf the code is throwing Win32Exception, this is a workaround (note that the code will differ on .NET Framework):\r\n\r\n````\r\nusing System.Runtime.InteropServices;\r\nclass PlatformException : System.ComponentModel.Win32Exception\r\n{\r\n    public PlatformException() : PlatformException(Marshal.GetLastWin32ErrorCode()) {}\r\n\r\n    public PlatformException(int n) : base(n)\r\n    {\r\n        HResult = (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? (n | 0x80070000) : n;\r\n    }\r\n}\r\n````\r\n\r\nIf the code is catching Win32Exception, this is a workaround:\r\n\r\n    (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? (ex.NativeErrorCode | 0x80070000) : ex.NativeErrorCode\r\n\r\nif the code is catching Exception, workaround requires a dynamic downcast\r\n\r\n    (ex is System.ComponentModel.Win32Exception wex) ? ((RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? (wex.NativeErrorCode | 0x80070000) : wex.NativeErrorCode)) : ex.HResult\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003ejhudsoncedaron\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-System.ComponentModel`, `untriaged`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2021-01-12T05:27:45Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDc1ODg2ODUxNw==",
+                                           "createdAt":  "2021-01-12T18:59:44Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "safern",
+                                           "body":  "It seems like `Win32Exception` calls the base ctors which are `ExternalException` ctors, which just sets `HRESULT` to `E_FAIL` (0x80004005). https://source.dot.net/#System.Private.CoreLib/ExternalException.cs,28\r\n\r\nSo `Win32Exception` would need to map the error code to the according HRESULT?\r\n\r\nI believe the area for this issue should be `Microsoft.Win32`. ",
+                                           "updatedAt":  "2021-01-12T18:59:44Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDc2MTUyMDczMg==",
+                                           "createdAt":  "2021-01-16T07:17:39Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "danmoseley",
+                                           "body":  "Win32Exception as designed does not attempt to map system codes to HRESULTs (using eg HRESULT_FROM_WIN32). As you saw its HRESULT is always E_FAIL unless set otherwise. I do not know whether that was a choice or an oversight back in.NEt 1.0. Regardless I expect changing that now would be unacceptably breaking. Feel free to open issue or PR in dotnet-api-docs if necessary.\n\nHRESULTs also aren\u0027t relevant to Unix. Its best to think of Win32exception  as a sort of PlatformException. It does that job well. There is historical baggage in the name but we could potentially increasingly throw a derived type for that reason.",
+                                           "updatedAt":  "2021-01-16T07:17:39Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDc2MjQwNzI4MQ==",
+                                           "createdAt":  "2021-01-18T18:21:56Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jhudsoncedaron",
+                                           "body":  "@danmosemsft : `catch (Exception e) when (e.HResult == some value)` does something plenty useful on Unix. Typically IOException will have a usable value here.",
+                                           "updatedAt":  "2021-01-18T18:22:31Z"
+                                       }
+                                   ],
+                         "totalCount":  5
+                     },
+        "title":  "Behavior of System.ComponentModel.Win32Exception.HResult does not match documentation",
+        "labels":  [
+                       "area-Microsoft.Win32"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/81020",
+        "createdAt":  "2023-01-21T15:30:21Z",
+        "number":  81020,
+        "author":  "karlra",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHOC2mzwA==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "codymullins",
+                                            "createdAt":  "2024-03-18T15:00:51Z"
+                                        }
+                                    ],
+                          "totalCount":  1
+                      },
+        "updatedAt":  "2024-09-04T15:37:09Z",
+        "body":  "### Is there an existing issue for this?\n\n- [X] I have searched the existing issues\n\n### Describe the bug\n\nAt a random point, where according to the logs it appears nobody was using our web app, the app stopped accepting requests entirely. The app had an uptime of over a month at the point where this happened and nothing like this has happened before on any of our apps, which all have very long uptimes and most of them have tens or hundreds of thousands of users.\r\n\r\nThe following was spammed to the error logs, again and again (over 1000 such log entries over ~4 minutes until we manually restarted). It cannot be request driven because this is a low traffic app and does not have so many visitors in a 4 minute interval.\r\n\r\nMicrosoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware[1]\r\nAn unhandled exception has occurred while executing the request.\r\nSystem.Security.Cryptography.CryptographicException: An error occurred while trying to encrypt the provided data. Refer to the inner exception for more information. For more information go to http://aka.ms/dataprotectionwarning\r\n    ---\u003e System.TypeInitializationException: The type initializer for \u0027Microsoft.Extensions.Logging.LoggingExtensions\u0027 threw an exception.\r\n    ---\u003e System.IO.FileNotFoundException: Could not load file or assembly \u0027Microsoft.Win32.Registry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a\u0027. The system cannot find the file specified.\r\n\r\n   File name: \u0027Microsoft.Win32.Registry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a\u0027\r\n      --- End of inner exception stack trace ---\r\n      at Microsoft.Extensions.Logging.LoggingExtensions.ErrorOccurredWhileRefreshingKeyRing(ILogger logger, Exception exception)\r\n      at Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingProvider.GetCurrentKeyRingCore(DateTime utcNow, Boolean forceRefresh)\r\n      at Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingBasedDataProtector.Protect(Byte[] plaintext)\r\n      --- End of inner exception stack trace ---\r\n      at Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingBasedDataProtector.Protect(Byte[] plaintext)\r\n      at Microsoft.AspNetCore.Session.CookieProtection.Protect(IDataProtector protector, String data)\r\n      at Microsoft.AspNetCore.Session.SessionMiddleware.Invoke(HttpContext context)\r\n      at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.\u003cInvoke\u003eg__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)\n\n### Expected Behavior\n\nThe above does not happen. Why is it trying to load a Win32 registry module on Linux?\n\n### Steps To Reproduce\n\nUnknown, happened randomly on a production system\n\n### Exceptions (if any)\n\nMicrosoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware[1]\r\nAn unhandled exception has occurred while executing the request.\r\nSystem.Security.Cryptography.CryptographicException: An error occurred while trying to encrypt the provided data. Refer to the inner exception for more information. For more information go to http://aka.ms/dataprotectionwarning\r\n    ---\u003e System.TypeInitializationException: The type initializer for \u0027Microsoft.Extensions.Logging.LoggingExtensions\u0027 threw an exception.\r\n    ---\u003e System.IO.FileNotFoundException: Could not load file or assembly \u0027Microsoft.Win32.Registry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a\u0027. The system cannot find the file specified.\r\n\r\n   File name: \u0027Microsoft.Win32.Registry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a\u0027\r\n      --- End of inner exception stack trace ---\r\n      at Microsoft.Extensions.Logging.LoggingExtensions.ErrorOccurredWhileRefreshingKeyRing(ILogger logger, Exception exception)\r\n      at Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingProvider.GetCurrentKeyRingCore(DateTime utcNow, Boolean forceRefresh)\r\n      at Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingBasedDataProtector.Protect(Byte[] plaintext)\r\n      --- End of inner exception stack trace ---\r\n      at Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingBasedDataProtector.Protect(Byte[] plaintext)\r\n      at Microsoft.AspNetCore.Session.CookieProtection.Protect(IDataProtector protector, String data)\r\n      at Microsoft.AspNetCore.Session.SessionMiddleware.Invoke(HttpContext context)\r\n      at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.\u003cInvoke\u003eg__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)\n\n### .NET Version\n\n6.0.13\n\n### Anything else?\n\nRunning on Ubuntu 18.04.\r\n\r\nglobal.json file:\r\n  Not found\r\n\r\nHost:\r\n  Version:      6.0.13\r\n  Architecture: x64\r\n  Commit:       1af80ba017\r\n\r\n.NET SDKs installed:\r\n  No SDKs were found.\r\n\r\n.NET runtimes installed:\r\n  Microsoft.AspNetCore.App 6.0.13 [/usr/share/dotnet/shared/Microsoft.AspNetCore.App]\r\n  Microsoft.NETCore.App 6.0.13 [/usr/share/dotnet/shared/Microsoft.NETCore.App]\r\n\r\nDownload .NET:\r\n  https://aka.ms/dotnet-download\r\n\r\nLearn about .NET Runtimes and SDKs:\r\n  https://aka.ms/dotnet/runtimes-sdk-info",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOitbZzw==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5TdP0n",
+                                           "createdAt":  "2023-01-23T11:13:39Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "I couldn\u0027t figure out the best area label to add to this issue. If you have write-permissions please help me learn by adding exactly one [area label](https://github.com/dotnet/runtime/blob/master/docs/area-owners.md).",
+                                           "updatedAt":  "2023-01-23T11:13:39Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5Teji8",
+                                           "createdAt":  "2023-01-23T15:15:45Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-microsoft-win32\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Is there an existing issue for this?\n\n- [X] I have searched the existing issues\n\n### Describe the bug\n\nAt a random point, where according to the logs it appears nobody was using our web app, the app stopped accepting requests entirely. The app had an uptime of over a month at the point where this happened and nothing like this has happened before on any of our apps, which all have very long uptimes and most of them have tens or hundreds of thousands of users.\r\n\r\nThe following was spammed to the error logs, again and again (over 1000 such log entries over ~4 minutes until we manually restarted). It cannot be request driven because this is a low traffic app and does not have so many visitors in a 4 minute interval.\r\n\r\nMicrosoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware[1]\r\nAn unhandled exception has occurred while executing the request.\r\nSystem.Security.Cryptography.CryptographicException: An error occurred while trying to encrypt the provided data. Refer to the inner exception for more information. For more information go to http://aka.ms/dataprotectionwarning\r\n    ---\u003e System.TypeInitializationException: The type initializer for \u0027Microsoft.Extensions.Logging.LoggingExtensions\u0027 threw an exception.\r\n    ---\u003e System.IO.FileNotFoundException: Could not load file or assembly \u0027Microsoft.Win32.Registry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a\u0027. The system cannot find the file specified.\r\n\r\n   File name: \u0027Microsoft.Win32.Registry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a\u0027\r\n      --- End of inner exception stack trace ---\r\n      at Microsoft.Extensions.Logging.LoggingExtensions.ErrorOccurredWhileRefreshingKeyRing(ILogger logger, Exception exception)\r\n      at Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingProvider.GetCurrentKeyRingCore(DateTime utcNow, Boolean forceRefresh)\r\n      at Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingBasedDataProtector.Protect(Byte[] plaintext)\r\n      --- End of inner exception stack trace ---\r\n      at Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingBasedDataProtector.Protect(Byte[] plaintext)\r\n      at Microsoft.AspNetCore.Session.CookieProtection.Protect(IDataProtector protector, String data)\r\n      at Microsoft.AspNetCore.Session.SessionMiddleware.Invoke(HttpContext context)\r\n      at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.\u003cInvoke\u003eg__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)\n\n### Expected Behavior\n\nThe above does not happen. Why is it trying to load a Win32 registry module on Linux?\n\n### Steps To Reproduce\n\nUnknown, happened randomly on a production system\n\n### Exceptions (if any)\n\nMicrosoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware[1]\r\nAn unhandled exception has occurred while executing the request.\r\nSystem.Security.Cryptography.CryptographicException: An error occurred while trying to encrypt the provided data. Refer to the inner exception for more information. For more information go to http://aka.ms/dataprotectionwarning\r\n    ---\u003e System.TypeInitializationException: The type initializer for \u0027Microsoft.Extensions.Logging.LoggingExtensions\u0027 threw an exception.\r\n    ---\u003e System.IO.FileNotFoundException: Could not load file or assembly \u0027Microsoft.Win32.Registry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a\u0027. The system cannot find the file specified.\r\n\r\n   File name: \u0027Microsoft.Win32.Registry, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a\u0027\r\n      --- End of inner exception stack trace ---\r\n      at Microsoft.Extensions.Logging.LoggingExtensions.ErrorOccurredWhileRefreshingKeyRing(ILogger logger, Exception exception)\r\n      at Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingProvider.GetCurrentKeyRingCore(DateTime utcNow, Boolean forceRefresh)\r\n      at Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingBasedDataProtector.Protect(Byte[] plaintext)\r\n      --- End of inner exception stack trace ---\r\n      at Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingBasedDataProtector.Protect(Byte[] plaintext)\r\n      at Microsoft.AspNetCore.Session.CookieProtection.Protect(IDataProtector protector, String data)\r\n      at Microsoft.AspNetCore.Session.SessionMiddleware.Invoke(HttpContext context)\r\n      at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.\u003cInvoke\u003eg__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)\n\n### .NET Version\n\n6.0.13\n\n### Anything else?\n\nRunning on Ubuntu 18.04.\r\n\r\nglobal.json file:\r\n  Not found\r\n\r\nHost:\r\n  Version:      6.0.13\r\n  Architecture: x64\r\n  Commit:       1af80ba017\r\n\r\n.NET SDKs installed:\r\n  No SDKs were found.\r\n\r\n.NET runtimes installed:\r\n  Microsoft.AspNetCore.App 6.0.13 [/usr/share/dotnet/shared/Microsoft.AspNetCore.App]\r\n  Microsoft.NETCore.App 6.0.13 [/usr/share/dotnet/shared/Microsoft.NETCore.App]\r\n\r\nDownload .NET:\r\n  https://aka.ms/dotnet-download\r\n\r\nLearn about .NET Runtimes and SDKs:\r\n  https://aka.ms/dotnet/runtimes-sdk-info\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003ekarlra\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-Microsoft.Win32`, `untriaged`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2023-01-23T15:15:45Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5Te0Ak",
+                                           "createdAt":  "2023-01-23T15:59:15Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODJ-LXA==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "mrcha0s",
+                                                                               "createdAt":  "2023-10-17T10:07:10Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "ViktorHofer",
+                                           "body":  "\u003e The above does not happen. Why is it trying to load a Win32 registry module on Linux?\r\n\r\nMicrosoft.Win32.Registry is part of the shared framework and is used when resolving any of these types: https://github.com/dotnet/runtime/blob/main/src/libraries/Microsoft.Win32.Registry/ref/Microsoft.Win32.Registry.cs. Do you use reflection or load assemblies dynamically, given that this happened randomly after a month?\r\n\r\n\u003e Steps To Reproduce\r\nUnknown, happened randomly on a production system\r\n\r\nUnfortunately we can\u0027t investigate this issue further without repro steps or a full stack trace.",
+                                           "updatedAt":  "2023-01-23T16:00:21Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5Te1Fj",
+                                           "createdAt":  "2023-01-23T16:02:08Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "This issue has been marked `needs-author-action` and may be missing some important information.",
+                                           "updatedAt":  "2023-01-23T16:02:08Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5Te8Rl",
+                                           "createdAt":  "2023-01-23T16:20:06Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "karlra",
+                                           "body":  "No, we are not using reflection or loading any assemblies dynamically. This is a very simple MVC app, I can\u0027t imagine that this is driven by user code. The stack trace I provided refers to internal Microsoft code, no?",
+                                           "updatedAt":  "2023-01-23T16:20:06Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5TfbMm",
+                                           "createdAt":  "2023-01-23T17:53:45Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ViktorHofer",
+                                           "body":  "@javiercn can we please move that issue back into aspnetcore? From the stacktrace, https://github.com/dotnet/aspnetcore/blob/73690575fd21834bda000f542c0d686427f113ae/src/DataProtection/DataProtection/src/KeyManagement/KeyRingProvider.cs#L206 throws the `FileNotFoundException` so something on that path must depend on Win32.Registry types.",
+                                           "updatedAt":  "2023-01-23T17:54:00Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5Tffz7",
+                                           "createdAt":  "2023-01-23T18:08:41Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOEhlIug==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "ViktorHofer",
+                                                                               "createdAt":  "2023-01-23T18:11:21Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "JohnFF",
+                                                                               "createdAt":  "2025-09-10T01:09:50Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  2
+                                                         },
+                                           "author":  "karlra",
+                                           "body":  "Can I take a guess that the issue is here: https://github.com/dotnet/aspnetcore/blob/73690575fd21834bda000f542c0d686427f113ae/src/DataProtection/DataProtection/src/LoggingExtensions.cs#L182\r\n\r\non line 157-158, where it references RegistryKey and using Microsoft.Win32 in the header?",
+                                           "updatedAt":  "2023-01-23T18:08:41Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5Tjthx",
+                                           "createdAt":  "2023-01-24T12:37:45Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ViktorHofer",
+                                           "body":  "That makes sense yes. What I don\u0027t understand is why the FileNotFoundException happens given that `Microsoft.Win32.Registry.dll` is part of the targeting pack, the shared framework and the runtime pack on all platforms. Even though it does throw PlatformNotSupportedExceptions on Unix, it\u0027s still included in the layout.\r\n\r\ncc @dougbu @wtgodbe @JamesNK (as this is an aspnetcore issue)",
+                                           "updatedAt":  "2023-01-24T12:37:45Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5Tmmwg",
+                                           "createdAt":  "2023-01-24T20:46:13Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dougbu",
+                                           "body":  "\u003e as this is an aspnetcore issue\r\n\r\nThat\u0027s not clear to me because the OP describes the issue as intermittent and happening in an app that\u0027s been running smoothly for weeks before the problem is hit. It\u0027s as if the file is getting deleted randomly.\r\n\r\nIf the problem occurs around the same time as a Visual Studio or Windows Update on the affected machine(s), that might be the explanation. I don\u0027t have a better idea at this point.",
+                                           "updatedAt":  "2023-01-24T20:46:13Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5TmvbQ",
+                                           "createdAt":  "2023-01-24T21:06:21Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "karlra",
+                                           "body":  "I just checked on the production server (that experienced this issue) and the file is there, in the /refs folder. It has correct permissions. Very strange.",
+                                           "updatedAt":  "2023-01-24T21:06:21Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5pXxHa",
+                                           "createdAt":  "2023-10-18T07:31:28Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOD3XGvQ==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "digrizzz",
+                                                                               "createdAt":  "2024-01-17T11:24:59Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "mirivhbv",
+                                                                               "createdAt":  "2024-01-22T10:29:06Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "GustavoHennig",
+                                                                               "createdAt":  "2024-10-21T12:43:12Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  3
+                                                         },
+                                           "author":  "aaron-puhl",
+                                           "body":  "Had the same issue on linux with .net7, but after redeploy it went away and I can\u0027t reproduce it.",
+                                           "updatedAt":  "2023-10-18T07:31:28Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5sp7dG",
+                                           "createdAt":  "2023-11-22T14:58:39Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODWZj4w==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "mirivhbv",
+                                                                               "createdAt":  "2024-01-22T10:29:24Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "masterofinsanity",
+                                                                               "createdAt":  "2024-02-12T13:07:33Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  2
+                                                         },
+                                           "author":  "tspence",
+                                           "body":  "I have observed this issue as well on DotNet 7.\r\n\r\n```\r\nSystem.Security.Cryptography.CryptographicException: An error occurred while trying to encrypt the provided data. Refer to the inner exception for more information. For more information go to http://aka.ms/dataprotectionwarning\r\n ---\u003e System.TypeInitializationException: The type initializer for \u0027Microsoft.Extensions.Logging.LoggingExtensions\u0027 threw an exception.\r\n ---\u003e System.IO.FileNotFoundException: Could not load file or assembly \u0027Microsoft.Win32.Registry, Version=7.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a\u0027. The system cannot find the file specified.\r\n```\r\n\r\nThe symptom is:\r\n* Fully running system including the registry DLL\r\n* Totally working when the app deployed\r\n* Randomly, a few days later, it suddenly begins to throw this error\r\n* Service cannot recover until it is taken offline and relaunched\r\n\r\nSince this issue only appears to happen after time, my hunch is that some logging-related object in this application was disposed.  The best guess I have is that there is some tiny difference between the initial creation of the logging related object and the attempted recreation of the logging related object, which causes the recreation to fail.\r\n\r\nWill share more details if I discover anything from our traces.",
+                                           "updatedAt":  "2023-11-22T14:58:39Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5sqCIZ",
+                                           "createdAt":  "2023-11-22T15:11:39Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "tspence",
+                                           "body":  "Possibly related: https://github.com/Azure/azure-storage-net/issues/969",
+                                           "updatedAt":  "2023-11-22T15:11:39Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc50OU1X",
+                                           "createdAt":  "2024-02-17T09:19:19Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODa-bWA==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "codymullins",
+                                                                               "createdAt":  "2024-03-18T15:01:42Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "sfiruch",
+                                           "body":  "Stumbled into the same problem:\r\n- Blazor app, .NET 7, Kestrel was running smoothly on Linux for months, using `dotnet run --project xyz`\r\n- App restart did not help.\r\n- Server reboot \u0026 upgrade to .NET 8 helped.",
+                                           "updatedAt":  "2024-02-17T09:19:19Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc53dQTu",
+                                           "createdAt":  "2024-03-18T15:02:57Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "codymullins",
+                                           "body":  "This happened to us today. .NET 8 Blazor app on Ubuntu. Other services unaffected. Rebooting the VM was required to resolve the issue.\r\n\r\n```\r\nSystem.Security.Cryptography.CryptographicException: An error occurred while trying to encrypt the provided data. Refer to the inner exception for more information.\r\n ---\u003e System.TypeInitializationException: The type initializer for \u0027Microsoft.Extensions.Logging.LoggingExtensions\u0027 threw an exception.\r\n ---\u003e System.IO.FileNotFoundException: Could not load file or assembly \u0027Microsoft.Win32.Registry, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a\u0027. The system cannot find the file specified.\r\n\r\nFile name: \u0027Microsoft.Win32.Registry, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a\u0027\r\n   --- End of inner exception stack trace ---\r\n   at Microsoft.Extensions.Logging.LoggingExtensions.ErrorOccurredWhileRefreshingKeyRing(ILogger logger, Exception exception)\r\n   at Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingProvider.GetCurrentKeyRingCore(DateTime utcNow, Boolean forceRefresh)\r\n   at Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingBasedDataProtector.Protect(Byte[] plaintext)\r\n   --- End of inner exception stack trace ---\r\n   at Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingBasedDataProtector.Protect(Byte[] plaintext)\r\n   at Microsoft.AspNetCore.Authentication.OpenIdConnect.OpenIdConnectHandler.WriteNonceCookie(String nonce)\r\n   at Microsoft.AspNetCore.Authentication.OpenIdConnect.OpenIdConnectHandler.HandleChallengeAsyncInternal(AuthenticationProperties properties)\r\n   at Microsoft.AspNetCore.Authentication.OpenIdConnect.OpenIdConnectHandler.HandleChallengeAsync(AuthenticationProperties properties)\r\n   at Microsoft.AspNetCore.Authentication.AuthenticationHandler`1.ChallengeAsync(AuthenticationProperties properties)\r\n   at Microsoft.AspNetCore.Authentication.AuthenticationService.ChallengeAsync(HttpContext context, String scheme, AuthenticationProperties properties)\r\n   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.\u003c\u003ec__DisplayClass0_0.\u003c\u003cHandleAsync\u003eg__Handle|0\u003ed.MoveNext()\r\n--- End of stack trace from previous location ---\r\n   at PureBlazor.BlazorFrameworkAuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult) in G:\\repos\\pureblazor\\cms\\src\\PureBlazor\\BlazorFrameworkAuthorizationMiddlewareResultHandler.cs:line 24\r\n   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)\r\n   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)\r\n   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.\u003cInvoke\u003eg__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)\r\n   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.HandleException(HttpContext context, ExceptionDispatchInfo edi)\r\n   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.\u003cInvoke\u003eg__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)\r\n   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpProtocol.ProcessRequests[TContext](IHttpApplication`1 application)\r\n```",
+                                           "updatedAt":  "2024-03-18T15:04:14Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc55RCEH",
+                                           "createdAt":  "2024-04-03T12:44:05Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOEWxxKA==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "HEART",
+                                                                               "user":  "sfiruch",
+                                                                               "createdAt":  "2024-04-03T17:30:02Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "HEART",
+                                                                               "user":  "herynkv",
+                                                                               "createdAt":  "2024-04-04T05:29:49Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "lkosson",
+                                                                               "createdAt":  "2024-04-05T07:02:06Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "HEART",
+                                                                               "user":  "AndyCoder123",
+                                                                               "createdAt":  "2024-06-06T03:47:12Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "Safirion",
+                                                                               "createdAt":  "2024-09-04T15:37:36Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "Brokemia",
+                                                                               "createdAt":  "2025-06-16T16:47:36Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  6
+                                                         },
+                                           "author":  "huancz",
+                                           "body":  "tl;dr - combination of lazy dll loading and some linux-specific magic is probably the culprit. Workaround at the end.\r\n\r\n---\r\n\r\nHappens to our app too. Still running on .NET 6.0 and restarting the app helps. Usually it takes few months of uptime before it manifests. My first attempt to make sense of the exception stack: cookie auth (or any other code that uses DataProtector) is using existing valid keyring. At some point it expires and auto refresh tries to renew it. And as part of renewal it tries to log something, so static initializer of `Microsoft.Extensions.Logging.LoggingExtensions` runs - and fails with the above exception. The intended log message is lost, instead we get the message about bad or missing Microsoft.Win32.Registry.\r\n\r\nBut if Win32.Registry was just broken and never load on linux, that would require that nothing ever uses the LoggingExtensions. Not even generating new keyring - or the app would break on startup. And message about new keyring definitely IS in the log.\r\n\r\nBut... it\u0027s long running app, running on linux. Which allows file overwrite while they are in use by running app, without forcing restart. And .NET runtime upgrade is just one `apt-get upgrade` away. SO, it MAY be looking for exact patch version that was valid when the app was started, but no longer exists due to system upgrade (even when the message says it\u0027s looking for X.0.0.0).\r\n\r\nWith this in mind, I did some experiments, command `ls -l /proc/\u003cpid\u003e/fd | grep in32`.\r\n\r\nFirst run after encountering the problem and restarting service:\r\n```\r\nlr-x------ 1 wwwdata nogroup 64 Apr  3 12:23 209 -\u003e /usr/share/dotnet/shared/Microsoft.NETCore.App/6.0.28/Microsoft.Win32.Registry.dll\r\n```\r\n\r\nAfter another restart:\r\n(empty, dll is not loaded)\r\n\r\nTesting instance of the same app that has been running for a long time without user interaction - no Win32.Registry, but...\r\n```\r\nlr-x------ 1 wwwdata nogroup 64 Apr  3 12:24 170 -\u003e /usr/share/dotnet/shared/Microsoft.NETCore.App/6.0.20/Microsoft.Win32.Primitives.dll (deleted)\r\n```\r\n(note the .20 version instead of .28, and (deleted) at the end).\r\n\r\nMy conclusion (and repro... kind of):\r\n- start app to generate valid keyring =\u003e new keyring is generated, INFO is logged and Microsoft.Win32.Registry.dll is loaded\r\n- restart app with keyring already generated =\u003e it doesn\u0027t need to log anything and doesn\u0027t load Microsoft.Win32.Registry.dll\r\n- wait for keyring to expire\r\n- update dotnet runtime\r\n- try to do something that requires DP operation\r\n\r\nSo, workaround should be something like this in Program.cs:\r\n```c#\r\npublic static async Task Main(string[] args)\r\n{\r\n    {\r\n        // https://github.com/dotnet/runtime/issues/81020\r\n        _ = typeof(Microsoft.Win32.Registry).Assembly;\r\n    }\r\n    ...\r\n}\r\n```\r\n\r\nI\u0027d rather load Microsoft.Extensions.Logging.LoggingExtensions, but it\u0027s internal class. I\u0027ve added it to our app as a test, but only thing I can report now is that it doesn\u0027t fail at startup and the win32 .dll is always loaded in memory. Reporting back if it helped will probably take a long time.",
+                                           "updatedAt":  "2024-04-03T13:13:47Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6AFwRV",
+                                           "createdAt":  "2024-06-05T06:36:00Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOD_4Tyw==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "AndyCoder123",
+                                                                               "createdAt":  "2024-06-06T04:26:03Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "tareq2",
+                                                                               "createdAt":  "2024-12-21T18:39:33Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  2
+                                                         },
+                                           "author":  "AndyCoder123",
+                                           "body":  "I\u0027m getting the same issue with a .NET 8 RazorPages app on Ubuntu 22. Interestingly it happened in two different ways on two different servers in the cluster. In both cases, rebooting the servers resolved the issue.\r\n\r\nThe second one involves a different binary (Microsoft.AspNetCore.Diagnostics.Abstractions) but every other symptom was the same, i.e. the server was running fine for months before the issue happened, then the logs were flooded with 2Gb per day of errors.\r\n\r\nThe stack traces are below:\r\n\r\n```\r\nfail: Microsoft.AspNetCore.Server.Kestrel[13]\r\n      Connection id \"0HN2FQ2B985GH\", Request id \"0HN2FQ2B985GH:00000001\": An unhandled exception was thrown by the application.\r\n      System.InvalidOperationException: The exception handler configured on ExceptionHandlerOptions produced a 404 status response. This InvalidOperationException containing the original exception was thrown since this is often due to a misconfigured ExceptionHandlingPath. If the exception handler is expected to return 404 status responses then set AllowStatusCode404Response to true.\r\n       ---\u003e System.Security.Cryptography.CryptographicException: An error occurred while trying to encrypt the provided data. Refer to the inner exception for more information.\r\n       ---\u003e System.TypeInitializationException: The type initializer for \u0027Microsoft.Extensions.Logging.LoggingExtensions\u0027 threw an exception.\r\n       ---\u003e System.IO.FileNotFoundException: Could not load file or assembly \u0027Microsoft.Win32.Registry, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a\u0027. The system cannot find the file specified.\r\n      \r\n      File name: \u0027Microsoft.Win32.Registry, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a\u0027\r\n         --- End of inner exception stack trace ---\r\n         at Microsoft.Extensions.Logging.LoggingExtensions.ErrorOccurredWhileRefreshingKeyRing(ILogger logger, Exception exception)\r\n         at Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingProvider.GetCurrentKeyRingCore(DateTime utcNow, Boolean forceRefresh)\r\n         at Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingBasedDataProtector.Protect(Byte[] plaintext)\r\n         --- End of inner exception stack trace ---\r\n         at Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingBasedDataProtector.Protect(Byte[] plaintext)\r\n         at Microsoft.AspNetCore.Antiforgery.DefaultAntiforgeryTokenSerializer.Serialize(AntiforgeryToken token)\r\n         at Microsoft.AspNetCore.Antiforgery.DefaultAntiforgery.Serialize(IAntiforgeryFeature antiforgeryFeature)\r\n         at Microsoft.AspNetCore.Mvc.ViewFeatures.HtmlHelper.GenerateForm(String actionName, String controllerName, Object routeValues, FormMethod method, Nullable`1 antiforgery, Object htmlAttributes)\r\n         at UGIPCore.Pages.Pages_SecurityLogin.ExecuteAsync()\r\n         at Microsoft.AspNetCore.Mvc.Razor.RazorView.RenderPageCoreAsync(IRazorPage page, ViewContext context)\r\n         at Microsoft.AspNetCore.Mvc.Razor.RazorView.RenderPageAsync(IRazorPage page, ViewContext context, Boolean invokeViewStarts)\r\n         at Microsoft.AspNetCore.Mvc.Razor.RazorView.RenderAsync(ViewContext context)\r\n         at Microsoft.AspNetCore.Mvc.ViewFeatures.ViewExecutor.ExecuteAsync(ViewContext viewContext, String contentType, Nullable`1 statusCode)\r\n         at Microsoft.AspNetCore.Mvc.ViewFeatures.ViewExecutor.ExecuteAsync(ViewContext viewContext, String contentType, Nullable`1 statusCode)\r\n         at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.\u003cInvokeNextResultFilterAsync\u003eg__Awaited|30_0[TFilter,TFilterAsync](ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)\r\n         at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResultExecutedContextSealed context)\r\n         at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.ResultNext[TFilter,TFilterAsync](State\u0026 next, Scope\u0026 scope, Object\u0026 state, Boolean\u0026 isCompleted)\r\n         at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeResultFilters()\r\n      --- End of stack trace from previous location ---\r\n         at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.\u003cInvokeNextResourceFilter\u003eg__Awaited|25_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)\r\n         at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)\r\n         at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State\u0026 next, Scope\u0026 scope, Object\u0026 state, Boolean\u0026 isCompleted)\r\n         at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()\r\n      --- End of stack trace from previous location ---\r\n         at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.\u003cInvokeAsync\u003eg__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)\r\n         at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.\u003cInvokeAsync\u003eg__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)\r\n         at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)\r\n         at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.\u003cInvoke\u003eg__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)\r\n         --- End of inner exception stack trace ---\r\n         at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.HandleException(HttpContext context, ExceptionDispatchInfo edi)\r\n         at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.\u003cInvoke\u003eg__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)\r\n         at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)\r\n         at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpProtocol.ProcessRequests[TContext](IHttpApplication`1 application)\r\n```\r\n\r\n```\r\nfail: Microsoft.AspNetCore.Server.Kestrel[13]\r\n      Connection id \"0HN2FQ2DUKVBS\", Request id \"0HN2FQ2DUKVBS:00000001\": An unhandled exception was thrown by the application.\r\n      System.IO.FileNotFoundException: Could not load file or assembly \u0027Microsoft.AspNetCore.Diagnostics.Abstractions, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60\u0027. The system cannot find the file specified.\r\n      \r\n      File name: \u0027Microsoft.AspNetCore.Diagnostics.Abstractions, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60\u0027\r\n         at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.HandleException(HttpContext context, ExceptionDispatchInfo edi)\r\n         at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine\u0026 stateMachine)\r\n         at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.HandleException(HttpContext context, ExceptionDispatchInfo edi)\r\n         at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.\u003cInvoke\u003eg__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)\r\n         at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)\r\n         at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpProtocol.ProcessRequests[TContext](IHttpApplication`1 application)\r\n```",
+                                           "updatedAt":  "2024-06-05T07:33:50Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6Hivtt",
+                                           "createdAt":  "2024-08-07T18:01:48Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dgoldm",
+                                           "body":  "@huancz - it\u0027s been 4 months since you proposed your workaround.\r\nCan you please report the results?",
+                                           "updatedAt":  "2024-08-07T18:01:48Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6IyF6w",
+                                           "createdAt":  "2024-08-17T11:30:00Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODw9wxg==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "dgoldm",
+                                                                               "createdAt":  "2024-08-18T04:36:53Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "huancz",
+                                                                               "createdAt":  "2024-09-04T14:23:18Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  2
+                                                         },
+                                           "author":  "AndyCoder123",
+                                           "body":  "\u003e @huancz - it\u0027s been 4 months since you proposed your workaround. Can you please report the results?\r\n\r\nI\u0027ve had his workaround on my servers since June, under similar conditions, and haven\u0027t seen the issue again. So it\u0027s not a guarantee of a fix but seems to have helped..",
+                                           "updatedAt":  "2024-08-17T11:30:00Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6K09LX",
+                                           "createdAt":  "2024-09-04T13:54:37Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Safirion",
+                                           "body":  "I have the same random crash (after long running) on Ubuntu with a web api in .net 8.\r\n\r\n`Could not load file or assembly \u0027System.Web.HttpUtility, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51\u0027. The system cannot find the file specified.\\n\\n`\r\n\r\nIs there any fix planed because actually this is ruining my app stability on time ?\r\n\r\nThe workaround is really painful as I have to figure out all the dll referenced and call it on main func... On big application it\u0027s really boring.",
+                                           "updatedAt":  "2024-09-04T13:54:57Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6K1EbL",
+                                           "createdAt":  "2024-09-04T14:06:31Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "huancz",
+                                           "body":  "@Safirion \r\n\r\nThe issue seem to be architectural, and impossible to be \"fixed\". Proper \"fix\" is to make sure you restart your apps when you update dotnet runtime on your server. Or don\u0027t update the runtime when you can\u0027t afford to restart apps.\r\n\r\nWe have since moved most of our apps to podman containers where it can\u0027t happen (not because of this issue, it\u0027s just better for security, and there is no support for older runtimes on newest ubuntu).\r\n\r\nedit: I guess they could implement some opt-in eager dll loading. Which, honestly, seems like an overkill to fix something that\u0027s essentially user error - broken server management policy. Maybe if broader use case could be found... I wouldn\u0027t hold my breath.",
+                                           "updatedAt":  "2024-09-04T14:27:32Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6K1bwh",
+                                           "createdAt":  "2024-09-04T14:43:47Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "Safirion",
+                                           "body":  "An option to disable this lazy loading of dll or just use the later one instead of the one present at the moment of the application starts certainly fix this issue.\r\n\r\nIt\u0027s not a broken management policy to run daily update task and I don\u0027t think that it was to the developer to takes in charge the bad management of dll loading on Linux (windows .net runtime update don\u0027t crash .net apps currently running on it)",
+                                           "updatedAt":  "2024-09-04T14:43:47Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6K1nlN",
+                                           "createdAt":  "2024-09-04T15:03:44Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "huancz",
+                                           "body":  "It\u0027s a bad policy, because you may think your apps are secure and up to date, but they are still using the old vulnerable dlls. Allowing them to use mixed dlls from multiple runtimes seems like recipe for huge trouble too.\r\n\r\nWindows dotnet update requires you to **restart windows** if any app is using those dlls. Linux is much more forgiving.",
+                                           "updatedAt":  "2024-09-04T15:03:44Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6K1tnP",
+                                           "createdAt":  "2024-09-04T15:10:39Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODw-OjQ==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "huancz",
+                                                                               "createdAt":  "2024-09-04T15:10:49Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "Safirion",
+                                           "body":  "It\u0027s not ideal, I agree, but it\u0027s far better than a crash in production in both cases.\r\n\r\nEdit : \r\nI will use this method in main to ensure all assemblies are loaded at application startup. It will delay my application start by few seconds but at least it should not crash after start. 🤞\r\n\r\n```\r\npublic static void LoadAllAssemblies()\r\n{\r\n    Assembly rootAssembly = Assembly.GetEntryAssembly();\r\n    HashSet\u003cstring\u003e visited = new();\r\n    Queue\u003cAssembly\u003e queue = new();\r\n\r\n    queue.Enqueue(rootAssembly);\r\n\r\n    while (queue.Any())\r\n    {\r\n        Assembly assembly = queue.Dequeue();\r\n        visited.Add(assembly.FullName);\r\n\r\n        AssemblyName[] references = assembly.GetReferencedAssemblies();\r\n        foreach (AssemblyName reference in references)\r\n        {\r\n            if (!visited.Contains(reference.FullName))\r\n                queue.Enqueue(Assembly.Load(reference));\r\n        }\r\n    }\r\n}\r\n```\r\n\r\n@huancz Thanks for the idea 👍",
+                                           "updatedAt":  "2024-09-04T15:37:09Z"
+                                       }
+                                   ],
+                         "totalCount":  24
+                     },
+        "title":  "Random crash on Linux because assembly Microsoft.Win32.Registry cannot be loaded on aspnet 6.0.13",
+        "labels":  [
+                       "area-Microsoft.Win32"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/82494",
+        "createdAt":  "2023-02-22T17:35:08Z",
+        "number":  82494,
+        "author":  "tarekgh",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2023-07-05T16:32:52Z",
+        "body":  "### Description\r\n\r\nThis is reported through the VS community portal https://developercommunity.visualstudio.com/t/SystemMediaSoundPlayer-doesnt-play-sp/10169184. We moved this here as the issue reproduce on .NET too. \r\n\r\n have a wav audio file with `Lavf58.29.100` meta tag that is getting an error saying that is not a wav valid audio file, but when using FFMpeg to change the encoding to 59.33.100 and using ADPCM as well, the new wav audio start to work on this code, so i was wondering if this encoding is not supported on System.Media.PlayerSound\r\n\r\nusing (var sound = new System.Media.SoundPlayer(path)) { sound.PlaySync(); }\r\n\r\nThe first image is about the converted audio file, that has Lavf59.33.100 ADPCM Encoding and the second has the Lavf58.29.100.\r\n\r\n\r\n![image](https://user-images.githubusercontent.com/10833894/220701289-705b7a5b-87a1-4db0-9f2e-dde27a91e778.png)\r\n\r\n![image](https://user-images.githubusercontent.com/10833894/220701339-6abecf50-d37e-4e1e-b26b-7b295ca6e604.png)\r\n\r\n\r\n### Reproduction Steps\r\n\r\nTry to play any WAV file encoded with `Lavf58.29.100` \r\n\r\nusing (var sound = new System.Media.SoundPlayer(path)) { sound.PlaySync(); }\r\n\r\n\r\n### Expected behavior\r\n\r\nThe sound will play.\r\n\r\n### Actual behavior\r\n\r\nIt fail to play with error message\r\n\r\n### Regression?\r\n\r\nNo\r\n\r\n### Known Workarounds\r\n\r\nConvert the WAV file to use other encoding\r\n\r\n### Configuration\r\n\r\nAll .NET and .NET Framework versions\r\n\r\n### Other information\r\n\r\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOVeAgEQ==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5V3A1B",
+                                           "createdAt":  "2023-02-22T17:36:40Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-microsoft-win32\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Description\n\nThis is reported through the VS community portal https://developercommunity.visualstudio.com/t/SystemMediaSoundPlayer-doesnt-play-sp/10169184. We moved this here as the issue reproduce on .NET too. \r\n\r\n have a wav audio file that has a Lavf58.29.100 that is getting an error saying that is not a wav valid audio file, but when using FFMpeg to change the encoding to 59.33.100 and using ADPCM as well, the new wav audio start to work on this code, so i was wondering if this encoding is not supported on System.Media.PlayerSound\r\n\r\n\r\n\r\nusing (var sound = new System.Media.SoundPlayer(path)) { sound.PlaySync(); }\r\n\r\n\r\n\r\nThe first image is about the converted audio file, that has Lavf59.33.100 ADPCM Encoding and the second has the Lavf58.29.100.\r\n\r\n\r\n![image](https://user-images.githubusercontent.com/10833894/220701289-705b7a5b-87a1-4db0-9f2e-dde27a91e778.png)\r\n\r\n![image](https://user-images.githubusercontent.com/10833894/220701339-6abecf50-d37e-4e1e-b26b-7b295ca6e604.png)\r\n\r\n\r\n\n\n### Reproduction Steps\n\nTry to play any WAV file encoded with `Lavf58.29.100` \r\n\r\nusing (var sound = new System.Media.SoundPlayer(path)) { sound.PlaySync(); }\r\n\n\n### Expected behavior\n\nThe sound will play.\n\n### Actual behavior\n\nIt fail to play with error message\n\n### Regression?\n\nNo\n\n### Known Workarounds\n\nConvert the WAV file to use other encoding\n\n### Configuration\n\nAll .NET and .NET Framework versions\n\n### Other information\n\n_No response_\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003etarekgh\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-Microsoft.Win32`, `untriaged`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2023-02-22T17:36:40Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5V4CAR",
+                                           "createdAt":  "2023-02-22T20:25:10Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOC2l9Bw==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "tarekgh",
+                                                                               "createdAt":  "2023-02-23T01:24:08Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "hopperpl",
+                                           "body":  "As a note, \"Lavf58.29.100\" respectively \" Lavf59.33.100\" are not encoding formats, it is simply a meta tag of `ffmpeg`\u0027s `libavformat` library in the `.wav` file.\r\n\r\nThe first (working) file is encoded in **WAVE_FORMAT_ADPCM**, the second (not working) is encoded in **WAVE_FORMAT_PCM**. (https://learn.microsoft.com/en-us/windows/win32/api/mmeapi/ns-mmeapi-waveformatex)\r\n\r\n```\r\n#define WAVE_FORMAT_PCM    0x0001\r\n#define WAVE_FORMAT_ADPCM  0x0002\r\n```\r\n(this is what `ffmpeg` prints as audio tag)\r\n\r\n--- \r\n\r\nIn the second image `ffmpeg` is complaining, that the \u0027data\u0027 chunk has an invalid size. This has most likely caused the issue with the SoundPlayer, the `.wav` file is simply corrupt.\r\n\r\nSee yellow text: _Ignoring maximum wave data size, file may be invalid_\r\n\r\nA solution would be for the .wav parser in the SoundPlayer to correct an invalid \u0027data\u0027 chunk size. I\u0027ve seen many times that wave-writers set the value to int.MaxValue when recording as the final size is (still) unknown when they start.",
+                                           "updatedAt":  "2023-02-22T20:25:10Z"
+                                       }
+                                   ],
+                         "totalCount":  2
+                     },
+        "title":  "System.Media.SoundPlayer doesn\u0027t play specific encoding Lavf58.29.100",
+        "labels":  [
+                       "area-Microsoft.Win32"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/92072",
+        "createdAt":  "2023-09-14T16:38:15Z",
+        "number":  92072,
+        "author":  "dave-c-whitney",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2023-10-16T09:44:48Z",
+        "body":  "### Description\r\n\r\ndecompiled code (via ILSpy) for reading a string:\r\n`\tcase 1:`\r\n`\t{`\r\n`\t\tif (lpcbData % 2 == 1)`\r\n`\t\t{`\r\n`\t\t\ttry`\r\n`\t\t\t{`\r\n`\t\t\t\tlpcbData = checked(lpcbData + 1);`\r\n`\t\t\t}`\r\n`\t\t\tcatch (OverflowException innerException2)`\r\n`\t\t\t{`\r\n`\t\t\t\tthrow new IOException(System.SR.Arg_RegGetOverflowBug, innerException2);`\r\n`\t\t\t}`\r\n`\t\t}`\r\n`\t\tchar[] array5 = new char[lpcbData / 2];`\r\n`\t\tnum = global::Interop.Advapi32.RegQueryValueEx(_hkey, name, null, ref lpType, array5, ref lpcbData);`\r\n`\t\tobj = ((array5.Length == 0 || array5[^1] != 0) ? new string(array5) : new string(array5, 0, array5.Length - 1));`\r\n`\t\tbreak;`\r\n`\t}`\r\n\r\n\r\n\u0027num\u0027 is never checked to see if ERROR_MORE_DATA was returned - we may be truncating a freshly written value.\r\nlpcbData is not checked against array5.Length - we may be padding the resulting string with excess zeros.\r\n\r\nConsider the case where the registry currently holds the string \"XXXXXXXXXX\". lpcbData should be initialized to 24. Now, before the line of code that reads the value itself is executed, another thread/process writes \"YYYY\". Once the line actually runs, array5 will contain \"YYYY\\0\\0\\0\\0\\0\\0\\0\".\r\n\r\nAlternatively, if the current value is \"YYYY\", lpcbData will be initialized to 10. If another thread/process writes \"XXXXXXXXXX\", the line that reads should return ERROR_MORE_DATA, and will _possibly_ fill the buffer with \"XXXXX\"\r\n\r\nA similar bug exists for reading binary values.\r\n\r\n### Reproduction Steps\r\n\r\n`void WriterThread(object write)`\r\n`{`\r\n`    using (Microsoft.Win32.RegistryKey key = Microsoft.Win32.RegistryKey.OpenBaseKey(Microsoft.Win32.RegistryHive.CurrentUser, Microsoft.Win32.RegistryView.Default))`\r\n`    {`\r\n`        using (Microsoft.Win32.RegistryKey subKey = key.CreateSubKey(\"Foo\"))`\r\n`        {`\r\n`            while (true)`\r\n`            {`\r\n`                subKey.SetValue(\"Name\", write, Microsoft.Win32.RegistryValueKind.String);`\r\n`            }`\r\n`        }`\r\n`    }`\r\n`}`\r\n` `\r\n`System.Threading.Thread t1 = new System.Threading.Thread(WriterThread);`\r\n`System.Threading.Thread t2 = new System.Threading.Thread(WriterThread);`\r\n` `\r\n`string x = \"XXXXXXXXXXX\";`\r\n`string y = \"YYYYYYYYYYYYYYYY\";`\r\n` `\r\n`t1.Start(x);`\r\n`t2.Start(y);`\r\n` `\r\n`using (Microsoft.Win32.RegistryKey key = Microsoft.Win32.RegistryKey.OpenBaseKey(Microsoft.Win32.RegistryHive.CurrentUser, Microsoft.Win32.RegistryView.Default))`\r\n`{`\r\n`    using (Microsoft.Win32.RegistryKey subKey = key.CreateSubKey(\"Foo\"))`\r\n`    {`\r\n`        while (true)`\r\n`        {`\r\n`            string s = (string)subKey.GetValue(\"Name\");`\r\n`            if (s != x \u0026\u0026 s != y)`\r\n`            {`\r\n`                System.Diagnostics.Debugger.Break();`\r\n`            }`\r\n`        }`\r\n`    }`\r\n`}`\r\n\r\n### Expected behavior\r\n\r\nCode always properly reads what\u0027s presently stored in the registry.\r\n\r\n### Actual behavior\r\n\r\nReturn value will either be truncated or zero-filled, depending on the relative size of the value when its size is sampled and when it\u0027s actually read.\r\n\r\n### Regression?\r\n\r\nNo, .net472 has the same bug.\r\n\r\n### Known Workarounds\r\n\r\nNo workaround for truncated reads, but for zero-filled reads the caller can Trim(\u0027\\0\u0027) the result first.\r\n\r\n### Configuration\r\n\r\n6.0.2\r\nWin11, current as of 9/14/2023, x64.\r\nThis is a straightforward code bug - config, etc, is irrelevant.\r\n\r\n### Other information\r\n\r\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOZ1vXhg==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5mgd_f",
+                                           "createdAt":  "2023-09-14T16:38:21Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-microsoft-win32\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\n### Description\n\ndecompiled code (via ILSpy) for reading a string:\r\n\tcase 1:\r\n\t{\r\n\t\tif (lpcbData % 2 == 1)\r\n\t\t{\r\n\t\t\ttry\r\n\t\t\t{\r\n\t\t\t\tlpcbData = checked(lpcbData + 1);\r\n\t\t\t}\r\n\t\t\tcatch (OverflowException innerException2)\r\n\t\t\t{\r\n\t\t\t\tthrow new IOException(System.SR.Arg_RegGetOverflowBug, innerException2);\r\n\t\t\t}\r\n\t\t}\r\n\t\tchar[] array5 = new char[lpcbData / 2];\r\n\t\tnum = global::Interop.Advapi32.RegQueryValueEx(_hkey, name, null, ref lpType, array5, ref lpcbData);\r\n\t\tobj = ((array5.Length == 0 || array5[^1] != 0) ? new string(array5) : new string(array5, 0, array5.Length - 1));\r\n\t\tbreak;\r\n\t}\r\n\r\n\u0027num\u0027 is never checked to see if ERROR_MORE_DATA was returned - we may be truncating a freshly written value.\r\nlpcbData is not checked against array5.Length - we may be padding the resulting string with excess zeros.\r\n\r\nConsider the case where the registry currently holds the string \"XXXXXXXXXX\". lpcbData should be initialized to 24. Now, before the line of code that reads the value itself is executed, another thread/process writes \"YYYY\". Once the line actually runs, array5 will contain \"YYYY\\0\\0\\0\\0\\0\\0\\0\".\r\n\r\nAlternatively, if the current value is \"YYYY\", lpcbData will be initialized to 10. If another thread/process writes \"XXXXXXXXXX\", the line that reads should return ERROR_MORE_DATA, and will _possibly_ fill the buffer with \"XXXXX\"\r\n\r\nA similar bug exists for reading binary values.\n\n### Reproduction Steps\n\nvoid WriterThread(object write)\r\n{\r\n    using (Microsoft.Win32.RegistryKey key = Microsoft.Win32.RegistryKey.OpenBaseKey(Microsoft.Win32.RegistryHive.CurrentUser, Microsoft.Win32.RegistryView.Default))\r\n    {\r\n        using (Microsoft.Win32.RegistryKey subKey = key.CreateSubKey(\"Foo\"))\r\n        {\r\n            while (true)\r\n            {\r\n                subKey.SetValue(\"Name\", write, Microsoft.Win32.RegistryValueKind.String);\r\n            }\r\n        }\r\n    }\r\n}\r\n\r\nSystem.Threading.Thread t1 = new System.Threading.Thread(WriterThread);\r\nSystem.Threading.Thread t2 = new System.Threading.Thread(WriterThread);\r\n\r\nstring x = \"XXXXXXXXXXX\";\r\nstring y = \"YYYYYYYYYYYYYYYY\";\r\n\r\nt1.Start(x);\r\nt2.Start(y);\r\n\r\nusing (Microsoft.Win32.RegistryKey key = Microsoft.Win32.RegistryKey.OpenBaseKey(Microsoft.Win32.RegistryHive.CurrentUser, Microsoft.Win32.RegistryView.Default))\r\n{\r\n    using (Microsoft.Win32.RegistryKey subKey = key.CreateSubKey(\"Foo\"))\r\n    {\r\n        while (true)\r\n        {\r\n            string s = (string)subKey.GetValue(\"Name\");\r\n            if (s != x \u0026\u0026 s != y)\r\n            {\r\n                System.Diagnostics.Debugger.Break();\r\n            }\r\n        }\r\n    }\r\n}\r\n\n\n### Expected behavior\n\nCode always properly reads what\u0027s presently stored in the registry.\n\n### Actual behavior\n\nReturn value will either be truncated or zero-filled, depending on the relative size of the value when its size is sampled and when it\u0027s actually read.\n\n### Regression?\n\nNo, .net472 has the same bug.\n\n### Known Workarounds\n\nNo workaround for truncated reads, but for zero-filled reads the caller can Trim(\u0027\\0\u0027) the result first.\n\n### Configuration\n\n6.0.2\r\nWin11, current as of 9/14/2023, x64.\r\nThis is a straightforward code bug - config, etc, is irrelevant.\n\n### Other information\n\n_No response_\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003edave-c-whitney\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-Microsoft.Win32`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2023-09-14T16:38:21Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5nW8kz",
+                                           "createdAt":  "2023-09-25T16:15:58Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ericstj",
+                                           "body":  "Looks to me like @stephentoub fixed this in the latest codebase: https://github.com/dotnet/runtime/commit/cbfc5499e6024a0d53d7c9957c143cf45fac2987\r\n\r\nCould you try net7.0 or net8.0 and see if the same issue still exists?",
+                                           "updatedAt":  "2023-09-25T16:15:58Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5nW82L",
+                                           "createdAt":  "2023-09-25T16:16:37Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "This issue has been marked `needs-author-action` and may be missing some important information.",
+                                           "updatedAt":  "2023-09-25T16:16:37Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5nW9eG",
+                                           "createdAt":  "2023-09-25T16:18:07Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dave-c-whitney",
+                                           "body":  "I am, unfortunately, constrained to use .net6 for the foreseeable future. Any chance of a backport fix?",
+                                           "updatedAt":  "2023-09-25T16:18:07Z"
+                                       }
+                                   ],
+                         "totalCount":  4
+                     },
+        "title":  "RegistryKey.GetValue does not account for underlying value changes while reading strings/byte arrays",
+        "labels":  [
+                       "bug",
+                       "area-Microsoft.Win32",
+                       "needs-further-triage"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/113535",
+        "createdAt":  "2025-03-14T14:21:02Z",
+        "number":  113535,
+        "author":  "NoLongerBreathedIn",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-08-01T10:07:20Z",
+        "body":  "### Description\n\nIf you open a key with `OpenSubKey(key, RegistryRights.SetValue)`, the resulting `RegistryKey` object doesn\u0027t consider itself writeable unless the parent was opened with a `RegistryKeyPermissionCheck` of `ReadWriteSubTree` (`Default` won\u0027t work, which is weird because it works fine with `CreateSubKey`), and calls to `RegistryKey.SetValue` on that object fail in `RegistryKey.EnsureWriteable()`.\n\nI feel like this contradicts the principle of least permissions - you should ask for the minimum permissions you need, and this is the obvious way of doing it.\n\n### Reproduction Steps\n\n```C#\nusing System.Security.AccessControl;\nusing Microsoft.Win32;\n\nusing(RegistryKey? k = Registry.CurrentUser.CreateSubKey(@\"Software\\Contoso\\SetValueTest\")) {\n\tif(k != null)\n\t\tk.SetValue(\"working\", \"this works fine\");\n}\n\n\nusing (RegistryKey? k = Registry.CurrentUser.OpenSubKey(@\"Software\\Contoso\\SetValueTest\", RegistryRights.SetValue)) {\n\tif(k != null)\n\t\tk.SetValue(\"broken\", \"this throws an exception\");\n}\n```\n\n### Expected behavior\n\nThe code should create a registry key `HKCU\\Software\\Contoso\\SetValueTest`, with the following values:\n| Name | Type | Value |\n|--------|--------|--------|\n| `working` | `REG_SZ` | `this works fine` |\n| `broken` | `REG_SZ` | `this throws an exception` |\n\n### Actual behavior\n\nThe code works fine to create the registry key and set the value `working` on it. However, when it tries to set the `broken` value, it throws an error in `EnsureWriteable`. This makes no sense - the key was opened with `SetValue` permission.\n\n### Regression?\n\nNot a regression - behaves the same way in .NETFramework.\n\n### Known Workarounds\n\nYou can open the key with `OpenSubKey(string, bool)`, but this doesn\u0027t work to reduce the requested access rights.\n\n### Configuration\n\n.NET version 9.0.3\nWindows 11 Pro 22H2 build 22621.4317\namd64 (11th gen Intel Core i7-11700K)\nThis can\u0027t be specific to the configuration - the source code has this bug.\n\n### Other information\n\nI\u0027ve determined that the issue is as follows (all lines are in `RegistryKey.cs`):\n\n1) When opening a key with `CreateSubKey`, the writeability of that key is determined by whether the permission check is set to `ReadSubTree` (line 209). If it\u0027s set to `Default` the key is always treated as writeable. This behavior is correct, but there is a bug that the subkey\u0027s permission check is set to `Default` in that case instead of being copied from the parent key if it already exists (line 213).\n2) When opening a key with `OpenSubKey`, the writeability of that key is determined by whether the permission check is set to `ReadWriteSubTree`. If it\u0027s set to `Default` the key is treated as nonwriteable, instead of what the docs say (\"inherits the mode of its parent\"). Further, the subkey\u0027s permission check in that case is also set to `Default` instead of being copied from the parent, which feels like another bug.\n3) When HKCU et al. are opened with `OpenBaseKey`, their permissions checks are set to `Default` (line 427). This feels like a huge issue - the permissions check on a key should never be set to `Default`, ever.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOu2WbwQ==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc6iaewn",
+                                           "createdAt":  "2025-03-14T14:21:30Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-system-security, @bartonjs, @vcsjones\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2025-03-14T14:25:09Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6iaiw8",
+                                           "createdAt":  "2025-03-14T14:25:10Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-microsoft-win32\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2025-03-14T14:25:10Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6k8i53",
+                                           "createdAt":  "2025-03-31T20:33:24Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ericstj",
+                                           "body":  "Since this is not a regression and in very old API we\u0027re unlikely to take a change in behavior.  Looks to me like RegistryRights were trying to apply some additional restrictions/defaults at the managed API level.  The OS access rules ultimately still work as expected.\n\nDocs could potentially be improved.  @NoLongerBreathedIn - did you have a proposal for a change here?",
+                                           "updatedAt":  "2025-03-31T20:33:24Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6k9qTh",
+                                           "createdAt":  "2025-03-31T23:14:02Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOEcsIYg==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "ericstj",
+                                                                               "createdAt":  "2025-07-31T17:06:02Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "NoLongerBreathedIn",
+                                           "body":  "Current behavior: A `RegistryKey` is \"managed-writeable\" if it was created with `RegistryKeyPermissionsCheck.Default` using `CreateSubKey`, if it was created with `RegistryKeyPermissionsCheck.ReadWriteSubTree`, or if it is a predefined key from `Registry`. If it was created without an explicit `RegistryKeyPermissionsCheck` defined, but a `writeable` flag passed, that is equivalent to setting the `RegistryKeyPermissionsCheck` to `writeable? ReadWriteSubTree : ReadSubTree`. If neither was passed, it is as if it was created with a `RegistryKeyPermissionsCheck` that is the same as what its parent was created with. Predefined keys were created with `RegistryKeyPermissionsCheck.Default`. Write operations on keys that are not \"managed-writeable\" throw.\n\nHonestly, I\u0027d just deprecate the enum and replace it with the `writeable` flag when using `CreateSubKey`; for `OpenSubKey` the correct replacement would be the `RegistryRights` version (and the key would properly inherit the managed-writeability of its parent, which would be writeable for all except HKCC and HKPD [which I think don\u0027t allow writing for anyone anyway - if this is wrong then of course it would be writeable for that one]).\n\nI think the place that went wrong was when it was decided to check writeability before making syscalls to edit things — it was checked in an inconsistent way, and doesn\u0027t really match what you want for `OpenSubKey`.",
+                                           "updatedAt":  "2025-03-31T23:14:02Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc67M7gW",
+                                           "createdAt":  "2025-07-31T17:08:42Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ericstj",
+                                           "body":  "@NoLongerBreathedIn - I agree with deprecation.  We shouldn\u0027t be trying to apply / enforce access writes in the managed layer.  If we just deprecate methods + enum do we have sufficient functionality in the remaining API?",
+                                           "updatedAt":  "2025-07-31T17:08:42Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc67ZZvB",
+                                           "createdAt":  "2025-08-01T10:05:53Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "NoLongerBreathedIn",
+                                           "body":  "Yes, as long as the predefined keys get their permissions check set to `ReadWriteSubTree` (at least for the ones that are writeable). Currently the only way to open a key (failing if it doesn\u0027t exist) and have it be writeable while specifying the rights you want is to use a `RegistryKeyPermissionsCheck` overload of `OpenSubKey`. (Using `CreateSubKey` to open a writeable handle to an ancestor that always exists and then `OpenSubKey` from there also works but is daft as all get-out.)",
+                                           "updatedAt":  "2025-08-01T10:07:20Z"
+                                       }
+                                   ],
+                         "totalCount":  6
+                     },
+        "title":  "OpenSubKey(string, RegistryRights) is useless",
+        "labels":  [
+                       "area-Microsoft.Win32",
+                       "needs-further-triage"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/117922",
+        "createdAt":  "2025-07-22T11:15:50Z",
+        "number":  117922,
+        "author":  "vsfeedback",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-07-26T10:29:41Z",
+        "body":  "_This issue has been moved from [a ticket on Developer Community](https://developercommunity.visualstudio.com/t/SystemMediaSoundPlayer-is-not-working/10936509)._\n\n---\n[severity:It\u0027s more difficult to complete my work]\nSystem.Media.SoundPlayer çalışmıyor. Ses vermiyor. Her türlü denedim ama olmuyor.\n private void buttonÇal_Click(object sender, EventArgs e)\n {\n     soundPlayer = new System.Media.SoundPlayer(@\"D:\\HDD\\copyright (C) son\\bitmemişler\\THREAD_PROJECT_01\\EXAMPLE No 1.wav\");\n     soundPlayer.Play();\n     //soundPlayer.SoundLocation = @\"D:\\HDD\\copyright (C) son\\bitmemişler\\THREAD_PROJECT_01\\EXAMPLE No 1.wav\";\n     //soundPlayer.SoundLocation = @\"D:\\HDD\\copyright (C) son\\bitmemişler\\THREAD_PROJECT_01\\EXAMPLE No 2.wav\";\n     //soundPlayer.LoadAsync();\n     //soundPlayer.PlaySync();\n }\n\n---\n### Original Comments\n\n#### Feedback Bot on 7/14/2025, 07:28 AM: \n\n\u003cp\u003eWe have directed your feedback to the appropriate engineering team for further evaluation. The team will review the feedback and notify you about the next steps.\u003c/p\u003e\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOuPm8zQ==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc64-bzN",
+                                           "createdAt":  "2025-07-22T15:26:23Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-microsoft-win32\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2025-07-22T15:26:23Z"
+                                       }
+                                   ],
+                         "totalCount":  1
+                     },
+        "title":  "System.Media.SoundPlayer is not working. It doesn\u0027t sound. I\u0027ve tried all kinds of things, but it doesn\u0027t work.",
+        "labels":  [
+                       "area-Microsoft.Win32",
+                       "needs-further-triage"
+                   ]
+    }
+]

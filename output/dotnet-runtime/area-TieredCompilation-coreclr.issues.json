@@ -1,0 +1,1055 @@
+﻿[
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/12025",
+        "createdAt":  "2019-02-12T22:08:16Z",
+        "number":  12025,
+        "author":  "kouvel",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-07-08T17:49:53Z",
+        "body":  "For PR https://github.com/dotnet/coreclr/pull/21292, for cases covered in https://github.com/dotnet/coreclr/blob/master/tests/src/baseservices/TieredCompilation/TieredVtableMethodTests.cs",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOZAgGFw==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5kCAYX",
+                                           "createdAt":  "2023-08-15T00:01:33Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Due to lack of recent activity, this issue has been marked as a candidate for backlog cleanup.  It will be closed if no further activity occurs within 14 more days. Any new comment (by anyone, not necessarily the author) will undo this process.\n\nThis process is part of our [issue cleanup automation](https://github.com/dotnet/runtime/blob/main/docs/issue-cleanup.md).",
+                                           "updatedAt":  "2023-08-15T00:01:33Z"
+                                       }
+                                   ],
+                         "totalCount":  1
+                     },
+        "title":  "Add perf tests for slot backpatching with tiering",
+        "labels":  [
+                       "area-TieredCompilation-coreclr"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/12026",
+        "createdAt":  "2019-02-12T22:14:23Z",
+        "number":  12026,
+        "author":  "kouvel",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2023-12-06T11:55:34Z",
+        "body":  "See example:\r\nhttps://github.com/dotnet/coreclr/blob/8ad7d5e57e0eb0308453895693a996f5a93c8e08/tests/src/baseservices/TieredCompilation/TieredVtableMethodTests.cs#L107\r\n\r\nThe call uses an instantiating stub that does a direct call if the method\u0027s code entry point is stable at the time of stub generation, or an indirect call otherwise. With tiering, an indirect call is always used, and this indirect call doesn\u0027t seem to be easily prefetched, it\u0027s sort of like a dependent load. This could be fixed by making the instantiating stub use a direct call, making the call target backpatchable, and backpatching it when the entry point changes.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHObcz3sg==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQ2MzUwMzExOQ==",
+                                           "createdAt":  "2019-02-14T06:08:27Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jkotas",
+                                           "body":  "Isn\u0027t this same underlying problem as https://github.com/dotnet/coreclr/issues/20282 ?",
+                                           "updatedAt":  "2019-02-14T06:08:27Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQ2MzcwMDA2NQ==",
+                                           "createdAt":  "2019-02-14T16:45:15Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "kouvel",
+                                           "body":  "It\u0027s similar at a high level. A regular method call would go through a precode of some sort when the code entry point is not stable, and in this case it would do an indirect call through the vtable slot. The latter seems to be slower consistently because the code is in a stub, and since the code is in a stub a fix may be used that is different from a fix for dotnet/runtime#965 (though it doesn\u0027t have to be different).",
+                                           "updatedAt":  "2019-02-14T16:46:25Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQ2MzcwODc3OQ==",
+                                           "createdAt":  "2019-02-14T17:07:42Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jkotas",
+                                           "body":  "It should be easy to change the stub to go through a precode instead of indirection if it helps.",
+                                           "updatedAt":  "2019-02-14T17:07:42Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQ2MzcyNjM4OA==",
+                                           "createdAt":  "2019-02-14T17:57:14Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "kouvel",
+                                           "body":  "I don\u0027t think it would help perf. For a fix for dotnet/runtime#965 I was thinking that the backpatching changes could be collected and at some point suspend the runtime and backpatch a bunch of the call targets, something similar could be done for the instantiation stub as well. Alternatively because the instantiation stub has a specific layout the call target can be aligned such that it can be backpatched similarly to dispatch stubs, then it wouldn\u0027t need runtime suspension.",
+                                           "updatedAt":  "2019-02-14T17:57:14Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDQ5OTMyMTIxMw==",
+                                           "createdAt":  "2019-06-06T02:09:22Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "kouvel",
+                                           "body":  "It\u0027s probably a bit more risky to fix this for 3.0 at this point. Moved to future.",
+                                           "updatedAt":  "2019-06-06T02:09:22Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5tzPey",
+                                           "createdAt":  "2023-12-06T06:01:14Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Due to lack of recent activity, this issue has been marked as a candidate for backlog cleanup.  It will be closed if no further activity occurs within 14 more days. Any new comment (by anyone, not necessarily the author) will undo this process.\n\nThis process is part of our [issue cleanup automation](https://github.com/dotnet/runtime/blob/main/docs/issue-cleanup.md).",
+                                           "updatedAt":  "2023-12-06T06:01:14Z"
+                                       }
+                                   ],
+                         "totalCount":  6
+                     },
+        "title":  "Calls to virtual methods with generic parameters are slower with tiering",
+        "labels":  [
+                       "tenet-performance",
+                       "area-TieredCompilation-coreclr"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/31613",
+        "createdAt":  "2020-02-01T09:44:31Z",
+        "number":  31613,
+        "author":  "mrange",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2021-07-26T16:15:35Z",
+        "body":  "Hi.\r\n\r\nI saw a performance regression going from .NET 4.8 to dotnet core 3.1. It\u0027s small so in practice this might not hurt most users but I thought it\u0027s better to create an issue than keeping mum.\r\n\r\nI noticed it when discussing my other issue: https://github.com/dotnet/runtime/issues/2191 so the code will be similar although I don\u0027t think this is tail call related but I don\u0027t know for sure of course.\r\n\r\nWhen setting up a simple push stream pipeline\r\n\r\n```fsharp\r\n// Minimalistic PushStream\r\n//  A PushStream accepts a receiver function that will be called\r\n//  with each value in the PushStream\r\ntype \u0027T PushStream = (\u0027T -\u003e unit) -\u003e unit\r\n\r\nmodule PushStream =\r\n  let inline zero      ()       = LanguagePrimitives.GenericZero\r\n  let inline push      r v      = r v\r\n\r\n  // Creates a PushStream with all integers from b to e (inclusive)\r\n  let inline fromRange b e    r = for i = b to e do push r i\r\n  // Maps all values in ps using mapping function f\r\n  let inline map       f   ps r = ps (fun v -\u003e push r (f v))\r\n  // Filters all values in ps using filter function f\r\n  let inline filter    f   ps r = ps (fun v -\u003e if f v then push r v)\r\n  // Sums all values in ps\r\n  let inline sum           ps   = let mutable s = zero () in ps (fun v -\u003e s \u003c- s + v); s\r\n\r\n[\u003cDisassemblyDiagnoser\u003e]\r\ntype Benchmarks () =\r\n  [\u003cParams (10000, 100)\u003e] \r\n  member val public Count = 100 with get, set\r\n\r\n  [\u003cBenchmark\u003e]\r\n  member x.SimplePushStreamTest () =\r\n    PushStream.fromRange  0 x.Count\r\n    |\u003e PushStream.map     int64\r\n    |\u003e PushStream.filter  (fun v -\u003e (v \u0026\u0026\u0026 1L) = 0L)\r\n    |\u003e PushStream.map     ((+) 1L)\r\n    |\u003e PushStream.sum\r\n```\r\n\r\nBenchmark dotnet reports: \r\n\r\n```\r\n$ dotnet run -c Release -f netcoreapp3.1 --filter \u0027*\u0027 --runtimes net48 netcoreapp3.1\r\n...\r\n|               Method |       Runtime |     Toolchain | Count |        Mean |     Error |    StdDev | Ratio | RatioSD | Code Size |\r\n|--------------------- |-------------- |-------------- |------ |------------:|----------:|----------:|------:|--------:|----------:|\r\n| SimplePushStreamTest |      .NET 4.8 |         net48 |   100 |    400.6 ns |   3.92 ns |   3.67 ns |  1.00 |    0.00 |     272 B |\r\n| SimplePushStreamTest | .NET Core 3.1 | netcoreapp3.1 |   100 |    439.3 ns |   4.35 ns |   4.07 ns |  1.10 |    0.02 |     273 B |\r\n|                      |               |               |       |             |           |           |       |         |           |\r\n| SimplePushStreamTest |      .NET 4.8 |         net48 | 10000 | 33,542.5 ns | 143.25 ns | 133.99 ns |  1.00 |    0.00 |     272 B |\r\n| SimplePushStreamTest | .NET Core 3.1 | netcoreapp3.1 | 10000 | 39,449.8 ns | 259.08 ns | 242.35 ns |  1.18 |    0.01 |     273 B |\r\n```\r\n\r\n.NET 4.8 performs between 10% to 20% faster than dotnet core 3.1.\r\n\r\nI dug a bit into the jitted assembler and found the following differences\r\n\r\n```diff\r\n--- dotnetcore.asm\r\n+++ net48.asm\r\n@@ -1,4 +1,4 @@\r\n-; dotnet core 3.1\r\n+; .net v48\r\n \r\n ; PushStream.fromRange  0 x.Count\r\n LOOP:\r\n@@ -12,7 +12,6 @@\r\n jne     LOOP\r\n \r\n ; PushStream.map     int64\r\n-nop     dword ptr [rax+rax]\r\n mov     rcx,qword ptr [rcx+8]\r\n movsxd  rdx,edx\r\n mov     rax,qword ptr [rcx]\r\n@@ -21,8 +20,7 @@\r\n jmp     rax\r\n \r\n ; PushStream.filter  (fun v -\u003e (v \u0026\u0026\u0026 1L) = 0L)\r\n-nop     dword ptr [rax+rax]\r\n-mov     eax,edx\r\n+mov     rax,rdx\r\n test    al,1\r\n jne     BAILOUT\r\n mov     rcx,qword ptr [rcx+8]\r\n@@ -35,7 +33,6 @@\r\n ret\r\n \r\n ; PushStream.map     ((+) 1L)\r\n-nop     dword ptr [rax+rax]\r\n mov     rcx,qword ptr [rcx+8]\r\n inc     rdx\r\n mov     rax,qword ptr [rcx]\r\n@@ -44,11 +41,9 @@\r\n jmp     rax\r\n \r\n ; PushStream.sum\r\n-nop     dword ptr [rax+rax]\r\n mov     rax,qword ptr [rcx+8]\r\n mov     rcx,rax\r\n add     rdx,qword ptr [rax+8]\r\n mov     qword ptr [rcx+8],rdx\r\n xor     eax,eax\r\n ret\r\n-\r\n```\r\n\r\nIt seems that in dotnet core there\u0027s an extra nop at the start of each method. I suspected tiered compilation but after much messing about trying to disable tiered compilation it\u0027s either unrelated or I wasn\u0027t able to disable tiered compilation.\r\n\r\nIt surprises me that the nop adds this much overhead but I can\u0027t spot anything else of significance.\r\n\r\nThe code is here: https://github.com/mrange/TryNewDisassembler/tree/fsharpPerformanceRegression\r\n\r\nAnd here:\r\n\r\n```fsharp\r\nmodule PerformanceRegression =\r\n  open System\r\n  open System.Linq\r\n  open System.Diagnostics\r\n\r\n  // Minimalistic PushStream\r\n  //  A PushStream accepts a receiver function that will be called\r\n  //  with each value in the PushStream\r\n  type \u0027T PushStream = (\u0027T -\u003e unit) -\u003e unit\r\n\r\n  module PushStream =\r\n    let inline zero      ()       = LanguagePrimitives.GenericZero\r\n    let inline push      r v      = r v\r\n\r\n    // Creates a PushStream with all integers from b to e (inclusive)\r\n    let inline fromRange b e    r = for i = b to e do push r i\r\n    // Maps all values in ps using mapping function f\r\n    let inline map       f   ps r = ps (fun v -\u003e push r (f v))\r\n    // Filters all values in ps using filter function f\r\n    let inline filter    f   ps r = ps (fun v -\u003e if f v then push r v)\r\n    // Sums all values in ps\r\n    let inline sum           ps   = let mutable s = zero () in ps (fun v -\u003e s \u003c- s + v); s\r\n\r\n  module Tests =\r\n    open BenchmarkDotNet.Attributes\r\n    open BenchmarkDotNet.Configs\r\n    open BenchmarkDotNet.Jobs\r\n    open BenchmarkDotNet.Horology\r\n    open BenchmarkDotNet.Running\r\n    open BenchmarkDotNet.Diagnostics.Windows.Configs\r\n\r\n    [\u003cDisassemblyDiagnoser\u003e]\r\n    type Benchmarks () =\r\n      [\u003cParams (10000, 100)\u003e] \r\n      member val public Count = 100 with get, set\r\n\r\n      [\u003cBenchmark\u003e]\r\n      member x.SimplePushStreamTest () =\r\n        PushStream.fromRange  0 x.Count\r\n        |\u003e PushStream.map     int64\r\n        |\u003e PushStream.filter  (fun v -\u003e (v \u0026\u0026\u0026 1L) = 0L)\r\n        |\u003e PushStream.map     ((+) 1L)\r\n        |\u003e PushStream.sum\r\n\r\n    let run argv = \r\n      let job = Job.Default\r\n                    .WithWarmupCount(30)\r\n                    .WithIterationTime(TimeInterval.FromMilliseconds(250.0)) // the default is 0.5s per iteration, which is slighlty too much for us\r\n                    .WithMinIterationCount(15)\r\n                    .WithMaxIterationCount(20)\r\n                    .AsDefault()\r\n      let config = DefaultConfig.Instance.AddJob(job)\r\n      let b = BenchmarkSwitcher [|typeof\u003cBenchmarks\u003e|]\r\n      let summary = b.Run(argv, config)\r\n      printfn \"%A\" summary\r\n\r\n// Run with: dotnet run -c Release -f netcoreapp3.1 --filter \u0027*\u0027 --runtimes net48 netcoreapp3.1\r\n[\u003cEntryPoint\u003e]\r\nlet main argv =\r\n  PerformanceRegression.Tests.run argv\r\n  0\r\n```\r\n\r\ncategory:cq\r\ntheme:optimization\r\nskill-level:intermediate\r\ncost:medium",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOKBJPmg==",
+                         "nodes":  [
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDU4MTA1OTMzNw==",
+                                           "createdAt":  "2020-02-01T19:00:27Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOA6fzbw==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "mrange",
+                                                                               "createdAt":  "2020-02-01T19:22:14Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "LAUGH",
+                                                                               "user":  "mrange",
+                                                                               "createdAt":  "2020-02-01T19:22:16Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  2
+                                                         },
+                                           "author":  "jkotas",
+                                           "body":  "The extra no-ops should be gone in current master after https://github.com/dotnet/coreclr/pull/26740/ .",
+                                           "updatedAt":  "2020-02-01T19:00:27Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDU4MTA1OTM0OQ==",
+                                           "createdAt":  "2020-02-01T19:00:32Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jkotas",
+                                           "body":  "cc @adamsitnik ",
+                                           "updatedAt":  "2020-02-01T19:00:32Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDYyNDQwMTQ5NQ==",
+                                           "createdAt":  "2020-05-06T01:47:56Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "AndyAyersMS",
+                                           "body":  "We should verify perf is recovered. Let\u0027s take a look as part of .NET 5.",
+                                           "updatedAt":  "2020-05-06T01:47:56Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY0NzgyMTU1OA==",
+                                           "createdAt":  "2020-06-22T23:36:24Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "BruceForstall",
+                                           "body":  "@erozenfeld Can you verify if any work remains here?",
+                                           "updatedAt":  "2020-06-22T23:36:24Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY2Njg0ODU2Nw==",
+                                           "createdAt":  "2020-07-31T00:54:24Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "AndyAyersMS",
+                                           "body":  "I still see a regression with a fairly recent P8 build:\r\n```\r\nBenchmarkDotNet=v0.12.1, OS=Windows 10.0.18363.959 (1909/November2018Update/19H2)\r\nIntel Core i7-8650U CPU 1.90GHz (Kaby Lake R), 1 CPU, 8 logical and 4 physical cores\r\n.NET Core SDK=5.0.100-preview.8.20359.6\r\n  [Host]     : .NET Core 3.1.4 (CoreCLR 4.700.20.20201, CoreFX 4.700.20.21406), X64 RyuJIT DEBUG\r\n  Job-DTXTLF : .NET Framework 4.8 (4.8.4180.0), X64 RyuJIT\r\n  Job-XPSVFA : .NET Core 3.1.4 (CoreCLR 4.700.20.20201, CoreFX 4.700.20.21406), X64 RyuJIT\r\n  Job-KQQRIJ : .NET Core 5.0.0 (CoreCLR 5.0.20.35809, CoreFX 5.0.20.35809), X64 RyuJIT\r\n\r\nMaxIterationCount=20  MinIterationCount=15  WarmupCount=30\r\n\r\n|               Method |        Job |       Runtime |     Toolchain | Count |        Mean |       Error |      StdDev | Ratio | RatioSD |\r\n|--------------------- |----------- |-------------- |-------------- |------ |------------:|------------:|------------:|------:|--------:|\r\n| SimplePushStreamTest | Job-DTXTLF |      .NET 4.8 |         net48 |   100 |    372.9 ns |     4.34 ns |     4.06 ns |  1.00 |    0.00 |\r\n| SimplePushStreamTest | Job-XPSVFA | .NET Core 3.1 | netcoreapp3.1 |   100 |    406.1 ns |     9.33 ns |     9.58 ns |  1.09 |    0.03 |\r\n| SimplePushStreamTest | Job-KQQRIJ | .NET Core 5.0 |  netcoreapp50 |   100 |    439.1 ns |    23.10 ns |    26.60 ns |  1.18 |    0.08 |\r\n|                      |            |               |               |       |             |             |             |       |         |\r\n| SimplePushStreamTest | Job-DTXTLF |      .NET 4.8 |         net48 | 10000 | 29,770.6 ns |   531.09 ns |   470.80 ns |  1.00 |    0.00 |\r\n| SimplePushStreamTest | Job-XPSVFA | .NET Core 3.1 | netcoreapp3.1 | 10000 | 30,609.8 ns |   402.64 ns |   356.93 ns |  1.03 |    0.02 |\r\n| SimplePushStreamTest | Job-KQQRIJ | .NET Core 5.0 |  netcoreapp50 | 10000 | 37,312.9 ns | 1,136.50 ns | 1,167.10 ns |  1.25 |    0.04 |\r\n```",
+                                           "updatedAt":  "2020-07-31T00:54:24Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY3MDU5MTgwMg==",
+                                           "createdAt":  "2020-08-07T16:08:09Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "AndyAyersMS",
+                                           "body":  "@briansull if you haven\u0027t started looking at this, I\u0027ll take a look.",
+                                           "updatedAt":  "2020-08-07T16:08:09Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY3MDYyMTc5MQ==",
+                                           "createdAt":  "2020-08-07T17:18:07Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "briansull",
+                                           "body":  "Sure, go ahead and take a look",
+                                           "updatedAt":  "2020-08-07T17:18:07Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY3MDgwMTk2NA==",
+                                           "createdAt":  "2020-08-08T01:13:34Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "AndyAyersMS",
+                                           "body":  "Suspect this is some residual overhead from tiered compilation. Disabling that gives\r\n```\r\nBenchmarkDotNet=v0.12.1, OS=Windows 10.0.18363.959 (1909/November2018Update/19H2)\r\nIntel Core i7-8650U CPU 1.90GHz (Kaby Lake R), 1 CPU, 8 logical and 4 physical cores\r\n.NET Core SDK=5.0.100-preview.8.20359.6\r\n  [Host]     : .NET Core 3.1.4 (CoreCLR 4.700.20.20201, CoreFX 4.700.20.21406), X64 RyuJIT DEBUG\r\n  Job-FZFFZC : .NET Framework 4.8 (4.8.4180.0), X64 RyuJIT\r\n  Job-FIZZFG : .NET Core 3.1.4 (CoreCLR 4.700.20.20201, CoreFX 4.700.20.21406), X64 RyuJIT\r\n  Job-HDIAOD : .NET Core 5.0.0 (CoreCLR 5.0.20.35809, CoreFX 5.0.20.35809), X64 RyuJIT\r\n\r\nMaxIterationCount=20  MinIterationCount=15  WarmupCount=30\r\n\r\n|               Method |        Job |       Runtime |     Toolchain | Count |        Mean |     Error |    StdDev | Ratio | RatioSD | Code Size |\r\n|--------------------- |----------- |-------------- |-------------- |------ |------------:|----------:|----------:|------:|--------:|----------:|\r\n| SimplePushStreamTest | Job-FZFFZC |      .NET 4.8 |         net48 |   100 |    375.1 ns |   4.80 ns |   4.71 ns |  1.00 |    0.00 |     272 B |\r\n| SimplePushStreamTest | Job-FIZZFG | .NET Core 3.1 | netcoreapp3.1 |   100 |    388.9 ns |  15.25 ns |  15.66 ns |  1.03 |    0.04 |     272 B |\r\n| SimplePushStreamTest | Job-HDIAOD | .NET Core 5.0 | netcoreapp5.0 |   100 |    389.1 ns |   7.26 ns |   6.79 ns |  1.04 |    0.02 |     273 B |\r\n|                      |            |               |               |       |             |           |           |       |         |           |\r\n| SimplePushStreamTest | Job-FZFFZC |      .NET 4.8 |         net48 | 10000 | 31,360.3 ns | 545.98 ns | 510.71 ns |  1.00 |    0.00 |     272 B |\r\n| SimplePushStreamTest | Job-FIZZFG | .NET Core 3.1 | netcoreapp3.1 | 10000 | 30,618.3 ns | 217.74 ns | 193.02 ns |  0.98 |    0.02 |     272 B |\r\n| SimplePushStreamTest | Job-HDIAOD | .NET Core 5.0 | netcoreapp5.0 | 10000 | 31,787.3 ns | 412.13 ns | 385.51 ns |  1.01 |    0.02 |     273 B |\r\n```\r\n\r\nDifferential profiles of 4.8 vs 5.0 show identical codegen in all the hot methods, eg:\r\n```asm\r\n\r\n;; 4.8\r\n;; Program+PerformanceRegression+Tests+SimplePushStreamTest@42-6.Invoke(Int64)\r\n\r\n00007ff8`f2816040 488b4908        mov     rcx,qword ptr [rcx+8]\r\n00007ff8`f2816044 48ffc2          inc     rdx\r\n00007ff8`f2816047 488b01          mov     rax,qword ptr [rcx]\r\n00007ff8`f281604a 488b4040        mov     rax,qword ptr [rax+40h]\r\n00007ff8`f281604e 488b4020        mov     rax,qword ptr [rax+20h]\r\n00007ff8`f2816052 48ffe0          jmp     rax\r\n\r\n;; 5.0\r\n;; Assembly listing for method SimplePushStreamTest@42-6:Invoke(long):Unit:this\r\n\r\nG_M35068_IG01:\r\n\t\t\t\t\t\t;; bbWeight=1    PerfScore 0.00\r\nG_M35068_IG02:\r\n       mov      rcx, gword ptr [rcx+8]\r\n       inc      rdx\r\n       mov      rax, qword ptr [rcx]\r\n       mov      rax, qword ptr [rax+64]\r\n       mov      rax, qword ptr [rax+32]\r\n\t\t\t\t\t\t;; bbWeight=1    PerfScore 8.25\r\nG_M35068_IG03:\r\n       rex.jmp  rax\r\n```\r\n\r\ncc @kouvel \r\n\r\nGoing to relabel this as VM.\r\n\r\n\r\n",
+                                           "updatedAt":  "2020-08-08T01:13:34Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY3MTcwMjk1MQ==",
+                                           "createdAt":  "2020-08-11T03:27:44Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "kouvel",
+                                           "body":  "This seems to have something to do with JIT timing. I have seen some cases before where different loop alignment led to noticeable regressions when tiering is enabled. It could also be better at random, but naturally the regressions are more noticed. Adjusting timing of rejits by changing the call count threshold seems to change the perf significantly. Code locality may also be relevant, as I noticed that using R2R\u0027ed runtime binaries versus using IL-only runtime binaries also affects perf significantly regardless of tiering. Tiering timings have changed between 3.1 and 5.0, typically it would be for the better, though there may be benchmarks where slight differences in timing may realize as larger differences in performance. I suspect this is not a regression due to a bug but rather a regression due to chance. It would need more investigation to determine the root causes, and if my theory is right, to determine how to reduce the chance factor and make it more deterministic.",
+                                           "updatedAt":  "2020-08-11T03:27:44Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY3MTg5NzQwMA==",
+                                           "createdAt":  "2020-08-11T11:46:43Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "kouvel",
+                                           "body":  "I see large differences in time spent in a function when the function\u0027s code crosses a cache line boundary. For small functions it may help to align them such that they would fit within a cache line.",
+                                           "updatedAt":  "2020-08-11T11:46:43Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY3MjA0NTc3OA==",
+                                           "createdAt":  "2020-08-11T16:00:29Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "AndyAyersMS",
+                                           "body":  "#2249 added 32 byte alignment for tier1 methods with loops; might be interesting to try this for all tier1 methods.",
+                                           "updatedAt":  "2020-08-11T16:00:29Z"
+                                       },
+                                       {
+                                           "id":  "MDEyOklzc3VlQ29tbWVudDY3MjI4ODY2Ng==",
+                                           "createdAt":  "2020-08-11T21:27:52Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "kouvel",
+                                           "body":  "I see, I was also thinking something like this:\r\n- If `0 \u003c size \u003c= 16` then align at any 16-byte offset in a cache line\r\n- If `16 \u003c size \u003c= 32` then align at offsets 0, 16, or 32, but not at 48\r\n- If `32 \u003c size \u003c= 48` then align at offsets 0 or 16\r\n- If `48 \u003c size \u003c= 64` then align at offset 0 only\r\n\r\nMight allow for a bit more density but #2249 also mentioned that crossing a 32-byte boundary has perf issues for loops, so 32-byte alignment may work better in some cases.",
+                                           "updatedAt":  "2020-08-11T21:27:52Z"
+                                       }
+                                   ],
+                         "totalCount":  12
+                     },
+        "title":  "Minor performance regression going to dotnet core 3.1 from .NET 4.8",
+        "labels":  [
+                       "tenet-performance",
+                       "area-TieredCompilation-coreclr"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/73594",
+        "createdAt":  "2022-08-08T21:41:25Z",
+        "number":  73594,
+        "author":  "gdkchan",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2022-08-10T19:06:56Z",
+        "body":  "### Description\r\n\r\nA few years ago, tiered compilation was introduced on .NET. However, at least to my knowledge, it was never supported for dynamic methods. Having tiered compilation for dynamic methods would provide the same benefits it does for \"pre-compiled\" applications, faster startup when you have a lot of code that only needs to run once (and so the JIT optimizations might not pay off if it spends more time compiling the code than actually running it).\r\n\r\nIn the past I made emulators that translate machine code to .NET IL. One of the problems was that the JIT was quite slow, and at the time tiered compilation was not implemented. Some guest applications could take up to a few minutes to start due to the JIT cost, among other issues. Tiered compilation could improve that, and generally improve applications that needs to generate large amounts of dynamic methods.\r\n\r\nIt might be worth exposing some API to allow passing some hint to the JIT about the preferred compilation strategy for the dynamic method (like tiered, optimizations disabled or all optimizations). Personally I would be fine just getting tiered compilation for all dynamic methods, but maybe in some cases that\u0027s not desirable, so having the choice would be better.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  null,
+                         "nodes":  [
+
+                                   ],
+                         "totalCount":  0
+                     },
+        "title":  "Tiered compilation support for dynamic methods",
+        "labels":  [
+                       "tenet-performance",
+                       "area-TieredCompilation-coreclr"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/77635",
+        "createdAt":  "2022-10-29T16:48:36Z",
+        "number":  77635,
+        "author":  "EgorBo",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2023-07-03T22:21:38Z",
+        "body":  "When we re-jit a R2R\u0027d code we hit `HandleCallCountingForFirstCall` where we set `m_tier1CallCountingCandidateMethodRecentlyRecorded = true` to delay call-counting installation further, see [here](https://github.com/dotnet/runtime/blob/385e1bafaa307736541c6024ab29008f98f400f8/src/coreclr/vm/tieredcompilation.cpp#L166-L170).\r\n\r\nIt seems to me that we should not do that when we already have R2R\u0027d version installed, a proper fix is\r\n```c\r\nif (!ExecutionManager::IsReadyToRunCode(pMethodDesc-\u003eGetNativeCode()))\r\n{\r\n    // Delay call counting for currently recoded methods further\r\n    m_tier1CallCountingCandidateMethodRecentlyRecorded = true;\r\n}\r\n```\r\nHowever, `ExecutionManager::IsReadyToRunCode` is likely not cheap due to https://github.com/dotnet/runtime/issues/8393 issue 😞\r\n\r\nThe problem, it should help with, is: when we start a large app we constantly compile something and VM simply doesn\u0027t have a window to install call counting stubs for methods, even extremely hot ones - they might stuck un-counted in Tier0 for seconds, see https://github.com/dotnet/runtime/pull/70941#issuecomment-1284348407 ",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOYIM4SA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5WsM98",
+                                           "createdAt":  "2023-03-04T04:51:01Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOC3N41w==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "EgorBo",
+                                                                               "createdAt":  "2023-03-05T21:26:53Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "davidwrighton",
+                                           "body":  "#79021 has fixed the reason not to do this",
+                                           "updatedAt":  "2023-03-04T04:51:01Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5gf5iS",
+                                           "createdAt":  "2023-07-03T18:19:41Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "mangod9",
+                                           "body":  "@EgorBo, this issue is tagged for 8. Assume its not a large change to make it in? ",
+                                           "updatedAt":  "2023-07-03T18:19:41Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5ggzb2",
+                                           "createdAt":  "2023-07-03T22:21:05Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "EgorBo",
+                                           "body":  "\u003e @EgorBo, this issue is tagged for 8. Assume its not a large change to make it in?\r\n\r\nThe fix is more or less simple but I wasn\u0027t able yet to proove it improves anything yet, need to try to some big 1P project",
+                                           "updatedAt":  "2023-07-03T22:21:05Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5ggzhI",
+                                           "createdAt":  "2023-07-03T22:21:37Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "EgorBo",
+                                           "body":  "I moved it to Future but as a best-effort to make it to 8.0 if we find a proof it works",
+                                           "updatedAt":  "2023-07-03T22:21:37Z"
+                                       }
+                                   ],
+                         "totalCount":  4
+                     },
+        "title":  "Don\u0027t delay call-counting-installation because of R2R\u0027d code",
+        "labels":  [
+                       "area-TieredCompilation-coreclr"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/80231",
+        "createdAt":  "2023-01-05T11:10:44Z",
+        "number":  80231,
+        "author":  "hamarb123",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-01-02T12:03:30Z",
+        "body":  "### Background and motivation\r\n\r\nDynamic PGO is a great feature that profiles code during tier 0 and works out what the most common codepaths is so that it can optimise more for them. Read more about it [here](https://gist.github.com/EgorBo/dc181796683da3d905a5295bfd3dd95b), especially the \u0027results\u0027 section and how much performance can be improved by when using PGO, and [here](https://github.com/dotnet/runtime/blob/main/docs/design/features/DynamicPgo.md) to read the design document. The way it works is based on the principle that \"past behavior is a good predictor of future behavior\", but this is not always the case.\r\n\r\nConsider a video game (that doesn\u0027t use NAOT or similar) with graphics options that the user can configure at any time, if the option causes a significant change to the game (e.g. using a different implementation of an interface, using a different codepath more commonly), then all the potential from PGO is wasted and it may exclusively/mostly use the cold path for some of the \u0027optimised\u0027 methods, because it may have already been optimised with the prior set of PGO information. This could also be the case in a image manipulation program that has many different options, all of which are configurable, if the user performs multiple long operations, then later operations could easily end up in a similar situation that could waste the potential of PGO, since the profiling could be wrong, if the processing is quite lengthy (like a few seconds long, I\u0027m not entirely sure how long PGO collects for), then it could take as long as it would have without being optimised using PGO, or possibly even longer if it\u0027s moved into a cold path. This could really be the case in any program which has configurable options that control a long operation.\r\n\r\nMy proposed solution: I propose a new API `RuntimeHelpers.ResetJitOptimizations()` which will act as a hint to the JIT that it should reset all optimisations for any code that was optimised based on usage information (and thus take the methods back to tier 0 \u0026 reset any collected information for other PGO methods that are still in tier 0 thus far). This API would ideally reset all of these methods, whether it does that asynchronously or synchronously or just sets a flag that informs the runtime it should re-write it next time it runs, but if there are any methods that would be too complicated to reset then the implementation should be allowed to skip these (to ensure that this method would not be a block for implementing any new techniques, and that the current advanced PGO techniques wouldn\u0027t make this method to complex to be worth implementing), and obviously any methods that are currently running mightn\u0027t be able to be reset in that moment and may have to be delayed to a later point. This way, programmers that want to squeeze the most performance out of their code would be able to insert a call to `RuntimeHelpers.ResetJitOptimizations()` at an appropriate time before long running operations that are user-configurable, and their code would have the opportunity to collect new PGO data and run faster.\r\n\r\nBasically, this would allow advanced programmers to provide a hint to the runtime that it should re-optimise their methods at appropriate time (e.g., just before starting a long operation, or after the settings menu is exited), which could easily allow their software to run faster.\r\n\r\nNote: technically since the implementation can decide what\u0027s \"too complicated\", a valid implementation could be to no-op, or only reset really simple methods that aren\u0027t running and call it a day (ideally it would be able to be a bit more clever than either of those though).\r\n\r\n### API Proposal\r\n\r\n```csharp\r\nnamespace System.Runtime.CompilerServices;\r\n\r\npublic static class RuntimeHelpers\r\n{\r\n    public static void ResetJitOptimizations();\r\n}\r\n```\r\n\r\n\r\n### API Usage\r\n\r\n```csharp\r\n//A relatively hot function (or multiple less hot functions) that would be eligible for PGO\r\nvoid Function1(ISomeInterface value, ...)\r\n{\r\n    ...\r\n}\r\n\r\n//Some process function, e.g. it could perform image manipulation, or be rendering a frame in a game, calls the hot function(/s) a number of times\r\nvoid Process(ISomeInterface value)\r\n{\r\n    ...\r\n}\r\n\r\n//Process with a particular interface implementation, may take a few seconds\r\nProcess(new SomeInterfaceImplA());\r\n\r\n//Later, this function call could potentially be much less optimised than the first one if PGO has kicked in\r\nProcess(new SomeInterfaceImplB());\r\n```\r\n\r\nWhen calling `Process(new SomeInterfaceImplB());` PGO may have kicked in and devirtualised some stuff from ISomeInterface, or checked common values that are no longer likely, etc. meaning it could be missing out on large performance savings (and possibly even be causing performance degradation if it commonly uses the cold path). If it was known to be a longer running task (e.g. a few seconds or more), you could reset the JIT optimisations with `RuntimeHelpers.ResetJitOptimizations()` to give the JIT an opportunity to create new PGO data \u0026 re-optimise the methods.\r\n\r\nThis could be extremely valuable for any task that is known to run for a long time (such as advanced image processing, rendering, game running), especially those which have user-configurable options which may change a common code path that may be changed well after all the hot methods have been optimised.\r\n\r\n### Alternative Designs\r\n\r\nIt may be desirable to reset the optimisations only for a specific assembly, but this probably substantially complicates the implementation and could reduce the effectiveness if it makes more methods ineligible.\r\nIt could always ensure that every method that uses PGO is always optimised if that is not actually difficult to implement.\r\nThe programmer could move their long-running task out-of-process so that they start a new process every time, this is often impractical and not ideal though and many people will not bother doing this (such as me).\r\n\r\n### Risks\r\n\r\nThe API could be complicated to implement in some cases (I don\u0027t know how complicated it could get), but the implementation is allowed to skip over any method it finds too complicated to do.\r\nThe API name may confuse people as to what it does, or it may imply that it should definitely always reset all optimisations.\r\n\r\n### Open questions\r\n\r\nWe could also add it to another class if it fits somewhere else better, or we could create a new `Jit` class that could be used for future methods relating to the jit.\r\n\r\nIs it necessary to allow the implementation to skip over methods it finds \u0027too complicated\u0027, ideally this would be no methods, and if this is not too complicated to achieve we should perhaps do this instead.\r\n\r\nHow would it work? And would it be asynchronous or even just set a flag somewhere, thus making the API call much quicker, and if so should this be treated as an implementation detail?",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOb7IaJQ==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5RyFDO",
+                                           "createdAt":  "2023-01-05T11:10:47Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "I couldn\u0027t figure out the best area label to add to this issue. If you have write-permissions please help me learn by adding exactly one [area label](https://github.com/dotnet/runtime/blob/master/docs/area-owners.md).",
+                                           "updatedAt":  "2023-01-05T11:10:47Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5RyUK_",
+                                           "createdAt":  "2023-01-05T12:16:33Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODDniDg==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "hamarb123",
+                                                                               "createdAt":  "2023-02-01T22:26:03Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "jkotas",
+                                                                               "createdAt":  "2023-08-14T20:56:06Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  2
+                                                         },
+                                           "author":  "EgorBo",
+                                           "body":  "While this API is doable we can\u0027t implement it right now as it will leak. CLR never reclaims memory occupied by codegen. In fact, it does not do that even for call counting stubs. Mainly for two reasons:\r\n1) Potential race conditions\r\n2) Fragmentation in the loader heap\r\n\r\nSo imagine we have a method `void Foo(){}`. First, we compile it to tier0, then to tier0-instrumented, then to tier1. Then you hit that API to rejit everything and we do that again. We end up with `3 * rejit-requests-count` code versions in memory. See [DynamicPgo-InstrumentedTiers.md](https://github.com/dotnet/runtime/blob/main/docs/design/features/DynamicPgo-InstrumentedTiers.md) for more details.\r\n\r\nFor your case I\u0027d recommend to disable Dynamic PGO (it mostly targets monomorphic applications which don\u0027t change their behavior drastically over time - from our view, it\u0027s like 90% of cases). We might eventually try to implement OSR-based deoptimizations but it\u0027s unlikely soon.\r\n",
+                                           "updatedAt":  "2023-01-05T12:17:57Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc5vshol",
+                                           "createdAt":  "2024-01-02T12:03:22Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "ZimM-LostPolygon",
+                                           "body":  "It\u0027s a pity it\u0027s unlikely to come soon. I am working on an application that is doing some really tight loops, but with the configuration of those loops changing ever so often. Dynamic PGO gives a really nice performance bump, but unfortunately, once that happens, the code is \"stuck\" in a path which, in my case, is guaranteed to be \"cold\" at the moment it was Tier1-compiled. Having a way to \"un-optimize\" some or all parts of code would solve that trouble completely.\r\n\r\nHonestly, even the \"leaks\" are not a problem, as long as only specific methods/classes can be targeted for re-optimization.",
+                                           "updatedAt":  "2024-01-02T12:03:30Z"
+                                       }
+                                   ],
+                         "totalCount":  3
+                     },
+        "title":  "[API Proposal]: RuntimeHelpers.ResetJitOptimizations",
+        "labels":  [
+                       "api-suggestion",
+                       "area-TieredCompilation-coreclr"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/95591",
+        "createdAt":  "2023-12-04T16:40:13Z",
+        "number":  95591,
+        "author":  "rhubarb-geek-nz",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHOC156jA==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "adamsitnik",
+                                            "createdAt":  "2023-12-05T07:27:32Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "nopeless",
+                                            "createdAt":  "2024-02-16T05:38:29Z"
+                                        }
+                                    ],
+                          "totalCount":  2
+                      },
+        "updatedAt":  "2024-08-01T20:50:36Z",
+        "body":  "I was looking at the startup time of PowerShell and noticed that the writes to StartupProfileData-Interactive are very inefficient\r\n\r\nI used \"strace\" to capture the system calls. At the start-up there is a section where it initialises a cache\r\n\r\n```\r\nopenat(AT_FDCWD, \"/home/bythesea/.cache/powershell/StartupProfileData-Interactive\", O_WRONLY|O_CREAT|O_TRUNC, 0644) = 141\r\nfcntl(141, F_SETFD, FD_CLOEXEC)         = 0\r\nwrite(141, \"@\\0\\0\\1f\\0\\0\\0\\0\\0\\0\\0)\\0\\0\\0\\32\\33\\0\\0006\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\"..., 64) = 64\r\nwrite(141, \"\\264\\0\\0\\2\\7\\0\\4\\0\\0\\0\\364\\1\\1\\0\\0\\0\\303\\321\\375W4\\363dL\\252\\233\\201j6J\\30(\"..., 44) = 44\r\nwrite(141, \"Microsoft.PowerShell.ConsoleHost\", 32) = 32\r\nwrite(141, \"Microsoft.PowerShell.ConsoleHost\"..., 101) = 101\r\n```\r\n\r\nThis goes on for \r\n\r\n```\r\n$ grep \"write(141,\" out.2 | wc -l\r\n15310\r\n```\r\n\r\nfor example\r\n\r\n```\r\nwrite(141, \"\\3012\\0\\6\", 4)              = 4\r\nwrite(141, \"\\1\\0\\1\\4\", 4)               = 4\r\nwrite(141, \"\\2772\\0\\6\", 4)              = 4\r\nwrite(141, \"\\1\\0\\1\\4\", 4)               = 4\r\nwrite(141, \"\\3002\\0\\6\", 4)              = 4\r\nwrite(141, \"\\1\\0\\1\\4\", 4)               = 4\r\nwrite(141, \"qs\\0\\6\", 4)                 = 4\r\nwrite(141, \"\\1\\0\\1\\4\", 4)               = 4\r\nwrite(141, \"zs\\0\\6\", 4)                 = 4\r\nwrite(141, \"\\1\\0\\1\\4\", 4)               = 4\r\nwrite(141, \"Vx\\0\\6\", 4)                 = 4\r\nwrite(141, \"\\1\\0\\1\\4\", 4)               = 4\r\nwrite(141, \"\\333?\\0\\6\", 4)              = 4\r\nwrite(141, \"\\1\\0\\1\\4\", 4)               = 4\r\nwrite(141, \"\\232A\\0\\6\", 4)              = 4\r\nwrite(141, \"\\1\\0\\1\\5\", 4)               = 4\r\nwrite(141, \"\\t\\0\", 2)                   = 2\r\nwrite(141, \"@\\25\\22\\2124\\1\\5\\262\\360\", 9) = 9\r\nwrite(141, \"\\0\", 1)                     = 1\r\nwrite(141, \"\\1\\0\\1\\5\", 4)               = 4\r\nwrite(141, \"\\t\\0\", 2)                   = 2\r\nwrite(141, \"@\\25\\22\\2124\\1\\5\\262\\362\", 9) = 9\r\n```\r\n\r\nThat is over 15,000 of calls to \"write\" with typically 4 bytes of payload. \r\n\r\nThis looks like there is no buffering between streaming of data types and operating system writes.\r\n\r\n\r\n### Expected behavior\r\n\r\n```\r\nThe writes to StartupProfileData-Interactive would be in larger blocks, buffered by the software.\r\n```\r\n\r\n\r\n### Actual behavior\r\n\r\n```\r\n$ grep \"write(141,\" out.2 | wc -l\r\n15310\r\n```\r\n\r\nwrites such as\r\n\r\n```\r\nwrite(141, \"\\3012\\0\\6\", 4)              = 4\r\nwrite(141, \"\\1\\0\\1\\4\", 4)               = 4\r\nwrite(141, \"\\2772\\0\\6\", 4)              = 4\r\nwrite(141, \"\\1\\0\\1\\4\", 4)               = 4\r\nwrite(141, \"\\3002\\0\\6\", 4)              = 4\r\nwrite(141, \"\\1\\0\\1\\4\", 4)               = 4\r\nwrite(141, \"qs\\0\\6\", 4)                 = 4\r\nwrite(141, \"\\1\\0\\1\\4\", 4)               = 4\r\nwrite(141, \"zs\\0\\6\", 4)                 = 4\r\nwrite(141, \"\\1\\0\\1\\4\", 4)               = 4\r\nwrite(141, \"Vx\\0\\6\", 4)                 = 4\r\nwrite(141, \"\\1\\0\\1\\4\", 4)               = 4\r\nwrite(141, \"\\333?\\0\\6\", 4)              = 4\r\nwrite(141, \"\\1\\0\\1\\4\", 4)               = 4\r\nwrite(141, \"\\232A\\0\\6\", 4)              = 4\r\nwrite(141, \"\\1\\0\\1\\5\", 4)               = 4\r\nwrite(141, \"\\t\\0\", 2)                   = 2\r\nwrite(141, \"@\\25\\22\\2124\\1\\5\\262\\360\", 9) = 9\r\nwrite(141, \"\\0\", 1)                     = 1\r\nwrite(141, \"\\1\\0\\1\\5\", 4)               = 4\r\nwrite(141, \"\\t\\0\", 2)                   = 2\r\nwrite(141, \"@\\25\\22\\2124\\1\\5\\262\\362\", 9) = 9\r\n```\r\n```\r\n\r\n### Environment data\r\n\r\n```powershell\r\nName                           Value\r\n----                           -----\r\nPSVersion                      7.4.0\r\nPSEdition                      Core\r\nGitCommitId                    7.4.0\r\nOS                             Arch Linux\r\nPlatform                       Unix\r\nPSCompatibleVersions           {1.0, 2.0, 3.0, 4.0…}\r\nPSRemotingProtocolVersion      2.3\r\nSerializationVersion           1.1.0.1\r\nWSManStackVersion              3.0\r\n```\r\nDotnet 8.0\r\n\r\n### Visuals\r\n\r\n```\r\n$ ls -ld .cache/powershell/StartupProfileData-Interactive\r\n-rw-r--r-- 1 bythesea users 74308 Dec  4 16:08 .cache/powershell/StartupProfileData-Interactive\r\n```\r\n\r\nThis might explain why PowerShell is so slow to start on a Raspberry Pi with a cheap SD-card. Those writes will be hammering the card.\r\n\r\n\u003e ProfileOptimization is in dotnet core. Please open issue in Dotnet Runtime repository.\r\n\r\nhttps://github.com/PowerShell/PowerShell/issues/20845\r\n",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOdBjr2Q==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc5tnbXe",
+                                           "createdAt":  "2023-12-04T16:49:10Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  null,
+                                           "body":  "Tagging subscribers to this area: @dotnet/area-system-io\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003cdetails\u003e\n\u003csummary\u003eIssue Details\u003c/summary\u003e\n\u003chr /\u003e\n\nI was looking at the startup time of PowerShell and noticed that the writes to StartupProfileData-Interactive are very inefficient\r\n\r\nI used \"strace\" to capture the system calls. At the start-up there is a section where it initialises a cache\r\n\r\n```\r\nopenat(AT_FDCWD, \"/home/bythesea/.cache/powershell/StartupProfileData-Interactive\", O_WRONLY|O_CREAT|O_TRUNC, 0644) = 141\r\nfcntl(141, F_SETFD, FD_CLOEXEC)         = 0\r\nwrite(141, \"@\\0\\0\\1f\\0\\0\\0\\0\\0\\0\\0)\\0\\0\\0\\32\\33\\0\\0006\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\"..., 64) = 64\r\nwrite(141, \"\\264\\0\\0\\2\\7\\0\\4\\0\\0\\0\\364\\1\\1\\0\\0\\0\\303\\321\\375W4\\363dL\\252\\233\\201j6J\\30(\"..., 44) = 44\r\nwrite(141, \"Microsoft.PowerShell.ConsoleHost\", 32) = 32\r\nwrite(141, \"Microsoft.PowerShell.ConsoleHost\"..., 101) = 101\r\n```\r\n\r\nThis goes on for \r\n\r\n```\r\n$ grep \"write(141,\" out.2 | wc -l\r\n15310\r\n```\r\n\r\nfor example\r\n\r\n```\r\nwrite(141, \"\\3012\\0\\6\", 4)              = 4\r\nwrite(141, \"\\1\\0\\1\\4\", 4)               = 4\r\nwrite(141, \"\\2772\\0\\6\", 4)              = 4\r\nwrite(141, \"\\1\\0\\1\\4\", 4)               = 4\r\nwrite(141, \"\\3002\\0\\6\", 4)              = 4\r\nwrite(141, \"\\1\\0\\1\\4\", 4)               = 4\r\nwrite(141, \"qs\\0\\6\", 4)                 = 4\r\nwrite(141, \"\\1\\0\\1\\4\", 4)               = 4\r\nwrite(141, \"zs\\0\\6\", 4)                 = 4\r\nwrite(141, \"\\1\\0\\1\\4\", 4)               = 4\r\nwrite(141, \"Vx\\0\\6\", 4)                 = 4\r\nwrite(141, \"\\1\\0\\1\\4\", 4)               = 4\r\nwrite(141, \"\\333?\\0\\6\", 4)              = 4\r\nwrite(141, \"\\1\\0\\1\\4\", 4)               = 4\r\nwrite(141, \"\\232A\\0\\6\", 4)              = 4\r\nwrite(141, \"\\1\\0\\1\\5\", 4)               = 4\r\nwrite(141, \"\\t\\0\", 2)                   = 2\r\nwrite(141, \"@\\25\\22\\2124\\1\\5\\262\\360\", 9) = 9\r\nwrite(141, \"\\0\", 1)                     = 1\r\nwrite(141, \"\\1\\0\\1\\5\", 4)               = 4\r\nwrite(141, \"\\t\\0\", 2)                   = 2\r\nwrite(141, \"@\\25\\22\\2124\\1\\5\\262\\362\", 9) = 9\r\n```\r\n\r\nThat is over 15,000 of calls to \"write\" with typically 4 bytes of payload. \r\n\r\nThis looks like there is no buffering between streaming of data types and operating system writes.\r\n\r\n\r\n### Expected behavior\r\n\r\n```\r\nThe writes to StartupProfileData-Interactive would be in larger blocks, buffered by the software.\r\n```\r\n\r\n\r\n### Actual behavior\r\n\r\n```\r\n$ grep \"write(141,\" out.2 | wc -l\r\n15310\r\n```\r\n\r\nwrites such as\r\n\r\n```\r\nwrite(141, \"\\3012\\0\\6\", 4)              = 4\r\nwrite(141, \"\\1\\0\\1\\4\", 4)               = 4\r\nwrite(141, \"\\2772\\0\\6\", 4)              = 4\r\nwrite(141, \"\\1\\0\\1\\4\", 4)               = 4\r\nwrite(141, \"\\3002\\0\\6\", 4)              = 4\r\nwrite(141, \"\\1\\0\\1\\4\", 4)               = 4\r\nwrite(141, \"qs\\0\\6\", 4)                 = 4\r\nwrite(141, \"\\1\\0\\1\\4\", 4)               = 4\r\nwrite(141, \"zs\\0\\6\", 4)                 = 4\r\nwrite(141, \"\\1\\0\\1\\4\", 4)               = 4\r\nwrite(141, \"Vx\\0\\6\", 4)                 = 4\r\nwrite(141, \"\\1\\0\\1\\4\", 4)               = 4\r\nwrite(141, \"\\333?\\0\\6\", 4)              = 4\r\nwrite(141, \"\\1\\0\\1\\4\", 4)               = 4\r\nwrite(141, \"\\232A\\0\\6\", 4)              = 4\r\nwrite(141, \"\\1\\0\\1\\5\", 4)               = 4\r\nwrite(141, \"\\t\\0\", 2)                   = 2\r\nwrite(141, \"@\\25\\22\\2124\\1\\5\\262\\360\", 9) = 9\r\nwrite(141, \"\\0\", 1)                     = 1\r\nwrite(141, \"\\1\\0\\1\\5\", 4)               = 4\r\nwrite(141, \"\\t\\0\", 2)                   = 2\r\nwrite(141, \"@\\25\\22\\2124\\1\\5\\262\\362\", 9) = 9\r\n```\r\n```\r\n\r\n### Environment data\r\n\r\n```powershell\r\nName                           Value\r\n----                           -----\r\nPSVersion                      7.4.0\r\nPSEdition                      Core\r\nGitCommitId                    7.4.0\r\nOS                             Arch Linux\r\nPlatform                       Unix\r\nPSCompatibleVersions           {1.0, 2.0, 3.0, 4.0…}\r\nPSRemotingProtocolVersion      2.3\r\nSerializationVersion           1.1.0.1\r\nWSManStackVersion              3.0\r\n```\r\nDotnet 8.0\r\n\r\n### Visuals\r\n\r\n```\r\n$ ls -ld .cache/powershell/StartupProfileData-Interactive\r\n-rw-r--r-- 1 bythesea users 74308 Dec  4 16:08 .cache/powershell/StartupProfileData-Interactive\r\n```\r\n\r\nThis might explain why PowerShell is so slow to start on a Raspberry Pi with a cheap SD-card. Those writes will be hammering the card.\r\n\r\n\u003e ProfileOptimization is in dotnet core. Please open issue in Dotnet Runtime repository.\r\n\r\nhttps://github.com/PowerShell/PowerShell/issues/20845\r\n\n\n\u003ctable\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAuthor:\u003c/th\u003e\n    \u003ctd\u003erhubarb-geek-nz\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eAssignees:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eLabels:\u003c/th\u003e\n    \u003ctd\u003e\n\n`area-System.IO`, `tenet-performance`, `untriaged`\n\n\u003c/td\u003e\n  \u003c/tr\u003e\n  \u003ctr\u003e\n    \u003cth align=\"left\"\u003eMilestone:\u003c/th\u003e\n    \u003ctd\u003e-\u003c/td\u003e\n  \u003c/tr\u003e\n\u003c/table\u003e\n\u003c/details\u003e",
+                                           "updatedAt":  "2023-12-04T16:49:10Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc50GOvZ",
+                                           "createdAt":  "2024-02-16T05:39:06Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOEQqIww==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "CONFUSED",
+                                                                               "user":  "hyeonk",
+                                                                               "createdAt":  "2024-05-14T22:43:59Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "CONFUSED",
+                                                                               "user":  "enihsyou",
+                                                                               "createdAt":  "2025-05-03T09:00:49Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  2
+                                                         },
+                                           "author":  "nopeless",
+                                           "body":  "![image](https://github.com/dotnet/runtime/assets/38830903/a2388cc1-6b60-46de-a7cc-df1bb7d43fe6)\r\n\r\nI don\u0027t even know what to say besides that I am beyond disappointed",
+                                           "updatedAt":  "2024-02-16T05:39:06Z"
+                                       }
+                                   ],
+                         "totalCount":  2
+                     },
+        "title":  "[MulticoreJIT] Writes to StartupProfileData-Interactive are syscall intensive",
+        "labels":  [
+                       "tenet-performance",
+                       "area-TieredCompilation-coreclr"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/99870",
+        "createdAt":  "2024-03-16T20:23:15Z",
+        "number":  99870,
+        "author":  "MichalPetryka",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2024-07-03T21:00:03Z",
+        "body":  "### Background and motivation\n\nBenchmarking tools like Benchmark.Net have to wait until methods get to Tier 1 to get reliable results today. Currently they do so by either calling the methods a few times and waiting an arbitrary amount of time which is not very reliable or by using runtime diagnostic events which makes writing benchmarks much harder.\r\nAs such, exposing an API that lets users poll for methods getting to T1 (or code running in AOT or with tiering disabled) could make benchmarking of code noticeably easier.\n\n### API Proposal\n\n```csharp\r\nnamespace System.Runtime.CompilerServices;\r\n\r\npublic class RuntimeHelpers\r\n{\r\n    public static bool IsMethodFullyOptimized(RuntimeMethodHandle method);\r\n}\r\n```\n\n### API Usage\n\n```csharp\r\nAction a = M;\r\nwhile (!RuntimeHelpers.IsMethodFullyOptimized(a.Method.MethodHandle))\r\n    a();\r\n\r\n// run benchmarks\r\n```\r\n\n\n### Alternative Designs\n\nThis could block the thread instead or be an event.\n\n### Risks\n\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOd1Yc8Q==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc53Vhzx",
+                                           "createdAt":  "2024-03-16T21:05:12Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODbAfSg==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "jkotas",
+                                                                               "createdAt":  "2024-03-16T21:40:15Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "huoyaoyuan",
+                                                                               "createdAt":  "2024-03-17T20:11:01Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "colejohnson66",
+                                                                               "createdAt":  "2024-03-18T18:57:32Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  3
+                                                         },
+                                           "author":  "EgorBo",
+                                           "body":  "This won\u0027t help BDN much, IMO. While benchmark method itself can be already optimized, it doesn\u0027t mean that all of its callees are. I don\u0027t think the problem you\u0027re trying to solve can be solved like that.\r\n\r\nMaybe BDN can just parse ETW/ES events, check stacks, etc.",
+                                           "updatedAt":  "2024-03-16T21:05:32Z"
+                                       }
+                                   ],
+                         "totalCount":  1
+                     },
+        "title":  "[API Proposal]: `RuntimeHelpers.IsMethodFullyOptimized` for benchmarking tools",
+        "labels":  [
+                       "api-suggestion",
+                       "area-TieredCompilation-coreclr"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/101868",
+        "createdAt":  "2024-05-03T22:25:52Z",
+        "number":  101868,
+        "author":  "EgorBo",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  "Y3Vyc29yOnYyOpHODFJ2GQ==",
+                          "nodes":  [
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "KeterSCP",
+                                            "createdAt":  "2024-05-06T21:26:01Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "timcassell",
+                                            "createdAt":  "2025-06-24T15:45:56Z"
+                                        },
+                                        {
+                                            "content":  "THUMBS_UP",
+                                            "user":  "omariom",
+                                            "createdAt":  "2025-06-30T12:30:14Z"
+                                        }
+                                    ],
+                          "totalCount":  3
+                      },
+        "updatedAt":  "2025-07-13T20:03:47Z",
+        "body":  "The default tiering strategy is quite obscure and it\u0027s not obvious how to make a small console repro to show a Tier1 codegen for a method without disabling TC completely. `DOTNET_TC_AggressiveTiering=1` was desinged to help with that, but it\u0027s still not working as expected, example:\r\n```cs\r\nusing System.Runtime.CompilerServices;\r\n\r\npublic class Prog\r\n{\r\n    static void Main()\r\n    {\r\n        for (int i = 0; i \u003c 10000000; i++)\r\n            Test();\r\n    }\r\n\r\n    [MethodImpl(MethodImplOptions.NoInlining)]\r\n    static void Test() { }\r\n}\r\n```\r\n\r\nEven with `DOTNET_TC_AggressiveTiering=1` we never end up requesting a recompilation for `Test` and it stays in Tier0. I think, with `DOTNET_TC_AggressiveTiering` we should install call-counting stub synchrously without a delay/timer, so even:\r\n```cs\r\nusing System.Runtime.CompilerServices;\r\n\r\npublic class Prog\r\n{\r\n    static void Main()\r\n    {\r\n        for (int i = 0; i \u003c 2; i++)\r\n            Test();\r\n    }\r\n\r\n    [MethodImpl(MethodImplOptions.NoInlining)]\r\n    static void Test() { }\r\n}\r\n```\r\nshould print a Tier1 version (or at least, Tier0-instrumented) of `Test`",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOttLhxw==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc58zXOz",
+                                           "createdAt":  "2024-05-03T22:26:16Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @JulieLeeMSFT, @jakobbotsch\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2024-05-03T22:26:16Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6y4RMO",
+                                           "createdAt":  "2025-06-24T16:10:41Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "timcassell",
+                                           "body":  "Until this is resolved, what\u0027s a reliable workaround today? `Thread.Sleep(100)` after each call?",
+                                           "updatedAt":  "2025-06-24T16:10:41Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc620uHH",
+                                           "createdAt":  "2025-07-13T20:03:47Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "EgorBo",
+                                           "body":  "\u003e Until this is resolved, what\u0027s a reliable workaround today? `Thread.Sleep(100)` after each call?\n\nSorry for the delay, I personally just insert `Thread.Sleep(10)` in a for loop with say 200 iterations calling my noinline test method.",
+                                           "updatedAt":  "2025-07-13T20:03:47Z"
+                                       }
+                                   ],
+                         "totalCount":  3
+                     },
+        "title":  "DOTNET_TC_AggressiveTiering doesn\u0027t work as expected",
+        "labels":  [
+                       "area-TieredCompilation-coreclr"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/110387",
+        "createdAt":  "2024-12-04T09:41:01Z",
+        "number":  110387,
+        "author":  "yahorsi",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-07-01T06:43:30Z",
+        "body":  "Hi Guys,\n\nWe run a highly loaded app in Kubernetes and we see perf issues after releasing new versions, partially caused by the JIT compilation, we do have probes but it does not help.\n\nQuestion: How can we force full app tier1 compilation on the startup? Startup duration is not a big deal as we have liveness probes and k8 will use prev version pods while new starts.",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOlh94Kg==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc6WAkeR",
+                                           "createdAt":  "2024-12-04T09:51:33Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "stephentoub",
+                                           "body":  "You can disable tiered compilation such that everything will initially be compiled with full optimization:\nhttps://learn.microsoft.com/en-us/dotnet/core/runtime-config/compilation#tiered-compilation\n\nJust keep in mind that tiering isn\u0027t just about startup. By disabling tiering, you\u0027ll also be disabling throughput optimizations that depend on tiering, like dynamic PGO.\n\nYou could also explore getting the best of both worlds,  using Ready To Run to precompile much of your app but allowing tiering / dynamic PGO to further optimize.",
+                                           "updatedAt":  "2024-12-04T09:54:00Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6WAnRN",
+                                           "createdAt":  "2024-12-04T09:55:20Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "yahorsi",
+                                           "body":  "Thank you for the reply, disabling tiering won\u0027t make the whole app to JIT, my idea was that while the app in k8 starts it still. does not get any requests, so, we have time to fully JIT compile it and use the most optimized tier1, it\u0027s not a mobile app where startup time is critical, it\u0027s a k8 app that has a liveness probe, so we have time to make all possible optimizations to guarantee that when app responds to the liveness probe - it is fully ready and no any other warmup is needed.",
+                                           "updatedAt":  "2024-12-04T09:55:20Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6WH3gq",
+                                           "createdAt":  "2024-12-04T21:58:14Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "AndyAyersMS",
+                                           "body":  "\u003e We run a highly loaded app in Kubernetes and we see perf issues after releasing new versions, partially caused by the JIT compilation, we do have probes but it does not help.\n\nI think we need to understand better what it is you\u0027re seeing. Can you share more details?\n\n\u003e Thank you for the reply, disabling tiering won\u0027t make the whole app to JIT, my idea was that while the app in k8 starts it still. does not get any requests, so, we have time to fully JIT compile it and use the most optimized tier1,\n \nPGO needs to observe the current instance of the app doing its normal processing. There is no way to short-circuit this. The initial observation period is what gives PGO the ability to focus its optimizations.",
+                                           "updatedAt":  "2024-12-04T21:58:14Z"
+                                       }
+                                   ],
+                         "totalCount":  3
+                     },
+        "title":  "[Question] [k8s] [Performanjce ]Force Tier1 compilation on start",
+        "labels":  [
+                       "area-TieredCompilation-coreclr"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/119655",
+        "createdAt":  "2025-09-12T17:29:49Z",
+        "number":  119655,
+        "author":  "MaxwellDAssistek",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-09-16T15:45:02Z",
+        "body":  "### Description\n\nI tried following a blog post to enable this feature on my Android App as it seems like it might potentially be helpful to improve initial JIT performance since AOT is not an option for my application structure.\n\nhttps://devblogs.microsoft.com/dotnet/an-easy-solution-for-improving-app-launch-performance/\n\n### Reproduction Steps\n\n1. Create android app project.\n2. Add the specified lines of code at the earliest point in app startup:\n```\n    ProfileOptimization.SetProfileRoot(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData));\n    ProfileOptimization.StartProfile(\"Startup.Profile\");\n```\n3. Run the app\n4. Observe that the profile is not generated at the specified path. (easiest to do using a rooted adb connection)\n\n### Expected behavior\n\nThe profile to be generated at the requested location.\n\n### Actual behavior\n\nNo profile file is created.\n\n### Regression?\n\n_No response_\n\n### Known Workarounds\n\n_No response_\n\n### Configuration\n\nTested both using .NET 8 and latest .NET 10 RC.\n\n### Other information\n\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOxKhBQA==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc7D4iDe",
+                                           "createdAt":  "2025-09-12T18:13:56Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to \u0027arch-android\u0027: @vitek-karas, @simonrozsival, @steveisok, @akoeplinger\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2025-09-12T18:13:56Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc7D4kLy",
+                                           "createdAt":  "2025-09-12T18:17:12Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "jkotas",
+                                           "body":  "MulticoreJIT is not supported by Mono that has been the default runtime used on Android.\n\nWith .NET 10 RC1 you could try CoreCLR  that does support MulticoreJIT. CoreCLR is in a preview for Android - just set \u003cUseMonoRuntime\u003efalse\u003c/UseMonoRuntime\u003e. We would be interested if it works for you.\n\ncc @vitek-karas",
+                                           "updatedAt":  "2025-09-12T18:17:12Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc7D4lEe",
+                                           "createdAt":  "2025-09-12T18:18:40Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "MaxwellDAssistek",
+                                           "body":  "Unfortunately my app just immediately crashes on startup with Mono disabled with a segfault in libSystem.Security.Cryptography.Native.Android.so.\n\nI still need to work to narrow it down and make a proper report.",
+                                           "updatedAt":  "2025-09-12T18:19:14Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc7D4uqT",
+                                           "createdAt":  "2025-09-12T18:33:46Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "akoeplinger",
+                                           "body":  " Until that is fixed you can also try recording a custom Mono AOT profile via https://github.com/jonathanpeppers/Mono.Profiler.Android",
+                                           "updatedAt":  "2025-09-12T18:33:46Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc7D4wGV",
+                                           "createdAt":  "2025-09-12T18:36:02Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "MaxwellDAssistek",
+                                           "body":  "Unfortunately my application structure is not compatible with trimming (dynamically loaded plugins) and thus cannot use the typical AOT approaches.",
+                                           "updatedAt":  "2025-09-12T18:36:02Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc7D4z28",
+                                           "createdAt":  "2025-09-12T18:41:47Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "vitek-karas",
+                                           "body":  "@grendello this looks familiar? ",
+                                           "updatedAt":  "2025-09-12T18:41:47Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc7EDgwg",
+                                           "createdAt":  "2025-09-14T06:11:02Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "MaxwellDAssistek",
+                                           "body":  "\u003e MulticoreJIT is not supported by Mono that has been the default runtime used on Android.\n\u003e \n\u003e With .NET 10 RC1 you could try CoreCLR that does support MulticoreJIT. CoreCLR is in a preview for Android - just set false. We would be interested if it works for you.\n\nI was able to work around the crash (opened a separate issue for that). But even with CoreCLR, I\u0027m still not seeing a profile getting generated in the folder.",
+                                           "updatedAt":  "2025-09-14T06:11:02Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc7EQdks",
+                                           "createdAt":  "2025-09-15T15:01:21Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHOEiTEsw==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "MaxwellDAssistek",
+                                                                               "createdAt":  "2025-09-15T15:02:11Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "simonrozsival",
+                                           "body":  "\u003e Unfortunately my app just immediately crashes on startup with Mono disabled with a segfault in libSystem.Security.Cryptography.Native.Android.so.\n\nThis is a known issue which will be fixed in RC2: https://github.com/dotnet/android/issues/10464",
+                                           "updatedAt":  "2025-09-15T15:01:21Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc7EjP-b",
+                                           "createdAt":  "2025-09-16T10:33:21Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "akoeplinger",
+                                           "body":  "@MaxwellDAssistek the profiled AOT setup I linked above doesn\u0027t require trimming, it just records which methods are used during startup and then AOTs the ones it can. We ship a default AOT profile today which works for most apps, the custom one would replace that.",
+                                           "updatedAt":  "2025-09-16T10:33:21Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc7EqEFA",
+                                           "createdAt":  "2025-09-16T15:45:02Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "MaxwellDAssistek",
+                                           "body":  "@akoeplinger \n\n```\n0\u003eXamarin.Android.Common.targets(546,3): Error XA1030 : The \u0027RunAOTCompilation\u0027 MSBuild property is only supported when trimming is enabled. Edit the project file in a text editor to set \u0027PublishTrimmed\u0027 to \u0027true\u0027 for this build configuration.\n```",
+                                           "updatedAt":  "2025-09-16T15:45:02Z"
+                                       }
+                                   ],
+                         "totalCount":  10
+                     },
+        "title":  "[MulticoreJIT] Profile does not get generated on android",
+        "labels":  [
+                       "area-TieredCompilation-coreclr",
+                       "os-android",
+                       "untriaged"
+                   ]
+    }
+]

@@ -1,0 +1,287 @@
+﻿[
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/106197",
+        "createdAt":  "2024-08-09T16:48:38Z",
+        "number":  106197,
+        "author":  "annelo-msft",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-09-08T17:21:57Z",
+        "body":  "### Background and motivation\n\nThe [System.ClientModel](https://www.nuget.org/packages/System.ClientModel) library provides building blocks for .NET clients that call cloud services.  This addition supports client APIs for [long-running operations](https://devblogs.microsoft.com/azure-sdk/understanding-the-azure-core-library-for-net/#operationt), i.e. service operations where the service returns a response before the requested operation has completed.  For such operations, SCM-based clients return a subclient derived from SCM\u0027s abstract `OperationResult` class, which allows users to monitor the operation\u0027s status and obtain any resulting value.  \r\n\r\nThe new `OperationResult` type is similar to the [Operation](https://learn.microsoft.com/en-us/dotnet/api/azure.operation?view=azure-dotnet) and [Operation\\\u003cT\\\u003e](https://learn.microsoft.com/en-us/dotnet/api/azure.operation-1?view=azure-dotnet) types in Azure.Core, but has fewer public APIs in ordre to support greater variation of implementation patterns in the third-party cloud service space.  It serves as a base type for public operation subclients such as the `CreateVectorStoreOperation` type in the [.NET OpenAI client library](https://github.com/openai/openai-dotnet/pull/156).  It provides APIs to wait for the operation to complete processing on the service, and a rehydration token that can be to \"rehydrate\" an operation in progress, e.g. to obtain the value computed by a long-running operation from a different process than the one that started the operation.  Client subtypes add public properties such as `Value` and `Status` as applicable to the operation implementation.\n\n### API Proposal\n\n```csharp\r\nnamespace System.ClientModel.Primitives\r\n{\r\n    public abstract partial class OperationResult : System.ClientModel.ClientResult\r\n    {\r\n        protected OperationResult(System.ClientModel.Primitives.PipelineResponse response) { }\r\n        public abstract bool IsCompleted { get; protected set; }\r\n        public abstract System.ClientModel.ContinuationToken? RehydrationToken { get; protected set; }\r\n        public abstract void WaitForCompletion(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));\r\n        public abstract System.Threading.Tasks.Task WaitForCompletionAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));\r\n    }\r\n}\r\n```\r\n\n\n### API Usage\n\nExample usage of derived `CreateVectorStoreOperation` type in OpenAI client:\r\n\r\n```csharp\r\nVectorStoreClient client = new VectorStoreClient(new OpenAIClientOptions());\r\nCreateVectorStoreOperation operation = await client.CreateVectorStoreAsync(waitUntilCompleted: false);\r\nawait operation.WaitForCompletionAsync();\r\nVectorStore vectorStore = operation.Value;\r\n```\r\n\n\n### Alternative Designs\n\n_No response_\n\n### Risks\n\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOiFFLNw==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc6Hzh8U",
+                                           "createdAt":  "2024-08-09T17:42:15Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODtfccw==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "annelo-msft",
+                                                                               "createdAt":  "2024-08-09T21:55:04Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "stephentoub",
+                                           "body":  "Generally looks reasonably, but I\u0027m wondering about the IsCompleted property. What\u0027s the use case for that, and does the value change after the result has been constructed? e.g. is that actually going to make networking requests to determine whether the operation has completed? If it doesn\u0027t, then I worry it\u0027ll be confusing that IsCompleted isn\u0027t up-to-date. And if it does, then I worry that there\u0027s expensive work happening behind a property, possibly expensive asynchronous work.",
+                                           "updatedAt":  "2024-08-09T17:42:15Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6HzjSm",
+                                           "createdAt":  "2024-08-09T17:45:49Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODteAQg==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "terrajobst",
+                                                                               "createdAt":  "2024-08-09T18:01:39Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "stephentoub",
+                                           "body":  "Also, for the usage example, what happens if instead of:\n```C#\nVectorStoreClient client = new VectorStoreClient(new OpenAIClientOptions());\nCreateVectorStoreOperation operation = await client.CreateVectorStoreAsync(waitUntilCompleted: false);\nawait operation.WaitForCompletionAsync();\nVectorStore vectorStore = operation.Value;\n```\nI end up writing:\n```C#\nVectorStoreClient client = new VectorStoreClient(new OpenAIClientOptions());\nCreateVectorStoreOperation operation = await client.CreateVectorStoreAsync(waitUntilCompleted: false);\nVectorStore vectorStore = operation.Value;\n```\nwhich is what I\u0027d naturally be inclined to do. Does `Value` throw an exception if it\u0027s not yet completed? Does it block until the operation completes? I assume `waitUntilCompleted` defaults to true in general, so by default developers don\u0027t need to do the wait explicitly and the \"right things\" just happen?",
+                                           "updatedAt":  "2024-08-09T17:45:49Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6HzrEY",
+                                           "createdAt":  "2024-08-09T18:03:18Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "terrajobst",
+                                           "body":  "How does the operation know that it\u0027s completed? Is it push based (i.e. does the server tell the client \"I\u0027m done\") or is it polling based?",
+                                           "updatedAt":  "2024-08-09T18:03:18Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6H1Dkv",
+                                           "createdAt":  "2024-08-09T22:31:20Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "annelo-msft",
+                                           "body":  "\u003e I\u0027m wondering about the IsCompleted property. What\u0027s the use case for that, and does the value change after the result has been constructed?\r\n\r\nYes, the value of `IsCompleted` will typically change after the result has been constructed.  The property itself doesn\u0027t make any service calls (we avoid this from properties because of the difficulty making async calls there), but if a caller passes `waitUntilCompleted: false`, the intended use of the returned operation subclient is to call the `WaitForCompletion` method prior to accessing a `Value` property, if the intention is to access the final output value from the operation.  To answer @terrajobst\u0027s question, many LROs are polling-based, so `WaitForCompletion` will poll a service endpoint to obtain the operation status until the operation has completed, and then it will set `IsCompleted` to true before returning. \r\n\r\n`IsCompleted` is available to check whether the operation has completed, e.g. in a rehydration scenario.  Another use case for it is that, in cases where the public subtype adds an `UpdateStatus` method (or similar), a user can implement their own polling loop (e.g. to use a custom polling interval) by doing:\r\n\r\n```csharp\r\nwhile (!operation.IsCompleted)\r\n{\r\n    // delay custom interval\r\n\r\n    operation.UpdateStatus();    \r\n}\r\n```\r\n\r\n\u003e Does `Value` throw an exception if it\u0027s not yet completed?  Does it block until the operation completes? \r\n\r\nIt does not.  `Value` should be a nullable property when it appears on an `OperationResult` subtype, so if the service operation doesn\u0027t provide a response containing a value until the operation has completed, a correct implementation would return null from the property until `IsCompleted` is true.  Some services return responses containing values that represent intermediate progress -- OpenAI does this, for example -- and for these, `Value` is populated with the intermediate result because it may contain information of value to the end user.\r\n\r\n\u003e  I assume `waitUntilCompleted` defaults to true in general, so by default developers don\u0027t need to do the wait explicitly and the \"right things\" just happen?\r\n\r\nIt actually doesn\u0027t.  We made the design decision in Azure clients to require a user to pass a value for this parameter because it was hard to pick a default that would work across all LRO cases, and we are planning to follow the same design for SCM-based clients.  For example, some LROs can [take up to 24 hours to complete](https://platform.openai.com/docs/api-reference/batch), and we didn\u0027t want user code to block for that long without explicit opt-in to that.  Other LROs can return in a few seconds, so we also didn\u0027t want to force callers to write extra lines of code to `WaitForCompletion` in those cases.  At the end of the day, we felt it was better to require the end-user to pass a parameter opting-in to their preference, since they should have a better sense of the characteristics of a given operation, and would need to write different code subsequent to the start-operation call depending on the value they passed.  (As a side-note, in Azure.Core, we have a separate [WaitUntil enum](https://learn.microsoft.com/en-us/dotnet/api/azure.waituntil?view=azure-dotnet) we use for this parameter, but we felt we didn\u0027t need an extra type for it in SCM.)",
+                                           "updatedAt":  "2024-08-09T22:31:20Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6H-nMO",
+                                           "createdAt":  "2024-08-10T12:03:29Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODtv_zA==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "terrajobst",
+                                                                               "createdAt":  "2024-08-12T23:16:00Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "stephentoub",
+                                           "body":  "Thanks. IsCompleted is still troublesome to me. I\u0027d expect to be able to poll it in a loop like:\r\n```c#\r\nwhile (!IsCompleted)\r\n{\r\n   DoOtherThings();\r\n}\r\n```\r\nbut it sounds like that\u0027ll likely hang because I\u0027m not calling am explicit update that doesn\u0027t exist on the base where IsCompleted is. Does IsCompleted need to exist on the base? Or should it be a method that also has an async counterpart that can actually poll the service if not completed? ",
+                                           "updatedAt":  "2024-08-12T15:01:12Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6ID98C",
+                                           "createdAt":  "2024-08-11T12:20:01Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "dotnet-policy-service",
+                                           "body":  "Tagging subscribers to this area: @dotnet/ncl\nSee info in [area-owners.md](https://github.com/dotnet/runtime/blob/main/docs/area-owners.md) if you want to be subscribed.\n\u003c!-- Policy app identification https://img.shields.io/static/v1?label=PullRequestIssueManagement. --\u003e",
+                                           "updatedAt":  "2024-08-12T23:14:35Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6IJoCL",
+                                           "createdAt":  "2024-08-12T15:02:47Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "karelz",
+                                           "body":  "@stephentoub does it belong to Runtime repo? Or rather into Azure SDK? https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/core/System.ClientModel/README.md",
+                                           "updatedAt":  "2024-08-12T23:14:42Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6IKosM",
+                                           "createdAt":  "2024-08-12T16:49:54Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODtuPhg==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "terrajobst",
+                                                                               "createdAt":  "2024-08-12T17:12:32Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "karelz",
+                                                                               "createdAt":  "2024-08-12T18:47:48Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  2
+                                                         },
+                                           "author":  "bartonjs",
+                                           "body":  "@karelz It\u0027s an advisory/discussion item for API Review because it\u0027s in the System namespace, and we don\u0027t have good process for doing our process on issues in their repository.\r\n\r\nWe should probably call it `area-Meta`, or make up an area label for it.",
+                                           "updatedAt":  "2024-08-12T23:14:49Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6IK8ky",
+                                           "createdAt":  "2024-08-12T17:35:26Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODtuy_Q==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "karelz",
+                                                                               "createdAt":  "2024-08-12T18:47:41Z"
+                                                                           },
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "annelo-msft",
+                                                                               "createdAt":  "2024-08-12T20:01:50Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  2
+                                                         },
+                                           "author":  "terrajobst",
+                                           "body":  "@karelz @jeffhandley \r\n\r\n`System.ClientModel` is owned by the Azure SDK. It\u0027s unusual for the `System` namespace to be owned by other teams. We have an agreement that they post API changes in this repo and we assess if that has overlap with other `System` APIs in order to ask for reconciliation. I\u0027ve added the area label `area-System.ClientModel` and added an ownership for it (#106281) which points to @dotnet/fxdc.",
+                                           "updatedAt":  "2024-08-12T23:14:55Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6IM2II",
+                                           "createdAt":  "2024-08-12T23:28:46Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "terrajobst",
+                                           "body":  "@stephentoub \r\n\r\n\u003e Or should it be a method that also has an async counterpart that can actually poll the service if not completed?\r\n\r\nSo you\u0027re proposing something like this:\r\n\r\n```C#\r\nwhile (!(await client.IsCompletedAsync())\r\n{\r\n    DoOtherThings();\r\n}\r\n```\r\n\r\nThat feels awkward. I\u0027d probably invert the Boolean to avoid the parentheses:\r\n\r\n```C#\r\nwhile (await client.IsPendingAync())\r\n{\r\n    DoOtherThings();\r\n}\r\n```\r\n\r\nBut I guess if your primary concern is that it\u0027s easy to write the sync loop and dead lock, then maybe we should detect that pattern in an analyzer.",
+                                           "updatedAt":  "2024-08-13T18:31:41Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6IM8f2",
+                                           "createdAt":  "2024-08-12T23:59:03Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "annelo-msft",
+                                           "body":  "I agree that we may not want to make `IsCompleted` a method. \r\n\r\n@stephentoub, is your concern primarily that the `IsCompleted`  property doesn\u0027t make sense without having an `UpdateStatus` method to set it on the base type?  If so, would it be addressed by adding `UpdateStatus` to the base type?  That feels like a reasonable addition, and lets us layer `WaitForCompletion` over `UpdateStatus` as we do today in Azure.Core.",
+                                           "updatedAt":  "2024-08-12T23:59:03Z"
+                                       },
+                                       {
+                                           "id":  "IC_kwDODI9FZc6IUUs3",
+                                           "createdAt":  "2024-08-13T20:01:50Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  "Y3Vyc29yOnYyOpHODt4wVw==",
+                                                             "nodes":  [
+                                                                           {
+                                                                               "content":  "THUMBS_UP",
+                                                                               "user":  "annelo-msft",
+                                                                               "createdAt":  "2024-08-13T20:20:48Z"
+                                                                           }
+                                                                       ],
+                                                             "totalCount":  1
+                                                         },
+                                           "author":  "stephentoub",
+                                           "body":  "\u003e is your concern primarily that the IsCompleted property doesn\u0027t make sense without having an UpdateStatus method to set it on the base type? \n\nThat\u0027s a key part of it. `IsCompleted` can\u0027t be anything other than a snapshot answer unless we\u0027re going to do sync-over-async (or there\u0027s some kind of polling happening asynchronously in the background that\u0027s updating it), but that\u0027s not obvious to a consumer, to whom it looks like this should always be up-to-date, just like `Task`. In fact, I\u0027d guess that `Task` will be the thing folks use to reason about this, but that mental model is wrong. So as proposed a0 it\u0027s not clear to me you can do anything meaningful with IsCompleted (if you were checking it to know whether you need to call Wait, you could just call Wait), b) it seems like it\u0027s a pit of failure for someone who thinks it\u0027s always up-to-date, and c) without a corresponding way to update it on the abstraction it seems like a leaky abstraction.\n\n\u003e If so, would it be addressed by adding UpdateStatus to the base type?\n\nEither moving IsCompleted to the derived types or moving UpdateStatus to the base type. If we believe that IsCompleted+UpdateStatus+Wait are sufficient for the 99% use cases, then moving UpdateStatus down seems reasonable, along with thoroughly documenting IsCompleted as being a snapshot answer that\u0027s only ever updated by a call to UpdateStatus/Wait. I\u0027d also wonder at that point why IsCompleted needs to be abstract, rather than just having a protected setter; I think that also helps a bit to communicate that there\u0027s no meaningful work being done in it, whereas having it be abstract might hint that it\u0027s actually being implemented by the derived type to call out to the service. The other approach would be fine, too; if you need the derived type to be successful in performing updates in many cases, then just move IsCompleted to that derived type as well.",
+                                           "updatedAt":  "2024-08-13T20:01:50Z"
+                                       }
+                                   ],
+                         "totalCount":  12
+                     },
+        "title":  "[API Proposal]: System.ClientModel long-running operation base type `OperationResult`",
+        "labels":  [
+                       "api-suggestion",
+                       "area-System.ClientModel"
+                   ]
+    },
+    {
+        "url":  "https://github.com/dotnet/runtime/issues/115664",
+        "createdAt":  "2025-05-16T18:22:51Z",
+        "number":  115664,
+        "author":  "m-nash",
+        "reactions":  {
+                          "hasNextPage":  false,
+                          "endCursor":  null,
+                          "nodes":  [
+
+                                    ],
+                          "totalCount":  0
+                      },
+        "updatedAt":  "2025-08-05T18:30:32Z",
+        "body":  "### Background and motivation\n\nBackground and motivation\nThe [System.ClientModel](https://www.nuget.org/packages/System.ClientModel) library provides building blocks for .NET clients that call cloud services. For background, this package has been reviewed in the following previous issues: https://github.com/dotnet/runtime/issues/94126 | https://github.com/dotnet/runtime/issues/97711 | https://github.com/dotnet/runtime/issues/104617 | https://github.com/dotnet/runtime/issues/106197 | https://github.com/dotnet/runtime/issues/111046\n\nIn the event that a 3p wants to modify the read/write routines for a MRW model they need to ability to inject a proxy to run when reading or writing.  We are adding an options API to both add and resolve the proxies for a given Read or Write call.\n\n### API Proposal\n\nBelow are the changes to the options class which include an API to add a proxy as well as both a Try and non Try method to lookup if a proxy exists.\n\n```diff\npublic class ModelReaderWriterOptions\n{ \n    public ModelReaderWriterOptions(string format); \n    public string Format { get; }\n    public static ModelReaderWriterOptions Json { get; }\n+   public object? ProxiedModel { get; }\n    public static ModelReaderWriterOptions Xml { get; }\n+   public void AddProxy\u003cT\u003e(IPersistableModel\u003cT\u003e proxy); \n+   public IPersistableModel\u003cT\u003e ResolveProxy\u003cT\u003e(IPersistableModel\u003cT\u003e model); \n+   public IJsonModel\u003cT\u003e ResolveProxy\u003cT\u003e(IJsonModel\u003cT\u003e model); \n+   public bool TryGetProxy\u003cT\u003e(out IPersistableModel\u003cT\u003e? proxy); \n+   public bool TryGetProxy\u003cT\u003e(out IJsonModel\u003cT\u003e? proxy); \n} \n```\n\n\n### API Usage\n\n\nUsing a proxy with the following definition\n\n```C# Snippet:Readme_Read_Proxy_ClassStub\npublic class OutputModelProxy : IJsonModel\u003cOutputModel\u003e\n```\n\nThe example below shows how to read JSON to create a strongly-typed model instance using a proxy.\n\n```C# Snippet:Readme_Read_Proxy\nstring json = @\"{\n      \"\"x\"\": 1,\n      \"\"y\"\": 2,\n      \"\"z\"\": 3\n    }\";\n\nModelReaderWriterOptions options = new ModelReaderWriterOptions(\"W\");\noptions.AddProxy(new OutputModelProxy());\n\nOutputModel? model = ModelReaderWriter.Read\u003cOutputModel\u003e(BinaryData.FromString(json), options);\n```\n\nFor more details see https://github.com/Azure/azure-sdk-for-net/blob/ca9d0d12386d1067a0fccbed3a084b65c0dbb4bc/sdk/core/System.ClientModel/samples/ModelReaderWriter.md#using-a-proxy\n\n### Alternative Designs\n\n_No response_\n\n### Risks\n\n_No response_",
+        "comments":  {
+                         "hasNextPage":  false,
+                         "endCursor":  "Y3Vyc29yOnYyOpHOvB94Jw==",
+                         "nodes":  [
+                                       {
+                                           "id":  "IC_kwDODI9FZc68H3gn",
+                                           "createdAt":  "2025-08-05T18:30:20Z",
+                                           "reactions":  {
+                                                             "hasNextPage":  false,
+                                                             "endCursor":  null,
+                                                             "nodes":  [
+
+                                                                       ],
+                                                             "totalCount":  0
+                                                         },
+                                           "author":  "bartonjs",
+                                           "body":  "* We discussed AddProxy vs SetProxy, and decided that while it has set-semantics (last write wins), since the key is the type parameter it would make code more legible to use \"Add\"\n  * Since this library uses \"frozen options\" conventions, AddProxy should throw for frozen copies.\n* We discussed \"ModelProxy\" vs \"ProxiedModel\", and decided the proposed name is slightly better for technical reasons.\n* Looks good as proposed.\n\n```C#\nnamespace System.ClientModel.Primitives;\n\npublic partial class ModelReaderWriterOptions\n{ \n    public object? ProxiedModel { get; }\n\n    public void AddProxy\u003cT\u003e(IPersistableModel\u003cT\u003e proxy); \n    public IPersistableModel\u003cT\u003e ResolveProxy\u003cT\u003e(IPersistableModel\u003cT\u003e model); \n    public IJsonModel\u003cT\u003e ResolveProxy\u003cT\u003e(IJsonModel\u003cT\u003e model); \n    public bool TryGetProxy\u003cT\u003e(out IPersistableModel\u003cT\u003e? proxy); \n    public bool TryGetProxy\u003cT\u003e(out IJsonModel\u003cT\u003e? proxy); \n}\n``` ",
+                                           "updatedAt":  "2025-08-05T18:30:20Z"
+                                       }
+                                   ],
+                         "totalCount":  1
+                     },
+        "title":  "[API Proposal]: System.ClientModel Add support for proxy reader / writers",
+        "labels":  [
+                       "api-approved",
+                       "area-System.ClientModel"
+                   ]
+    }
+]
